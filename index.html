@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <title>AquaCompare - Fish Species Compatibility Tool | Aquarium Fish Comparison</title>
+    <meta name="description" content="Compare aquarium fish species for compatibility. Check temperature, pH, tank size, and aggression levels for 99+ freshwater fish species. Plan your perfect aquarium community.">
+    <meta name="keywords" content="aquarium fish compatibility, fish species comparison, tank mates, freshwater fish, aquarium planning, fish care requirements">
+    <meta name="author" content="AquaCompare">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yourdomain.com/">
+    <meta property="og:title" content="AquaCompare - Fish Species Compatibility Tool">
+    <meta property="og:description" content="Compare 99+ aquarium fish species for compatibility. Check temperature, pH, tank size, and behavior to plan your perfect community tank.">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://yourdomain.com/">
+    <meta property="twitter:title" content="AquaCompare - Fish Species Compatibility Tool">
+    <meta property="twitter:description" content="Compare 99+ aquarium fish species for compatibility. Check temperature, pH, tank size, and behavior to plan your perfect community tank.">
+    
+    <!-- Favicon (You'll need to add your own favicon.ico file) -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <!-- Google Analytics - Replace GA_MEASUREMENT_ID with your actual ID -->
+    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA_MEASUREMENT_ID');
+    </script> -->
+</head>
+<body>
+    <div class="header">
+        <h1>🐠 AquaCompare</h1>
+        <p>Compare fish species for compatibility and tank requirements</p>
+        <div class="header-nav">
+            <a href="index.html">Compare Fish</a>
+            <a href="about.html">How to Use</a>
+            <div id="auth-links">
+                <a href="login.html">Login</a>
+                <a href="signup.html">Sign Up</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="selection-section">
+            <h2>Select Fish Species to Compare</h2>
+            <div class="fish-selector">
+                <div class="selector-box">
+                    <label for="fish1">Fish Species 1</label>
+                    <input type="text" class="search-input" id="search1" placeholder="Search species..." oninput="filterSpecies('panel1', 'search1')">
+                    <div class="species-panel" id="panel1"></div>
+                </div>
+                <div class="selector-box">
+                    <label for="fish2">Fish Species 2</label>
+                    <input type="text" class="search-input" id="search2" placeholder="Search species..." oninput="filterSpecies('panel2', 'search2')">
+                    <div class="species-panel" id="panel2"></div>
+                </div>
+                <div class="selector-box">
+                    <label for="fish3">Fish Species 3 (Optional)</label>
+                    <input type="text" class="search-input" id="search3" placeholder="Search species..." oninput="filterSpecies('panel3', 'search3')">
+                    <div class="species-panel" id="panel3"></div>
+                </div>
+            </div>
+            <button class="compare-button" onclick="compareSpecies()">Compare Species</button>
+        </div>
+
+        <div class="comparison-grid" id="comparisonGrid">
+            <div class="empty-state">
+                <h3>No comparison yet</h3>
+                <p>Select at least two fish species above and click "Compare Species" to see their compatibility</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2024 AquaCompare. Fish care data sourced from SeriouslyFish, Aquarium Co-Op, FishLore, and Aqueon.</p>
+        <p><a href="about.html">About</a> | <a href="/cdn-cgi/l/email-protection#1e67716b6c337b737f77725e7b667f736e727b307d7173">Contact</a></p>
+        <p><small>Always research thoroughly and consult with experienced aquarists before adding new fish to your tank.</small></p>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script data-cfasync="false" src="/cdn-cgi/script    <script src="js/storage-service.js"></script>
+    <script src="js/auth-manager.js"></script>
+    <script src="js/fish-data.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
