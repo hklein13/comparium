@@ -1,0 +1,218 @@
+/* ============================================================================
+   DARK MODE STYLES
+   ============================================================================ */
+
+/* Root variables for easy theme switching */
+:root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --bg-card: #ffffff;
+    --text-primary: #2c3e50;
+    --text-secondary: #6c757d;
+    --border-color: #e1e8ed;
+    --gradient-start: #667eea;
+    --gradient-end: #764ba2;
+    --shadow: rgba(0, 0, 0, 0.1);
+    --shadow-hover: rgba(0, 0, 0, 0.15);
+}
+
+/* Dark mode color scheme */
+[data-theme="dark"] {
+    --bg-primary: #1a1a2e;
+    --bg-secondary: #16213e;
+    --bg-card: #0f3460;
+    --text-primary: #eee;
+    --text-secondary: #bbb;
+    --border-color: #2d3e5f;
+    --gradient-start: #667eea;
+    --gradient-end: #764ba2;
+    --shadow: rgba(0, 0, 0, 0.3);
+    --shadow-hover: rgba(0, 0, 0, 0.5);
+}
+
+/* Apply theme colors */
+body {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.header {
+    background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+}
+
+.container,
+.comparison-panel,
+.auth-box,
+.dashboard-section,
+.tank-form,
+.stat-card,
+.tank-card {
+    background: var(--bg-card);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.comparison-panel h3,
+.dashboard-section h2,
+.auth-box h2 {
+    color: var(--text-primary);
+}
+
+select,
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+textarea {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border-color: var(--border-color);
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+select:focus,
+input:focus,
+textarea:focus {
+    background: var(--bg-card);
+    border-color: var(--gradient-start);
+}
+
+.results {
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+.compatible {
+    background: rgba(40, 167, 69, 0.1);
+    border-color: #28a745;
+}
+
+[data-theme="dark"] .compatible {
+    background: rgba(40, 167, 69, 0.2);
+}
+
+.incompatible {
+    background: rgba(220, 53, 69, 0.1);
+    border-color: #dc3545;
+}
+
+[data-theme="dark"] .incompatible {
+    background: rgba(220, 53, 69, 0.2);
+}
+
+.warning {
+    background: rgba(255, 193, 7, 0.1);
+    border-color: #ffc107;
+}
+
+[data-theme="dark"] .warning {
+    background: rgba(255, 193, 7, 0.2);
+}
+
+.footer {
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    border-top: 1px solid var(--border-color);
+}
+
+.item-list li {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.item-list li:hover {
+    background: var(--bg-secondary);
+}
+
+.fish-list-item {
+    border-color: var(--border-color);
+    background: var(--bg-card);
+}
+
+.species-badge {
+    background: var(--bg-secondary);
+    color: var(--gradient-start);
+}
+
+/* Dark mode toggle button */
+.theme-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 4px 12px var(--shadow);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.theme-toggle:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px var(--shadow-hover);
+}
+
+.theme-toggle:active {
+    transform: translateY(0);
+}
+
+/* Icon animation */
+.theme-toggle .icon {
+    transition: transform 0.3s ease;
+}
+
+.theme-toggle:hover .icon {
+    transform: rotate(20deg);
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .theme-toggle {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+        bottom: 15px;
+        right: 15px;
+    }
+}
+
+/* Ensure links remain visible in dark mode */
+[data-theme="dark"] a {
+    color: #8b9cff;
+}
+
+[data-theme="dark"] a:hover {
+    color: #a0b0ff;
+}
+
+/* Table styles for dark mode */
+[data-theme="dark"] table {
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] th,
+[data-theme="dark"] td {
+    border-color: var(--border-color);
+}
+
+/* Button styles remain vibrant in dark mode */
+.button,
+.auth-button,
+.btn-small {
+    /* Keep gradient, looks good in both modes */
+}
+
+/* Empty state text */
+.empty-state,
+.empty-state-small {
+    color: var(--text-secondary);
+}
