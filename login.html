@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - AquaCompare</title>
+    <meta name="description" content="Login to AquaCompare to save your fish comparisons and tank plans.">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="header">
+        <h1>🐠 AquaCompare</h1>
+        <p>Fish Species Compatibility Tool</p>
+        <div class="header-nav">
+            <a href="index.html">Compare Fish</a>
+            <a href="about.html">How to Use</a>
+            <div id="auth-links">
+                <a href="login.html">Login</a>
+                <a href="signup.html">Sign Up</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="auth-container">
+        <div class="auth-box">
+            <h2>Welcome Back!</h2>
+            
+            <div id="message-display"></div>
+
+            <form id="login-form" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        name="username" 
+                        required 
+                        autocomplete="username"
+                        placeholder="Enter your username"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        required 
+                        autocomplete="current-password"
+                        placeholder="Enter your password"
+                    >
+                </div>
+
+                <button type="submit" class="auth-button">Login</button>
+            </form>
+
+            <div class="auth-links">
+                <p>Don't have an account? <a href="signup.html">Sign up here</a></p>
+                <p><a href="index.html">Continue without logging in</a></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2024 AquaCompare. Fish care data sourced from SeriouslyFish, Aquarium Co-Op, FishLore, and Aqueon.</p>
+        <p><a href="about.html">About</a> | <a href="/cdn-cgi/l/email-protection#c0b9afb5b2eda5ada1a9ac80a5b8a1adb0aca5eea3afad">Contact</a></p>
+    </div>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="js/storage-service.js"></script>
+    <script src="js/auth-manager.js"></script>
+    <script>
+        // Check if already logged in
+        if (authManager.isLoggedIn()) {
+            window.location.href = 'dashboard.html';
+        }
+
+        async function handleLogin(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const messageDisplay = document.getElementById('message-display');
+            const submitButton = event.target.querySelector('button[type="submit"]');
+
+            // Disable button during login
+            submitButton.disabled = true;
+            submitButton.textContent = 'Logging in...';
+
+            try {
+                const result = await authManager.login(username, password);
+
+                if (result.success) {
+                    messageDisplay.innerHTML = `<div class="success-message">${result.message}</div>`;
+                    
+                    // Redirect after short delay
+                    setTimeout(() => {
+                        authManager.redirectAfterLogin();
+                    }, 500);
+                } else {
+                    messageDisplay.innerHTML = `<div class="error-message">${result.message}</div>`;
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Login';
+                }
+            } catch (error) {
+                messageDisplay.innerHTML = `<div class="error-message">Login failed. Please try again.</div>`;
+                submitButton.disabled = false;
+                submitButton.textContent = 'Login';
+            }
+        }
+
+        // Allow Enter key to submit
+        document.getElementById('password').addEventListener('keypress', (e) => {
+            if (e.key === 'Ent
