@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - AquaCompare</title>
+    <meta name="description" content="Your AquaCompare dashboard - view your saved comparisons, tanks, and favorite fish.">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="header">
+        <h1>🐠 AquaCompare</h1>
+        <p>Fish Species Compatibility Tool</p>
+        <div class="header-nav">
+            <a href="index.html">Compare Fish</a>
+            <a href="my-tanks.html">My Tanks</a>
+            <a href="about.html">How to Use</a>
+            <div id="auth-links"></div>
+        </div>
+    </div>
+
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1>Welcome back, <span id="username-display"></span>!</h1>
+            <p>Manage your fish comparisons, tanks, and favorites</p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="dashboard-stats">
+            <div class="stat-card">
+                <span class="stat-number" id="comparison-count">0</span>
+                <span class="stat-label">Comparisons Saved</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" id="tank-count">0</span>
+                <span class="stat-label">Tanks Created</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" id="favorite-count">0</span>
+                <span class="stat-label">Favorite Species</span>
+            </div>
+        </div>
+
+        <!-- Recent Comparisons -->
+        <div class="dashboard-section">
+            <h2>📊 Recent Comparisons</h2>
+            <div id="recent-comparisons">
+                <div class="empty-state-small">
+                    <p>No comparisons yet. <a href="index.html">Start comparing fish!</a></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- My Tanks -->
+        <div class="dashboard-section">
+            <h2>🏠 My Tanks</h2>
+            <div id="my-tanks-preview">
+                <div class="empty-state-small">
+                    <p>No tanks created yet. <a href="my-tanks.html">Create your first tank!</a></p>
+                </div>
+            </div>
+            <p style="text-align: center; margin-top: 1rem;">
+                <a href="my-tanks.html" class="btn-small">Manage All Tanks</a>
+            </p>
+        </div>
+
+        <!-- Favorite Species -->
+        <div class="dashboard-section">
+            <h2>⭐ Favorite Species</h2>
+            <div id="favorite-species">
+                <div class="empty-state-small">
+                    <p>No favorites yet. Click the ★ on species when comparing to save them!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Export Data -->
+        <div class="dashboard-section">
+            <h2>💾 Data Management</h2>
+            <p>Export your data to back it up or transfer to another device.</p>
+            <button onclick="exportData()" class="btn-small">Export My Data (JSON)</button>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2024 AquaCompare</p>
+        <p><a href="about.html">About</a> | <a href="/cdn-cgi/l/email-protection#bec7d1cbcc93dbd3dfd7d2fedbc6dfd3ced2db90ddd1d3">Contact</a></p>
+    </div>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="js/fish-data.js"></script>
+    <script src="js/storage-service.js"></script>
+    <script src="js/auth-manager.js"></script>
+    <script>
+        // Require authentication
+        if (!authManager.requireAuth()) {
+            // Will redirect to login
+        } else {
+            loadDashboard();
+        }
+
+        async function loadDashboard() {
+            const username = authManager.getCurrentUsername();
+            document.getElementById('username-display').textContent = username;
+
+            // Load profile data
+            const profile = await storageService.getUserProfile(username);
+            
+            if (profile) {
+                // Update stats
+                const comparisons = profile.profile.comparisonHistory || [];
+                const tanks = profile.profile.tanks || [];
+                const favorites = profile.profile.favoriteSpecies || [];
+
+                document.getElementById('comparison-count').textContent = comparisons.length;
+                document.getElementById('tank-count').textContent = tanks.length;
+                document.getElementById('favorite-count').textContent = favorites.length;
+
+                // Load recent comparisons
+                loadRecentComparisons(comparisons.slice(0, 5));
+
+                // Load tank preview
+                loadTanksPreview(tanks.slice(0, 3));
+
+                // Load favorites
+                loadFavorites(favorites);
+            }
+        }
+
+        function loadRecentComparisons(comparisons) {
+            const container = document.getElementById('recent-comparisons');
+            
+            if (comparisons.length === 0) {
+                return; // Keep empty state
+            }
+
+            let html = '<ul class="item-list">';
+            comparisons.forEach(comp => {
+                const speciesNames = comp.species.map(s => s.name).join(', ');
+                const date = new Date(comp.date).toLocaleDateString();
+                const icon = comp.compatible ? '✅' : '⚠️';
+                
+                html += `
+                    <li>
+                        <div>
+                            <strong>${icon} ${speciesNames}</strong><br>
+                            <small>${date}</small>
+                        </div>
+                    </li>
+                `;
+            });
+            html += '</ul>';
+            
+            container.innerHTML = html;
+        }
+
+        function loadTanksPreview(tanks) {
+            const container = document.getElementById('my-tanks-preview');
+            
+            if (tanks.length === 0) {
+                return; // Keep empty state
+            }
+
+            let html = '';
+            tanks.forEach(tank => {
+                const speciesCount = tank.species ? tank.species.length : 0;
+                html += `
+                    <div class="tank-card" onclick="window.location.href='my-tanks.html'">
+                        <h3>${tank.name}</h3>
+                        <div class="tank-card-meta">
+                            ${tank.size} gallons • ${speciesCount} species
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        function loadFavorites(favorites) {
+            const container = document.getElementById('favorite-species');
+            
+            if (favorites.length === 0) {
+                return; // Keep empty state
+            }
+
+            let html = '<ul class="item-list">';
+            favorites.forEach(speciesKey => {
+                const fish = fishDatabase[speciesKey];
+                if (fish) {
+                    html += `
+                        <li>
+                            <div>
+                                <strong>${fish.commonName}</strong><br>
+                                <small><em>${fish.scientificName}</em></small>
+                            </div>
+                            <span class="favorite-star active" onclick="removeFavorite('${speciesKey}')">★</span>
+                        </li>
+                    `;
+                }
+            });
+            html += '</ul>';
+            
+            container.innerHTML = html;
+        }
+
+        async function removeFavorite(speciesKey) {
+            const username = authManager.getCurrentUsername();
+            await storageService.removeFavorite(username, speciesKey);
+            authManager.showMessage('Removed from favorites', 'success');
+            loadDashboard(); // Reload to update display
+        }
+
+        async function exportData() {
+            const username = authManager.getCurrentUsername();
+            const data = await storageService.exportUserData(username);
+            
+            if (data) {
+                // Create download
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `aquacompare-${username}-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+ 
