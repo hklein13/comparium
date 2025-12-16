@@ -153,4 +153,11 @@
             const confirmPassword = this.value;
             
             if (confirmPassword && password !== confirmPassword) {
-                this.setCustomVa
+                this.setCustomValidity('Passwords must match');
+            } else {
+                this.setCustomValidity('');
+            }
+        });
+    </script>
+</body>
+</html>
