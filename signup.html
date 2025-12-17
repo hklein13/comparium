@@ -150,7 +150,7 @@
         }
 
         // Real-time password match validation
-        document.getElementById('confirm-password').addEventListener('input', function() {
+         document.getElementById('confirm-password').addEventListener('input', function() {
             const password = document.getElementById('password').value;
             const confirmPassword = this.value;
             
@@ -160,7 +160,10 @@
                 this.setCustomValidity('');
             }
         });
-    <script src="js/theme-manager.js"></script>
+
+        // Attach form submit handler
+        document.getElementById('signup-form').addEventListener('submit', handleSignup);
     </script>
+    <script src="js/theme-manager.js"></script>
 </body>
 </html>
