@@ -11,13 +11,13 @@
 function makeSpeciesNamesClickable() {
     console.log('🔍 makeSpeciesNamesClickable started');
     
-    // Find all fish names in the results
-    const resultsDiv = document.querySelector('.results');
+    // Find the comparison grid (not .results!)
+    const resultsDiv = document.getElementById('comparisonGrid');
     if (!resultsDiv) {
-        console.log('❌ No .results div found');
+        console.log('❌ No comparisonGrid found');
         return;
     }
-    console.log('✅ Found results div');
+    console.log('✅ Found comparisonGrid');
 
     // Safety check: ensure selectedSpecies exists
     if (typeof selectedSpecies === 'undefined') {
@@ -73,7 +73,7 @@ function makeSpeciesNamesClickable() {
 function addFavoriteStarsToResults(selectedFish) {
     if (!authManager || !authManager.isLoggedIn()) return;
 
-    const resultsDiv = document.querySelector('.results');
+    const resultsDiv = document.getElementById('comparisonGrid');  // CHANGED
     if (!resultsDiv) return;
 
     selectedFish.forEach(fishKey => {
