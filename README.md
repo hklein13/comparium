@@ -113,10 +113,10 @@ Your free GitHub Pages site works great at `yourusername.github.io/Comparium`, b
    - Open `index.html` in a text editor (Notepad, TextEdit, or VS Code)
    - Find this section near the top (around line 26):
    ```html
-   <!-- Google Analytics - Replace GA_MEASUREMENT_ID with your actual ID -->
+   <!-- Google Analytics - Replace G-8VNY458QF3 with your actual ID -->
    ```
    - Remove the `<!--` at the beginning and `-->` at the end
-   - Replace `GA_MEASUREMENT_ID` with your actual ID (twice)
+   - Replace `G-8VNY458QF3` with your actual ID (twice)
    - Save the file
    - Upload the updated file to GitHub
 
