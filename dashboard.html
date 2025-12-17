@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - AquaCompare</title>
-    <meta name="description" content="Your AquaCompare dashboard - view your saved comparisons, tanks, and favorite fish.">
+    <title>Dashboard - Comparium</title>
+    <meta name="description" content="Your Comparium dashboard - view your saved comparisons, tanks, and favorite fish.">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/dark-mode.css">
 <link rel="stylesheet" href="css/enhanced-ui.css">
 </head>
 <body>
     <div class="header">
-        <h1>🐠 AquaCompare</h1>
+        <h1>🐠 Comparium</h1>
         <p>Fish Species Compatibility Tool</p>
         <div class="header-nav">
             <a href="index.html">Compare Fish</a>
@@ -85,7 +85,7 @@
     </div>
 
     <div class="footer">
-        <p>&copy; 2024 AquaCompare</p>
+        <p>&copy; 2024 Comparium</p>
         <p><a href="about.html">About</a> | <a href="/cdn-cgi/l/email-protection#bec7d1cbcc93dbd3dfd7d2fedbc6dfd3ced2db90ddd1d3">Contact</a></p>
     </div>
 
@@ -222,7 +222,7 @@
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `aquacompare-${username}-${new Date().toISOString().split('T')[0]}.json`;
+                a.download = `Comparium-${username}-${new Date().toISOString().split('T')[0]}.json`;
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);

@@ -1,4 +1,4 @@
-# AquaCompare - Fish Species Compatibility Tool
+# Comparium - Fish Species Compatibility Tool
 
 A web-based tool for comparing freshwater aquarium fish species and checking compatibility. Includes 99 species with detailed care requirements, predation warnings, and compatibility analysis.
 
@@ -20,14 +20,14 @@ A web-based tool for comparing freshwater aquarium fish species and checking com
 2. **Create a New Repository**
    - Once logged in, click the "+" icon in the top right
    - Select "New repository"
-   - Name it: `aquacompare` (or any name you like)
+   - Name it: `Comparium` (or any name you like)
    - ✅ Check "Public"
    - ✅ Check "Add a README file"
    - Click "Create repository"
 
 3. **Upload Your Website Files**
    - In your new repository, click "Add file" → "Upload files"
-   - Drag and drop ALL files and folders from the `aquacompare-website` folder:
+   - Drag and drop ALL files and folders from the `Comparium-website` folder:
      - index.html
      - about.html
      - css/ folder (with styles.css inside)
@@ -44,14 +44,14 @@ A web-based tool for comparing freshwater aquarium fish species and checking com
 5. **Get Your Website Link**
    - Wait 2-3 minutes for GitHub to build your site
    - Refresh the Settings → Pages page
-   - You'll see: "Your site is published at https://yourusername.github.io/aquacompare/"
+   - You'll see: "Your site is published at https://yourusername.github.io/Comparium/"
    - **That's your website link!** Share it with anyone!
 
 ---
 
 ## 🌐 Getting a Custom Domain (Optional)
 
-Your free GitHub Pages site works great at `yourusername.github.io/aquacompare`, but you can get a custom domain like `aquacompare.com` for about $10-15/year.
+Your free GitHub Pages site works great at `yourusername.github.io/Comparium`, but you can get a custom domain like `Comparium.com` for about $10-15/year.
 
 ### Step 1: Buy a Domain
 
@@ -61,7 +61,7 @@ Your free GitHub Pages site works great at `yourusername.github.io/aquacompare`,
 - **Cloudflare** (cheapest) - https://www.cloudflare.com/products/registrar/
 
 **What to do:**
-1. Search for your desired domain (e.g., "aquacompare.com")
+1. Search for your desired domain (e.g., "Comparium.com")
 2. Add to cart and purchase (usually $10-15/year)
 3. Complete registration
 
@@ -71,7 +71,7 @@ Your free GitHub Pages site works great at `yourusername.github.io/aquacompare`,
 1. Find "DNS Settings" or "DNS Management"
 2. Add these records:
 
-   **For root domain (aquacompare.com):**
+   **For root domain (Comparium.com):**
    - Type: A Record
    - Host: @
    - Value: 185.199.108.153
@@ -82,7 +82,7 @@ Your free GitHub Pages site works great at `yourusername.github.io/aquacompare`,
    - 185.199.110.153
    - 185.199.111.153
 
-   **For www subdomain (www.aquacompare.com):**
+   **For www subdomain (www.Comparium.com):**
    - Type: CNAME
    - Host: www
    - Value: yourusername.github.io
@@ -92,7 +92,7 @@ Your free GitHub Pages site works great at `yourusername.github.io/aquacompare`,
 
 **In GitHub:**
 1. Go to your repository Settings → Pages
-2. Under "Custom domain", enter your domain (e.g., aquacompare.com)
+2. Under "Custom domain", enter your domain (e.g., Comparium.com)
 3. Click "Save"
 4. ✅ Check "Enforce HTTPS" (wait a few minutes if it's not available yet)
 
@@ -145,10 +145,10 @@ background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 2. Create an `images` folder in your website directory
 3. Put `logo.png` inside the `images` folder
 4. Open `index.html` and `about.html`
-5. Find `<h1>🐠 AquaCompare</h1>`
+5. Find `<h1>🐠 Comparium</h1>`
 6. Replace with:
    ```html
-   <img src="images/logo.png" alt="AquaCompare Logo" style="height: 60px;">
+   <img src="images/logo.png" alt="Comparium Logo" style="height: 60px;">
    ```
 7. Upload all files to GitHub
 
@@ -162,7 +162,7 @@ background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 ## 📁 File Structure
 
 ```
-aquacompare-website/
+Comparium-website/
 ├── index.html          # Main comparison page
 ├── about.html          # Help and information page
 ├── css/
@@ -269,7 +269,7 @@ Contact: your-email@example.com
 
 ## 📄 License
 
-This project is free to use and modify for personal or educational purposes. If you use this code, please credit AquaCompare and the original data sources.
+This project is free to use and modify for personal or educational purposes. If you use this code, please credit Comparium and the original data sources.
 
 **Important:** Fish care data is educational only. Always research thoroughly before adding fish to your aquarium.
 

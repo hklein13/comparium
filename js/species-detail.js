@@ -50,7 +50,7 @@ function loadSpeciesDetail() {
     }
 
     // Update page title
-    document.title = `${fish.commonName} - AquaCompare`;
+    document.title = `${fish.commonName} - Comparium`;
 
     // Generate content
     const content = `

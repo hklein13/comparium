@@ -1,4 +1,4 @@
-// AquaCompare - Application Logic
+// Comparium - Application Logic
 
 // Fish categories for organized display
 const fishCategories = {
