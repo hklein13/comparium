@@ -6,6 +6,8 @@
     <title>Dashboard - AquaCompare</title>
     <meta name="description" content="Your AquaCompare dashboard - view your saved comparisons, tanks, and favorite fish.">
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/dark-mode.css">
+<link rel="stylesheet" href="css/enhanced-ui.css">
 </head>
 <body>
     <div class="header">
@@ -225,4 +227,12 @@
                 a.click();
                 document.body.removeChild(a);
                 URL.revokeObjectURL(url);
+                
+                authManager.showMessage('Data exported successfully', 'success');
+            }
+        }
+    </script>
+    <script src="js/theme-manager.js"></script>
+</body>
+</html>
  
