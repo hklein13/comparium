@@ -247,5 +247,21 @@
     </script>
 
     <script src="js/theme-manager.js"></script>
+    <script type="module">
+  // Check if user is logged in
+  window.firebaseAuthState(window.firebaseAuth, (user) => {
+    if (!user) {
+      // Not logged in - redirect to login
+      window.location.href = 'login.html';
+    } else {
+      // User is logged in - show their email
+      document.querySelector('.dashboard-header h1').textContent = 
+        'Welcome back, ' + user.email + '!';
+    }
+  });
+</script>
+```
+
+---
 </body>
 </html>
