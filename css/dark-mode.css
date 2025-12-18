@@ -37,8 +37,8 @@ body {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.header {
-    background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+[data-theme="dark"] .header {
+    background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
 }
 
 .container,
@@ -399,6 +399,191 @@ textarea:focus {
     color: var(--text-primary) !important;
 }
 
+/* ==========================================================================
+   STRONG OVERRIDES FOR THEMES THAT USE !important
+   Ensure dark-mode wins against ocean-theme/styles that force light colors
+   ========================================================================== */
+
+/* Make page-level colors authoritative in dark mode */
+[data-theme="dark"] body {
+    background: var(--bg-primary) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Header and primary UI components should use dark colors even if other
+   theme files added !important rules for light mode. */
+[data-theme="dark"] .header {
+    background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%) !important;
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .selection-section,
+[data-theme="dark"] .comparison-grid,
+[data-theme="dark"] .content-section,
+[data-theme="dark"] .auth-box,
+[data-theme="dark"] .dashboard-header,
+[data-theme="dark"] .dashboard-section,
+[data-theme="dark"] .stat-card,
+[data-theme="dark"] .tank-form,
+[data-theme="dark"] .tank-preview,
+[data-theme="dark"] .tank-card {
+    background: var(--bg-card) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+
+/* Buttons and accents */
+[data-theme="dark"] .compare-button,
+[data-theme="dark"] .auth-button {
+    background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%) !important;
+    color: #fff !important;
+    box-shadow: 0 4px 12px var(--shadow) !important;
+}
+
+[data-theme="dark"] .btn-small {
+    background: var(--gradient-start) !important;
+    color: #fff !important;
+}
+
+/* Panels that ocean-theme forces white should be dark in dark mode */
+[data-theme="dark"] .selection-section,
+[data-theme="dark"] .species-panel,
+[data-theme="dark"] .info-box,
+[data-theme="dark"] .warning-box {
+    background: var(--bg-card) !important;
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .species-panel .species-item,
+[data-theme="dark"] .species-panel .species-item:hover,
+[data-theme="dark"] .species-panel .species-item.selected {
+    background: var(--bg-secondary) !important;
+}
+
+[data-theme="dark"] .species-badge {
+    background: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Ensure body-level link colors are visible */
+[data-theme="dark"] a {
+    color: var(--gradient-start) !important;
+}
+
+[data-theme="dark"] .remove-fish-btn,
+[data-theme="dark"] .btn-danger {
+    background: #ff6b6b !important;
+}
+
+/* Small utility: make placeholders readable */
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder {
+    color: var(--text-secondary) !important;
+    opacity: 0.9 !important;
+}
+
+/* ===== CATEGORY / COLLAPSIBLE FIXES ===== */
+/* Ensure category headers and summary panels are dark in dark mode */
+[data-theme="dark"] .category-details {
+    border-color: var(--border-color) !important;
+    background: transparent !important;
+}
+
+[data-theme="dark"] .category-details summary {
+    background: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
+    border-radius: 6px !important;
+    padding: 0.65rem !important;
+    list-style: none !important;
+}
+
+[data-theme="dark"] .category-details[open] summary::before {
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .category-details summary::before {
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .category-details summary::-webkit-details-marker {
+    display: none !important;
+}
+
+/* Sub-items inside categories should use secondary background */
+[data-theme="dark"] .category-details .species-item {
+    background: var(--bg-card) !important;
+    color: var(--text-primary) !important;
+    border-left-color: transparent !important;
+}
+
+/* ===== SELECT / OPTION / INPUT CONTRAST ===== */
+[data-theme="dark"] select,
+[data-theme="dark"] option,
+[data-theme="dark"] .search-input,
+[data-theme="dark"] input,
+[data-theme="dark"] textarea {
+    background: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] option {
+    color: var(--text-primary) !important;
+    background: var(--bg-secondary) !important;
+}
+
+[data-theme="dark"] select:focus,
+[data-theme="dark"] input:focus,
+[data-theme="dark"] textarea:focus {
+    background: var(--bg-card) !important;
+    border-color: var(--gradient-start) !important;
+}
+
+/* ===== HEADING & LABEL CONTRAST ===== */
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3,
+[data-theme="dark"] h4,
+[data-theme="dark"] h5,
+[data-theme="dark"] h6 {
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .selection-section h2,
+[data-theme="dark"] .dashboard-header h1,
+[data-theme="dark"] .header p,
+[data-theme="dark"] .selector-box label,
+[data-theme="dark"] .category-details summary {
+    color: var(--text-primary) !important;
+}
+
+/* Make small text slightly lighter but still readable */
+[data-theme="dark"] small,
+[data-theme="dark"] .species-scientific-name {
+    color: var(--text-secondary) !important;
+}
+
+/* ===== SPECIES / SUBCATEGORY FONT CONTRAST ===== */
+/* Ensure list items and their text are high contrast in dark mode */
+[data-theme="dark"] .species-item {
+    color: var(--text-primary) !important;
+    background: var(--bg-card) !important;
+}
+
+[data-theme="dark"] .species-item:hover,
+[data-theme="dark"] .species-item.selected {
+    background: var(--bg-secondary) !important;
+    border-left-color: var(--gradient-start) !important;
+}
+
+[data-theme="dark"] .species-common-name {
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .species-scientific-name {
+    color: var(--text-secondary) !important;
+}
+
 /* Dashboard sections - needs light text */
 [data-theme="dark"] .dashboard-section h2 {
     color: var(--text-primary) !important;
@@ -452,3 +637,4 @@ textarea:focus {
 [data-theme="dark"] .tank-card-meta {
     color: var(--text-secondary) !important;
 }
+
