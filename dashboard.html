@@ -246,20 +246,18 @@
         document.getElementById('copyright-year').textContent = new Date().getFullYear();
     </script>
 
+    <script type="module" src="js/firebase-init.js"></script>
     <script src="js/theme-manager.js"></script>
-    <script type="module">
-  // Check if user is logged in
-  window.firebaseAuthState(window.firebaseAuth, (user) => {
-    if (!user) {
-      // Not logged in - redirect to login
-      window.location.href = 'login.html';
-    } else {
-      // User is logged in - show their email
-      document.querySelector('.dashboard-header h1').textContent = 
-        'Welcome back, ' + user.email + '!';
-    }
-  });
-</script>
+    <script>
+      // Prefer using authManager to enforce login and display username/email
+      if (!authManager.requireAuth()) {
+          // requireAuth will redirect to login
+      } else {
+          const displayName = authManager.getCurrentUsername() || 'Guest';
+          const header = document.querySelector('.dashboard-header h1');
+          if (header) header.textContent = 'Welcome back, ' + displayName + '!';
+      }
+    </script>
 ```
 
 ---
