@@ -115,15 +115,26 @@
             window.location.href = 'dashboard.html';
         }
 
-        async function handleSignup(event) {
-            event.preventDefault();
-            
-            const username = document.getElementById('username').value;
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirm-password').value;
-            const messageDisplay = document.getElementById('message-display');
-            const submitButton = event.target.querySelector('button[type="submit"]');
+        async function handleSignup(e) {
+    e.preventDefault();
+    
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const username = document.getElementById('username').value;
+
+    try {
+        // Create user with Firebase ONLY
+        const userCredential = await window.firebaseSignUp(window.firebaseAuth, email, password);
+        
+        // Store username in localStorage (optional)
+        localStorage.setItem('username', username);
+        
+        alert('Account created successfully!');
+        window.location.href = 'dashboard.html';
+    } catch (error) {
+        alert('Signup failed: ' + error.message);
+    }
+}
 
             // Clear previous messages
             messageDisplay.innerHTML = '';
@@ -181,7 +192,6 @@
         document.getElementById('copyright-year').textContent = new Date().getFullYear();
     </script>
 
-    <script src="js/theme-manager.js"></script>
 </body>
 </html>
 
