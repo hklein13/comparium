@@ -87,39 +87,22 @@
             window.location.href = 'dashboard.html';
         }
 
-        async function handleLogin(event) {
-            event.preventDefault();
-            
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            const messageDisplay = document.getElementById('message-display');
-            const submitButton = event.target.querySelector('button[type="submit"]');
+        async function handleLogin(e) {
+    e.preventDefault();
+    
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
 
-            // Disable button during login
-            submitButton.disabled = true;
-            submitButton.textContent = 'Logging in...';
-
-            try {
-                const result = await authManager.login(username, password);
-
-                if (result.success) {
-                    messageDisplay.innerHTML = `<div class="success-message">${result.message}</div>`;
-                    
-                    // Redirect after short delay
-                    setTimeout(() => {
-                        authManager.redirectAfterLogin();
-                    }, 500);
-                } else {
-                    messageDisplay.innerHTML = `<div class="error-message">${result.message}</div>`;
-                    submitButton.disabled = false;
-                    submitButton.textContent = 'Login';
-                }
-            } catch (error) {
-                messageDisplay.innerHTML = `<div class="error-message">Login failed. Please try again.</div>`;
-                submitButton.disabled = false;
-                submitButton.textContent = 'Login';
-            }
-        }
+    try {
+        // Sign in with Firebase
+        const userCredential = await window.firebaseSignIn(window.firebaseAuth, email, password);
+        
+        alert('Login successful!');
+        window.location.href = 'dashboard.html';
+    } catch (error) {
+        alert('Login failed: ' + error.message);
+    }
+}
 
         // Allow Enter key to submit
         document.getElementById('password').addEventListener('keypress', (e) => {
