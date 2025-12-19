@@ -271,6 +271,45 @@
             color: var(--text-primary, #e2e8f0);
         }
 
+        /* Additional dark mode contrast fixes */
+        [data-theme="dark"] .glossary-header p,
+        [data-theme="dark"] .glossary-item-description,
+        [data-theme="dark"] .section-title,
+        [data-theme="dark"] .empty-state h3 {
+            color: var(--text-primary, #e2e8f0);
+        }
+
+        [data-theme="dark"] .category-count,
+        [data-theme="dark"] .glossary-item-meta,
+        [data-theme="dark"] .search-box input::placeholder,
+        [data-theme="dark"] .search-icon,
+        [data-theme="dark"] .empty-state {
+            color: var(--text-secondary, #bbb);
+        }
+
+        [data-theme="dark"] .search-box input {
+            background: var(--bg-secondary, #16213e);
+            color: var(--text-primary, #e2e8f0);
+            border-color: var(--border-color, #2d3e5f);
+        }
+
+        [data-theme="dark"] .section-title {
+            border-bottom-color: var(--border-color, #2d3e5f);
+        }
+
+        [data-theme="dark"] .glossary-item {
+            border-color: var(--border-color, #2d3e5f);
+        }
+
+        [data-theme="dark"] .tag {
+            background: var(--bg-secondary, #16213e);
+            color: var(--text-primary, #e2e8f0);
+        }
+
+        [data-theme="dark"] .contribute-banner {
+            background: linear-gradient(135deg, #0f766e 0%, #1e3a8a 100%);
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .glossary-container {
