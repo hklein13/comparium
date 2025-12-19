@@ -1,0 +1,237 @@
+// ============================================================================
+// Comparium Firestore Security Rules
+// ============================================================================
+// Deploy with: firebase deploy --only firestore:rules
+// Test with: firebase emulators:start --only firestore
+//
+// PHASE 1: Private user data migration from localStorage
+// - Each user can only read/write their own profile
+// - Username uniqueness enforced via separate collection
+// - All tanks, favorites, and comparison history are private
+// ============================================================================
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ========================================================================
+    // HELPER FUNCTIONS
+    // ========================================================================
+
+    // Check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Check if user owns the resource
+    function isOwner(uid) {
+      return isAuthenticated() && request.auth.uid == uid;
+    }
+
+    // Validate user profile structure on create
+    function isValidUserProfile() {
+      let data = request.resource.data;
+      return data.keys().hasAll(['uid', 'username', 'email', 'created', 'profile'])
+             && data.uid is string
+             && data.uid == request.auth.uid  // Must match authenticated user
+             && data.username is string
+             && data.username.size() >= 3
+             && data.username.size() <= 30
+             && data.email is string
+             && data.email.matches('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')
+             && data.created is string
+             && data.profile is map
+             && data.profile.keys().hasAll(['favoriteSpecies', 'comparisonHistory', 'tanks'])
+             && data.profile.favoriteSpecies is list
+             && data.profile.comparisonHistory is list
+             && data.profile.tanks is list;
+    }
+
+    // Validate user profile structure on update (more lenient)
+    function isValidUserUpdate() {
+      let data = request.resource.data;
+      // Can't change uid, username, email, or created
+      return !('uid' in request.resource.data.diff(resource.data).affectedKeys())
+             && !('username' in request.resource.data.diff(resource.data).affectedKeys())
+             && !('email' in request.resource.data.diff(resource.data).affectedKeys())
+             && !('created' in request.resource.data.diff(resource.data).affectedKeys());
+    }
+
+    // Validate tank structure
+    function isValidTank(tank) {
+      return tank.keys().hasAll(['id', 'name', 'size', 'species', 'created'])
+             && tank.id is string
+             && tank.name is string
+             && tank.name.size() >= 1
+             && tank.name.size() <= 100
+             && tank.size is number
+             && tank.size > 0
+             && tank.species is list
+             && tank.created is string;
+    }
+
+    // Validate comparison structure
+    function isValidComparison(comparison) {
+      return comparison.keys().hasAll(['id', 'date', 'species', 'compatible'])
+             && comparison.id is string
+             && comparison.date is string
+             && comparison.species is list
+             && comparison.species.size() >= 2
+             && comparison.compatible is bool;
+    }
+
+    // Validate species key format (alphanumeric + hyphens/underscores)
+    function isValidSpeciesKey(key) {
+      return key is string
+             && key.size() > 0
+             && key.size() <= 100
+             && key.matches('^[a-zA-Z0-9_-]+$');
+    }
+
+    // ========================================================================
+    // USERS COLLECTION (Primary user data)
+    // ========================================================================
+    // Structure: users/{uid}
+    //   - uid: Firebase Auth UID
+    //   - username: Unique username (3-30 chars)
+    //   - email: User email
+    //   - created: ISO-8601 timestamp
+    //   - lastLogin: ISO-8601 timestamp
+    //   - profile:
+    //       - favoriteSpecies: Array of species keys
+    //       - comparisonHistory: Array of comparison objects
+    //       - tanks: Array of tank objects
+    // ========================================================================
+
+    match /users/{uid} {
+      // READ: Only the owner can read their own profile
+      allow read: if isOwner(uid);
+
+      // CREATE: Only authenticated user can create their own profile
+      // - UID must match authenticated user
+      // - Profile structure must be valid
+      // - Username must be registered in usernames collection first
+      allow create: if isOwner(uid)
+                       && isValidUserProfile()
+                       && exists(/databases/$(database)/documents/usernames/$(request.resource.data.username));
+
+      // UPDATE: Only owner can update their profile
+      // - Cannot change uid, username, email, or created timestamp
+      // - Can update lastLogin, profile data
+      allow update: if isOwner(uid)
+                       && isValidUserUpdate();
+
+      // DELETE: Prevent profile deletion (keep for audit trail)
+      // If deletion is needed, implement soft-delete flag instead
+      allow delete: if false;
+    }
+
+    // ========================================================================
+    // USERNAMES COLLECTION (Username uniqueness index)
+    // ========================================================================
+    // Structure: usernames/{username}
+    //   - uid: Firebase Auth UID of the owner
+    //   - created: ISO-8601 timestamp when username was claimed
+    //
+    // This collection enforces username uniqueness and allows username->UID lookup
+    // ========================================================================
+
+    match /usernames/{username} {
+      // READ: Any authenticated user can check if username exists
+      // (Needed for registration validation)
+      allow read: if isAuthenticated();
+
+      // CREATE: Only when creating a new user account
+      // - Username must be 3-30 characters
+      // - UID must match authenticated user
+      // - Can only create if it doesn't already exist (Firestore enforces this)
+      allow create: if isAuthenticated()
+                       && request.resource.data.uid == request.auth.uid
+                       && username.size() >= 3
+                       && username.size() <= 30
+                       && username.matches('^[a-zA-Z0-9_-]+$');
+
+      // UPDATE/DELETE: Never allow changes to usernames
+      // If a user wants to change username, implement a manual admin process
+      allow update, delete: if false;
+    }
+
+    // ========================================================================
+    // EMAIL INDEX COLLECTION (Email->UID lookup - Optional)
+    // ========================================================================
+    // Structure: emails/{email}
+    //   - uid: Firebase Auth UID
+    //   - created: ISO-8601 timestamp
+    //
+    // Optional collection for email->UID lookups if needed
+    // Firebase Auth already handles email uniqueness
+    // ========================================================================
+
+    match /emails/{email} {
+      // READ: Only owner can read their own email mapping
+      allow read: if isAuthenticated() && resource.data.uid == request.auth.uid;
+
+      // CREATE: Only when creating a new user account
+      allow create: if isAuthenticated()
+                       && request.resource.data.uid == request.auth.uid;
+
+      // UPDATE/DELETE: Never allow changes
+      allow update, delete: if false;
+    }
+
+    // ========================================================================
+    // FUTURE: PUBLIC TANKS COLLECTION (Phase 2)
+    // ========================================================================
+    // Uncomment when implementing community tank sharing feature
+    //
+    // match /publicTanks/{tankId} {
+    //   allow read: if true;
+    //
+    //   allow create: if isAuthenticated()
+    //                    && request.resource.data.ownerUid == request.auth.uid
+    //                    && request.resource.data.visibility == 'public';
+    //
+    //   allow update, delete: if isAuthenticated()
+    //                            && resource.data.ownerUid == request.auth.uid;
+    // }
+
+    // ========================================================================
+    // FUTURE: SPECIES REFERENCE DATABASE (Phase 3)
+    // ========================================================================
+    // Uncomment when migrating fish-data.js to Firestore
+    //
+    // match /species/{speciesId} {
+    //   // Public read for all users
+    //   allow read: if true;
+    //
+    //   // Admin-only writes (implement admin role check)
+    //   allow write: if isAuthenticated()
+    //                   && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    // }
+
+    // ========================================================================
+    // FUTURE: GLOSSARY COLLECTION (Phase 3)
+    // ========================================================================
+    // Uncomment when migrating glossary.js to Firestore
+    //
+    // match /glossary/{termId} {
+    //   // Public read for all users
+    //   allow read: if true;
+    //
+    //   // Admin-only writes
+    //   allow write: if isAuthenticated()
+    //                   && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    // }
+
+    // ========================================================================
+    // DEFAULT: DENY ALL ACCESS
+    // ========================================================================
+    // Any collection not explicitly defined above is denied by default
+    // This is a security best practice
+    // ========================================================================
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

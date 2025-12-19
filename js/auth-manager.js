@@ -19,18 +19,18 @@ class AuthManager {
         if (window.firebaseAuthState && window.firebaseAuth) {
             window.firebaseAuthState(window.firebaseAuth, async (user) => {
                 if (user) {
-                    // Try to load username from local profile mapping
+                    // Load username from Firestore profile
                     const uid = user.uid;
-                    const localJson = localStorage.getItem(`user_${uid}`);
-                    if (localJson) {
+                    if (window.firestoreGetProfile) {
                         try {
-                            const profile = JSON.parse(localJson);
-                            this.currentUser = profile.username || user.email;
+                            const profile = await window.firestoreGetProfile(uid);
+                            this.currentUser = profile?.username || user.email;
                         } catch (e) {
+                            console.error('Error loading username:', e);
                             this.currentUser = user.email;
                         }
                     } else {
-                        // No local profile, fall back to email
+                        // Firestore not available, use email
                         this.currentUser = user.email;
                     }
                     this.updateUIForLoggedInUser();
