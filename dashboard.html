@@ -107,12 +107,26 @@
         if (!authManager.requireAuth()) {
             // Will redirect to login
         } else {
+            initDashboard();
+        }
+
+        async function initDashboard() {
+            // Wait for auth to be fully initialized
+            let retries = 0;
+            while (!authManager.getCurrentUsername() && retries < 20) {
+                await new Promise(resolve => setTimeout(resolve, 100));
+                retries++;
+            }
             loadDashboard();
         }
 
         async function loadDashboard() {
             const username = authManager.getCurrentUsername();
-            document.getElementById('username-display').textContent = username;
+            if (username) {
+                document.getElementById('username-display').textContent = username;
+            } else {
+                document.getElementById('username-display').textContent = 'User';
+            }
 
             // Load profile data
             const profile = await storageService.getUserProfile(username);

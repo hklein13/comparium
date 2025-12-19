@@ -14,7 +14,7 @@ class AuthManager {
     /**
      * Initialize authentication state
      */
-    init() {
+    async init() {
         // If Firebase auth is available, listen for auth state changes and keep currentUser in sync
         if (window.firebaseAuthState && window.firebaseAuth) {
             window.firebaseAuthState(window.firebaseAuth, async (user) => {
@@ -44,7 +44,7 @@ class AuthManager {
         }
 
         // Fallback: check if user is already logged in via local storage
-        const username = this.storage.getCurrentUser();
+        const username = await this.storage.getCurrentUser();
         if (username) {
             this.currentUser = username;
             this.updateUIForLoggedInUser();
