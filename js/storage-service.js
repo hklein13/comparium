@@ -8,9 +8,9 @@
 
 class StorageService {
     constructor() {
-        // Future: Add backend API endpoint here
-        // this.apiUrl = 'https://your-backend.com/api';
-        this.useBackend = false; // Toggle when ready for backend
+        // Firestore is now the primary storage backend
+        // localStorage is only used for UI preferences (theme)
+        this.useBackend = true; // Firestore enabled
     }
 
     // ========================================================================
@@ -26,56 +26,28 @@ class StorageService {
      */
     async registerUser(username, password, email) {
         try {
-            // If Firebase Auth is available, create the account there and store the profile in Firestore (preferred)
             const auth = window.firebaseAuth;
-            if (auth && window.firebaseSignUp && window.firestoreSetProfile) {
-                // Quick username uniqueness check against existing local mapping
-                if (localStorage.getItem(`username_map_${username}`)) {
-                    return { success: false, message: 'Username already exists' };
-                }
 
-                // Create Firebase user with email/password
-                const userCredential = await window.firebaseSignUp(auth, email, password);
-                const uid = userCredential.user.uid;
-
-                // Create profile object and save to Firestore
-                const user = {
-                    uid: uid,
-                    username: username,
-                    email: email,
-                    created: new Date().toISOString(),
-                    lastLogin: new Date().toISOString(),
-                    profile: {
-                        favoriteSpecies: [],
-                        comparisonHistory: [],
-                        tanks: []
-                    }
-                };
-
-                const saved = await window.firestoreSetProfile(uid, user);
-                if (!saved) {
-                    // fallback to local storage if Firestore write fails
-                    localStorage.setItem(`user_${uid}`, JSON.stringify(user));
-                }
-
-                // Map username to uid for lookup
-                localStorage.setItem(`username_map_${username}`, uid);
-                // Store current session username for compatibility
-                localStorage.setItem('currentUser', username);
-
-                return { success: true, message: 'Account created successfully!' };
+            // Require Firebase Auth and Firestore
+            if (!auth || !window.firebaseSignUp || !window.firestoreSetProfile || !window.firestoreUsernameExists || !window.firestoreCreateUsername) {
+                return { success: false, message: 'Database connection unavailable. Please try again later.' };
             }
 
-            // Fallback: original localStorage behaviour (no Firebase)
-            const existingUser = localStorage.getItem(`user_${username}`);
-            if (existingUser) {
+            // Check username uniqueness in Firestore
+            const usernameExists = await window.firestoreUsernameExists(username);
+            if (usernameExists) {
                 return { success: false, message: 'Username already exists' };
             }
 
+            // Create Firebase Auth user with email/password
+            const userCredential = await window.firebaseSignUp(auth, email, password);
+            const uid = userCredential.user.uid;
+
+            // Create user profile object
             const user = {
+                uid: uid,
                 username: username,
                 email: email,
-                password: this._hashPassword(password), // Simple hash
                 created: new Date().toISOString(),
                 lastLogin: new Date().toISOString(),
                 profile: {
@@ -85,11 +57,35 @@ class StorageService {
                 }
             };
 
-            localStorage.setItem(`user_${username}`, JSON.stringify(user));
+            // Save profile to Firestore users collection
+            const profileSaved = await window.firestoreSetProfile(uid, user);
+            if (!profileSaved) {
+                // Clean up Auth user if Firestore save failed
+                console.error('Failed to save profile to Firestore');
+                return { success: false, message: 'Failed to create account. Please try again.' };
+            }
+
+            // Create username mapping in Firestore usernames collection
+            const usernameMapped = await window.firestoreCreateUsername(username, uid);
+            if (!usernameMapped) {
+                console.error('Failed to create username mapping');
+                // Profile is saved, so account is usable, just log the error
+            }
+
             return { success: true, message: 'Account created successfully!' };
 
         } catch (error) {
             console.error('Registration error:', error);
+
+            // Provide user-friendly error messages
+            if (error.code === 'auth/email-already-in-use') {
+                return { success: false, message: 'Email address is already in use' };
+            } else if (error.code === 'auth/invalid-email') {
+                return { success: false, message: 'Invalid email address' };
+            } else if (error.code === 'auth/weak-password') {
+                return { success: false, message: 'Password should be at least 6 characters' };
+            }
+
             return { success: false, message: 'Registration failed. Please try again.' };
         }
     }
@@ -102,106 +98,77 @@ class StorageService {
      */
     async loginUser(identifier, password) {
         try {
-            // identifier may be an email or a username
             const auth = window.firebaseAuth;
 
-            // If Firebase Auth available, try using it
-            if (auth && window.firebaseSignIn) {
-                let email = null;
-                let uid = null;
+            // Require Firebase Auth and Firestore
+            if (!auth || !window.firebaseSignIn || !window.firestoreGetProfile) {
+                return { success: false, message: 'Database connection unavailable. Please try again later.' };
+            }
 
-                if (identifier.includes('@')) {
-                    email = identifier;
-                    // attempt to find profile by email to get uid
-                    if (window.firestoreGetProfileByEmail) {
-                        const profile = await window.firestoreGetProfileByEmail(email);
-                        if (profile && profile.uid) uid = profile.uid;
-                    }
-                } else {
-                    // Treat identifier as username; map to uid then to stored profile
-                    uid = localStorage.getItem(`username_map_${identifier}`);
-                    if (uid) {
-                        const localUserJson = localStorage.getItem(`user_${uid}`);
-                        if (localUserJson) {
-                            const localUser = JSON.parse(localUserJson);
-                            email = localUser.email;
-                        } else if (window.firestoreGetProfile) {
-                            const profile = await window.firestoreGetProfile(uid);
-                            if (profile && profile.email) email = profile.email;
-                        }
-                    }
-                    if (!email) {
-                        return { success: false, message: 'Username not found' };
-                    }
+            let email = null;
+            let uid = null;
+
+            if (identifier.includes('@')) {
+                // identifier is an email
+                email = identifier;
+            } else {
+                // identifier is a username - look up UID from Firestore
+                if (!window.firestoreGetUidByUsername) {
+                    return { success: false, message: 'Database connection unavailable. Please try again later.' };
                 }
 
-                // Sign in using Firebase
-                const userCredential = await window.firebaseSignIn(auth, email, password);
-                uid = uid || userCredential.user.uid;
-
-                // Try to fetch profile from Firestore
-                let profile = null;
-                if (window.firestoreGetProfile && uid) profile = await window.firestoreGetProfile(uid);
-
-                if (profile) {
-                    // Update lastLogin
-                    profile.lastLogin = new Date().toISOString();
-                    await window.firestoreSetProfile(uid, profile);
-
-                    // Ensure local mapping
-                    if (profile.username) localStorage.setItem(`username_map_${profile.username}`, uid);
-                    localStorage.setItem(`user_${uid}`, JSON.stringify(profile));
-                    localStorage.setItem('currentUser', profile.username);
-
-                    return {
-                        success: true,
-                        message: 'Login successful!',
-                        user: {
-                            username: profile.username,
-                            email: profile.email,
-                            created: profile.created
-                        }
-                    };
+                uid = await window.firestoreGetUidByUsername(identifier);
+                if (!uid) {
+                    return { success: false, message: 'Username not found' };
                 }
 
-                // If we don't have a Firestore profile, fallback to email as username
-                localStorage.setItem('currentUser', email);
-                return { success: true, message: 'Login successful!', user: { username: email, email } };
+                // Get email from user profile
+                const profile = await window.firestoreGetProfile(uid);
+                if (!profile || !profile.email) {
+                    return { success: false, message: 'User profile not found' };
+                }
+                email = profile.email;
             }
 
-            // Fallback to localStorage auth
-            const userJson = localStorage.getItem(`user_${identifier}`);
-            if (!userJson) {
-                return { success: false, message: 'Username not found' };
+            // Sign in with Firebase Auth using email/password
+            const userCredential = await window.firebaseSignIn(auth, email, password);
+            uid = uid || userCredential.user.uid;
+
+            // Fetch user profile from Firestore
+            const profile = await window.firestoreGetProfile(uid);
+            if (!profile) {
+                return { success: false, message: 'User profile not found' };
             }
 
-            const user = JSON.parse(userJson);
-            const hashedPassword = this._hashPassword(password);
-
-            if (user.password !== hashedPassword) {
-                return { success: false, message: 'Incorrect password' };
-            }
-
-            // Update last login
-            user.lastLogin = new Date().toISOString();
-            localStorage.setItem(`user_${identifier}`, JSON.stringify(user));
-
-            // Set current session
-            localStorage.setItem('currentUser', identifier);
+            // Update lastLogin timestamp
+            profile.lastLogin = new Date().toISOString();
+            await window.firestoreSetProfile(uid, profile);
 
             return {
                 success: true,
                 message: 'Login successful!',
                 user: {
-                    username: user.username,
-                    email: user.email,
-                    created: user.created
+                    username: profile.username,
+                    email: profile.email,
+                    created: profile.created
                 }
             };
 
         } catch (error) {
             console.error('Login error:', error);
-            return { success: false, message: (error && error.message) ? error.message : 'Login failed. Please try again.' };
+
+            // Provide user-friendly error messages
+            if (error.code === 'auth/user-not-found') {
+                return { success: false, message: 'User not found' };
+            } else if (error.code === 'auth/wrong-password') {
+                return { success: false, message: 'Incorrect password' };
+            } else if (error.code === 'auth/invalid-email') {
+                return { success: false, message: 'Invalid email address' };
+            } else if (error.code === 'auth/user-disabled') {
+                return { success: false, message: 'This account has been disabled' };
+            }
+
+            return { success: false, message: error.message || 'Login failed. Please try again.' };
         }
     }
 
@@ -214,32 +181,37 @@ class StorageService {
             if (auth && window.firebaseSignOut) {
                 await window.firebaseSignOut(auth);
             }
+            return { success: true };
         } catch (e) {
-            console.warn('Firebase signOut failed:', e.message || e);
+            console.error('Logout failed:', e);
+            return { success: false, message: 'Logout failed' };
         }
-        localStorage.removeItem('currentUser');
-        return { success: true };
     }
 
     /**
      * Get currently logged in user
-     * @returns {string|null} username
+     * @returns {Promise<string|null>} username
      */
-    getCurrentUser() {
-        // Prefer Firebase auth current user if present
+    async getCurrentUser() {
+        // Check Firebase Auth state
         const auth = window.firebaseAuth;
-        if (auth && auth.currentUser) {
-            // Try to return mapped username if available
-            const uid = auth.currentUser.uid;
-            const localJson = localStorage.getItem(`user_${uid}`);
-            if (localJson) {
-                try { return JSON.parse(localJson).username; } catch(e){ }
-            }
-            return auth.currentUser.email || null;
+        if (!auth || !auth.currentUser) {
+            return null;
         }
 
-        // Fallback to legacy currentUser
-        return localStorage.getItem('currentUser');
+        // Get username from Firestore profile
+        const uid = auth.currentUser.uid;
+        if (window.firestoreGetProfile) {
+            try {
+                const profile = await window.firestoreGetProfile(uid);
+                return profile?.username || auth.currentUser.email || null;
+            } catch (e) {
+                console.error('Error getting current user:', e);
+            }
+        }
+
+        // Fallback to email if Firestore unavailable
+        return auth.currentUser.email || null;
     }
 
     /**
@@ -258,38 +230,39 @@ class StorageService {
 
     /**
      * Get user profile data
-     * @param {string} username 
+     * @param {string} username
      * @returns {Promise<object|null>}
      */
     async getUserProfile(username) {
         try {
-            // If Firestore is available, prefer to fetch profile from there
-            if (window.firebaseFirestore && window.firestoreGetProfile) {
-                let uid = localStorage.getItem(`username_map_${username}`) || username;
+            if (!window.firebaseFirestore || !window.firestoreGetProfile) {
+                return null;
+            }
 
-                // If username looks like an email, try lookup by email
-                if (username && username.includes('@') && window.firestoreGetProfileByEmail) {
+            let uid = null;
+
+            // If username looks like an email, look up by email
+            if (username && username.includes('@')) {
+                if (window.firestoreGetProfileByEmail) {
                     const profileByEmail = await window.firestoreGetProfileByEmail(username);
                     if (profileByEmail) return profileByEmail;
                 }
-
-                const profile = await window.firestoreGetProfile(uid);
-                if (profile) return profile;
+                return null;
             }
 
-            // Fallback to localStorage
-            const uid = localStorage.getItem(`username_map_${username}`) || username;
-            const userJson = localStorage.getItem(`user_${uid}`);
-            if (!userJson) return null;
+            // Look up UID from username
+            if (window.firestoreGetUidByUsername) {
+                uid = await window.firestoreGetUidByUsername(username);
+            }
 
-            const user = JSON.parse(userJson);
-            return {
-                username: user.username,
-                email: user.email,
-                created: user.created,
-                lastLogin: user.lastLogin,
-                profile: user.profile
-            };
+            if (!uid) {
+                // Maybe username is actually a UID, try directly
+                uid = username;
+            }
+
+            const profile = await window.firestoreGetProfile(uid);
+            return profile;
+
         } catch (error) {
             console.error('Error getting profile:', error);
             return null;
@@ -298,40 +271,32 @@ class StorageService {
 
     /**
      * Update user profile
-     * @param {string} username 
-     * @param {object} updates 
+     * @param {string} username
+     * @param {object} updates
      * @returns {Promise<{success: boolean}>}
      */
     async updateUserProfile(username, updates) {
         try {
-            // Resolve username->uid mapping
-            const uid = localStorage.getItem(`username_map_${username}`) || username;
-
-            // If Firestore available, update there
-            if (window.firebaseFirestore && window.firestoreUpdateProfile) {
-                const success = await window.firestoreUpdateProfile(uid, updates);
-                if (success) {
-                    // Keep a local copy in sync as fallback
-                    const profile = await window.firestoreGetProfile(uid);
-                    if (profile) localStorage.setItem(`user_${uid}`, JSON.stringify(profile));
-                    return { success: true };
-                }
+            if (!window.firebaseFirestore || !window.firestoreUpdateProfile) {
                 return { success: false };
             }
 
-            // Fallback to localStorage update
-            const userJson = localStorage.getItem(`user_${uid}`);
-            if (!userJson) return { success: false };
-
-            const user = JSON.parse(userJson);
-            // Merge updates
-            if (updates.email) user.email = updates.email;
-            if (updates.profile) {
-                user.profile = { ...user.profile, ...updates.profile };
+            // Resolve username -> UID
+            let uid = null;
+            if (window.firestoreGetUidByUsername && !username.includes('@')) {
+                uid = await window.firestoreGetUidByUsername(username);
+            } else {
+                uid = username; // Assume it's a UID or handle email lookup
             }
 
-            localStorage.setItem(`user_${uid}`, JSON.stringify(user));
-            return { success: true };
+            if (!uid) {
+                return { success: false };
+            }
+
+            // Update in Firestore
+            const success = await window.firestoreUpdateProfile(uid, updates);
+            return { success };
+
         } catch (error) {
             console.error('Error updating profile:', error);
             return { success: false };
@@ -344,41 +309,20 @@ class StorageService {
 
     /**
      * Save a comparison to history
-     * @param {string} username 
-     * @param {object} comparison 
+     * @param {string} username
+     * @param {object} comparison
      * @returns {Promise<{success: boolean}>}
      */
     async saveComparison(username, comparison) {
         try {
-            const uid = localStorage.getItem(`username_map_${username}`) || username;
-            if (window.firebaseFirestore && window.firestoreAddComparison) {
-                // Firestore will append using arrayUnion
-                return await window.firestoreAddComparison(uid, comparison);
+            if (!window.firebaseFirestore || !window.firestoreAddComparison) {
+                return { success: false };
             }
 
-            // Fallback: localStorage
-            const userJson = localStorage.getItem(`user_${uid}`);
-            if (!userJson) return { success: false };
+            const uid = await this._resolveUid(username);
+            if (!uid) return { success: false };
 
-            const user = JSON.parse(userJson);
-            
-            const comparisonRecord = {
-                id: Date.now().toString(),
-                date: new Date().toISOString(),
-                species: comparison.species,
-                compatible: comparison.compatible
-            };
-
-            user.profile.comparisonHistory = user.profile.comparisonHistory || [];
-            user.profile.comparisonHistory.unshift(comparisonRecord); // Add to beginning
-            
-            // Keep only last 50 comparisons
-            if (user.profile.comparisonHistory.length > 50) {
-                user.profile.comparisonHistory = user.profile.comparisonHistory.slice(0, 50);
-            }
-
-            localStorage.setItem(`user_${uid}`, JSON.stringify(user));
-            return { success: true, id: comparisonRecord.id };
+            return await window.firestoreAddComparison(uid, comparison);
 
         } catch (error) {
             console.error('Error saving comparison:', error);
@@ -388,17 +332,20 @@ class StorageService {
 
     /**
      * Get comparison history
-     * @param {string} username 
+     * @param {string} username
      * @returns {Promise<array>}
      */
     async getComparisonHistory(username) {
         try {
-            const uid = localStorage.getItem(`username_map_${username}`) || username;
-            if (window.firebaseFirestore && window.firestoreGetComparisons) {
-                return await window.firestoreGetComparisons(uid);
+            if (!window.firebaseFirestore || !window.firestoreGetComparisons) {
+                return [];
             }
-            const profile = await this.getUserProfile(username);
-            return profile?.profile?.comparisonHistory || [];
+
+            const uid = await this._resolveUid(username);
+            if (!uid) return [];
+
+            return await window.firestoreGetComparisons(uid);
+
         } catch (error) {
             console.error('Error getting comparison history:', error);
             return [];
@@ -411,29 +358,21 @@ class StorageService {
 
     /**
      * Add species to favorites
-     * @param {string} username 
-     * @param {string} speciesKey 
+     * @param {string} username
+     * @param {string} speciesKey
      * @returns {Promise<{success: boolean}>}
      */
     async addFavorite(username, speciesKey) {
         try {
-            const uid = localStorage.getItem(`username_map_${username}`) || username;
-            if (window.firebaseFirestore && window.firestoreAddFavorite) {
-                return await window.firestoreAddFavorite(uid, speciesKey);
+            if (!window.firebaseFirestore || !window.firestoreAddFavorite) {
+                return { success: false };
             }
 
-            const userJson = localStorage.getItem(`user_${uid}`);
-            if (!userJson) return { success: false };
+            const uid = await this._resolveUid(username);
+            if (!uid) return { success: false };
 
-            const user = JSON.parse(userJson);
-            user.profile.favoriteSpecies = user.profile.favoriteSpecies || [];
-            
-            if (!user.profile.favoriteSpecies.includes(speciesKey)) {
-                user.profile.favoriteSpecies.push(speciesKey);
-                localStorage.setItem(`user_${uid}`, JSON.stringify(user));
-            }
+            return await window.firestoreAddFavorite(uid, speciesKey);
 
-            return { success: true };
         } catch (error) {
             console.error('Error adding favorite:', error);
             return { success: false };
@@ -442,29 +381,21 @@ class StorageService {
 
     /**
      * Remove species from favorites
-     * @param {string} username 
-     * @param {string} speciesKey 
+     * @param {string} username
+     * @param {string} speciesKey
      * @returns {Promise<{success: boolean}>}
      */
     async removeFavorite(username, speciesKey) {
         try {
-            const uid = localStorage.getItem(`username_map_${username}`) || username;
-            if (window.firebaseFirestore && window.firestoreRemoveFavorite) {
-                return await window.firestoreRemoveFavorite(uid, speciesKey);
+            if (!window.firebaseFirestore || !window.firestoreRemoveFavorite) {
+                return { success: false };
             }
 
-            const userJson = localStorage.getItem(`user_${uid}`);
-            if (!userJson) return { success: false };
+            const uid = await this._resolveUid(username);
+            if (!uid) return { success: false };
 
-            const user = JSON.parse(userJson);
-            user.profile.favoriteSpecies = user.profile.favoriteSpecies || [];
-            
-            user.profile.favoriteSpecies = user.profile.favoriteSpecies.filter(
-                key => key !== speciesKey
-            );
-            
-            localStorage.setItem(`user_${uid}`, JSON.stringify(user));
-            return { success: true };
+            return await window.firestoreRemoveFavorite(uid, speciesKey);
+
         } catch (error) {
             console.error('Error removing favorite:', error);
             return { success: false };
@@ -473,17 +404,20 @@ class StorageService {
 
     /**
      * Get favorite species
-     * @param {string} username 
+     * @param {string} username
      * @returns {Promise<array>}
      */
     async getFavorites(username) {
         try {
-            const uid = localStorage.getItem(`username_map_${username}`) || username;
-            if (window.firebaseFirestore && window.firestoreGetFavorites) {
-                return await window.firestoreGetFavorites(uid);
+            if (!window.firebaseFirestore || !window.firestoreGetFavorites) {
+                return [];
             }
-            const profile = await this.getUserProfile(username);
-            return profile?.profile?.favoriteSpecies || [];
+
+            const uid = await this._resolveUid(username);
+            if (!uid) return [];
+
+            return await window.firestoreGetFavorites(uid);
+
         } catch (error) {
             console.error('Error getting favorites:', error);
             return [];
@@ -507,38 +441,20 @@ class StorageService {
 
     /**
      * Save a tank configuration
-     * @param {string} username 
-     * @param {object} tank 
+     * @param {string} username
+     * @param {object} tank
      * @returns {Promise<{success: boolean, tankId?: string}>}
      */
     async saveTank(username, tank) {
         try {
-            const uid = localStorage.getItem(`username_map_${username}`) || username;
-            if (window.firebaseFirestore && window.firestoreSaveTank) {
-                return await window.firestoreSaveTank(uid, tank);
+            if (!window.firebaseFirestore || !window.firestoreSaveTank) {
+                return { success: false };
             }
 
-            const userJson = localStorage.getItem(`user_${uid}`);
-            if (!userJson) return { success: false };
+            const uid = await this._resolveUid(username);
+            if (!uid) return { success: false };
 
-            const user = JSON.parse(userJson);
-            user.profile.tanks = user.profile.tanks || [];
-
-            if (tank.id) {
-                // Update existing tank
-                const index = user.profile.tanks.findIndex(t => t.id === tank.id);
-                if (index !== -1) {
-                    user.profile.tanks[index] = tank;
-                }
-            } else {
-                // Create new tank
-                tank.id = Date.now().toString();
-                tank.created = new Date().toISOString();
-                user.profile.tanks.push(tank);
-            }
-
-            localStorage.setItem(`user_${uid}`, JSON.stringify(user));
-            return { success: true, tankId: tank.id };
+            return await window.firestoreSaveTank(uid, tank);
 
         } catch (error) {
             console.error('Error saving tank:', error);
@@ -548,17 +464,20 @@ class StorageService {
 
     /**
      * Get all tanks for user
-     * @param {string} username 
+     * @param {string} username
      * @returns {Promise<array>}
      */
     async getTanks(username) {
         try {
-            const uid = localStorage.getItem(`username_map_${username}`) || username;
-            if (window.firebaseFirestore && window.firestoreGetTanks) {
-                return await window.firestoreGetTanks(uid);
+            if (!window.firebaseFirestore || !window.firestoreGetTanks) {
+                return [];
             }
-            const profile = await this.getUserProfile(username);
-            return profile?.profile?.tanks || [];
+
+            const uid = await this._resolveUid(username);
+            if (!uid) return [];
+
+            return await window.firestoreGetTanks(uid);
+
         } catch (error) {
             console.error('Error getting tanks:', error);
             return [];
@@ -567,8 +486,8 @@ class StorageService {
 
     /**
      * Get single tank by ID
-     * @param {string} username 
-     * @param {string} tankId 
+     * @param {string} username
+     * @param {string} tankId
      * @returns {Promise<object|null>}
      */
     async getTank(username, tankId) {
@@ -583,27 +502,21 @@ class StorageService {
 
     /**
      * Delete a tank
-     * @param {string} username 
-     * @param {string} tankId 
+     * @param {string} username
+     * @param {string} tankId
      * @returns {Promise<{success: boolean}>}
      */
     async deleteTank(username, tankId) {
         try {
-            const uid = localStorage.getItem(`username_map_${username}`) || username;
-            if (window.firebaseFirestore && window.firestoreDeleteTank) {
-                return await window.firestoreDeleteTank(uid, tankId);
+            if (!window.firebaseFirestore || !window.firestoreDeleteTank) {
+                return { success: false };
             }
 
-            const userJson = localStorage.getItem(`user_${uid}`);
-            if (!userJson) return { success: false };
+            const uid = await this._resolveUid(username);
+            if (!uid) return { success: false };
 
-            const user = JSON.parse(userJson);
-            user.profile.tanks = user.profile.tanks || [];
-            
-            user.profile.tanks = user.profile.tanks.filter(t => t.id !== tankId);
-            
-            localStorage.setItem(`user_${uid}`, JSON.stringify(user));
-            return { success: true };
+            return await window.firestoreDeleteTank(uid, tankId);
+
         } catch (error) {
             console.error('Error deleting tank:', error);
             return { success: false };
@@ -686,35 +599,32 @@ class StorageService {
     // ========================================================================
 
     /**
-     * Simple password hashing (NOT secure for production - use bcrypt with backend)
+     * Resolve username to UID
+     * @param {string} username - Username or UID
+     * @returns {Promise<string|null>} - UID or null
      * @private
      */
-    _hashPassword(password) {
-        // This is a simple hash for demo purposes
-        // With backend, use proper bcrypt/argon2
-        let hash = 0;
-        for (let i = 0; i < password.length; i++) {
-            const char = password.charCodeAt(i);
-            hash = ((hash << 5) - hash) + char;
-            hash = hash & hash;
-        }
-        return hash.toString();
-    }
+    async _resolveUid(username) {
+        if (!username) return null;
 
-    /**
-     * Clear all user data (for testing)
-     */
-    clearAllData() {
-        if (confirm('This will delete ALL user data. Are you sure?')) {
-            const keys = Object.keys(localStorage);
-            keys.forEach(key => {
-                if (key.startsWith('user_') || key === 'currentUser') {
-                    localStorage.removeItem(key);
-                }
-            });
-            return true;
+        // If it looks like an email, don't try username lookup
+        if (username.includes('@')) {
+            // Try to get profile by email
+            if (window.firestoreGetProfileByEmail) {
+                const profile = await window.firestoreGetProfileByEmail(username);
+                return profile?.uid || null;
+            }
+            return null;
         }
-        return false;
+
+        // Try to look up UID from username
+        if (window.firestoreGetUidByUsername) {
+            const uid = await window.firestoreGetUidByUsername(username);
+            if (uid) return uid;
+        }
+
+        // Assume it's already a UID
+        return username;
     }
 }
 
