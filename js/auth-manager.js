@@ -145,8 +145,6 @@ class AuthManager {
         const authLinks = document.getElementById('auth-links');
         if (authLinks) {
             authLinks.innerHTML = `
-                <a href="dashboard.html">Dashboard</a>
-                <a href="my-tanks.html">My Tanks</a>
                 <span style="opacity: 0.8;">Welcome, ${this.currentUser}!</span>
                 <a href="#" onclick="authManager.logout(); return false;">Logout</a>
             `;
