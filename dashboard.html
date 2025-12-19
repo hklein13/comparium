@@ -249,15 +249,5 @@
 
     <script type="module" src="js/firebase-init.js"></script>
     <script src="js/theme-manager.js"></script>
-    <script>
-      // Prefer using authManager to enforce login and display username/email
-      if (!authManager.requireAuth()) {
-          // requireAuth will redirect to login
-      } else {
-          const displayName = authManager.getCurrentUsername() || 'Guest';
-          const header = document.querySelector('.dashboard-header h1');
-          if (header) header.textContent = 'Welcome back, ' + displayName + '!';
-      }
-    </script>
 </body>
 </html>
