@@ -247,7 +247,10 @@ class StorageService {
 
             // Look up UID from username
             if (window.firestoreGetUidByUsername) {
-                uid = await window.firestoreGetUidByUsername(username);
+                const userData = await window.firestoreGetUidByUsername(username);
+                if (userData && userData.uid) {
+                    uid = userData.uid;
+                }
             }
 
             if (!uid) {
@@ -279,7 +282,8 @@ class StorageService {
             // Resolve username -> UID
             let uid = null;
             if (window.firestoreGetUidByUsername && !username.includes('@')) {
-                uid = await window.firestoreGetUidByUsername(username);
+                const userData = await window.firestoreGetUidByUsername(username);
+                uid = userData?.uid || null;
             } else {
                 uid = username; // Assume it's a UID or handle email lookup
             }
@@ -614,8 +618,8 @@ class StorageService {
 
         // Try to look up UID from username
         if (window.firestoreGetUidByUsername) {
-            const uid = await window.firestoreGetUidByUsername(username);
-            if (uid) return uid;
+            const userData = await window.firestoreGetUidByUsername(username);
+            if (userData?.uid) return userData.uid;
         }
 
         // Assume it's already a UID

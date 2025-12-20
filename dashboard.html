@@ -107,30 +107,25 @@
         (async () => {
             const isAuthed = await authManager.requireAuth();
             if (isAuthed) {
-                initDashboard();
+                await loadDashboard();
             }
         })();
 
-        async function initDashboard() {
-            // Wait for auth to be fully initialized
-            let retries = 0;
-            while (!authManager.getCurrentUsername() && retries < 20) {
-                await new Promise(resolve => setTimeout(resolve, 100));
-                retries++;
-            }
-            loadDashboard();
-        }
-
         async function loadDashboard() {
-            const username = authManager.getCurrentUsername();
-            if (username) {
-                document.getElementById('username-display').textContent = username;
-            } else {
-                document.getElementById('username-display').textContent = 'User';
+            // Get UID from Firebase Auth (already verified by requireAuth)
+            const uid = window.firebaseAuth.currentUser.uid;
+
+            // Load profile from Firestore
+            const profile = await storageService.getUserProfile(uid);
+
+            if (!profile) {
+                console.error('Profile not found');
+                window.location.href = 'login.html';
+                return;
             }
 
-            // Load profile data
-            const profile = await storageService.getUserProfile(username);
+            // Display username
+            document.getElementById('username-display').textContent = profile.username || 'User';
             
             if (profile) {
                 // Update stats
