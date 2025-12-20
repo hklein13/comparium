@@ -106,8 +106,12 @@
     <script>
         // PRODUCTION: Proper auth check using Firebase's event system
         (async () => {
-            // Wait for Firebase Auth to complete its initial state check
-            // This promise resolves when onAuthStateChanged fires for the first time
+            // Module scripts are deferred - wait for firebase-init.js to load
+            while (!window.firebaseAuthReady) {
+                await new Promise(resolve => setTimeout(resolve, 50));
+            }
+
+            // Now wait for Firebase Auth to complete its initial state check
             const user = await window.firebaseAuthReady;
 
             if (!user) {

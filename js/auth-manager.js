@@ -214,13 +214,16 @@ class AuthManager {
      * PRODUCTION: Uses Firebase's onAuthStateChanged event instead of polling
      */
     async requireAuth() {
-        // Wait for Firebase Auth to complete initial state check
-        if (window.firebaseAuthReady) {
-            const user = await window.firebaseAuthReady;
+        // Wait for firebase-init.js module to load (modules are deferred)
+        while (!window.firebaseAuthReady) {
+            await new Promise(resolve => setTimeout(resolve, 50));
+        }
 
-            if (user) {
-                return true;
-            }
+        // Wait for Firebase Auth to complete initial state check
+        const user = await window.firebaseAuthReady;
+
+        if (user) {
+            return true;
         }
 
         // Not logged in - redirect to login
