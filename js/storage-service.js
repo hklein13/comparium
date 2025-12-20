@@ -43,6 +43,13 @@ class StorageService {
             const userCredential = await window.firebaseSignUp(auth, email, password);
             const uid = userCredential.user.uid;
 
+            // Create username mapping FIRST (must exist before profile due to Firestore rules)
+            const usernameMapped = await window.firestoreCreateUsername(username, uid);
+            if (!usernameMapped) {
+                console.error('Failed to create username mapping');
+                return { success: false, message: 'Username is already taken. Please try another.' };
+            }
+
             // Create user profile object
             const user = {
                 uid: uid,
@@ -57,19 +64,11 @@ class StorageService {
                 }
             };
 
-            // Save profile to Firestore users collection
+            // Save profile to Firestore users collection (username exists now, so rules pass)
             const profileSaved = await window.firestoreSetProfile(uid, user);
             if (!profileSaved) {
-                // Clean up Auth user if Firestore save failed
                 console.error('Failed to save profile to Firestore');
                 return { success: false, message: 'Failed to create account. Please try again.' };
-            }
-
-            // Create username mapping in Firestore usernames collection
-            const usernameMapped = await window.firestoreCreateUsername(username, uid);
-            if (!usernameMapped) {
-                console.error('Failed to create username mapping');
-                // Profile is saved, so account is usable, just log the error
             }
 
             return { success: true, message: 'Account created successfully!' };
