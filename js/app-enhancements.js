@@ -61,9 +61,9 @@ function makeSpeciesNamesClickable() {
         }
     });
 
-    // Add favorite stars next to fish names in the header
-    addFavoriteStarsToResults(selectedFish);
-    
+    // Favorite stars are now added directly in displayComparison() in app.js
+    // No need to add them here - prevents duplicate stars
+
     console.log('✅ makeSpeciesNamesClickable completed');
 }
 
