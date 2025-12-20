@@ -204,9 +204,23 @@ class AuthManager {
      * Waits for Firebase auth to initialize first
      */
     async requireAuth() {
-        // Wait for Firebase Auth to be ready
-        if (window.firebaseAuthReady) {
-            await window.firebaseAuthReady;
+        // Wait briefly for Firebase Auth to initialize (max 2 seconds)
+        const maxWait = 2000;
+        const checkInterval = 50;
+        let waited = 0;
+
+        while (!window.firebaseAuth && waited < maxWait) {
+            await new Promise(resolve => setTimeout(resolve, checkInterval));
+            waited += checkInterval;
+        }
+
+        // If Firebase Auth available, wait a bit more for currentUser to be set
+        if (window.firebaseAuth) {
+            let authWait = 0;
+            while (!window.firebaseAuth.currentUser && authWait < 1000) {
+                await new Promise(resolve => setTimeout(resolve, 50));
+                authWait += 50;
+            }
         }
 
         // Check Firebase auth state directly
