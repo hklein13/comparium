@@ -406,9 +406,8 @@ buildPanels();
 
 // Add favorites functionality to species selection
 function addFavoriteButton(speciesKey) {
-    if (!authManager.isLoggedIn()) return '';
-    
-    const isFav = false; // Will be checked async
+    // Always show star for feature discovery and to prevent race conditions
+    // toggleFavorite() handles the login check if user tries to use it
     return `<span class="favorite-star" data-species="${speciesKey}" onclick="toggleFavorite('${speciesKey}', this)">★</span>`;
 }
 
