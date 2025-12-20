@@ -135,9 +135,14 @@ function compareSpecies() {
     if (fish3Key) selectedFish.push(fish3Key);
 
     const fishData = selectedFish.map(key => fishDatabase[key]);
-    
+
     displayComparison(fishData);
     analyzeCompatibility(fishData);
+
+    // Load favorite states for the comparison results
+    if (authManager.isLoggedIn()) {
+        loadFavoritesState();
+    }
 }
 
 function displayComparison(fishData) {
@@ -145,9 +150,10 @@ function displayComparison(fishData) {
     
     let html = '<div class="comparison-header"><div></div>';
     fishData.forEach(fish => {
+        const speciesKey = fish.commonName.toLowerCase().replace(/\s+/g, '');
         html += `
             <div class="fish-column">
-                <h3>${fish.commonName}</h3>
+                <h3>${fish.commonName} ${addFavoriteButton(speciesKey)}</h3>
                 <div class="scientific">${fish.scientificName}</div>
             </div>
         `;

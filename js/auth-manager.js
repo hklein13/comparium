@@ -13,10 +13,23 @@ class AuthManager {
 
     /**
      * Initialize authentication state
+     * Waits for Firebase to load before setting up auth listener
      */
     async init() {
+        // Wait for Firebase module to load (it's a deferred module script)
+        const waitForFirebase = async () => {
+            let attempts = 0;
+            while (!window.firebaseAuthState && attempts < 100) {
+                await new Promise(resolve => setTimeout(resolve, 50));
+                attempts++;
+            }
+            return window.firebaseAuthState && window.firebaseAuth;
+        };
+
+        const firebaseReady = await waitForFirebase();
+
         // If Firebase auth is available, listen for auth state changes and keep currentUser in sync
-        if (window.firebaseAuthState && window.firebaseAuth) {
+        if (firebaseReady) {
             window.firebaseAuthState(window.firebaseAuth, async (user) => {
                 if (user) {
                     // Load username from Firestore profile
