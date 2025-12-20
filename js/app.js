@@ -446,7 +446,7 @@ async function loadFavoritesState() {
 async function saveComparisonToHistory(fishData, isCompatible) {
     if (!authManager.isLoggedIn()) return;
 
-    const uid = window.firebaseAuth?.currentUser?.uid;
+    const uid = authManager.getCurrentUid();
     if (!uid) return;
 
     const comparison = {

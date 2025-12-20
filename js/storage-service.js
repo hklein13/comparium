@@ -225,38 +225,17 @@ class StorageService {
 
     /**
      * Get user profile data
-     * @param {string} username
+     * NOTE: Currently unused - dashboard loads profile directly with firestoreGetProfile()
+     * @param {string} uid - Firebase Auth UID
      * @returns {Promise<object|null>}
      */
-    async getUserProfile(username) {
+    async getUserProfile(uid) {
         try {
             if (!window.firebaseFirestore || !window.firestoreGetProfile) {
                 return null;
             }
 
-            let uid = null;
-
-            // If username looks like an email, look up by email
-            if (username && username.includes('@')) {
-                if (window.firestoreGetProfileByEmail) {
-                    const profileByEmail = await window.firestoreGetProfileByEmail(username);
-                    if (profileByEmail) return profileByEmail;
-                }
-                return null;
-            }
-
-            // Look up UID from username
-            if (window.firestoreGetUidByUsername) {
-                const userData = await window.firestoreGetUidByUsername(username);
-                if (userData && userData.uid) {
-                    uid = userData.uid;
-                }
-            }
-
-            if (!uid) {
-                // Maybe username is actually a UID, try directly
-                uid = username;
-            }
+            if (!uid) return null;
 
             const profile = await window.firestoreGetProfile(uid);
             return profile;
@@ -269,28 +248,18 @@ class StorageService {
 
     /**
      * Update user profile
-     * @param {string} username
-     * @param {object} updates
+     * NOTE: Currently unused - kept for future profile editing features
+     * @param {string} uid - Firebase Auth UID
+     * @param {object} updates - Profile fields to update
      * @returns {Promise<{success: boolean}>}
      */
-    async updateUserProfile(username, updates) {
+    async updateUserProfile(uid, updates) {
         try {
             if (!window.firebaseFirestore || !window.firestoreUpdateProfile) {
                 return { success: false };
             }
 
-            // Resolve username -> UID
-            let uid = null;
-            if (window.firestoreGetUidByUsername && !username.includes('@')) {
-                const userData = await window.firestoreGetUidByUsername(username);
-                uid = userData?.uid || null;
-            } else {
-                uid = username; // Assume it's a UID or handle email lookup
-            }
-
-            if (!uid) {
-                return { success: false };
-            }
+            if (!uid) return { success: false };
 
             // Update in Firestore
             const success = await window.firestoreUpdateProfile(uid, updates);

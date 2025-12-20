@@ -212,7 +212,7 @@
         async function saveTank(event) {
             event.preventDefault();
 
-            const uid = window.firebaseAuth?.currentUser?.uid;
+            const uid = authManager.getCurrentUid();
             if (!uid) {
                 authManager.showMessage('Not logged in', 'error');
                 return;
@@ -241,7 +241,7 @@
         }
 
         async function loadTanks() {
-            const uid = window.firebaseAuth?.currentUser?.uid;
+            const uid = authManager.getCurrentUid();
             if (!uid) return;
 
             const tanks = await storageService.getTanks(uid);
@@ -318,7 +318,7 @@
         }
 
         async function editTank(tankId) {
-            const uid = window.firebaseAuth?.currentUser?.uid;
+            const uid = authManager.getCurrentUid();
             if (!uid) return;
 
             const tank = await storageService.getTank(uid, tankId);
@@ -342,7 +342,7 @@
                 return;
             }
 
-            const uid = window.firebaseAuth?.currentUser?.uid;
+            const uid = authManager.getCurrentUid();
             if (!uid) return;
 
             const result = await storageService.deleteTank(uid, tankId);
