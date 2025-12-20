@@ -137,9 +137,9 @@ service cloud.firestore {
     // ========================================================================
 
     match /usernames/{username} {
-      // READ: Any authenticated user can check if username exists
-      // (Needed for registration validation)
-      allow read: if isAuthenticated();
+      // READ: Anyone can check if username exists
+      // (Needed for registration validation before user is authenticated)
+      allow read: if true;
 
       // CREATE: Only when creating a new user account
       // - Username must be 3-30 characters
