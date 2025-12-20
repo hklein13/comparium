@@ -104,11 +104,12 @@
     <script src="js/auth-manager.js"></script>
     <script>
         // Require authentication
-        if (!authManager.requireAuth()) {
-            // Will redirect to login
-        } else {
-            initDashboard();
-        }
+        (async () => {
+            const isAuthed = await authManager.requireAuth();
+            if (isAuthed) {
+                initDashboard();
+            }
+        })();
 
         async function initDashboard() {
             // Wait for auth to be fully initialized

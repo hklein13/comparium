@@ -30,6 +30,20 @@ try {
 const auth = getAuth(app);
 const firestore = getFirestore(app);
 
+// Create a promise that resolves when auth is ready
+let authReadyResolve;
+window.firebaseAuthReady = new Promise(resolve => {
+  authReadyResolve = resolve;
+});
+
+// Listen for auth state and resolve the promise when ready
+onAuthStateChanged(auth, (user) => {
+  if (authReadyResolve) {
+    authReadyResolve(user);
+    authReadyResolve = null; // Only resolve once
+  }
+});
+
 // Expose helpers globally for ease of migration
 window.firebaseApp = app;
 window.firebaseAuth = auth;

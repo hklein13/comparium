@@ -203,20 +203,21 @@ class AuthManager {
      * Require authentication (redirect to login if not logged in)
      * Waits for Firebase auth to initialize first
      */
-    requireAuth() {
-        // If Firebase auth is available, check the current auth state directly
+    async requireAuth() {
+        // Wait for Firebase Auth to be ready
+        if (window.firebaseAuthReady) {
+            await window.firebaseAuthReady;
+        }
+
+        // Check Firebase auth state directly
         if (window.firebaseAuth && window.firebaseAuth.currentUser) {
             return true;
         }
 
-        // Fallback to authManager state
-        if (!this.isLoggedIn()) {
-            // Store intended destination
-            sessionStorage.setItem('redirectAfterLogin', window.location.pathname);
-            window.location.href = 'login.html';
-            return false;
-        }
-        return true;
+        // Not logged in - redirect to login
+        sessionStorage.setItem('redirectAfterLogin', window.location.pathname);
+        window.location.href = 'login.html';
+        return false;
     }
 
     /**
