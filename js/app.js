@@ -134,7 +134,11 @@ function compareSpecies() {
     const selectedFish = [fish1Key, fish2Key];
     if (fish3Key) selectedFish.push(fish3Key);
 
-    const fishData = selectedFish.map(key => fishDatabase[key]);
+    // Get fish data and attach the database key to each object
+    const fishData = selectedFish.map(key => ({
+        ...fishDatabase[key],
+        _databaseKey: key  // Add the correct database key
+    }));
 
     displayComparison(fishData);
     analyzeCompatibility(fishData);
@@ -147,10 +151,11 @@ function compareSpecies() {
 
 function displayComparison(fishData) {
     const grid = document.getElementById('comparisonGrid');
-    
+
     let html = '<div class="comparison-header"><div></div>';
     fishData.forEach(fish => {
-        const speciesKey = fish.commonName.toLowerCase().replace(/\s+/g, '');
+        // Use the correct database key attached in compareSpecies()
+        const speciesKey = fish._databaseKey;
         html += `
             <div class="fish-column">
                 <h3>${fish.commonName} ${addFavoriteButton(speciesKey)}</h3>
