@@ -90,10 +90,10 @@ function inferAdultSize(fishData) {
   if (name.includes("giant") || name.includes("large") || name.includes("pleco")) return 8.0;
 
   // Based on minimum tank size (rough estimate)
-  if (fishData.minTankSize <= 5) return 1.5;
-  if (fishData.minTankSize <= 10) return 2.0;
-  if (fishData.minTankSize <= 20) return 3.0;
-  if (fishData.minTankSize <= 40) return 5.0;
+  if (fishData.tankSizeMin <= 5) return 1.5;
+  if (fishData.tankSizeMin <= 10) return 2.0;
+  if (fishData.tankSizeMin <= 20) return 3.0;
+  if (fishData.tankSizeMin <= 40) return 5.0;
 
   return 6.0;
 }
@@ -199,18 +199,22 @@ async function migrateFishData() {
           phMin: fishData.phMin,
           phMax: fishData.phMax,
           waterHardness: fishData.waterHardness,
-          minTankSize: fishData.minTankSize,
+          tankSizeMin: fishData.tankSizeMin,
+          tankSizeUnit: fishData.tankSizeUnit,
+          maxSize: fishData.maxSize,
+          sizeUnit: fishData.sizeUnit,
           aggression: fishData.aggression,
           diet: fishData.diet,
-          incompatibleWith: fishData.incompatibleWith || [],
+          schooling: fishData.schooling,
+          lifespan: fishData.lifespan,
+          careLevel: fishData.careLevel,
 
           // ========== NEW FIELDS (intelligent defaults) ==========
           careSheet: {
             difficulty: inferDifficulty(fishData),
             adultSize: inferAdultSize(fishData),
             minimumSchoolSize: inferSchoolSize(fishData),
-            bioloadFactor: 1.0, // Default - will refine later
-            lifespan: undefined // To be added manually
+            bioloadFactor: 1.0 // Default - will refine later
           },
 
           behavior: {
