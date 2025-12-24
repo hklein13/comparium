@@ -12,8 +12,8 @@ class GlossaryManager {
         this.glossaryData = this.initializeGlossaryData();
         this.categories = this.initializeCategories();
         
-        // Firestore configuration (ready for migration)
-        this.useFirestore = false; // Set to true when migrating to Firestore
+        // Firestore configuration
+        this.useFirestore = true; // Enable Firestore data fetching
         this.firestoreCollection = 'glossary'; // Collection name for Firestore
     }
 
@@ -241,25 +241,48 @@ class GlossaryManager {
     }
 
     /**
-     * Load glossary entries from Firestore (future implementation)
-     * @param {string} category - Category to load
+     * Load glossary entries from Firestore
+     * @param {string} category - Category to load (species, diseases, equipment, terminology)
      * @returns {Promise<Array>}
      */
     async loadFromFirestore(category) {
-        if (!this.useFirestore || !window.firebaseFirestore) {
+        if (!this.useFirestore) {
+            return this.glossaryData[category] || [];
+        }
+
+        // Wait for Firebase to initialize
+        if (!window.firebaseAuthReady) {
+            console.warn('Firebase not initialized for glossary, using local data');
             return this.glossaryData[category] || [];
         }
 
         try {
-            // Future Firestore implementation
-            // const categoryConfig = this.categories.find(c => c.id === category);
-            // const collection = categoryConfig.firestoreSubcollection;
-            // const snapshot = await getDocs(collection(firestore, this.firestoreCollection, collection));
-            // return snapshot.docs.map(doc => ({ firestoreId: doc.id, ...doc.data() }));
-            
-            return this.glossaryData[category] || [];
+            // Import Firestore functions dynamically
+            const { getFirestore, collection, query, where, getDocs } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+            const db = getFirestore();
+
+            // Query glossary collection for entries in this category
+            const glossaryCollection = collection(db, this.firestoreCollection);
+            const categoryQuery = query(glossaryCollection, where('category', '==', category));
+            const snapshot = await getDocs(categoryQuery);
+
+            if (snapshot.empty) {
+                console.warn(`No ${category} entries found in Firestore, using local data`);
+                return this.glossaryData[category] || [];
+            }
+
+            // Convert Firestore documents to glossary entry format
+            const entries = snapshot.docs.map(doc => ({
+                firestoreId: doc.id,
+                ...doc.data()
+            }));
+
+            console.log(`✅ Loaded ${entries.length} ${category} entries from Firestore`);
+            return entries;
+
         } catch (error) {
-            console.error('Error loading from Firestore:', error);
+            console.error(`Error loading ${category} from Firestore:`, error);
+            // Fallback to local data on error
             return this.glossaryData[category] || [];
         }
     }

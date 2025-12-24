@@ -196,32 +196,47 @@ service cloud.firestore {
     // }
 
     // ========================================================================
-    // FUTURE: SPECIES REFERENCE DATABASE (Phase 3)
+    // SPECIES REFERENCE DATABASE (Phase 2)
     // ========================================================================
-    // Uncomment when migrating fish-data.js to Firestore
+    // Fish species data - public read, admin-only write
     //
-    // match /species/{speciesId} {
-    //   // Public read for all users
-    //   allow read: if true;
+    // ADMIN SETUP:
+    // Before running migration scripts, add admin role to your user profile:
+    // 1. Go to Firebase Console → Firestore → users collection
+    // 2. Find your user document (your UID)
+    // 3. Add field: admin: true
     //
-    //   // Admin-only writes (implement admin role check)
-    //   allow write: if isAuthenticated()
-    //                   && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
-    // }
+    // Then you can run: npm run migrate:fish
+    // ========================================================================
+
+    match /species/{speciesId} {
+      // Public read for all users (no authentication required)
+      allow read: if true;
+
+      // Admin-only writes
+      // Checks if user is authenticated AND has admin: true in their profile
+      allow write: if isAuthenticated()
+                      && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.admin == true;
+    }
 
     // ========================================================================
-    // FUTURE: GLOSSARY COLLECTION (Phase 3)
+    // GLOSSARY COLLECTION (Phase 2)
     // ========================================================================
-    // Uncomment when migrating glossary.js to Firestore
+    // Glossary entries - public read, admin-only write
     //
-    // match /glossary/{termId} {
-    //   // Public read for all users
-    //   allow read: if true;
-    //
-    //   // Admin-only writes
-    //   allow write: if isAuthenticated()
-    //                   && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
-    // }
+    // Same admin setup as species collection above
+    // Then you can run: npm run migrate:glossary
+    // ========================================================================
+
+    match /glossary/{termId} {
+      // Public read for all users (no authentication required)
+      allow read: if true;
+
+      // Admin-only writes
+      // Checks if user is authenticated AND has admin: true in their profile
+      allow write: if isAuthenticated()
+                      && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.admin == true;
+    }
 
     // ========================================================================
     // DEFAULT: DENY ALL ACCESS

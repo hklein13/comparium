@@ -9,7 +9,8 @@
     "test:headed": "playwright test --headed",
     "test:debug": "playwright test --debug",
     "test:report": "playwright show-report",
-    "migrate:fish": "node scripts/migrate-fish-to-firestore.js"
+    "migrate:fish": "node scripts/migrate-fish-to-firestore.js",
+    "migrate:glossary": "node scripts/migrate-glossary-to-firestore.js"
   },
   "repository": {
     "type": "git",
