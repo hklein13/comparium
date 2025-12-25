@@ -27,9 +27,9 @@ test.describe('Complete User Flow', () => {
 
     await test.step('Register new user account', async () => {
       // Fill registration form
-      await page.fill('#signup-username', testUser.username);
-      await page.fill('#signup-email', testUser.email);
-      await page.fill('#signup-password', testUser.password);
+      await page.fill('#username', testUser.username);
+      await page.fill('#email', testUser.email);
+      await page.fill('#password', testUser.password);
 
       // Submit form
       await page.click('button[type="submit"]');
@@ -148,8 +148,8 @@ test.describe('Complete User Flow', () => {
 
     await test.step('Login with existing credentials', async () => {
       // Fill login form
-      await page.fill('#login-username', testUser.username);
-      await page.fill('#login-password', testUser.password);
+      await page.fill('#identifier', testUser.username);
+      await page.fill('#password', testUser.password);
 
       // Submit form
       await page.click('button[type="submit"]');
@@ -233,9 +233,9 @@ test.describe('Authentication Edge Cases', () => {
       await page.goto('/signup.html');
 
       // Try to register with the same username from previous test
-      await page.fill('#signup-username', testUser.username);
-      await page.fill('#signup-email', `different${timestamp}@example.com`);
-      await page.fill('#signup-password', testUser.password);
+      await page.fill('#username', testUser.username);
+      await page.fill('#email', `different${timestamp}@example.com`);
+      await page.fill('#password', testUser.password);
 
       // Submit form
       await page.click('button[type="submit"]');
@@ -251,8 +251,8 @@ test.describe('Authentication Edge Cases', () => {
     await test.step('Attempt login with wrong password', async () => {
       await page.goto('/login.html');
 
-      await page.fill('#login-username', testUser.username);
-      await page.fill('#login-password', 'WrongPassword123!');
+      await page.fill('#identifier', testUser.username);
+      await page.fill('#password', 'WrongPassword123!');
 
       await page.click('button[type="submit"]');
 
