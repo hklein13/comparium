@@ -26,7 +26,7 @@ export default defineConfig({
   // Shared settings for all projects
   use: {
     // Base URL for tests
-    baseURL: process.env.TEST_URL || 'https://comparium.net',
+    baseURL: process.env.TEST_URL || 'http://localhost:8080',
 
     // Collect trace on failure for debugging
     trace: 'on-first-retry',
