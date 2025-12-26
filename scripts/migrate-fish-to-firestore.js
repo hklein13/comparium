@@ -48,13 +48,13 @@ function loadFishDatabase() {
   const content = readFileSync(fishDataPath, 'utf-8');
 
   // Extract the fishDatabase object
-  const match = content.match(/const fishDatabase = ({[\s\S]*?});/);
+  const match = content.match(/(const|let|var) fishDatabase = ({[\s\S]*?});/);
   if (!match) {
     throw new Error('Could not find fishDatabase in fish-data.js');
   }
 
   // Parse the object (safe since it's our own code)
-  const fishDatabase = eval(`(${match[1]})`);
+  const fishDatabase = eval(`(${match[2]})`);
   return fishDatabase;
 }
 
