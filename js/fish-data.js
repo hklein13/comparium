@@ -1,4 +1,4 @@
-        const fishDatabase = {
+        var fishDatabase = {
             angelfish: {
                 commonName: "Freshwater Angelfish",
                 scientificName: "Pterophyllum scalare",

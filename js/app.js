@@ -8,7 +8,7 @@
 // 2. fish-data.js (fallback) - if Firestore is unavailable
 // ============================================================================
 
-let fishDatabase = {}; // Will be populated from Firestore or fallback
+// fishDatabase is declared in fish-data.js and will be reassigned from Firestore if available
 
 /**
  * Load fish species data from Firestore
@@ -30,7 +30,7 @@ async function loadFishFromFirestore() {
 
         if (!window.firebaseAuthReady) {
             console.warn('Firebase not initialized, using fallback fish data');
-            return window.fishDatabase || {}; // Fallback to fish-data.js
+            return fishDatabase; // Fallback to fish-data.js
         }
 
         // Wait for Firebase initialization to complete or timeout
@@ -49,7 +49,7 @@ async function loadFishFromFirestore() {
 
         if (snapshot.empty) {
             console.warn('No species found in Firestore, using fallback data');
-            return window.fishDatabase || {};
+            return fishDatabase;
         }
 
         // Convert Firestore documents to fishDatabase format
@@ -63,7 +63,7 @@ async function loadFishFromFirestore() {
 
     } catch (error) {
         console.error('Error loading from Firestore, using fallback data:', error);
-        return window.fishDatabase || {};
+        return fishDatabase;
     }
 }
 

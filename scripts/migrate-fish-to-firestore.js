@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Fish Database Migration Script
+ * Fish Database Migration Script (Admin SDK Version)
  *
  * PURPOSE:
  * Migrates existing fish species data from js/fish-data.js to Firestore
@@ -11,6 +11,11 @@
  * 3. Preserves all existing data exactly as-is
  * 4. Uses the fish key (e.g., "neonTetra") as the document ID
  *
+ * SETUP (One-time):
+ * 1. Download service account key from Firebase Console
+ * 2. Save as: scripts/serviceAccountKey.json
+ * 3. Add to .gitignore (NEVER commit this file!)
+ *
  * RUN:
  * npm run migrate:fish
  *
@@ -18,8 +23,7 @@
  * Will overwrite existing documents
  */
 
-import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, doc, setDoc } from 'firebase/firestore';
+import admin from 'firebase-admin';
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
@@ -27,20 +31,25 @@ import { dirname, join } from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Firebase configuration (from firebase-init.js)
-const firebaseConfig = {
-  apiKey: "AIzaSyDExicgmY78u4NAWVJngqaZkhKdmAbebjM",
-  authDomain: "comparium-21b69.firebaseapp.com",
-  projectId: "comparium-21b69",
-  storageBucket: "comparium-21b69.firebasestorage.app",
-  messagingSenderId: "925744346774",
-  appId: "1:925744346774:web:77453c0374054d5b0d74b7",
-  measurementId: "G-WSR0CCKYEC"
-};
+// Initialize Firebase Admin SDK
+const serviceAccountPath = join(__dirname, 'serviceAccountKey.json');
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+try {
+  const serviceAccount = JSON.parse(readFileSync(serviceAccountPath, 'utf-8'));
+
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount)
+  });
+
+  console.log('✅ Firebase Admin SDK initialized');
+} catch (error) {
+  console.error('\n❌ ERROR: Could not load service account key\n');
+  console.error('Make sure you have downloaded serviceAccountKey.json to scripts/ folder');
+  console.error('See MIGRATION_GUIDE.md for instructions\n');
+  process.exit(1);
+}
+
+const db = admin.firestore();
 
 // Read and parse fish-data.js
 function loadFishDatabase() {
@@ -48,13 +57,13 @@ function loadFishDatabase() {
   const content = readFileSync(fishDataPath, 'utf-8');
 
   // Extract the fishDatabase object
-  const match = content.match(/const fishDatabase = ({[\s\S]*?});/);
+  const match = content.match(/(const|let|var) fishDatabase = ({[\s\S]*?});/);
   if (!match) {
     throw new Error('Could not find fishDatabase in fish-data.js');
   }
 
   // Parse the object (safe since it's our own code)
-  const fishDatabase = eval(`(${match[1]})`);
+  const fishDatabase = eval(`(${match[2]})`);
   return fishDatabase;
 }
 
@@ -70,17 +79,21 @@ async function migrateFishData() {
     const speciesCount = Object.keys(fishDatabase).length;
     console.log(`✅ Loaded ${speciesCount} species\n`);
 
-    const speciesCollection = collection(db, 'species');
+    const speciesCollection = db.collection('species');
     let successCount = 0;
     let errorCount = 0;
     const errors = [];
 
     console.log('🚀 Starting migration to Firestore...\n');
 
-    for (const [key, fishData] of Object.entries(fishDatabase)) {
+    // Use batching for better performance
+    const batch = db.batch();
+    const entries = Object.entries(fishDatabase);
+
+    for (const [key, fishData] of entries) {
       try {
-        // Migrate data exactly as-is from fish-data.js
-        await setDoc(doc(speciesCollection, key), fishData);
+        const docRef = speciesCollection.doc(key);
+        batch.set(docRef, fishData);
 
         console.log(`  ✅ ${key.padEnd(25)} → ${fishData.commonName}`);
         successCount++;
@@ -90,6 +103,13 @@ async function migrateFishData() {
         errorCount++;
         errors.push({ key, error: error.message });
       }
+    }
+
+    // Commit the batch
+    if (successCount > 0) {
+      console.log('\n💾 Committing batch write to Firestore...');
+      await batch.commit();
+      console.log('✅ Batch committed successfully');
     }
 
     // Summary
@@ -108,9 +128,9 @@ async function migrateFishData() {
 
     console.log('\n📋 Next Steps:');
     console.log('   1. Verify data in Firebase Console → Firestore → species collection');
-    console.log('   2. Update Firestore rules to allow public read access');
-    console.log('   3. Update app.js to fetch species from Firestore');
-    console.log('\n✨ Migration script complete!\n');
+    console.log('   2. Test your website - species should load from Firestore');
+    console.log('   3. (Optional) Delete serviceAccountKey.json for security');
+    console.log('\n✨ Migration complete!\n');
 
   } catch (error) {
     console.error('\n💥 Migration failed with error:');

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Glossary Migration Script
+ * Glossary Migration Script (Admin SDK Version)
  *
  * PURPOSE:
  * Migrates glossary data from js/glossary.js to Firestore
@@ -11,6 +11,11 @@
  * 3. Preserves all existing data exactly as-is
  * 4. Uses the entry ID (e.g., "neon-tetra") as the document ID
  *
+ * SETUP (One-time):
+ * 1. Download service account key from Firebase Console
+ * 2. Save as: scripts/serviceAccountKey.json
+ * 3. Add to .gitignore (NEVER commit this file!)
+ *
  * RUN:
  * npm run migrate:glossary
  *
@@ -18,8 +23,7 @@
  * Will overwrite existing documents
  */
 
-import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, doc, setDoc } from 'firebase/firestore';
+import admin from 'firebase-admin';
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
@@ -27,20 +31,25 @@ import { dirname, join } from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Firebase configuration (from firebase-init.js)
-const firebaseConfig = {
-  apiKey: "AIzaSyDExicgmY78u4NAWVJngqaZkhKdmAbebjM",
-  authDomain: "comparium-21b69.firebaseapp.com",
-  projectId: "comparium-21b69",
-  storageBucket: "comparium-21b69.firebasestorage.app",
-  messagingSenderId: "925744346774",
-  appId: "1:925744346774:web:77453c0374054d5b0d74b7",
-  measurementId: "G-WSR0CCKYEC"
-};
+// Initialize Firebase Admin SDK
+const serviceAccountPath = join(__dirname, 'serviceAccountKey.json');
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+try {
+  const serviceAccount = JSON.parse(readFileSync(serviceAccountPath, 'utf-8'));
+
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount)
+  });
+
+  console.log('✅ Firebase Admin SDK initialized');
+} catch (error) {
+  console.error('\n❌ ERROR: Could not load service account key\n');
+  console.error('Make sure you have downloaded serviceAccountKey.json to scripts/ folder');
+  console.error('See MIGRATION_GUIDE.md for instructions\n');
+  process.exit(1);
+}
+
+const db = admin.firestore();
 
 // Read and parse glossary.js
 function loadGlossaryData() {
@@ -75,12 +84,15 @@ async function migrateGlossaryData() {
     const totalEntries = Object.values(glossaryData).reduce((sum, entries) => sum + entries.length, 0);
     console.log(`✅ Loaded ${totalEntries} entries across ${Object.keys(glossaryData).length} categories\n`);
 
-    const glossaryCollection = collection(db, 'glossary');
+    const glossaryCollection = db.collection('glossary');
     let successCount = 0;
     let errorCount = 0;
     const errors = [];
 
     console.log('🚀 Starting migration to Firestore...\n');
+
+    // Use batching for better performance
+    const batch = db.batch();
 
     // Iterate through each category
     for (const [category, entries] of Object.entries(glossaryData)) {
@@ -89,8 +101,9 @@ async function migrateGlossaryData() {
 
       for (const entry of entries) {
         try {
-          // Migrate entry exactly as-is
-          await setDoc(doc(glossaryCollection, entry.id), entry);
+          // Add to batch
+          const docRef = glossaryCollection.doc(entry.id);
+          batch.set(docRef, entry);
 
           console.log(`  ✅ ${entry.id.padEnd(25)} → ${entry.title}`);
           successCount++;
@@ -101,6 +114,13 @@ async function migrateGlossaryData() {
           errors.push({ id: entry.id, error: error.message });
         }
       }
+    }
+
+    // Commit the batch
+    if (successCount > 0) {
+      console.log('\n💾 Committing batch write to Firestore...');
+      await batch.commit();
+      console.log('✅ Batch committed successfully');
     }
 
     // Summary
@@ -121,7 +141,8 @@ async function migrateGlossaryData() {
     console.log('   1. Verify data in Firebase Console → Firestore → glossary collection');
     console.log('   2. Update Firestore rules to allow public read access');
     console.log('   3. Update glossary.js to set useFirestore = true');
-    console.log('\n✨ Migration script complete!\n');
+    console.log('   4. (Optional) Delete serviceAccountKey.json for security');
+    console.log('\n✨ Migration complete!\n');
 
   } catch (error) {
     console.error('\n💥 Migration failed with error:');
