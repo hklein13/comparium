@@ -136,17 +136,7 @@ body {
     border-radius: 8px;
     cursor: pointer;
     margin-top: 1rem;
-    transition: transform 0.2s ease;
     box-shadow: 0 4px 12px rgba(20, 184, 166, 0.3);
-}
-
-.compare-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(20, 184, 166, 0.4);
-}
-
-.compare-button:active {
-    transform: translateY(0);
 }
 
 .comparison-grid {
@@ -531,18 +521,8 @@ body {
     font-size: 1.1rem;
     border-radius: 8px;
     cursor: pointer;
-    transition: transform 0.2s ease;
     box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
     font-weight: 600;
-}
-
-.auth-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
-}
-
-.auth-button:active {
-    transform: translateY(0);
 }
 
 .auth-links {
@@ -752,12 +732,6 @@ body {
     margin-bottom: 1rem;
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.tank-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
 }
 
 .tank-card h3 {
@@ -783,6 +757,68 @@ body {
     padding: 0.25rem 0.75rem;
     border-radius: 20px;
     font-size: 0.85rem;
+}
+
+/* ============================================================================
+   HOVER ANIMATIONS
+   ============================================================================ */
+
+/* Button Hover - Scale Up */
+.compare-button,
+.auth-button,
+.btn-small,
+button:not(.remove-fish-btn) {
+    transition: all 0.3s ease;
+}
+
+.compare-button:hover,
+.auth-button:hover,
+.btn-small:hover,
+button:not(.remove-fish-btn):hover {
+    transform: scale(1.1);
+}
+
+.compare-button:active,
+.auth-button:active,
+.btn-small:active,
+button:not(.remove-fish-btn):active {
+    transform: scale(1.05);
+}
+
+/* Card Hover - Zoom */
+.tank-card,
+.stat-card,
+.content-section,
+.selection-section,
+.info-card,
+.dashboard-section {
+    transition: all 0.3s ease;
+}
+
+.tank-card:hover,
+.stat-card:hover,
+.info-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+
+/* Link Hover - Wave Underline */
+a {
+    position: relative;
+    background-image: linear-gradient(to right, currentColor 0%, currentColor 100%);
+    background-position: 0 100%;
+    background-size: 0 2px;
+    background-repeat: no-repeat;
+    transition: background-size 0.3s ease, color 0.3s ease;
+}
+
+a:hover {
+    background-size: 100% 2px;
+}
+
+/* Override for header nav links to keep their existing styles */
+.header-nav a {
+    background-image: none;
 }
 
 /* ============================================================================

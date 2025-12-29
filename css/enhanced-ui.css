@@ -104,19 +104,6 @@ option {
 .btn-small {
     font-weight: 600;
     letter-spacing: 0.5px;
-    transition: all 0.3s ease;
-}
-
-.button:hover,
-.auth-button:hover,
-.btn-small:hover {
-    transform: translateY(-2px);
-}
-
-.button:active,
-.auth-button:active,
-.btn-small:active {
-    transform: translateY(0);
 }
 
 /* Results display improvements */
