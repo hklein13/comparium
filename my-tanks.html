@@ -106,6 +106,16 @@
             // Initialize page with error handling
             (async () => {
                 try {
+                    // Wait for Firebase Auth to initialize
+                    await window.firebaseAuthReady;
+
+                    // Poll for UID to become available (Firebase Auth can take a moment)
+                    let attempts = 0;
+                    while (!authManager.getCurrentUid() && attempts < 50) {
+                        await new Promise(resolve => setTimeout(resolve, 100));
+                        attempts++;
+                    }
+
                     await loadTanks();
                     populateSpeciesSelector();
                 } catch (error) {
