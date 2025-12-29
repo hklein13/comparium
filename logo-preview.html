@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logo Preview - Comparium</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .intro {
+            background: white;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .intro h1 {
+            margin-bottom: 10px;
+        }
+
+        .intro p {
+            color: #666;
+        }
+
+        .logo-option {
+            background: white;
+            padding: 60px 40px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .logo-label {
+            font-family: system-ui;
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 30px;
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .logo-display {
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(135deg, #1e3a8a 0%, #14b8a6 100%);
+            border-radius: 12px;
+        }
+
+        /* Option 1: Wave Underline */
+        .option-1 .logo {
+            font-size: 48px;
+            font-weight: 700;
+            color: white;
+            position: relative;
+            display: inline-block;
+        }
+
+        .option-1 .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg,
+                transparent 0%,
+                rgba(255,255,255,0.8) 25%,
+                rgba(255,255,255,0.8) 75%,
+                transparent 100%
+            );
+            border-radius: 2px;
+        }
+
+        /* Option 2: Bubble Letters */
+        .option-2 .logo {
+            font-size: 48px;
+            font-weight: 800;
+            color: white;
+            text-shadow:
+                3px 3px 0px rgba(0,0,0,0.2),
+                -1px -1px 0px rgba(255,255,255,0.3);
+            letter-spacing: 2px;
+        }
+
+        /* Option 3: Aqua Glow */
+        .option-3 .logo {
+            font-size: 48px;
+            font-weight: 600;
+            color: white;
+            text-shadow:
+                0 0 20px rgba(20, 184, 166, 0.8),
+                0 0 40px rgba(20, 184, 166, 0.5),
+                0 0 60px rgba(20, 184, 166, 0.3);
+            letter-spacing: 3px;
+        }
+
+        /* Option 4: Water Ripple with Icon */
+        .option-4 .logo {
+            font-size: 48px;
+            font-weight: 700;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .option-4 .logo::before {
+            content: '〰️';
+            font-size: 36px;
+            animation: wave 2s ease-in-out infinite;
+        }
+
+        @keyframes wave {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* Option 5: Minimal Elegant */
+        .option-5 .logo {
+            font-size: 48px;
+            font-weight: 300;
+            color: white;
+            letter-spacing: 8px;
+            text-transform: lowercase;
+            border-bottom: 2px solid rgba(255,255,255,0.5);
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        /* Option 6: Bold Ocean */
+        .option-6 .logo {
+            font-size: 52px;
+            font-weight: 900;
+            background: linear-gradient(180deg, #ffffff 0%, #a0e7e5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 1px;
+        }
+
+        /* Option 7: Fish Tank Frame */
+        .option-7 .logo {
+            font-size: 44px;
+            font-weight: 600;
+            color: white;
+            padding: 20px 40px;
+            border: 3px solid rgba(255,255,255,0.4);
+            border-radius: 12px;
+            display: inline-block;
+            position: relative;
+        }
+
+        .option-7 .logo::before {
+            content: '🐠';
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 28px;
+        }
+
+        .option-7 .logo::after {
+            content: '🐠';
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%) scaleX(-1);
+            font-size: 28px;
+        }
+
+        /* Option 8: Flowing Water */
+        .option-8 .logo {
+            font-size: 48px;
+            font-weight: 600;
+            color: white;
+            font-style: italic;
+            letter-spacing: 2px;
+            position: relative;
+        }
+
+        .option-8 .logo::before {
+            content: '~';
+            position: absolute;
+            left: -30px;
+            top: -5px;
+            font-size: 60px;
+            opacity: 0.5;
+            font-style: normal;
+        }
+
+        /* Sample header context */
+        .context-preview {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+        }
+
+        .context-preview .tagline {
+            color: white;
+            font-size: 18px;
+            margin-top: 10px;
+            opacity: 0.9;
+        }
+
+        .context-preview .nav-sample {
+            margin-top: 15px;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .context-preview .nav-sample a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 6px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="intro">
+        <h1>Logo Design Options for Comparium</h1>
+        <p>Each option shows the logo as it would appear in the header with your gradient background</p>
+    </div>
+
+    <div class="logo-option option-1">
+        <div class="logo-label">OPTION 1: Wave Underline — Clean with subtle wave accent</div>
+        <div class="logo-display">
+            <div class="logo">Comparium</div>
+            <div class="context-preview">
+                <div class="tagline">The place for all things aquarium</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="logo-option option-2">
+        <div class="logo-label">OPTION 2: Bubble Letters — Bold and playful with shadow depth</div>
+        <div class="logo-display">
+            <div class="logo">Comparium</div>
+            <div class="context-preview">
+                <div class="tagline">The place for all things aquarium</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="logo-option option-3">
+        <div class="logo-label">OPTION 3: Aqua Glow — Glowing effect like underwater light</div>
+        <div class="logo-display">
+            <div class="logo">Comparium</div>
+            <div class="context-preview">
+                <div class="tagline">The place for all things aquarium</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="logo-option option-4">
+        <div class="logo-label">OPTION 4: Water Ripple — Animated wave icon with text</div>
+        <div class="logo-display">
+            <div class="logo">Comparium</div>
+            <div class="context-preview">
+                <div class="tagline">The place for all things aquarium</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="logo-option option-5">
+        <div class="logo-label">OPTION 5: Minimal Elegant — Sophisticated and understated</div>
+        <div class="logo-display">
+            <div class="logo">comparium</div>
+            <div class="context-preview">
+                <div class="tagline">The place for all things aquarium</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="logo-option option-6">
+        <div class="logo-label">OPTION 6: Bold Ocean — Extra bold with gradient fill</div>
+        <div class="logo-display">
+            <div class="logo">Comparium</div>
+            <div class="context-preview">
+                <div class="tagline">The place for all things aquarium</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="logo-option option-7">
+        <div class="logo-label">OPTION 7: Fish Tank Frame — Bordered with fish icons on sides</div>
+        <div class="logo-display">
+            <div class="logo">Comparium</div>
+            <div class="context-preview">
+                <div class="tagline">The place for all things aquarium</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="logo-option option-8">
+        <div class="logo-label">OPTION 8: Flowing Water — Italic style with wave accent</div>
+        <div class="logo-display">
+            <div class="logo">Comparium</div>
+            <div class="context-preview">
+                <div class="tagline">The place for all things aquarium</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
