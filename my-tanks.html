@@ -264,12 +264,20 @@
         }
 
         async function loadTanks() {
+            console.log('🔍 loadTanks() called');
             try {
                 const uid = authManager.getCurrentUid();
-                if (!uid) return;
+                console.log('🔍 UID:', uid);
+                if (!uid) {
+                    console.log('❌ No UID, exiting early');
+                    return;
+                }
 
+                console.log('🔍 Fetching tanks from Firestore...');
                 const tanks = await storageService.getTanks(uid);
+                console.log('🔍 Tanks received:', tanks);
                 const container = document.getElementById('tanks-container');
+                console.log('🔍 Container element:', container);
 
                 if (!Array.isArray(tanks) || tanks.length === 0) {
                     container.innerHTML = `
