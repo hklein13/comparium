@@ -802,25 +802,6 @@ button:not(.remove-fish-btn):active {
     box-shadow: 0 8px 24px rgba(0,0,0,0.15);
 }
 
-/* Link Hover - Wave Underline */
-a {
-    position: relative;
-    background-image: linear-gradient(to right, currentColor 0%, currentColor 100%);
-    background-position: 0 100%;
-    background-size: 0 2px;
-    background-repeat: no-repeat;
-    transition: background-size 0.3s ease, color 0.3s ease;
-}
-
-a:hover {
-    background-size: 100% 2px;
-}
-
-/* Override for header nav links to keep their existing styles */
-.header-nav a {
-    background-image: none;
-}
-
 /* ============================================================================
    LOADING ANIMATIONS - RISING BUBBLES
    ============================================================================ */
