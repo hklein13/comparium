@@ -488,12 +488,49 @@ body {
         grid-template-columns: 1fr;
     }
 
+    /* Fix header for mobile - make text SMALLER not larger */
+    .header {
+        padding: 10px 15px;
+    }
+
+    .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .header-left {
+        width: 100%;
+        gap: 8px;
+    }
+
     .header h1 {
-        font-size: 2rem;
+        font-size: 18px;
     }
 
     .header p {
-        font-size: 1rem;
+        font-size: 10px;
+    }
+
+    /* Stack navigation vertically on mobile */
+    .header-nav {
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+
+    .header-nav a {
+        font-size: 11px;
+        padding: 5px 8px;
+    }
+
+    .header-nav #auth-links {
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+
+    .container {
+        padding: 1rem;
     }
 }
 
