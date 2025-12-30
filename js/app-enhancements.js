@@ -5,12 +5,20 @@
 // ============================================================================
 
 /**
+ * Escape special regex characters in a string
+ * This allows species names with parentheses and other special chars to work correctly
+ */
+function escapeRegex(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+/**
  * Make fish names clickable in comparison results
  * Call this after displaying results
  */
 function makeSpeciesNamesClickable() {
     console.log('🔍 makeSpeciesNamesClickable started');
-    
+
     // Find the comparison grid (not .results!)
     const resultsDiv = document.getElementById('comparisonGrid');
     if (!resultsDiv) {
@@ -41,19 +49,20 @@ function makeSpeciesNamesClickable() {
             console.log('❌ Fish not found in database:', fishKey);
             return;
         }
-        
+
         console.log('🔧 Processing:', fish.commonName, 'key:', fishKey);
 
         // Find all instances of this fish name in results
-        const fishNameRegex = new RegExp(`\\b${fish.commonName}\\b`, 'g');
-        
+        // Escape special regex characters (fixes species with parentheses like "Bichir (Senegal)")
+        const fishNameRegex = new RegExp(`\\b${escapeRegex(fish.commonName)}\\b`, 'g');
+
         const beforeHTML = resultsDiv.innerHTML;
         resultsDiv.innerHTML = resultsDiv.innerHTML.replace(
             fishNameRegex,
             `<a href="species.html?fish=${fishKey}" class="fish-name-link">${fish.commonName}</a>`
         );
         const afterHTML = resultsDiv.innerHTML;
-        
+
         if (beforeHTML !== afterHTML) {
             console.log('✅ Replaced text for:', fish.commonName);
         } else {
