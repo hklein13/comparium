@@ -36,8 +36,9 @@ body {
 
 .header-left {
     display: flex;
-    align-items: center;
-    gap: 15px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
 }
 
 .header h1 {
