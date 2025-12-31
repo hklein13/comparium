@@ -31,14 +31,13 @@ body {
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
-    align-items: baseline; /* Align text baselines, not bottom edges */
+    align-items: center;
 }
 
 .header-left {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 2px;
+    align-items: center;
+    gap: 15px;
 }
 
 .header h1 {
