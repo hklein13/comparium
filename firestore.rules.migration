@@ -1,0 +1,45 @@
+// ============================================================================
+// TEMPORARY MIGRATION RULES - FOR GLOSSARY MIGRATION ONLY
+// ============================================================================
+// IMPORTANT: These rules allow ANYONE to write to glossary during migration
+// After migration completes, run: firebase deploy --only firestore:rules
+// to restore secure rules from firestore.rules
+//
+// This file is TEMPORARY and should be deleted after migration
+// ============================================================================
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // TEMPORARY: Allow anyone to write to glossary for migration
+    // DELETE THIS FILE AFTER MIGRATION COMPLETES
+    match /glossary/{termId} {
+      allow read: if true;
+      allow write: if true;  // ⚠️ TEMPORARY - OPEN TO ALL
+    }
+
+    // Keep all other collections secure
+    match /users/{uid} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow write: if request.auth != null && request.auth.uid == uid;
+    }
+
+    match /usernames/{username} {
+      allow read: if true;
+      allow create: if request.auth != null;
+      allow update, delete: if false;
+    }
+
+    match /species/{speciesId} {
+      allow read: if true;
+      allow write: if request.auth != null
+                   && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.admin == true;
+    }
+
+    // Deny everything else
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

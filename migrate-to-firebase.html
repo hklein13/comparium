@@ -136,6 +136,7 @@
     <script src="js/glossary-generator.js"></script>
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
         import { getFirestore, collection, doc, setDoc, getDocs, deleteDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
         const firebaseConfig = {
@@ -149,9 +150,24 @@
         };
 
         const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
         const db = getFirestore(app);
 
         window.firestore = db;
+        window.firebaseAuth = auth;
+
+        // Check if user is logged in
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                log(`Logged in as: ${user.email}`, 'success');
+            } else {
+                log('⚠️ Not logged in - you need to log in first!', 'error');
+                const statusDiv = document.getElementById('connectionStatus');
+                if (statusDiv) {
+                    statusDiv.innerHTML = '<div class="status error">❌ You must <a href="login.html">log in</a> first to run migration (admin required)</div>';
+                }
+            }
+        });
 
         // Logging functions
         function log(message, type = 'info') {

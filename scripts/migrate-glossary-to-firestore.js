@@ -1,20 +1,22 @@
 #!/usr/bin/env node
 /**
- * Glossary Migration Script (Admin SDK Version)
+ * Glossary Migration Script - Updated for Dynamic Generation
  *
  * PURPOSE:
- * Migrates glossary data from js/glossary.js to Firestore
+ * Migrates glossary data from dynamically generated entries to Firestore
  *
  * WHAT IT DOES:
- * 1. Reads glossary data from js/glossary.js (4 categories × 3 entries = 12 entries)
- * 2. Creates Firestore documents for each entry in the 'glossary' collection
- * 3. Preserves all existing data exactly as-is
- * 4. Uses the entry ID (e.g., "neon-tetra") as the document ID
+ * 1. Loads fish-data.js (143 species)
+ * 2. Loads fish-descriptions.js (63 curated descriptions)
+ * 3. Uses glossary-generator.js to create glossary entries dynamically
+ * 4. Creates Firestore documents in 'glossary' collection
+ * 5. Uses Admin SDK - bypasses all security rules
  *
  * SETUP (One-time):
- * 1. Download service account key from Firebase Console
- * 2. Save as: scripts/serviceAccountKey.json
- * 3. Add to .gitignore (NEVER commit this file!)
+ * 1. Go to: https://console.firebase.google.com/project/comparium-21b69/settings/serviceaccounts/adminsdk
+ * 2. Click "Generate new private key"
+ * 3. Save as: scripts/serviceAccountKey.json
+ * 4. Add to .gitignore (NEVER commit this file!)
  *
  * RUN:
  * npm run migrate:glossary
@@ -44,30 +46,173 @@ try {
   console.log('✅ Firebase Admin SDK initialized');
 } catch (error) {
   console.error('\n❌ ERROR: Could not load service account key\n');
-  console.error('Make sure you have downloaded serviceAccountKey.json to scripts/ folder');
-  console.error('See MIGRATION_GUIDE.md for instructions\n');
+  console.error('SETUP INSTRUCTIONS:');
+  console.error('1. Go to: https://console.firebase.google.com/project/comparium-21b69/settings/serviceaccounts/adminsdk');
+  console.error('2. Click "Generate new private key"');
+  console.error('3. Save the downloaded file as: scripts/serviceAccountKey.json');
+  console.error('4. Run this script again\n');
   process.exit(1);
 }
 
 const db = admin.firestore();
 
-// Read and parse glossary.js
-function loadGlossaryData() {
+// Load fish database from fish-data.js
+function loadFishDatabase() {
+  const fishDataPath = join(__dirname, '../js/fish-data.js');
+  const content = readFileSync(fishDataPath, 'utf-8');
+
+  // Extract the fishDatabase object
+  const match = content.match(/(?:var|let|const)\s+fishDatabase\s*=\s*({[\s\S]*?});/);
+  if (!match) {
+    throw new Error('Could not find fishDatabase in fish-data.js');
+  }
+
+  // Parse the object
+  const fishDatabase = eval(`(${match[1]})`);
+  return fishDatabase;
+}
+
+// Load fish descriptions from fish-descriptions.js
+function loadFishDescriptions() {
+  const descriptionsPath = join(__dirname, '../js/fish-descriptions.js');
+  const content = readFileSync(descriptionsPath, 'utf-8');
+
+  // Extract the fishDescriptions object
+  const match = content.match(/const\s+fishDescriptions\s*=\s*({[\s\S]*?});/);
+  if (!match) {
+    throw new Error('Could not find fishDescriptions in fish-descriptions.js');
+  }
+
+  // Parse the object
+  const fishDescriptions = eval(`(${match[1]})`);
+  return fishDescriptions;
+}
+
+// ============================================================================
+// GLOSSARY GENERATOR FUNCTIONS (Inlined for simplicity)
+// ============================================================================
+// These functions are copied from glossary-generator.js to avoid module loading issues
+// This is a one-time migration script, so some duplication is acceptable (KISS principle)
+
+function toKebabCase(str) {
+    return str.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
+}
+
+function generateFishTags(fish) {
+    const tags = [];
+
+    // Care level tags
+    if (fish.careLevel === 'Very Easy' || fish.careLevel === 'Easy') {
+        tags.push('Beginner Friendly');
+    } else if (fish.careLevel === 'Moderate') {
+        tags.push('Intermediate');
+    } else if (fish.careLevel === 'Difficult' || fish.careLevel === 'Very Difficult') {
+        tags.push('Advanced');
+    }
+
+    // Temperament tag
+    if (fish.aggression) {
+        tags.push(fish.aggression);
+    }
+
+    // Schooling tag
+    if (fish.schooling && (fish.schooling.includes('School') || fish.schooling.includes('Group'))) {
+        tags.push('Schooling Fish');
+    }
+
+    // Size tags
+    const sizeNum = parseFloat(fish.maxSize);
+    if (!isNaN(sizeNum)) {
+        if (sizeNum < 2) {
+            tags.push('Small');
+        } else if (sizeNum <= 5) {
+            tags.push('Medium');
+        } else {
+            tags.push('Large');
+        }
+    }
+
+    // Diet tag
+    if (fish.diet) {
+        tags.push(fish.diet);
+    }
+
+    return tags;
+}
+
+function generateFishDescription(key, fish, descriptions) {
+    // Use curated description if available
+    if (descriptions && descriptions[key]) {
+        return descriptions[key];
+    }
+
+    // Generate basic description from attributes
+    const tempRange = `${fish.tempMin}-${fish.tempMax}°F`;
+    const phRange = `${fish.phMin}-${fish.phMax}`;
+
+    let careDesc = 'moderate care';
+    if (fish.careLevel === 'Very Easy' || fish.careLevel === 'Easy') {
+        careDesc = 'easy to care for';
+    } else if (fish.careLevel === 'Difficult' || fish.careLevel === 'Very Difficult') {
+        careDesc = 'challenging to maintain';
+    }
+
+    let tempDesc = 'peaceful community fish';
+    if (fish.aggression === 'Semi-aggressive') {
+        tempDesc = 'semi-aggressive species requiring careful tankmate selection';
+    } else if (fish.aggression === 'Aggressive') {
+        tempDesc = 'aggressive species best in species-only tanks';
+    }
+
+    const schoolingDesc = fish.schooling && (fish.schooling.includes('School') || fish.schooling.includes('Group'))
+        ? ` Best kept in groups (${fish.schooling}).`
+        : ' Can be kept individually or in compatible groups.';
+
+    return `${tempDesc} reaching ${fish.maxSize} inches, ${careDesc}. Thrives in ${tempRange} water with pH ${phRange} and minimum tank size of ${fish.tankSizeMin} gallons.${schoolingDesc} Lifespan of ${fish.lifespan}.`.replace(/\s+/g, ' ');
+}
+
+function generateGlossaryEntry(key, fish, descriptions = {}) {
+    return {
+        id: toKebabCase(key),
+        title: fish.commonName,
+        scientificName: fish.scientificName,
+        description: generateFishDescription(key, fish, descriptions),
+        imageUrl: fish.imageUrl || null,
+        tags: generateFishTags(fish),
+        category: 'species',
+        author: 'System',
+        firestoreId: null,
+        userId: null,
+        upvotes: 0,
+        verified: true
+    };
+}
+
+function generateGlossaryEntries(fishDatabase, descriptions = {}) {
+    const entries = [];
+
+    for (const [key, fish] of Object.entries(fishDatabase)) {
+        entries.push(generateGlossaryEntry(key, fish, descriptions));
+    }
+
+    return entries;
+}
+
+// Load diseases, equipment, and terminology from glossary.js
+function loadOtherGlossaryData() {
   const glossaryPath = join(__dirname, '../js/glossary.js');
   const content = readFileSync(glossaryPath, 'utf-8');
 
-  // Extract the glossaryData from initializeGlossaryData method
-  // This is a bit hacky but works for our use case
-  const match = content.match(/return\s+({[\s\S]*?});[\s\S]*?}[\s\S]*?\/\*\*[\s\S]*?Load glossary entries from Firestore/);
-  if (!match) {
-    throw new Error('Could not find glossaryData in glossary.js');
-  }
+  // Extract diseases array
+  const diseasesMatch = content.match(/diseases:\s*\[([\s\S]*?)\],?\s*equipment:/);
+  const equipmentMatch = content.match(/equipment:\s*\[([\s\S]*?)\],?\s*terminology:/);
+  const terminologyMatch = content.match(/terminology:\s*\[([\s\S]*?)\]\s*};?\s*}/);
 
-  // Parse the object (safe since it's our own code)
-  // Replace new Date().toISOString() with a fixed date for eval
-  const objectStr = match[1].replace(/new Date\(\)\.toISOString\(\)/g, '"2025-12-24T00:00:00.000Z"');
-  const glossaryData = eval(`(${objectStr})`);
-  return glossaryData;
+  const diseases = diseasesMatch ? eval(`[${diseasesMatch[1]}]`) : [];
+  const equipment = equipmentMatch ? eval(`[${equipmentMatch[1]}]`) : [];
+  const terminology = terminologyMatch ? eval(`[${terminologyMatch[1]}]`) : [];
+
+  return { diseases, equipment, terminology };
 }
 
 // Main migration function
@@ -77,12 +222,35 @@ async function migrateGlossaryData() {
   console.log('╚════════════════════════════════════════════════╝\n');
 
   try {
-    console.log('📖 Loading glossary data from js/glossary.js...');
-    const glossaryData = loadGlossaryData();
+    console.log('📖 Loading fish data...');
+    const fishDatabase = loadFishDatabase();
+    console.log(`✅ Loaded ${Object.keys(fishDatabase).length} fish species\n`);
 
-    // Count total entries
-    const totalEntries = Object.values(glossaryData).reduce((sum, entries) => sum + entries.length, 0);
-    console.log(`✅ Loaded ${totalEntries} entries across ${Object.keys(glossaryData).length} categories\n`);
+    console.log('📖 Loading fish descriptions...');
+    const fishDescriptions = loadFishDescriptions();
+    console.log(`✅ Loaded ${Object.keys(fishDescriptions).length} curated descriptions\n`);
+
+    console.log('📖 Loading other glossary data (diseases, equipment, terminology)...');
+    const { diseases, equipment, terminology } = loadOtherGlossaryData();
+    console.log(`✅ Loaded ${diseases.length} diseases, ${equipment.length} equipment, ${terminology.length} terminology\n`);
+
+    console.log('🔄 Generating species entries dynamically...');
+    const speciesEntries = generateGlossaryEntries(fishDatabase, fishDescriptions);
+    console.log(`✅ Generated ${speciesEntries.length} species entries\n`);
+
+    // Combine all entries
+    const allEntries = [
+      ...speciesEntries,
+      ...diseases,
+      ...equipment,
+      ...terminology
+    ];
+
+    console.log(`📊 Total entries to migrate: ${allEntries.length}`);
+    console.log(`   - Species: ${speciesEntries.length}`);
+    console.log(`   - Diseases: ${diseases.length}`);
+    console.log(`   - Equipment: ${equipment.length}`);
+    console.log(`   - Terminology: ${terminology.length}\n`);
 
     const glossaryCollection = db.collection('glossary');
     let successCount = 0;
@@ -91,36 +259,41 @@ async function migrateGlossaryData() {
 
     console.log('🚀 Starting migration to Firestore...\n');
 
-    // Use batching for better performance
-    const batch = db.batch();
+    // Migrate in batches of 500 (Firestore limit)
+    const batchSize = 500;
+    for (let i = 0; i < allEntries.length; i += batchSize) {
+      const batch = db.batch();
+      const batchEntries = allEntries.slice(i, i + batchSize);
 
-    // Iterate through each category
-    for (const [category, entries] of Object.entries(glossaryData)) {
-      console.log(`\n📁 Category: ${category.toUpperCase()}`);
-      console.log('─'.repeat(50));
-
-      for (const entry of entries) {
+      for (const entry of batchEntries) {
         try {
-          // Add to batch
           const docRef = glossaryCollection.doc(entry.id);
-          batch.set(docRef, entry);
 
-          console.log(`  ✅ ${entry.id.padEnd(25)} → ${entry.title}`);
+          // Add timestamps for Firestore
+          const entryWithTimestamps = {
+            ...entry,
+            created: admin.firestore.FieldValue.serverTimestamp(),
+            updated: admin.firestore.FieldValue.serverTimestamp()
+          };
+
+          batch.set(docRef, entryWithTimestamps);
+
+          console.log(`  ✅ ${entry.id.padEnd(30)} → ${entry.title}`);
           successCount++;
 
         } catch (error) {
-          console.error(`  ❌ ${entry.id.padEnd(25)} → ERROR: ${error.message}`);
+          console.error(`  ❌ ${entry.id.padEnd(30)} → ERROR: ${error.message}`);
           errorCount++;
           errors.push({ id: entry.id, error: error.message });
         }
       }
-    }
 
-    // Commit the batch
-    if (successCount > 0) {
-      console.log('\n💾 Committing batch write to Firestore...');
-      await batch.commit();
-      console.log('✅ Batch committed successfully');
+      // Commit the batch
+      if (batchEntries.length > 0) {
+        console.log(`\n💾 Committing batch ${Math.floor(i / batchSize) + 1}...`);
+        await batch.commit();
+        console.log('✅ Batch committed\n');
+      }
     }
 
     // Summary
@@ -139,9 +312,8 @@ async function migrateGlossaryData() {
 
     console.log('\n📋 Next Steps:');
     console.log('   1. Verify data in Firebase Console → Firestore → glossary collection');
-    console.log('   2. Update Firestore rules to allow public read access');
-    console.log('   3. Update glossary.js to set useFirestore = true');
-    console.log('   4. (Optional) Delete serviceAccountKey.json for security');
+    console.log('   2. Visit your website and check the glossary page');
+    console.log('   3. (Optional) Delete serviceAccountKey.json for security');
     console.log('\n✨ Migration complete!\n');
 
   } catch (error) {
