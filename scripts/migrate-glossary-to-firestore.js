@@ -94,12 +94,12 @@ function loadFishDescriptions() {
 function loadGeneratorFunctions() {
   const generatorPath = join(__dirname, '../js/glossary-generator.js');
 
+  // IMPORTANT: Clear require cache to ensure fresh load
+  // This prevents stale cached modules from being used
+  delete require.cache[require.resolve(generatorPath)];
+
   // Use require to load CommonJS module (via createRequire)
   const loaded = require(generatorPath);
-
-  // Debug: Check what was loaded
-  console.log('DEBUG: Loaded module keys:', Object.keys(loaded));
-  console.log('DEBUG: generateGlossaryEntries type:', typeof loaded.generateGlossaryEntries);
 
   return loaded;
 }
