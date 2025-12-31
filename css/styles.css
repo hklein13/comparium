@@ -31,7 +31,7 @@ body {
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-end; /* Align nav with tagline baseline */
 }
 
 .header-left {
@@ -496,24 +496,26 @@ body {
 
     .header-content {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: center; /* Center all header content on mobile */
         gap: 8px;
     }
 
     .header-left {
         width: 100%;
         flex-direction: column;
-        align-items: flex-start;
+        align-items: center; /* Center logo and tagline on mobile */
         gap: 4px;
     }
 
     .header h1 {
         font-size: 20px;
+        text-align: center;
     }
 
     .header p {
         font-size: 11px;
         opacity: 0.85;
+        text-align: center;
     }
 
     /* Stack navigation vertically on mobile */
