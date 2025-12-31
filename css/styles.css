@@ -69,24 +69,24 @@ body {
 }
 
 .header p {
-    font-size: 12px;
-    opacity: 0.8;
+    font-size: 14px;
+    opacity: 0.9;
     margin: 0;
 }
 
 .header-nav {
     display: flex;
-    gap: 5px;
+    gap: 8px;
     align-items: center;
 }
 
 .header-nav a {
     color: white;
     text-decoration: none;
-    padding: 6px 12px;
+    padding: 8px 14px;
     border-radius: 6px;
     transition: background 0.2s ease;
-    font-size: 13px;
+    font-size: 14px;
     white-space: nowrap;
 }
 
@@ -490,27 +490,30 @@ body {
 
     /* Fix header for mobile - make text SMALLER not larger */
     .header {
-        padding: 10px 15px;
+        padding: 8px 15px;
         position: relative; /* Remove sticky positioning on mobile */
     }
 
     .header-content {
         flex-direction: column;
         align-items: flex-start;
-        gap: 10px;
+        gap: 8px;
     }
 
     .header-left {
         width: 100%;
-        gap: 8px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
     }
 
     .header h1 {
-        font-size: 18px;
+        font-size: 20px;
     }
 
     .header p {
-        font-size: 10px;
+        font-size: 11px;
+        opacity: 0.85;
     }
 
     /* Stack navigation vertically on mobile */
