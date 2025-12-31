@@ -60,58 +60,18 @@ class GlossaryManager {
 
     /**
      * Initialize glossary data structure
+     * Species entries are dynamically generated from fish-data.js (single source of truth)
      * In the future, this will be loaded from Firestore
      */
     initializeGlossaryData() {
+        // Dynamically generate species entries from fish-data.js
+        // Uses glossary-generator.js for tag generation and description merging
+        const speciesEntries = typeof generateGlossaryEntries === 'function' && typeof fishDatabase !== 'undefined'
+            ? generateGlossaryEntries(fishDatabase, typeof fishDescriptions !== 'undefined' ? fishDescriptions : {})
+            : [];
+
         return {
-            species: [
-                {
-                    id: 'neon-tetra',
-                    title: 'Neon Tetra',
-                    scientificName: 'Paracheirodon innesi',
-                    description: 'A small, peaceful freshwater fish known for its bright blue and red coloration. Native to South American blackwater streams. Perfect for community tanks and schooling behavior.',
-                    imageUrl: null,
-                    tags: ['Beginner Friendly', 'Schooling Fish', 'Peaceful', 'Small'],
-                    category: 'species',
-                    author: 'System',
-                    created: new Date().toISOString(),
-                    // Firestore-ready fields
-                    firestoreId: null,
-                    userId: null, // Will be populated with Firebase Auth UID
-                    upvotes: 0,
-                    verified: true
-                },
-                {
-                    id: 'betta-fish',
-                    title: 'Betta Fish (Siamese Fighting Fish)',
-                    scientificName: 'Betta splendens',
-                    description: 'A colorful labyrinth fish known for its flowing fins and territorial behavior. Males are aggressive toward other males. Can breathe air from the surface. Prefers warm water (76-82°F).',
-                    imageUrl: null,
-                    tags: ['Colorful', 'Territorial', 'Labyrinth Fish', 'Easy Care'],
-                    category: 'species',
-                    author: 'System',
-                    created: new Date().toISOString(),
-                    firestoreId: null,
-                    userId: null,
-                    upvotes: 0,
-                    verified: true
-                },
-                {
-                    id: 'corydoras-catfish',
-                    title: 'Corydoras Catfish',
-                    scientificName: 'Corydoras spp.',
-                    description: 'Bottom-dwelling catfish that help keep substrate clean. Social fish that should be kept in groups of 6+. Very peaceful and great for community tanks. Multiple species available.',
-                    imageUrl: null,
-                    tags: ['Bottom Dweller', 'Schooling Fish', 'Peaceful', 'Algae Eater'],
-                    category: 'species',
-                    author: 'System',
-                    created: new Date().toISOString(),
-                    firestoreId: null,
-                    userId: null,
-                    upvotes: 0,
-                    verified: true
-                }
-            ],
+            species: speciesEntries,
             diseases: [
                 {
                     id: 'ich',
