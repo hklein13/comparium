@@ -281,6 +281,7 @@ git push                       # Push to remote
 ## Known Issues & Preferences
 
 ### User Environment
+- **Email:** harrisonklein@hotmail.com (used for Firebase admin rules)
 - **Website:** comparium.net (live site domain)
 - **Local folder:** `comparium-live` (contains latest code + serviceAccountKey.json)
 - **Windows PC** - Path handling and command syntax differs from Mac/Linux

@@ -1129,12 +1129,12 @@ class GlossaryManager {
      * @returns {string}
      */
     renderEntry(entry) {
-        const scientificName = entry.scientificName 
-            ? `<div class="glossary-item-meta">${entry.scientificName}</div>` 
+        const scientificName = entry.scientificName
+            ? `<div class="glossary-item-meta">${entry.scientificName}</div>`
             : '';
-        
-        const verifiedBadge = entry.verified 
-            ? '<span title="Verified by Comparium team">✓</span>' 
+
+        const verifiedBadge = entry.verified
+            ? '<span title="Verified by Comparium team">✓</span>'
             : '';
 
         const tags = entry.tags && entry.tags.length > 0
@@ -1143,15 +1143,22 @@ class GlossaryManager {
                </div>`
             : '';
 
+        const image = entry.imageUrl
+            ? `<img src="${entry.imageUrl}" alt="${entry.title}" class="glossary-item-image" loading="lazy">`
+            : '';
+
         return `
-            <div class="glossary-item">
-                <div class="glossary-item-title">
-                    ${entry.title}
-                    ${verifiedBadge}
+            <div class="glossary-item ${entry.imageUrl ? 'has-image' : ''}">
+                ${image}
+                <div class="glossary-item-content">
+                    <div class="glossary-item-title">
+                        ${entry.title}
+                        ${verifiedBadge}
+                    </div>
+                    ${scientificName}
+                    <div class="glossary-item-description">${entry.description}</div>
+                    ${tags}
                 </div>
-                ${scientificName}
-                <div class="glossary-item-description">${entry.description}</div>
-                ${tags}
             </div>
         `;
     }

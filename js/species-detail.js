@@ -61,11 +61,11 @@ function loadSpeciesDetail() {
                     <p class="scientific-name"><em>${fish.scientificName}</em></p>
                     ${generateFavoriteStar(fishKey)}
                 </div>
-                <div class="species-image-placeholder">
-                    <div class="image-placeholder">
-                        🐠
-                        <p>Photo coming soon!</p>
-                    </div>
+                <div class="species-image-container">
+                    ${fish.imageUrl
+                        ? `<img src="${fish.imageUrl}" alt="${fish.commonName}" class="species-image" loading="lazy">`
+                        : `<div class="image-placeholder">🐠<p>Photo coming soon!</p></div>`
+                    }
                 </div>
             </div>
 

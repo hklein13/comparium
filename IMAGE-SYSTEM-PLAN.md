@@ -435,7 +435,7 @@ service firebase.storage {
     match /fish-images/{imageId} {
       allow read: if true;
       allow write: if request.auth != null &&
-        request.auth.token.email == 'hklein13@outlook.com';
+        request.auth.token.email == 'harrisonklein@hotmail.com';
     }
   }
 }

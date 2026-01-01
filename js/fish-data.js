@@ -2,7 +2,7 @@
             angelfish: {
                 commonName: "Freshwater Angelfish",
                 scientificName: "Pterophyllum scalare",
-                imageUrl: null,
+                imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2Fangelfish.jpg?alt=media",
                 tempMin: 75,
                 tempMax: 82,
                 tempUnit: "°F",
@@ -42,7 +42,7 @@
             neonTetra: {
                 commonName: "Neon Tetra",
                 scientificName: "Paracheirodon innesi",
-                imageUrl: null,
+                imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FneonTetra.jpg?alt=media",
                 tempMin: 72,
                 tempMax: 78,
                 tempUnit: "°F",
@@ -102,7 +102,7 @@
             bettaFish: {
                 commonName: "Betta Fish",
                 scientificName: "Betta splendens",
-                imageUrl: null,
+                imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FbettaFish.jpg?alt=media",
                 tempMin: 76,
                 tempMax: 82,
                 tempUnit: "°F",
@@ -142,7 +142,7 @@
             molly: {
                 commonName: "Molly",
                 scientificName: "Poecilia sphenops",
-                imageUrl: null,
+                imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2Fmolly.jpg?alt=media",
                 tempMin: 72,
                 tempMax: 80,
                 tempUnit: "°F",
@@ -162,7 +162,7 @@
             platy: {
                 commonName: "Platy",
                 scientificName: "Xiphophorus maculatus",
-                imageUrl: null,
+                imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2Fplaty.jpg?alt=media",
                 tempMin: 68,
                 tempMax: 79,
                 tempUnit: "°F",
@@ -242,7 +242,7 @@
             cardinalTetra: {
                 commonName: "Cardinal Tetra",
                 scientificName: "Paracheirodon axelrodi",
-                imageUrl: null,
+                imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FcardinalTetra.jpg?alt=media",
                 tempMin: 73,
                 tempMax: 84,
                 tempUnit: "°F",
@@ -342,7 +342,7 @@
             cherryBarb: {
                 commonName: "Cherry Barb",
                 scientificName: "Puntius titteya",
-                imageUrl: null,
+                imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FcherryBarb.jpg?alt=media",
                 tempMin: 68,
                 tempMax: 81,
                 tempUnit: "°F",
@@ -382,7 +382,7 @@
             zebraDanio: {
                 commonName: "Zebra Danio",
                 scientificName: "Danio rerio",
-                imageUrl: null,
+                imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FzebraDanio.jpg?alt=media",
                 tempMin: 64,
                 tempMax: 77,
                 tempUnit: "°F",
