@@ -238,7 +238,7 @@ git push                       # Push to remote
 
 ### How Code Gets to Production
 1. **Claude Code creates staging branch** (e.g., `claude/fix-species-links-Hv5Zn`)
-2. **User downloads latest code** from staging branch
+2. **User pulls latest code** to local folder: `git pull` (see "Pull Latest Updates" task)
 3. **User tests changes locally** using http-server (see TESTING.md)
 4. **User reviews and approves** changes
 5. **User merges staging branch to main** via GitHub
@@ -265,7 +265,7 @@ git push                       # Push to remote
 - **Website:** comparium.net (live site domain)
 - **Local folder:** `comparium-live` (contains latest code + serviceAccountKey.json)
 - **Windows PC** - Path handling and command syntax differs from Mac/Linux
-- **Working from downloaded ZIPs** - Not using git clone (manual updates required)
+- **Using git clone/pull** - Pulls updates directly from GitHub (no more ZIP downloads!)
 - **Beginner to coding** - Needs step-by-step instructions with explanations
 
 ### Technical Preferences
@@ -278,8 +278,9 @@ git push                       # Push to remote
 ### Common Gotchas
 - **File extensions hidden by default** - Enable in Windows File Explorer
 - **Folder names with spaces** - Can cause path issues, use simple names
-- **Old code in downloads** - Always re-download after git pushes
+- **Forgetting to pull updates** - Run `git pull` to get latest code after Claude pushes
 - **Module system conflicts** - ES6 in browser, CommonJS in Node scripts
+- **Uncommitted changes blocking git pull** - Run `git stash` before pulling, `git stash pop` after
 
 ---
 
@@ -343,7 +344,92 @@ const entries = typeof generateGlossaryEntries === 'function'
 
 ## Common Tasks (Step-by-Step)
 
-### Task: Download Latest Code from GitHub
+### Task: First-Time Setup - Clone Repository with Git
+
+**Do this once** to set up your local folder with git. After this, you can pull updates easily without re-downloading ZIPs.
+
+**Prerequisites:**
+- Git installed on your computer (download from: https://git-scm.com/download/win)
+
+**Steps:**
+
+1. **Check if Git is installed:**
+   - Open Command Prompt
+   - Run: `git --version`
+   - If you see a version number (e.g., "git version 2.40.0"), you're good!
+   - If you see "git is not recognized", install Git from link above
+
+2. **Navigate to your Downloads folder:**
+   ```cmd
+   cd C:\Users\HarrisonKlein\Downloads
+   ```
+
+3. **Delete old comparium-live folder** (if it exists from ZIP downloads):
+   ```cmd
+   rmdir /s comparium-live
+   ```
+   Type `Y` when asked to confirm
+
+4. **Clone the repository:**
+   ```cmd
+   git clone -b claude/fix-species-links-Hv5Zn https://github.com/hklein13/comparium.git comparium-live
+   ```
+
+   **What this does:** Downloads the entire project with git history into a folder named `comparium-live`
+
+5. **Copy your service account key:**
+   - Copy `serviceAccountKey.json` to: `comparium-live\scripts\serviceAccountKey.json`
+
+6. **Verify it worked:**
+   ```cmd
+   cd comparium-live
+   git status
+   ```
+   You should see: "On branch claude/fix-species-links-Hv5Zn"
+
+**Done!** Now you can pull updates easily (see next task).
+
+---
+
+### Task: Pull Latest Updates from GitHub
+
+**Use this instead of downloading ZIPs** - much faster and easier!
+
+**Steps:**
+
+1. Open Command Prompt
+2. Navigate to your project:
+   ```cmd
+   cd C:\Users\HarrisonKlein\Downloads\comparium-live
+   ```
+3. Pull latest changes:
+   ```cmd
+   git pull
+   ```
+
+**You should see:**
+```
+Updating 1bff25b..997a72e
+Fast-forward
+ TESTING.md | 413 ++++++++++++++++++++++++++++++++++++++
+ CLAUDE.md  |  28 ++-
+ 2 files changed, 438 insertions(+), 3 deletions(-)
+```
+
+**That's it!** Your local folder now has the latest code.
+
+**If you get "uncommitted changes" error:**
+- You accidentally edited a file
+- Run: `git status` to see what changed
+- Run: `git stash` to temporarily save your changes
+- Run: `git pull` again
+- Run: `git stash pop` to restore your changes (if you want them)
+
+---
+
+### Task: Download Latest Code (ZIP Method - OLD WAY)
+
+**Note:** Only use this if git setup didn't work. Git pull (above) is much better!
 
 1. Go to: https://github.com/hklein13/comparium/tree/claude/fix-species-links-Hv5Zn
 2. Click the green **"Code"** button
@@ -460,10 +546,40 @@ const entries = typeof generateGlossaryEntries === 'function'
 - Always use terminal scripts for migrations, not browser tools
 
 ### "Old code is running" (line numbers don't match)
-1. Close ALL Command Prompt windows
-2. Download fresh ZIP from GitHub
-3. Extract to NEW folder with different name
-4. Run from new folder
+1. Run `git pull` to get latest code
+2. Close ALL Command Prompt windows and restart
+3. Verify update: `git log --oneline -5` (should show recent commits)
+
+### Git-Related Issues
+
+**"git is not recognized as a command"**
+- Git not installed → Download from: https://git-scm.com/download/win
+- Install, close terminal, reopen, try again
+
+**"fatal: not a git repository"**
+- You're in the wrong folder OR
+- Folder was created from ZIP download (not git clone)
+- Solution: Follow "First-Time Setup - Clone Repository" task in CLAUDE.md
+
+**"Your local changes would be overwritten by merge"**
+- You edited a file that Claude also changed
+- Solution:
+  1. Run `git status` to see what you changed
+  2. Run `git stash` to temporarily save your changes
+  3. Run `git pull` to get updates
+  4. Run `git stash pop` to restore your changes (if you want them)
+  5. Fix any conflicts if needed
+
+**"Already up to date" but I know there are new commits**
+- Wrong branch → Run `git branch` to check current branch
+- Should show: `claude/fix-species-links-Hv5Zn`
+- If wrong: `git checkout claude/fix-species-links-Hv5Zn`
+
+**"Please commit your changes or stash them"**
+- You have unsaved changes
+- To save: `git add . && git commit -m "My changes"`
+- To discard: `git reset --hard` (WARNING: Deletes your changes!)
+- To stash: `git stash` (saves temporarily)
 
 ---
 
@@ -474,6 +590,6 @@ const entries = typeof generateGlossaryEntries === 'function'
 - User is learning - take opportunities to teach, not just do
 - User wants zero technical debt - refactor before merging
 - User works on Windows - provide Windows-compatible commands/paths
-- User downloads ZIPs - always mention "download latest code" after git pushes
+- User uses git pull - remind to run `git pull` after you push updates
 
 **Remember:** This project is about building a strong foundation for future growth. Every decision should prioritize simplicity, maintainability, and the user's ability to understand what's happening.
