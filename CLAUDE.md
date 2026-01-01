@@ -222,29 +222,48 @@ git push                       # Push to remote
 
 ---
 
-## Current Branch
-**`claude/fix-species-links-Hv5Zn`** - Species link fixes and glossary refactoring
+## Current Branch & Git Workflow
 
-**Recent Work:**
+### Staging Branch (IMPORTANT)
+**`claude/fix-species-links-Hv5Zn`** - This is the ONE TRUE STAGING BRANCH
+
+**Branch Strategy:**
+- ✅ **ALWAYS use this branch** for all new work across all sessions
+- ✅ **DO NOT create new staging branches** - reuse this one
+- ✅ User merges to main when ready to deploy
+- ✅ After merge, continue using this branch for next features
+
+**Why reuse one branch?**
+- Keeps git history clean
+- Avoids branch proliferation
+- User tests same branch repeatedly
+- Simple workflow: one staging branch → main
+
+**Recent Work on This Branch:**
 - ✅ Refactored glossary system (eliminated 2,295 lines of duplication)
 - ✅ Created fish-descriptions.js (curated content)
 - ✅ Created glossary-generator.js (reusable logic)
 - ✅ Migrated 189 glossary entries to Firestore
 - ✅ Fixed module loading issues in migration script
+- ✅ Added comprehensive testing guide (TESTING.md)
+- ✅ Set up git pull workflow
 
 ---
 
 ## Deployment Workflow
 
 ### How Code Gets to Production
-1. **Claude Code creates staging branch** (e.g., `claude/fix-species-links-Hv5Zn`)
-2. **User pulls latest code** to local folder: `git pull` (see "Pull Latest Updates" task)
-3. **User tests changes locally** using http-server (see TESTING.md)
-4. **User reviews and approves** changes
-5. **User merges staging branch to main** via GitHub
-6. **Live site updates automatically** when main branch changes
+1. **Claude Code commits to staging branch** (`claude/fix-species-links-Hv5Zn`)
+2. **Claude Code pushes changes** to the staging branch
+3. **User pulls latest code** to local folder: `git pull` (see "Pull Latest Updates" task)
+4. **User tests changes locally** using http-server (see TESTING.md)
+5. **User reviews and approves** changes
+6. **User merges staging branch to main** via GitHub (when ready to deploy)
+7. **Live site updates automatically** when main branch changes
 
 **CRITICAL:** Merging to main = live site deployment. Always test locally first!
+
+**Note:** The staging branch (`claude/fix-species-links-Hv5Zn`) is reused across all sessions - we don't create new branches for each feature.
 
 ### Local Testing Setup
 - **Testing guide:** See `TESTING.md` for complete instructions
@@ -585,11 +604,23 @@ Fast-forward
 
 ## Notes for Claude
 
+### Branch Workflow (CRITICAL)
+- **ALWAYS use branch:** `claude/fix-species-links-Hv5Zn`
+- **NEVER create new staging branches** - reuse this one across all sessions
+- After pushing changes, remind user to run `git pull`
+- This branch is the permanent staging area - main branch is production
+
+### Communication & Development Style
 - User values transparency - explain what you're doing and why
 - User prefers KISS over cleverness - simple solutions always win
 - User is learning - take opportunities to teach, not just do
 - User wants zero technical debt - refactor before merging
 - User works on Windows - provide Windows-compatible commands/paths
-- User uses git pull - remind to run `git pull` after you push updates
+
+### Workflow Reminders
+- User uses git pull to get updates (not ZIP downloads)
+- User tests locally with http-server before merging to main
+- Merging to main = live site deployment (comparium.net)
+- Always reference CLAUDE.md and TESTING.md for user guidance
 
 **Remember:** This project is about building a strong foundation for future growth. Every decision should prioritize simplicity, maintainability, and the user's ability to understand what's happening.
