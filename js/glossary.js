@@ -11,7 +11,11 @@ class GlossaryManager {
         this.searchTerm = '';
         this.glossaryData = this.initializeGlossaryData();
         this.categories = this.initializeCategories();
-        
+
+        // Pagination configuration
+        this.currentPage = 1;
+        this.entriesPerPage = 15;
+
         // Firestore configuration
         this.useFirestore = true; // Enable Firestore data fetching
         this.firestoreCollection = 'glossary'; // Collection name for Firestore
@@ -957,13 +961,14 @@ class GlossaryManager {
 
     /**
      * Select a category
-     * @param {string} categoryId 
+     * @param {string} categoryId
      */
     async selectCategory(categoryId) {
         this.currentCategory = categoryId;
         this.searchTerm = '';
+        this.currentPage = 1; // Reset to first page
         document.getElementById('glossarySearch').value = '';
-        
+
         this.renderCategories();
         await this.renderContent();
     }
@@ -977,7 +982,7 @@ class GlossaryManager {
 
         // Load data (from Firestore in the future)
         const entries = await this.loadFromFirestore(this.currentCategory);
-        
+
         // Filter based on search term
         const filteredEntries = this.filterEntries(entries);
 
@@ -1009,13 +1014,113 @@ class GlossaryManager {
         const category = this.categories.find(c => c.id === this.currentCategory);
         const categoryTitle = category ? category.title : 'Search Results';
 
-        // Render entries
+        // Pagination: only apply when NOT searching
+        const usePagination = !this.searchTerm && this.currentCategory;
+        const totalEntries = filteredEntries.length;
+        const totalPages = Math.ceil(totalEntries / this.entriesPerPage);
+
+        // Ensure current page is valid
+        if (this.currentPage > totalPages) {
+            this.currentPage = totalPages;
+        }
+        if (this.currentPage < 1) {
+            this.currentPage = 1;
+        }
+
+        // Get entries for current page (or all if searching)
+        let entriesToShow;
+        if (usePagination) {
+            const startIndex = (this.currentPage - 1) * this.entriesPerPage;
+            const endIndex = startIndex + this.entriesPerPage;
+            entriesToShow = filteredEntries.slice(startIndex, endIndex);
+        } else {
+            entriesToShow = filteredEntries;
+        }
+
+        // Build pagination info text
+        let paginationInfo = '';
+        if (usePagination && totalPages > 1) {
+            const startNum = (this.currentPage - 1) * this.entriesPerPage + 1;
+            const endNum = Math.min(this.currentPage * this.entriesPerPage, totalEntries);
+            paginationInfo = `<p class="pagination-info">Showing ${startNum}-${endNum} of ${totalEntries} entries</p>`;
+        }
+
+        // Render entries with pagination
         container.innerHTML = `
             <h2 class="section-title">${categoryTitle}</h2>
+            ${paginationInfo}
             <div class="glossary-items">
-                ${filteredEntries.map(entry => this.renderEntry(entry)).join('')}
+                ${entriesToShow.map(entry => this.renderEntry(entry)).join('')}
             </div>
+            ${usePagination && totalPages > 1 ? this.renderPagination(totalPages) : ''}
         `;
+    }
+
+    /**
+     * Render pagination controls
+     * @param {number} totalPages
+     * @returns {string}
+     */
+    renderPagination(totalPages) {
+        const pages = [];
+
+        // Previous button
+        const prevDisabled = this.currentPage === 1 ? 'disabled' : '';
+        pages.push(`<button class="pagination-btn pagination-prev ${prevDisabled}" onclick="glossaryManager.goToPage(${this.currentPage - 1})" ${prevDisabled}>← Previous</button>`);
+
+        // Page numbers
+        const maxVisiblePages = 5;
+        let startPage = Math.max(1, this.currentPage - Math.floor(maxVisiblePages / 2));
+        let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+        // Adjust start if we're near the end
+        if (endPage - startPage < maxVisiblePages - 1) {
+            startPage = Math.max(1, endPage - maxVisiblePages + 1);
+        }
+
+        // First page and ellipsis
+        if (startPage > 1) {
+            pages.push(`<button class="pagination-btn pagination-num" onclick="glossaryManager.goToPage(1)">1</button>`);
+            if (startPage > 2) {
+                pages.push(`<span class="pagination-ellipsis">...</span>`);
+            }
+        }
+
+        // Page numbers
+        for (let i = startPage; i <= endPage; i++) {
+            const activeClass = i === this.currentPage ? 'active' : '';
+            pages.push(`<button class="pagination-btn pagination-num ${activeClass}" onclick="glossaryManager.goToPage(${i})">${i}</button>`);
+        }
+
+        // Last page and ellipsis
+        if (endPage < totalPages) {
+            if (endPage < totalPages - 1) {
+                pages.push(`<span class="pagination-ellipsis">...</span>`);
+            }
+            pages.push(`<button class="pagination-btn pagination-num" onclick="glossaryManager.goToPage(${totalPages})">${totalPages}</button>`);
+        }
+
+        // Next button
+        const nextDisabled = this.currentPage === totalPages ? 'disabled' : '';
+        pages.push(`<button class="pagination-btn pagination-next ${nextDisabled}" onclick="glossaryManager.goToPage(${this.currentPage + 1})" ${nextDisabled}>Next →</button>`);
+
+        return `<div class="pagination-controls">${pages.join('')}</div>`;
+    }
+
+    /**
+     * Navigate to a specific page
+     * @param {number} page
+     */
+    async goToPage(page) {
+        if (page < 1) return;
+        this.currentPage = page;
+        await this.renderContent();
+
+        // Scroll to top of content
+        const container = document.getElementById('glossaryContent');
+        if (container) {
+            container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
     }
 
     /**
@@ -1070,11 +1175,12 @@ class GlossaryManager {
 
     /**
      * Search across all categories
-     * @param {string} term 
+     * @param {string} term
      */
     async search(term) {
         this.searchTerm = term.trim();
-        
+        this.currentPage = 1; // Reset to first page when searching
+
         if (!this.searchTerm) {
             // Reset to current category view
             await this.renderContent();

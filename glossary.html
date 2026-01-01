@@ -310,6 +310,89 @@
             background: linear-gradient(135deg, #0f766e 0%, #1e3a8a 100%);
         }
 
+        /* Pagination styles */
+        .pagination-info {
+            color: var(--text-secondary, #666);
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .pagination-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e1e8ed;
+            flex-wrap: wrap;
+        }
+
+        .pagination-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid #e1e8ed;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            color: #2c3e50;
+        }
+
+        .pagination-btn:hover:not([disabled]) {
+            border-color: #14b8a6;
+            background: #f0fdfa;
+            color: #14b8a6;
+        }
+
+        .pagination-btn.active {
+            background: #14b8a6;
+            border-color: #14b8a6;
+            color: white;
+        }
+
+        .pagination-btn[disabled] {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .pagination-prev,
+        .pagination-next {
+            font-weight: 500;
+        }
+
+        .pagination-ellipsis {
+            padding: 0.5rem;
+            color: #666;
+        }
+
+        /* Dark mode pagination */
+        [data-theme="dark"] .pagination-controls {
+            border-top-color: var(--border-color, #2d3e5f);
+        }
+
+        [data-theme="dark"] .pagination-btn {
+            background: var(--bg-secondary, #16213e);
+            border-color: var(--border-color, #2d3e5f);
+            color: var(--text-primary, #e2e8f0);
+        }
+
+        [data-theme="dark"] .pagination-btn:hover:not([disabled]) {
+            border-color: #14b8a6;
+            background: rgba(20, 184, 166, 0.2);
+            color: #14b8a6;
+        }
+
+        [data-theme="dark"] .pagination-btn.active {
+            background: #14b8a6;
+            border-color: #14b8a6;
+            color: white;
+        }
+
+        [data-theme="dark"] .pagination-info {
+            color: var(--text-secondary, #bbb);
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .glossary-container {
@@ -322,6 +405,20 @@
 
             .glossary-categories {
                 grid-template-columns: 1fr;
+            }
+
+            .pagination-controls {
+                gap: 0.25rem;
+            }
+
+            .pagination-btn {
+                padding: 0.4rem 0.6rem;
+                font-size: 0.85rem;
+            }
+
+            .pagination-prev,
+            .pagination-next {
+                padding: 0.4rem 0.8rem;
             }
         }
     </style>
