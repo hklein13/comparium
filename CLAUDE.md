@@ -238,16 +238,24 @@ git push                       # Push to remote
 
 ### How Code Gets to Production
 1. **Claude Code creates staging branch** (e.g., `claude/fix-species-links-Hv5Zn`)
-2. **User reviews changes** in staging branch
-3. **User merges staging branch to main** via GitHub
-4. **Live site updates automatically** when main branch changes
+2. **User downloads latest code** from staging branch
+3. **User tests changes locally** using http-server (see TESTING.md)
+4. **User reviews and approves** changes
+5. **User merges staging branch to main** via GitHub
+6. **Live site updates automatically** when main branch changes
 
-**CRITICAL:** Merging to main = live site deployment. This is why code quality and testing are essential.
+**CRITICAL:** Merging to main = live site deployment. Always test locally first!
 
-### Current Testing Limitations
-- **No local testing environment setup yet**
-- Many changes tested by viewing on live site (risky!)
-- Need simple, repeatable local testing process
+### Local Testing Setup
+- **Testing guide:** See `TESTING.md` for complete instructions
+- **Tool:** http-server (Node.js local web server)
+- **Quick start:**
+  ```cmd
+  cd C:\Users\HarrisonKlein\Downloads\comparium-live
+  http-server
+  ```
+  Then open: http://localhost:8080
+- **Testing checklist:** See TESTING.md for what to test before merging
 
 ---
 
@@ -342,6 +350,19 @@ const entries = typeof generateGlossaryEntries === 'function'
 3. Click **"Download ZIP"**
 4. Extract to your working folder: `comparium-live`
 5. Copy your `serviceAccountKey.json` to: `comparium-live\scripts\serviceAccountKey.json`
+
+### Task: Test Changes Locally
+
+**See TESTING.md for complete guide.** Quick version:
+
+1. Open Command Prompt
+2. Navigate to project: `cd C:\Users\HarrisonKlein\Downloads\comparium-live`
+3. Start server: `http-server`
+4. Open browser to: `http://localhost:8080`
+5. Test your changes (click around, check console for errors with F12)
+6. Stop server when done: Press `Ctrl+C`
+
+**What to test:** See testing checklist in TESTING.md
 
 ### Task: Run Firestore Migration
 
