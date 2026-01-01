@@ -1,10 +1,98 @@
 # Comparium - Fish Species Compatibility Tool
 
-A web-based tool for comparing freshwater aquarium fish species and checking compatibility. Includes 99 species with detailed care requirements, predation warnings, and compatibility analysis.
+A web-based tool for comparing freshwater aquarium fish species and checking compatibility. Includes 143+ species with detailed care requirements, predation warnings, and compatibility analysis.
 
-## 🚀 Quick Start - Get Your Website Online in 15 Minutes
+**Live Site:** https://comparium.net
 
-### Method 1: GitHub Pages (FREE - Recommended for Beginners)
+---
+
+## Developer Quick Start
+
+### Run Locally (http-server)
+
+**Prerequisites:** Node.js installed (download from https://nodejs.org)
+
+**First time setup:**
+```cmd
+cd C:\Users\HarrisonKlein\Downloads\comparium-live
+npm install -g http-server
+```
+
+**Start the local server:**
+```cmd
+cd C:\Users\HarrisonKlein\Downloads\comparium-live
+http-server
+```
+
+**Open in browser:** http://localhost:8080
+
+**Stop the server:** Press `Ctrl+C` in the terminal
+
+---
+
+### Start Claude Code (Terminal)
+
+**Open Command Prompt or PowerShell, then run:**
+```cmd
+cd C:\Users\HarrisonKlein\Downloads\comparium-live
+claude
+```
+
+Claude Code will start in the project directory, ready to help with development.
+
+---
+
+### Git Basics - Push Commits to GitHub
+
+**Check what files changed:**
+```cmd
+git status
+```
+
+**Stage all changes:**
+```cmd
+git add .
+```
+
+**Commit with a message:**
+```cmd
+git commit -m "Your description of what changed"
+```
+
+**Push to GitHub:**
+```cmd
+git push
+```
+
+**Pull latest updates (if Claude pushed changes):**
+```cmd
+git pull
+```
+
+**Common workflow:**
+```cmd
+git add . && git commit -m "Add new feature" && git push
+```
+
+**If you get "uncommitted changes" error when pulling:**
+```cmd
+git stash
+git pull
+git stash pop
+```
+
+---
+
+### Branch Info
+
+- **Staging branch:** `claude/fix-species-links-Hv5Zn` (for development)
+- **Production branch:** `main` (merging to main deploys to live site)
+
+---
+
+## Hosting Guide - Deploy to GitHub Pages
+
+### GitHub Pages (FREE - Recommended for Beginners)
 
 **You'll need:**
 - A GitHub account (free - create at github.com)
