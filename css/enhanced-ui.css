@@ -225,6 +225,8 @@ option {
 
     .header-nav {
         gap: 1rem;
+        justify-content: center;
+        width: 100%;
     }
 
     /* Stacked layout for panels */
