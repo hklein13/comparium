@@ -34,7 +34,19 @@ async function searchWikimedia(scientificName) {
     const url = `https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=${searchQuery}&gsrnamespace=6&gsrlimit=3&prop=imageinfo&iiprop=url|extmetadata|size&iiurlwidth=400&format=json&origin=*`;
 
     try {
-        const response = await fetch(url);
+        const response = await fetch(url, {
+            headers: {
+                'User-Agent': 'Comparium/1.0 (https://comparium.net; contact@comparium.net) Node.js'
+            }
+        });
+
+        // Check for valid JSON response
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            console.error(`\n  Warning: Non-JSON response for ${scientificName}`);
+            return [];
+        }
+
         const data = await response.json();
 
         const pages = data.query?.pages;
@@ -358,8 +370,8 @@ async function main() {
             images: images
         });
 
-        // Small delay to be nice to Wikimedia API
-        await new Promise(resolve => setTimeout(resolve, 100));
+        // Delay to avoid Wikimedia rate limiting
+        await new Promise(resolve => setTimeout(resolve, 300));
     }
 
     console.log('\n\nGenerating preview page...');
