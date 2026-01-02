@@ -11,7 +11,9 @@
     "test:report": "playwright show-report",
     "migrate:fish": "node scripts/migrate-fish-to-firestore.js",
     "migrate:glossary": "node scripts/migrate-glossary-to-firestore.js",
-    "images": "node scripts/image-pipeline.js"
+    "images": "node scripts/image-pipeline.js",
+    "images:preview": "node scripts/generate-image-preview.js",
+    "images:upload": "node scripts/upload-selected-images.js"
   },
   "repository": {
     "type": "git",
