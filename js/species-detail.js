@@ -214,10 +214,10 @@ function addToTankPlan(speciesKey) {
         authManager.showMessage('Please login to add fish to tank plans', 'info');
         return;
     }
-    
-    // Store in session for tank builder
+
+    // Store in session for tank builder (read by tankManager on dashboard)
     sessionStorage.setItem('addToTank', speciesKey);
-    window.location.href = 'my-tanks.html';
+    window.location.href = 'dashboard.html#my-tanks-section';
 }
 
 // Initialize species detail page if we're on species.html
