@@ -638,3 +638,11 @@ textarea:focus {
     color: var(--text-secondary) !important;
 }
 
+[data-theme="dark"] .tank-notes {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .tank-notes-toggle {
+    color: #5eead4 !important;
+}
+

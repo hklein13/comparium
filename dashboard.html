@@ -28,7 +28,6 @@
             <div class="header-nav">
                 <a href="index.html">Compare Fish</a>
                 <a href="dashboard.html">Dashboard</a>
-                <a href="my-tanks.html">My Tanks</a>
                 <a href="glossary.html">Glossary</a>
                 <a href="faq.html">FAQ</a>
                 <div id="auth-links"></div>
@@ -68,17 +67,64 @@
             </div>
         </div>
 
-        <!-- My Tanks -->
-        <div class="dashboard-section">
-            <h2>🏠 My Tanks</h2>
-            <div id="my-tanks-preview">
-                <div class="empty-state-small">
-                    <p>No tanks created yet. <a href="my-tanks.html">Create your first tank!</a></p>
+        <!-- My Tanks - Full Management -->
+        <div class="dashboard-section" id="my-tanks-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem;">
+                <h2 style="margin: 0;">🏠 My Tanks</h2>
+                <button onclick="showNewTankForm()" class="btn-small">+ Create New Tank</button>
+            </div>
+
+            <!-- Tank Form (Initially Hidden) -->
+            <div id="tank-form-container" class="tank-form" style="display: none;">
+                <h3 id="form-title">Create New Tank</h3>
+                <form id="tank-form" onsubmit="saveTank(event)">
+                    <input type="hidden" id="tank-id">
+
+                    <div class="form-group">
+                        <label for="tank-name">Tank Name</label>
+                        <input type="text" id="tank-name" required placeholder="e.g., Living Room 55g">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tank-size">Tank Size (gallons)</label>
+                        <input type="number" id="tank-size" required min="1" placeholder="e.g., 55">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tank-notes">Notes (Optional)</label>
+                        <textarea id="tank-notes" rows="3" placeholder="Equipment, substrate, plans..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Select Fish Species</label>
+                        <select id="species-selector" onchange="addSpeciesToTank()">
+                            <option value="">-- Choose a species to add --</option>
+                        </select>
+                    </div>
+
+                    <div id="selected-species-list" style="margin: 1rem 0;">
+                        <strong style="font-size: 0.95rem;">Selected Species:</strong>
+                        <ul id="species-list" class="fish-list"></ul>
+                    </div>
+
+                    <div style="display: flex; gap: 1rem;">
+                        <button type="submit" class="btn-small">Save Tank</button>
+                        <button type="button" onclick="cancelForm()" class="btn-small btn-danger">Cancel</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Tanks List -->
+            <div id="tanks-container">
+                <div class="loading-container">
+                    <div class="bubble-loader">
+                        <div class="bubble"></div>
+                        <div class="bubble"></div>
+                        <div class="bubble"></div>
+                    </div>
+                    <div class="loading-text">Loading tanks...</div>
                 </div>
             </div>
-            <p style="text-align: center; margin-top: 1rem;">
-                <a href="my-tanks.html" class="btn-small">Manage All Tanks</a>
-            </p>
         </div>
 
         <!-- Favorite Species -->
@@ -104,10 +150,11 @@
     <p><a href="about.html">About</a> | <a href="mailto:contact@comparium.net">Contact</a></p>
     </div>
 
-    <script type="module" src="js/firebase-init.js"></script>
     <script src="js/fish-data.js"></script>
+    <script type="module" src="js/firebase-init.js"></script>
     <script src="js/storage-service.js"></script>
     <script src="js/auth-manager.js"></script>
+    <script src="js/tank-manager.js"></script>
     <script>
         // PRODUCTION: Proper auth check using Firebase's event system
         (async () => {
@@ -191,8 +238,8 @@
                     // Load recent comparisons
                     loadRecentComparisons(comparisons.slice(0, 5));
 
-                    // Load tank preview
-                    loadTanksPreview(tanks.slice(0, 3));
+                    // Initialize tank manager (loads full tank list)
+                    await window.tankManager.init();
 
                     // Load favorites
                     loadFavorites(favorites);
@@ -226,29 +273,6 @@
                 `;
             });
             html += '</ul>';
-            
-            container.innerHTML = html;
-        }
-
-        function loadTanksPreview(tanks) {
-            const container = document.getElementById('my-tanks-preview');
-            
-            if (tanks.length === 0) {
-                return; // Keep empty state
-            }
-
-            let html = '';
-            tanks.forEach(tank => {
-                const speciesCount = tank.species ? tank.species.length : 0;
-                html += `
-                    <div class="tank-card" onclick="window.location.href='my-tanks.html'">
-                        <h3>${tank.name}</h3>
-                        <div class="tank-card-meta">
-                            ${tank.size} gallons • ${speciesCount} species
-                        </div>
-                    </div>
-                `;
-            });
             
             container.innerHTML = html;
         }

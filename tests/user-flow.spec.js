@@ -51,9 +51,10 @@ test.describe('Complete User Flow', () => {
     // PHASE 2: CREATE TANK
     // ========================================================================
 
-    await test.step('Navigate to My Tanks page', async () => {
-      await page.goto('/my-tanks.html');
-      await expect(page).toHaveTitle(/My Tanks.*Comparium/i);
+    await test.step('Navigate to tanks section on dashboard', async () => {
+      // Tank management is now embedded in dashboard
+      await page.goto('/dashboard.html#my-tanks-section');
+      await expect(page).toHaveTitle(/Dashboard.*Comparium/i);
     });
 
     await test.step('Create a new tank', async () => {
@@ -68,9 +69,8 @@ test.describe('Complete User Flow', () => {
       await page.fill('#tank-size', '55');
       await page.fill('#tank-notes', 'This is a test tank created by automated testing');
 
-      // Add a species to the tank
-      await page.click('button:has-text("Add Species")');
-      await page.selectOption('select[id^="tank-species-"]', 'neon-tetra');
+      // Add a species using the dropdown selector
+      await page.selectOption('#species-selector', 'neonTetra');
 
       // Save the tank
       await page.click('button:has-text("Save Tank")');
@@ -179,10 +179,10 @@ test.describe('Complete User Flow', () => {
       const tankCount = await page.locator('#tank-count').textContent();
       expect(parseInt(tankCount)).toBeGreaterThanOrEqual(1);
 
-      // Navigate to tanks page
-      await page.goto('/my-tanks.html');
+      // Tank management is now embedded in dashboard - scroll to section
+      await page.goto('/dashboard.html#my-tanks-section');
 
-      // Verify our tank still exists
+      // Verify our tank still exists in the embedded tanks section
       await expect(page.locator('.tank-card:has-text("Test Community Tank")')).toBeVisible();
 
       console.log('✓ Tank data persisted correctly');
@@ -292,10 +292,10 @@ test.describe('Protected Routes', () => {
       console.log('✓ Protected route correctly redirected to login');
     });
 
-    await test.step('Access my-tanks without login', async () => {
+    await test.step('Access my-tanks without login (redirects to dashboard then login)', async () => {
       await page.goto('/my-tanks.html');
 
-      // Should redirect to login page
+      // my-tanks.html now redirects to dashboard, which then redirects to login
       await page.waitForURL('**/login.html', { timeout: 5000 });
 
       console.log('✓ Protected route correctly redirected to login');

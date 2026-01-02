@@ -4,11 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Tanks - Comparium</title>
-    <meta name="description" content="Build and manage your aquarium tank plans.">
+    <meta name="description" content="Manage your aquarium tank plans on Comparium.">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/dark-mode.css">
     <link rel="stylesheet" href="css/enhanced-ui.css">
     <link rel="stylesheet" href="css/ocean-theme.css">
+    <!-- Redirect to dashboard -->
+    <script>
+        // Redirect to dashboard tank section
+        // Preserving this page for backward compatibility with bookmarks and external links
+        window.location.replace('dashboard.html#my-tanks-section');
+    </script>
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VNY458QF3"></script>
     <script>
@@ -28,7 +34,6 @@
             <div class="header-nav">
                 <a href="index.html">Compare Fish</a>
                 <a href="dashboard.html">Dashboard</a>
-                <a href="my-tanks.html">My Tanks</a>
                 <a href="glossary.html">Glossary</a>
                 <a href="faq.html">FAQ</a>
                 <div id="auth-links"></div>
@@ -37,381 +42,23 @@
     </div>
 
     <div class="dashboard-container">
-        <div class="dashboard-header">
-            <h1>🏠 My Tanks</h1>
-            <p>Plan and track your aquarium setups</p>
-            <button onclick="showNewTankForm()" class="btn-small">+ Create New Tank</button>
-        </div>
-
-        <!-- New Tank Form (Initially Hidden) -->
-        <div id="tank-form-container" class="tank-form" style="display: none;">
-            <h2 id="form-title">Create New Tank</h2>
-            <form id="tank-form" onsubmit="saveTank(event)">
-                <input type="hidden" id="tank-id">
-                
-                <div class="form-group">
-                    <label for="tank-name">Tank Name</label>
-                    <input type="text" id="tank-name" required placeholder="e.g., Living Room 55g">
-                </div>
-
-                <div class="form-group">
-                    <label for="tank-size">Tank Size (gallons)</label>
-                    <input type="number" id="tank-size" required min="1" placeholder="e.g., 55">
-                </div>
-
-                <div class="form-group">
-                    <label for="tank-notes">Notes (Optional)</label>
-                    <textarea id="tank-notes" rows="3" placeholder="Equipment, substrate, etc."></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label>Select Fish Species</label>
-                    <select id="species-selector" onchange="addSpeciesToTank()">
-                        <option value="">-- Choose a species to add --</option>
-                    </select>
-                </div>
-
-                <div id="selected-species-list" style="margin: 1rem 0;">
-                    <h3 style="font-size: 1rem; margin-bottom: 0.5rem;">Selected Species:</h3>
-                    <ul id="species-list" class="fish-list"></ul>
-                </div>
-
-                <div style="display: flex; gap: 1rem;">
-                    <button type="submit" class="btn-small">Save Tank</button>
-                    <button type="button" onclick="cancelForm()" class="btn-small btn-danger">Cancel</button>
-                </div>
-            </form>
-        </div>
-
-        <!-- Tanks List -->
-        <div id="tanks-container">
-            <div class="loading-container">
-                <div class="bubble-loader">
-                    <div class="bubble"></div>
-                    <div class="bubble"></div>
-                    <div class="bubble"></div>
-                </div>
-                <div class="loading-text">Loading tanks...</div>
-            </div>
+        <div class="dashboard-section" style="text-align: center; padding: 3rem;">
+            <h2>Redirecting to Dashboard...</h2>
+            <p>Tank management has moved to the <a href="dashboard.html#my-tanks-section">Dashboard</a>.</p>
+            <p style="margin-top: 1rem;">
+                <a href="dashboard.html#my-tanks-section" class="btn-small">Go to Dashboard</a>
+            </p>
         </div>
     </div>
 
     <div class="footer">
-    <p>&copy; <span id="copyright-year"></span> Comparium. </p>
-    <p><a href="about.html">About</a> | <a href="mailto:contact@comparium.net">Contact</a></p>
+        <p>&copy; <span id="copyright-year"></span> Comparium.</p>
+        <p><a href="about.html">About</a> | <a href="mailto:contact@comparium.net">Contact</a></p>
     </div>
 
-    <script src="js/fish-data.js"></script>
-    <script type="module" src="js/firebase-init.js"></script>
-    <script src="js/storage-service.js"></script>
-    <script src="js/auth-manager.js"></script>
-    <script>
-        let currentTankSpecies = [];
-        let editingTankId = null;
-
-        // Require authentication
-        if (!authManager.requireAuth()) {
-            // Will redirect to login
-        } else {
-            // Initialize page with error handling
-            (async () => {
-                try {
-
-                    // Wait for Firebase Auth to initialize
-                    await window.firebaseAuthReady;
-
-                    // Poll for UID to become available (Firebase Auth can take a moment)
-                    let attempts = 0;
-                    while (!authManager.getCurrentUid() && attempts < 50) {
-                        await new Promise(resolve => setTimeout(resolve, 100));
-                        attempts++;
-                    }
-
-                    await loadTanks();
-                    populateSpeciesSelector();
-                } catch (error) {
-                    console.error('Error initializing My Tanks page:', error);
-                    showErrorState('Unable to load your tanks. Please <a href="javascript:location.reload()">refresh the page</a>.');
-                }
-            })();
-        }
-
-        function showErrorState(message) {
-            const container = document.getElementById('tanks-container');
-            if (container) {
-                container.innerHTML = `
-                    <div class="empty-state-small" style="text-align: center; padding: 2rem;">
-                        <p style="color: #dc3545; font-weight: bold;">⚠️ Error</p>
-                        <p style="margin: 1rem 0;">${message}</p>
-                    </div>
-                `;
-            }
-        }
-
-        function populateSpeciesSelector() {
-            const selector = document.getElementById('species-selector');
-            selector.innerHTML = '';
-            const defaultOpt = document.createElement('option');
-            defaultOpt.value = '';
-            defaultOpt.textContent = '-- Choose a species to add --';
-            selector.appendChild(defaultOpt);
-
-            // Add all fish from database safely using DOM methods
-            Object.keys(fishDatabase).forEach(key => {
-                const fish = fishDatabase[key];
-                if (!fish) return;
-                const opt = document.createElement('option');
-                opt.value = key;
-                opt.textContent = fish.commonName;
-                selector.appendChild(opt);
-            });
-        }
-
-        function showNewTankForm() {
-            document.getElementById('tank-form-container').style.display = 'block';
-            document.getElementById('form-title').textContent = 'Create New Tank';
-            document.getElementById('tank-form').reset();
-            document.getElementById('tank-id').value = '';
-            currentTankSpecies = [];
-            editingTankId = null;
-            updateSpeciesList();
-            window.scrollTo(0, 0);
-        }
-
-        function cancelForm() {
-            document.getElementById('tank-form-container').style.display = 'none';
-            currentTankSpecies = [];
-            editingTankId = null;
-        }
-
-        function addSpeciesToTank() {
-            const selector = document.getElementById('species-selector');
-            const speciesKey = selector.value;
-            
-            if (!speciesKey) return;
-            
-            // Check if already added
-            if (currentTankSpecies.includes(speciesKey)) {
-                authManager.showMessage('Species already added to this tank', 'info');
-                selector.value = '';
-                return;
-            }
-            
-            currentTankSpecies.push(speciesKey);
-            updateSpeciesList();
-            selector.value = '';
-        }
-
-        function updateSpeciesList() {
-            const list = document.getElementById('species-list');
-            list.innerHTML = '';
-
-            if (currentTankSpecies.length === 0) {
-                const li = document.createElement('li');
-                li.style.color = '#6c757d';
-                li.style.padding = '1rem';
-                li.textContent = 'No species added yet';
-                list.appendChild(li);
-                return;
-            }
-
-            currentTankSpecies.forEach(key => {
-                const fish = fishDatabase[key];
-                if (!fish) return;
-
-                const li = document.createElement('li');
-                li.className = 'fish-list-item';
-
-                const infoDiv = document.createElement('div');
-                const strong = document.createElement('strong');
-                strong.textContent = fish.commonName;
-                const br = document.createElement('br');
-                const small = document.createElement('small');
-                small.textContent = `${fish.maxSize}" • ${fish.tankSizeMin}+ gal`;
-
-                infoDiv.appendChild(strong);
-                infoDiv.appendChild(br);
-                infoDiv.appendChild(small);
-
-                const btn = document.createElement('button');
-                btn.type = 'button';
-                btn.className = 'remove-fish-btn';
-                btn.textContent = 'Remove';
-                btn.onclick = () => removeSpecies(key);
-
-                li.appendChild(infoDiv);
-                li.appendChild(btn);
-                list.appendChild(li);
-            });
-        }
-
-        function removeSpecies(speciesKey) {
-            currentTankSpecies = currentTankSpecies.filter(key => key !== speciesKey);
-            updateSpeciesList();
-        }
-
-        async function saveTank(event) {
-            event.preventDefault();
-
-            const uid = authManager.getCurrentUid();
-            if (!uid) {
-                authManager.showMessage('Not logged in', 'error');
-                return;
-            }
-
-            const tankId = document.getElementById('tank-id').value;
-            
-            const tank = {
-                id: tankId || null,
-                name: document.getElementById('tank-name').value,
-                size: parseInt(document.getElementById('tank-size').value, 10),
-                notes: document.getElementById('tank-notes').value,
-                species: currentTankSpecies,
-                updated: new Date().toISOString()
-            };
-
-            const result = await storageService.saveTank(uid, tank);
-            
-            if (result.success) {
-                authManager.showMessage('Tank saved successfully!', 'success');
-                cancelForm();
-                loadTanks();
-            } else {
-                authManager.showMessage('Failed to save tank', 'error');
-            }
-        }
-
-        async function loadTanks() {
-            console.log('🔍 loadTanks() called');
-            try {
-                const uid = authManager.getCurrentUid();
-                console.log('🔍 UID:', uid);
-                if (!uid) {
-                    console.log('❌ No UID, exiting early');
-                    return;
-                }
-
-                console.log('🔍 Fetching tanks from Firestore...');
-                const tanks = await storageService.getTanks(uid);
-                console.log('🔍 Tanks received:', tanks);
-                const container = document.getElementById('tanks-container');
-                console.log('🔍 Container element:', container);
-
-                if (!Array.isArray(tanks) || tanks.length === 0) {
-                    container.innerHTML = `
-                        <div class="empty-state-small">
-                            <p>No tanks yet. Click "Create New Tank" to get started!</p>
-                        </div>
-                    `;
-                    return;
-                }
-
-                container.innerHTML = '';
-                tanks.forEach(tank => {
-                const speciesCount = tank.species ? tank.species.length : 0;
-
-                const card = document.createElement('div');
-                card.className = 'tank-card';
-
-                const h3 = document.createElement('h3');
-                h3.textContent = tank.name || 'Untitled Tank';
-
-                const meta = document.createElement('div');
-                meta.className = 'tank-card-meta';
-                meta.textContent = `${tank.size} gallons • ${speciesCount} species`;
-
-                const speciesPreview = document.createElement('div');
-                speciesPreview.className = 'tank-species-preview';
-
-                if (Array.isArray(tank.species)) {
-                    tank.species.slice(0, 5).forEach(key => {
-                        const fish = fishDatabase[key];
-                        if (!fish) return;
-                        const span = document.createElement('span');
-                        span.className = 'species-badge';
-                        span.textContent = fish.commonName;
-                        speciesPreview.appendChild(span);
-                    });
-                    if (speciesCount > 5) {
-                        const more = document.createElement('span');
-                        more.className = 'species-badge';
-                        more.textContent = `+${speciesCount - 5} more`;
-                        speciesPreview.appendChild(more);
-                    }
-                }
-
-                const actions = document.createElement('div');
-                actions.style.marginTop = '1rem';
-                actions.style.display = 'flex';
-                actions.style.gap = '0.5rem';
-
-                const editBtn = document.createElement('button');
-                editBtn.className = 'btn-small';
-                editBtn.textContent = 'Edit';
-                editBtn.onclick = () => editTank(tank.id);
-
-                const delBtn = document.createElement('button');
-                delBtn.className = 'btn-small btn-danger';
-                delBtn.textContent = 'Delete';
-                delBtn.onclick = () => deleteTank(tank.id);
-
-                actions.appendChild(editBtn);
-                actions.appendChild(delBtn);
-
-                card.appendChild(h3);
-                card.appendChild(meta);
-                card.appendChild(speciesPreview);
-                card.appendChild(actions);
-
-                container.appendChild(card);
-            });
-            } catch (error) {
-                console.error('Error loading tanks:', error);
-                showErrorState('Failed to load your tanks. Please <a href="javascript:location.reload()">refresh the page</a>.');
-            }
-        }
-
-        async function editTank(tankId) {
-            const uid = authManager.getCurrentUid();
-            if (!uid) return;
-
-            const tank = await storageService.getTank(uid, tankId);
-            
-            if (tank) {
-                document.getElementById('tank-form-container').style.display = 'block';
-                document.getElementById('form-title').textContent = 'Edit Tank';
-                document.getElementById('tank-id').value = tank.id;
-                document.getElementById('tank-name').value = tank.name;
-                document.getElementById('tank-size').value = tank.size;
-                document.getElementById('tank-notes').value = tank.notes || '';
-                currentTankSpecies = tank.species || [];
-                editingTankId = tank.id;
-                updateSpeciesList();
-                window.scrollTo(0, 0);
-            }
-        }
-
-        async function deleteTank(tankId) {
-            if (!confirm('Are you sure you want to delete this tank?')) {
-                return;
-            }
-
-            const uid = authManager.getCurrentUid();
-            if (!uid) return;
-
-            const result = await storageService.deleteTank(uid, tankId);
-            
-            if (result.success) {
-                authManager.showMessage('Tank deleted', 'success');
-                loadTanks();
-            }
-        }
-    </script>
-    <!-- Auto-update copyright year -->
     <script>
         document.getElementById('copyright-year').textContent = new Date().getFullYear();
     </script>
-
     <script src="js/theme-manager.js"></script>
 </body>
 </html>
