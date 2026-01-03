@@ -3,44 +3,366 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <!-- SEO Meta Tags -->
-    <title>Comparium - Fish Species Compatibility Tool | Aquarium Fish Comparison</title>
-    <meta name="description" content="Compare aquarium fish species for compatibility. Check temperature, pH, tank size, and aggression levels for 99+ freshwater fish species. Plan your perfect aquarium community.">
-    <meta name="keywords" content="aquarium fish compatibility, fish species comparison, tank mates, freshwater fish, aquarium planning, fish care requirements">
+    <title>Comparium - The All-in-One Aquarium Platform</title>
+    <meta name="description" content="Compare fish compatibility, track tank maintenance, and join a community of aquarists. Everything you need for a thriving aquarium with 143+ freshwater species.">
+    <meta name="keywords" content="aquarium fish compatibility, fish species comparison, tank maintenance, freshwater fish, aquarium planning, fish care">
     <meta name="author" content="Comparium">
-    
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://comparium.net/">
-    <meta property="og:title" content="Comparium - Fish Species Compatibility Tool">
-    <meta property="og:description" content="Compare 99+ aquarium fish species for compatibility. Check temperature, pH, tank size, and behavior to plan your perfect community tank.">
-    
+    <meta property="og:title" content="Comparium - The All-in-One Aquarium Platform">
+    <meta property="og:description" content="Compare fish compatibility, track tank maintenance, and join a community of aquarists. 143+ freshwater species.">
+
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://comparium.net/">
-    <meta property="twitter:title" content="Comparium - Fish Species Compatibility Tool">
-    <meta property="twitter:description" content="Compare 99+ aquarium fish species for compatibility. Check temperature, pH, tank size, and behavior to plan your perfect community tank.">
-    
-    <!-- Favicon (You'll need to add your own favicon.ico file) -->
+    <meta property="twitter:title" content="Comparium - The All-in-One Aquarium Platform">
+    <meta property="twitter:description" content="Compare fish compatibility, track tank maintenance, and join a community of aquarists. 143+ freshwater species.">
+
+    <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="favicon.ico">
-    
-    <!-- Stylesheet -->
+
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="css/styles.css">
-<link rel="stylesheet" href="css/dark-mode.css">
-<link rel="stylesheet" href="css/enhanced-ui.css">
-<link rel="stylesheet" href="css/ocean-theme.css">
-    
-   <!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-8VNY458QF3"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-8VNY458QF3');
-</script>
+    <link rel="stylesheet" href="css/dark-mode.css">
+    <link rel="stylesheet" href="css/ocean-theme.css">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VNY458QF3"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-8VNY458QF3');
+    </script>
+
+    <style>
+        /* Landing Page Specific Styles */
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0c4a6e 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='20' cy='80' r='2' fill='rgba(255,255,255,0.1)'/%3E%3Ccircle cx='80' cy='20' r='3' fill='rgba(255,255,255,0.08)'/%3E%3Ccircle cx='50' cy='50' r='1.5' fill='rgba(255,255,255,0.1)'/%3E%3Ccircle cx='70' cy='70' r='2' fill='rgba(255,255,255,0.06)'/%3E%3Ccircle cx='30' cy='30' r='1' fill='rgba(255,255,255,0.1)'/%3E%3C/svg%3E");
+            background-size: 200px 200px;
+            animation: float 20s ease-in-out infinite;
+            opacity: 0.5;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            50% { transform: translateY(-20px) translateX(10px); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #5eead4 0%, #38bdf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero .tagline {
+            font-size: 1.5rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+            color: #94a3b8;
+        }
+
+        .hero .subtitle {
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.7;
+            color: #cbd5e1;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #14b8a6 0%, #0891b2 100%);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(20, 184, 166, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: 2px solid rgba(255,255,255,0.3);
+            transition: all 0.2s;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.5);
+        }
+
+        /* Stats Bar */
+        .hero .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #5eead4;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            margin-top: 0.25rem;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 5rem 2rem;
+            background: #f8fafc;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            color: #0f172a;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            color: #64748b;
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #f0fdfa 0%, #e0f2fe 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.3rem;
+            color: #0f172a;
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-card p {
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        .feature-tag {
+            display: inline-block;
+            background: #f0fdfa;
+            color: #0d9488;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        .feature-tag.coming-soon {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        /* How It Works Section */
+        .how-it-works {
+            padding: 5rem 2rem;
+            background: white;
+        }
+
+        .steps {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
+        .step {
+            flex: 1;
+            min-width: 250px;
+            text-align: center;
+            padding: 1.5rem;
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #14b8a6 0%, #0891b2 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 auto 1rem;
+        }
+
+        .step h3 {
+            color: #0f172a;
+            margin-bottom: 0.5rem;
+        }
+
+        .step p {
+            color: #64748b;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 5rem 2rem;
+            background: #f8fafc;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: 2.5rem;
+            color: #0f172a;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            color: #64748b;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Landing Footer */
+        .landing-footer {
+            background: #0f172a;
+            color: #94a3b8;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .landing-footer a {
+            color: #5eead4;
+            text-decoration: none;
+        }
+
+        .landing-footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero .tagline {
+                font-size: 1.2rem;
+            }
+
+            .hero .stats-bar {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn-primary, .btn-secondary {
+                width: 100%;
+                max-width: 280px;
+            }
+        }
+    </style>
 </head>
 <body>
+    <!-- Header -->
     <div class="header">
         <div class="header-content">
             <div class="header-left">
@@ -50,7 +372,7 @@
                 </a>
             </div>
             <div class="header-nav">
-                <a href="index.html">Compare Fish</a>
+                <a href="compare.html">Compare Fish</a>
                 <a href="dashboard.html">Dashboard</a>
                 <a href="glossary.html">Glossary</a>
                 <a href="faq.html">FAQ</a>
@@ -62,57 +384,135 @@
         </div>
     </div>
 
-    <div class="container">
-        <div class="selection-section">
-            <h2>Select Fish Species to Compare</h2>
-            <div class="fish-selector">
-                <div class="selector-box">
-                    <label for="fish1">Fish Species 1</label>
-                    <input type="text" class="search-input" id="search1" placeholder="Search species..." oninput="filterSpecies('panel1', 'search1')">
-                    <div class="species-panel" id="panel1"></div>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Comparium</h1>
+            <p class="tagline">The All-in-One Aquarium Platform</p>
+            <p class="subtitle">
+                Compare fish compatibility, track your tank maintenance, and join a community
+                of passionate aquarists. Everything you need for a thriving aquarium, in one place.
+            </p>
+            <div class="cta-buttons">
+                <a href="compare.html" class="btn-primary">Compare Fish Now</a>
+                <a href="signup.html" class="btn-secondary">Create Free Account</a>
+            </div>
+
+            <div class="stats-bar">
+                <div class="stat">
+                    <div class="stat-number">143+</div>
+                    <div class="stat-label">Fish Species</div>
                 </div>
-                <div class="selector-box">
-                    <label for="fish2">Fish Species 2</label>
-                    <input type="text" class="search-input" id="search2" placeholder="Search species..." oninput="filterSpecies('panel2', 'search2')">
-                    <div class="species-panel" id="panel2"></div>
+                <div class="stat">
+                    <div class="stat-number">25+</div>
+                    <div class="stat-label">Care Guides</div>
                 </div>
-                <div class="selector-box">
-                    <label for="fish3">Fish Species 3 (Optional)</label>
-                    <input type="text" class="search-input" id="search3" placeholder="Search species..." oninput="filterSpecies('panel3', 'search3')">
-                    <div class="species-panel" id="panel3"></div>
+                <div class="stat">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Free to Use</div>
                 </div>
             </div>
-            <button class="compare-button" onclick="compareSpecies()">Compare Species</button>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="section-header">
+            <h2>Everything You Need</h2>
+            <p>Tools and knowledge to keep your fish happy and healthy</p>
         </div>
 
-        <div class="comparison-grid" id="comparisonGrid">
-            <div class="empty-state">
-                <h3>No comparison yet</h3>
-                <p>Select at least two fish species above and click "Compare Species" to see their compatibility</p>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">&#128032;</div>
+                <h3>Fish Compatibility Checker</h3>
+                <p>Instantly see which fish can live together peacefully. Compare temperaments, water parameters, and tank size requirements side by side.</p>
+                <span class="feature-tag">Available Now</span>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">&#128203;</div>
+                <h3>Tank Management</h3>
+                <p>Create virtual tanks, add species, and keep track of your aquarium setups. Perfect for planning before you buy.</p>
+                <span class="feature-tag">Available Now</span>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">&#128197;</div>
+                <h3>Maintenance Tracking</h3>
+                <p>Log water changes, filter cleanings, and parameter tests. Set schedules and never miss important tank maintenance.</p>
+                <span class="feature-tag">Available Now</span>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">&#128276;</div>
+                <h3>Smart Reminders</h3>
+                <p>Get notified when maintenance is due. Push notifications to your phone so your tank stays healthy even when life gets busy.</p>
+                <span class="feature-tag coming-soon">Coming Soon</span>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">&#128218;</div>
+                <h3>Comprehensive Glossary</h3>
+                <p>Learn aquarium terminology, understand the nitrogen cycle, and find answers to common questions in our extensive knowledge base.</p>
+                <span class="feature-tag">Available Now</span>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">&#129309;</div>
+                <h3>Community Features</h3>
+                <p>Share your tanks, follow other aquarists, and get inspiration from the community. Connect with fellow hobbyists.</p>
+                <span class="feature-tag coming-soon">Coming Soon</span>
             </div>
         </div>
-    </div>
+    </section>
 
-    <div class="footer">
-    <p>&copy; <span id="copyright-year"></span> Comparium. </p>
-    <p><a href="about.html">About</a> | <a href="mailto:contact@comparium.net">Contact</a></p>
-        <p><small>Always research thoroughly and consult with experienced aquarists before adding new fish to your tank.</small></p>
-    </div>
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <div class="section-header">
+            <h2>Simple to Get Started</h2>
+            <p>From beginner to expert, Comparium grows with you</p>
+        </div>
 
-   <!-- Auto-update copyright year -->
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Compare Species</h3>
+                <p>Select fish you're interested in and instantly see compatibility ratings</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Build Your Tank</h3>
+                <p>Create a virtual tank and add species to plan your perfect setup</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Track & Maintain</h3>
+                <p>Log maintenance events and get reminders to keep your tank thriving</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <h2>Ready to Dive In?</h2>
+        <p>Join Comparium today and take the guesswork out of fishkeeping.</p>
+        <a href="compare.html" class="btn-primary">Start Comparing Fish</a>
+    </section>
+
+    <!-- Footer -->
+    <footer class="landing-footer">
+        <p>&copy; <span id="copyright-year"></span> Comparium. <a href="about.html">About</a> | <a href="faq.html">FAQ</a> | <a href="glossary.html">Glossary</a></p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">The all-in-one platform for aquarium enthusiasts.</p>
+    </footer>
+
+    <!-- Auto-update copyright year -->
     <script>
         document.getElementById('copyright-year').textContent = new Date().getFullYear();
     </script>
 
-    <script src="js/storage-service.js"></script>
-    <script src="js/auth-manager.js"></script>
-    <script src="js/fish-data.js"></script>
-    <script src="js/app.js"></script>
-    <script src="js/species-detail.js"></script>
-    <script src="js/app-enhancements.js"></script>
     <script src="js/theme-manager.js"></script>
-<!-- Firebase SDK -->
-<!-- Initialize Firebase in a shared module -->
-<script type="module" src="js/firebase-init.js"></script>
+    <script src="js/auth-manager.js"></script>
+    <script type="module" src="js/firebase-init.js"></script>
 </body>
 </html>

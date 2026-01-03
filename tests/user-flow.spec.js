@@ -255,8 +255,8 @@ test.describe('Complete User Flow', () => {
     // PHASE 3: ADD FAVORITE SPECIES
     // ========================================================================
 
-    await test.step('Navigate to home page and add favorite', async () => {
-      await page.goto('/index.html');
+    await test.step('Navigate to compare page and add favorite', async () => {
+      await page.goto('/compare.html');
 
       // Wait for species items to render
       await page.waitForTimeout(2000);
@@ -729,6 +729,7 @@ test.describe('Page Load Tests', () => {
   test('all main pages should load without errors', async ({ page }) => {
     const pages = [
       { url: '/index.html', title: /Comparium/i },
+      { url: '/compare.html', title: /Compare/i },
       { url: '/glossary.html', title: /Glossary/i },
       { url: '/faq.html', title: /FAQ/i },
       { url: '/login.html', title: /Login/i },
