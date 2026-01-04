@@ -215,6 +215,16 @@
             box-shadow: 0 8px 30px rgba(0,0,0,0.12);
         }
 
+        .feature-card-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .feature-card-link .feature-card {
+            cursor: pointer;
+        }
+
         .feature-icon {
             width: 60px;
             height: 60px;
@@ -425,26 +435,32 @@
         </div>
 
         <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon">&#128032;</div>
-                <h3>Fish Compatibility Checker</h3>
-                <p>Instantly see which fish can live together peacefully. Compare temperaments, water parameters, and tank size requirements side by side.</p>
-                <span class="feature-tag">Available Now</span>
-            </div>
+            <a href="compare.html" class="feature-card-link">
+                <div class="feature-card">
+                    <div class="feature-icon">&#128032;</div>
+                    <h3>Fish Compatibility Checker</h3>
+                    <p>Instantly see which fish can live together peacefully. Compare temperaments, water parameters, and tank size requirements side by side.</p>
+                    <span class="feature-tag">Available Now</span>
+                </div>
+            </a>
 
-            <div class="feature-card">
-                <div class="feature-icon">&#128203;</div>
-                <h3>Tank Management</h3>
-                <p>Create virtual tanks, add species, and keep track of your aquarium setups. Perfect for planning before you buy.</p>
-                <span class="feature-tag">Available Now</span>
-            </div>
+            <a href="dashboard.html#my-tanks-section" class="feature-card-link">
+                <div class="feature-card">
+                    <div class="feature-icon">&#128203;</div>
+                    <h3>Tank Management</h3>
+                    <p>Create virtual tanks, add species, and keep track of your aquarium setups. Perfect for planning before you buy.</p>
+                    <span class="feature-tag">Available Now</span>
+                </div>
+            </a>
 
-            <div class="feature-card">
-                <div class="feature-icon">&#128197;</div>
-                <h3>Maintenance Tracking</h3>
-                <p>Log water changes, filter cleanings, and parameter tests. Set schedules and never miss important tank maintenance.</p>
-                <span class="feature-tag">Available Now</span>
-            </div>
+            <a href="dashboard.html" class="feature-card-link">
+                <div class="feature-card">
+                    <div class="feature-icon">&#128197;</div>
+                    <h3>Maintenance Tracking</h3>
+                    <p>Log water changes, filter cleanings, and parameter tests. Set schedules and never miss important tank maintenance.</p>
+                    <span class="feature-tag">Available Now</span>
+                </div>
+            </a>
 
             <div class="feature-card">
                 <div class="feature-icon">&#128276;</div>
@@ -453,12 +469,14 @@
                 <span class="feature-tag coming-soon">Coming Soon</span>
             </div>
 
-            <div class="feature-card">
-                <div class="feature-icon">&#128218;</div>
-                <h3>Comprehensive Glossary</h3>
-                <p>Learn aquarium terminology, understand the nitrogen cycle, and find answers to common questions in our extensive knowledge base.</p>
-                <span class="feature-tag">Available Now</span>
-            </div>
+            <a href="glossary.html" class="feature-card-link">
+                <div class="feature-card">
+                    <div class="feature-icon">&#128218;</div>
+                    <h3>Comprehensive Glossary</h3>
+                    <p>Learn aquarium terminology, understand the nitrogen cycle, and find answers to common questions in our extensive knowledge base.</p>
+                    <span class="feature-tag">Available Now</span>
+                </div>
+            </a>
 
             <div class="feature-card">
                 <div class="feature-icon">&#129309;</div>
