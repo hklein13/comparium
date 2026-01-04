@@ -105,6 +105,8 @@
         document.getElementById('copyright-year').textContent = new Date().getFullYear();
     </script>
 
+    <!-- Scripts: Firebase first, then storage, then auth -->
+    <script type="module" src="js/firebase-init.js"></script>
     <script src="js/storage-service.js"></script>
     <script src="js/auth-manager.js"></script>
     <script src="js/fish-data.js"></script>
@@ -112,7 +114,5 @@
     <script src="js/species-detail.js"></script>
     <script src="js/app-enhancements.js"></script>
     <script src="js/theme-manager.js"></script>
-    <!-- Firebase SDK -->
-    <script type="module" src="js/firebase-init.js"></script>
 </body>
 </html>
