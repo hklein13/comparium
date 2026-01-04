@@ -66,7 +66,10 @@ glossary-generator.js (transforms data)
 - `scripts/serviceAccountKey.json` - Firebase Admin credentials (gitignored, never commit)
 
 ### Page Structure
+- **index.html** - Landing page (hero, features, how-it-works, CTA sections)
+- **compare.html** - Fish comparison tool (the main app functionality)
 - **dashboard.html** - User hub with stats, comparisons, tank management, maintenance tracking, and favorites
+- **glossary.html** - Species database with search and filtering
 - **my-tanks.html** - Redirects to dashboard#my-tanks-section (backward compat)
 - **faq.html** - Static FAQ with accordion toggle and search (js/faq.js)
 
@@ -75,6 +78,16 @@ glossary-generator.js (transforms data)
 - **Node scripts:** ES6 modules (package.json has `"type": "module"`)
 
 ### Script Load Order (Critical for HTML pages)
+```html
+<!-- Firebase must load before auth-manager -->
+<script type="module" src="js/firebase-init.js"></script>  <!-- 1. Firebase first -->
+<script src="js/storage-service.js"></script>              <!-- 2. Storage service -->
+<script src="js/auth-manager.js"></script>                 <!-- 3. Auth (needs Firebase) -->
+<script src="js/fish-data.js"></script>                    <!-- 4. Data -->
+<script src="js/theme-manager.js"></script>                <!-- 5. Theme last -->
+```
+
+For glossary pages specifically:
 ```html
 <script src="js/fish-data.js"></script>           <!-- 1. Data first -->
 <script src="js/fish-descriptions.js"></script>   <!-- 2. Descriptions -->
