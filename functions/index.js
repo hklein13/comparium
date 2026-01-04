@@ -36,6 +36,20 @@ const db = getFirestore();
  * Usage: Visit the URL in a browser after deployment to verify everything works.
  */
 exports.helloComparium = onRequest(async (req, res) => {
+  // Enable CORS for requests from comparium.net (and localhost for testing)
+  const allowedOrigins = ['https://comparium.net', 'http://localhost:8080'];
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.set('Access-Control-Allow-Origin', origin);
+  }
+  res.set('Access-Control-Allow-Methods', 'GET, POST');
+
+  // Handle preflight OPTIONS request
+  if (req.method === 'OPTIONS') {
+    res.status(204).send('');
+    return;
+  }
+
   try {
     // Test Firestore connection by querying tankSchedules collection
     const schedulesSnap = await db.collection("tankSchedules").limit(1).get();

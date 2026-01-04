@@ -13,6 +13,12 @@ playwright/.cache/
 
 # Firebase service account keys (NEVER commit!)
 scripts/serviceAccountKey.json
+functions/serviceAccountKey.json
+
+# Cloud Functions runtime config
+functions/.runtimeconfig.json
+functions/.env
+functions/.env.local
 
 # OS files
 .DS_Store
