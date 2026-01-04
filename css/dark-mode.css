@@ -646,3 +646,85 @@ textarea:focus {
     color: #5eead4 !important;
 }
 
+/* ===== LANDING PAGE DARK MODE ===== */
+
+/* Hero section - keep dark gradient, it works in both modes */
+[data-theme="dark"] .hero {
+    background: linear-gradient(135deg, #0a0f1a 0%, #0f172a 50%, #0c3a5a 100%) !important;
+}
+
+/* Features section */
+[data-theme="dark"] .features {
+    background: var(--bg-secondary) !important;
+}
+
+[data-theme="dark"] .section-header h2 {
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .section-header p {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .feature-card {
+    background: var(--bg-card) !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3) !important;
+}
+
+[data-theme="dark"] .feature-card:hover {
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4) !important;
+}
+
+[data-theme="dark"] .feature-icon {
+    background: linear-gradient(135deg, rgba(94, 234, 212, 0.2) 0%, rgba(56, 189, 248, 0.2) 100%) !important;
+}
+
+[data-theme="dark"] .feature-card h3 {
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .feature-card p {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .feature-tag {
+    background: rgba(94, 234, 212, 0.2) !important;
+    color: #5eead4 !important;
+}
+
+[data-theme="dark"] .feature-tag.coming-soon {
+    background: rgba(255, 193, 7, 0.2) !important;
+    color: #ffc107 !important;
+}
+
+/* How It Works section */
+[data-theme="dark"] .how-it-works {
+    background: var(--bg-primary) !important;
+}
+
+[data-theme="dark"] .step h3 {
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .step p {
+    color: var(--text-secondary) !important;
+}
+
+/* CTA section */
+[data-theme="dark"] .cta-section {
+    background: var(--bg-secondary) !important;
+}
+
+[data-theme="dark"] .cta-section h2 {
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .cta-section p {
+    color: var(--text-secondary) !important;
+}
+
+/* Landing footer - keep dark, works in both modes */
+[data-theme="dark"] .landing-footer {
+    background: #0a0f1a !important;
+}
+

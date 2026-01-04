@@ -60,7 +60,15 @@ glossary-generator.js (transforms data)
 - `js/fish-data.js` - Single source of truth for all species (143 entries with attributes)
 - `js/fish-descriptions.js` - Curated descriptions (63 species)
 - `js/glossary-generator.js` - Reusable logic for generating glossary entries
+- `js/tank-manager.js` - Tank CRUD operations (used by dashboard)
+- `js/maintenance-manager.js` - Event logging and schedule management for tanks
+- `js/faq.js` - FAQ accordion toggle and search functionality
 - `scripts/serviceAccountKey.json` - Firebase Admin credentials (gitignored, never commit)
+
+### Page Structure
+- **dashboard.html** - User hub with stats, comparisons, tank management, maintenance tracking, and favorites
+- **my-tanks.html** - Redirects to dashboard#my-tanks-section (backward compat)
+- **faq.html** - Static FAQ with accordion toggle and search (js/faq.js)
 
 ### Module Systems
 - **Browser:** ES6 modules (import/export)
@@ -74,6 +82,9 @@ glossary-generator.js (transforms data)
 <script type="module" src="js/firebase-init.js"></script>  <!-- 4. Firebase -->
 <script src="js/glossary.js"></script>            <!-- 5. UI last -->
 ```
+
+### Cross-Page Communication
+- **Add to Tank flow:** species-detail.js sets `sessionStorage.addToTank`, dashboard's tankManager reads it
 
 ## Git Workflow
 
@@ -124,6 +135,13 @@ glossary-generator.js (transforms data)
 allow read: if true;              // Public read
 allow write: if isAdmin();        // Admin-only writes
 ```
+
+### Firestore Collections
+- `glossary` - Species data (public read, admin write)
+- `users` - User profiles, tanks, favorites (owner read/write)
+- `usernames` - Username → UID mapping for login
+- `tankEvents` - Maintenance event logs (owner read/write)
+- `tankSchedules` - Recurring maintenance schedules (owner read/write)
 
 ## Image System
 
