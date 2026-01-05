@@ -2896,8 +2896,10 @@ p {
 
     .fish-collage {
         height: 300px;
+        width: 100%;
         max-width: 400px;
         margin: 0 auto;
+        justify-self: center;
     }
 
     .fish-collage-item:nth-child(1) {
