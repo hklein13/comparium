@@ -3,11 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Font Preview - Comparium</title>
+    <title>Font Options Preview | Comparium</title>
+
+    <!-- Unconventional Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@300;400;600&family=Playfair+Display:wght@400;600;700&family=Source+Sans+Pro:wght@300;400;600&family=Raleway:wght@400;600;700&family=Lato:wght@300;400;700&family=Merriweather:wght@400;700;900&family=Roboto:wght@300;400;500&family=Nunito:wght@400;600;700&family=Poppins:wght@400;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Alegreya+Sans:wght@400;500;700&family=Eczar:wght@400;500;600;700&family=Chivo:wght@400;500;700&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,600;0,6..96,700;1,6..96,400&family=Atkinson+Hyperlegible:wght@400;700&family=Crimson+Pro:ital,wght@0,400;0,500;0,600;1,400&family=Karla:wght@400;500;600;700&family=Lexend:wght@400;500;600&family=Sorts+Mill+Goudy:ital@0;1&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Darker+Grotesque:wght@400;500;600;700;800&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&display=swap"
       rel="stylesheet"
     />
 
@@ -20,223 +22,631 @@
 
       body {
         background: #f5f5f5;
-        padding: 20px;
+        padding: 2rem;
       }
 
-      .intro {
-        background: white;
-        padding: 30px;
-        margin-bottom: 30px;
-        border-radius: 8px;
+      .preview-header {
         text-align: center;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        background: #234a3a;
+        color: white;
+        border-radius: 12px;
       }
 
-      .intro h1 {
-        font-family: system-ui;
-        margin-bottom: 10px;
+      .preview-header h1 {
+        font-family: system-ui, sans-serif;
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
       }
 
-      .intro p {
-        font-family: system-ui;
-        color: #666;
+      .preview-header p {
+        font-family: system-ui, sans-serif;
+        opacity: 0.8;
+        font-size: 0.95rem;
       }
 
       .font-option {
-        background: white;
-        padding: 40px;
-        margin-bottom: 30px;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        background: #fefdfb;
+        border-radius: 16px;
+        padding: 3rem;
+        margin-bottom: 2rem;
+        border: 1px solid #e5e3de;
       }
 
       .font-label {
-        font-family: system-ui;
-        font-size: 14px;
-        color: #666;
-        margin-bottom: 20px;
-        padding: 10px;
-        background: #f0f0f0;
-        border-radius: 4px;
-        text-align: center;
+        font-family: system-ui, sans-serif;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: #7a7a7a;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
       }
 
-      .sample-content h1 {
-        font-size: 48px;
-        margin-bottom: 15px;
+      .font-label span {
+        background: #234a3a;
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 100px;
+        font-size: 0.7rem;
+      }
+
+      .font-name {
+        font-family: system-ui, sans-serif;
+        font-size: 0.85rem;
+        color: #4a4a4a;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #e5e3de;
+      }
+
+      .sample-hero h2 {
+        font-size: 2.5rem;
+        line-height: 1.2;
         color: #1a1a1a;
+        margin-bottom: 1rem;
       }
 
-      .sample-content h2 {
-        font-size: 32px;
-        margin-bottom: 20px;
-        color: #2c3e50;
-      }
-
-      .sample-content .tagline {
-        font-size: 18px;
-        margin-bottom: 20px;
-        color: #555;
-      }
-
-      .sample-content .body-text {
-        font-size: 16px;
+      .sample-hero p {
+        font-size: 1.15rem;
+        color: #4a4a4a;
+        margin-bottom: 1.5rem;
         line-height: 1.6;
-        color: #333;
-        margin-bottom: 15px;
       }
 
-      .sample-content .nav-sample {
-        font-size: 16px;
-        margin-top: 20px;
-        padding-top: 20px;
-        border-top: 1px solid #eee;
+      .sample-btn {
+        display: inline-block;
+        padding: 0.875rem 1.75rem;
+        background: #234a3a;
+        color: white;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 1rem;
       }
 
-      /* Option 1: Montserrat + Open Sans */
-      .option-1 h1,
-      .option-1 h2,
-      .option-1 .nav-sample {
-        font-family: 'Montserrat', sans-serif;
+      .sample-logo {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #234a3a;
+        margin-bottom: 2rem;
+      }
+
+      .divider {
+        height: 1px;
+        background: #e5e3de;
+        margin: 2rem 0;
+      }
+
+      .sample-card {
+        background: #faf9f6;
+        border: 1px solid #e5e3de;
+        border-radius: 12px;
+        padding: 1.5rem;
+        max-width: 400px;
+      }
+
+      .sample-card h3 {
+        font-size: 1.1rem;
+        color: #1a1a1a;
+        margin-bottom: 0.5rem;
+      }
+
+      .sample-card p {
+        font-size: 0.95rem;
+        color: #4a4a4a;
+        line-height: 1.6;
+      }
+
+      .sample-scientific {
+        font-style: italic;
+        color: #7a7a7a;
+        font-size: 0.9rem;
+        margin-top: 0.25rem;
+      }
+
+      /* ============================================
+         OPTION 1: Alegreya + Alegreya Sans
+         Literary, calligraphic, designed for extended reading
+         Has character without being showy
+         ============================================ */
+      .option-1 .sample-logo,
+      .option-1 .sample-hero h2,
+      .option-1 .sample-card h3 {
+        font-family: 'Alegreya', serif;
+      }
+
+      .option-1 .sample-hero p,
+      .option-1 .sample-btn,
+      .option-1 .sample-card p {
+        font-family: 'Alegreya Sans', sans-serif;
+      }
+
+      .option-1 .sample-hero h2 {
+        font-weight: 500;
+      }
+
+      .option-1 .sample-logo {
+        font-weight: 700;
+        letter-spacing: -0.01em;
+      }
+
+      .option-1 .sample-card h3 {
         font-weight: 600;
       }
-      .option-1 .tagline,
-      .option-1 .body-text {
-        font-family: 'Open Sans', sans-serif;
+
+      /* ============================================
+         OPTION 2: Eczar + Chivo
+         Eczar: Devanagari-inspired Latin, unusual forms
+         Chivo: Argentinian grotesque with personality
+         ============================================ */
+      .option-2 .sample-logo,
+      .option-2 .sample-hero h2,
+      .option-2 .sample-card h3 {
+        font-family: 'Eczar', serif;
       }
 
-      /* Option 2: Playfair Display + Source Sans Pro */
-      .option-2 h1,
-      .option-2 h2,
-      .option-2 .nav-sample {
-        font-family: 'Playfair Display', serif;
+      .option-2 .sample-hero p,
+      .option-2 .sample-btn,
+      .option-2 .sample-card p {
+        font-family: 'Chivo', sans-serif;
+      }
+
+      .option-2 .sample-hero h2 {
         font-weight: 600;
       }
-      .option-2 .tagline,
-      .option-2 .body-text {
-        font-family: 'Source Sans Pro', sans-serif;
-      }
 
-      /* Option 3: Raleway + Lato */
-      .option-3 h1,
-      .option-3 h2,
-      .option-3 .nav-sample {
-        font-family: 'Raleway', sans-serif;
-        font-weight: 600;
-      }
-      .option-3 .tagline,
-      .option-3 .body-text {
-        font-family: 'Lato', sans-serif;
-      }
-
-      /* Option 4: Poppins (both) */
-      .option-4 h1,
-      .option-4 h2,
-      .option-4 .nav-sample {
-        font-family: 'Poppins', sans-serif;
-        font-weight: 600;
-      }
-      .option-4 .tagline,
-      .option-4 .body-text {
-        font-family: 'Poppins', sans-serif;
-        font-weight: 400;
-      }
-
-      /* Option 5: Nunito (both) */
-      .option-5 h1,
-      .option-5 h2,
-      .option-5 .nav-sample {
-        font-family: 'Nunito', sans-serif;
+      .option-2 .sample-logo {
         font-weight: 700;
       }
-      .option-5 .tagline,
-      .option-5 .body-text {
-        font-family: 'Nunito', sans-serif;
+
+      .option-2 .sample-card h3 {
+        font-weight: 600;
+      }
+
+      /* ============================================
+         OPTION 3: Bodoni Moda + Atkinson Hyperlegible
+         High drama serif meets accessibility-focused sans
+         Unexpected pairing, both highly distinctive
+         ============================================ */
+      .option-3 .sample-logo,
+      .option-3 .sample-hero h2 {
+        font-family: 'Bodoni Moda', serif;
+      }
+
+      .option-3 .sample-hero p,
+      .option-3 .sample-btn,
+      .option-3 .sample-card h3,
+      .option-3 .sample-card p {
+        font-family: 'Atkinson Hyperlegible', sans-serif;
+      }
+
+      .option-3 .sample-hero h2 {
         font-weight: 400;
+        letter-spacing: -0.01em;
+      }
+
+      .option-3 .sample-logo {
+        font-weight: 600;
+        font-style: normal;
+      }
+
+      .option-3 .sample-card h3 {
+        font-weight: 700;
+      }
+
+      /* ============================================
+         OPTION 4: Crimson Pro + Karla
+         Crimson: Old-style figures, book typography
+         Karla: Quirky grotesque with unusual curves
+         ============================================ */
+      .option-4 .sample-logo,
+      .option-4 .sample-hero h2,
+      .option-4 .sample-card h3 {
+        font-family: 'Crimson Pro', serif;
+      }
+
+      .option-4 .sample-hero p,
+      .option-4 .sample-btn,
+      .option-4 .sample-card p {
+        font-family: 'Karla', sans-serif;
+      }
+
+      .option-4 .sample-hero h2 {
+        font-weight: 500;
+        font-size: 2.6rem;
+      }
+
+      .option-4 .sample-logo {
+        font-weight: 600;
+      }
+
+      .option-4 .sample-card h3 {
+        font-weight: 600;
+      }
+
+      /* ============================================
+         OPTION 5: Sorts Mill Goudy + Lexend
+         Sorts Mill: Beautiful 1916 revival, organic
+         Lexend: Designed for reading fluency, unusual
+         ============================================ */
+      .option-5 .sample-logo,
+      .option-5 .sample-hero h2,
+      .option-5 .sample-card h3 {
+        font-family: 'Sorts Mill Goudy', serif;
+      }
+
+      .option-5 .sample-hero p,
+      .option-5 .sample-btn,
+      .option-5 .sample-card p {
+        font-family: 'Lexend', sans-serif;
+      }
+
+      .option-5 .sample-hero h2 {
+        font-weight: 400;
+        font-size: 2.6rem;
+      }
+
+      .option-5 .sample-logo {
+        font-weight: 400;
+      }
+
+      .option-5 .sample-card h3 {
+        font-weight: 400;
+      }
+
+      .option-5 .sample-btn {
+        font-weight: 500;
+      }
+
+      /* ============================================
+         OPTION 6: Spectral + Darker Grotesque
+         Spectral: Google's literary serif, distinctive
+         Darker Grotesque: Unusual tall proportions
+         ============================================ */
+      .option-6 .sample-logo,
+      .option-6 .sample-hero h2,
+      .option-6 .sample-card h3 {
+        font-family: 'Spectral', serif;
+      }
+
+      .option-6 .sample-hero p,
+      .option-6 .sample-btn,
+      .option-6 .sample-card p {
+        font-family: 'Darker Grotesque', sans-serif;
+      }
+
+      .option-6 .sample-hero h2 {
+        font-weight: 500;
+      }
+
+      .option-6 .sample-logo {
+        font-weight: 600;
+      }
+
+      .option-6 .sample-hero p,
+      .option-6 .sample-card p {
+        font-weight: 500;
+      }
+
+      .option-6 .sample-btn {
+        font-weight: 600;
+      }
+
+      /* ============================================
+         OPTION 7: Bricolage Grotesque (solo)
+         Eclectic variable font with optical sizing
+         Designed to be expressive and distinctive
+         ============================================ */
+      .option-7 .sample-logo,
+      .option-7 .sample-hero h2,
+      .option-7 .sample-hero p,
+      .option-7 .sample-btn,
+      .option-7 .sample-card h3,
+      .option-7 .sample-card p {
+        font-family: 'Bricolage Grotesque', sans-serif;
+      }
+
+      .option-7 .sample-hero h2 {
+        font-weight: 600;
+        letter-spacing: -0.02em;
+      }
+
+      .option-7 .sample-logo {
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+
+      .option-7 .sample-card h3 {
+        font-weight: 600;
+      }
+
+      /* ============================================
+         OPTION 8: Darker Grotesque (solo)
+         Tall x-height, unusual proportions
+         Makes a statement while staying readable
+         ============================================ */
+      .option-8 .sample-logo,
+      .option-8 .sample-hero h2,
+      .option-8 .sample-hero p,
+      .option-8 .sample-btn,
+      .option-8 .sample-card h3,
+      .option-8 .sample-card p {
+        font-family: 'Darker Grotesque', sans-serif;
+      }
+
+      .option-8 .sample-hero h2 {
+        font-weight: 700;
+        letter-spacing: -0.01em;
+      }
+
+      .option-8 .sample-logo {
+        font-weight: 800;
+      }
+
+      .option-8 .sample-hero p {
+        font-weight: 500;
+      }
+
+      .option-8 .sample-btn {
+        font-weight: 600;
+      }
+
+      .option-8 .sample-card h3 {
+        font-weight: 700;
+      }
+
+      .option-8 .sample-card p {
+        font-weight: 500;
       }
     </style>
   </head>
   <body>
-    <div class="intro">
-      <h1>Font Preview for Comparium</h1>
-      <p>Scroll through each option to see how different fonts look with your actual content</p>
+    <div class="preview-header">
+      <h1>Unconventional Font Options</h1>
+      <p>Original choices — no Space Grotesk, Inter, or Outfit in sight</p>
     </div>
 
+    <!-- Option 1: Alegreya + Alegreya Sans -->
     <div class="font-option option-1">
-      <div class="font-label">
-        OPTION 1: Montserrat (Headers) + Open Sans (Body) — Modern & Professional
+      <div class="font-label">Option 1 <span>Literary</span></div>
+      <div class="font-name">
+        Alegreya + Alegreya Sans — calligraphic serif designed for literature, has soul without
+        being fussy
       </div>
-      <div class="sample-content">
-        <h1>Comparium</h1>
-        <h2>The place for all things aquarium</h2>
-        <p class="tagline">The place for all things aquarium</p>
-        <p class="body-text">
-          Browse our extensive database of freshwater and saltwater fish species. Compare
-          compatibility, water parameters, tank requirements, and behavior patterns to create the
-          perfect aquarium environment.
+
+      <div class="sample-logo">Comparium</div>
+
+      <div class="sample-hero">
+        <h2>Your aquarium information in one place.</h2>
+        <p>
+          Research species. Check compatibility. Track maintenance.<br />Hundreds of freshwater fish
+          and growing.
         </p>
-        <div class="nav-sample">Species Database • My Tanks • Glossary • About</div>
+        <a href="#" class="sample-btn">Get Started</a>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="sample-card">
+        <h3>German Blue Ram</h3>
+        <p class="sample-scientific">Mikrogeophagus ramirezi</p>
+        <p>
+          Peaceful dwarf cichlids with metallic gold coloring and striking pink and black markings.
+        </p>
       </div>
     </div>
 
+    <!-- Option 2: Eczar + Chivo -->
     <div class="font-option option-2">
-      <div class="font-label">
-        OPTION 2: Playfair Display (Headers) + Source Sans Pro (Body) — Elegant & Classic
+      <div class="font-label">Option 2 <span>Distinctive</span></div>
+      <div class="font-name">
+        Eczar + Chivo — Devanagari-inspired Latin serif meets Argentinian grotesque. Unusual and
+        memorable.
       </div>
-      <div class="sample-content">
-        <h1>Comparium</h1>
-        <h2>The place for all things aquarium</h2>
-        <p class="tagline">The place for all things aquarium</p>
-        <p class="body-text">
-          Browse our extensive database of freshwater and saltwater fish species. Compare
-          compatibility, water parameters, tank requirements, and behavior patterns to create the
-          perfect aquarium environment.
+
+      <div class="sample-logo">Comparium</div>
+
+      <div class="sample-hero">
+        <h2>Your aquarium information in one place.</h2>
+        <p>
+          Research species. Check compatibility. Track maintenance.<br />Hundreds of freshwater fish
+          and growing.
         </p>
-        <div class="nav-sample">Species Database • My Tanks • Glossary • About</div>
+        <a href="#" class="sample-btn">Get Started</a>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="sample-card">
+        <h3>German Blue Ram</h3>
+        <p class="sample-scientific">Mikrogeophagus ramirezi</p>
+        <p>
+          Peaceful dwarf cichlids with metallic gold coloring and striking pink and black markings.
+        </p>
       </div>
     </div>
 
+    <!-- Option 3: Bodoni Moda + Atkinson Hyperlegible -->
     <div class="font-option option-3">
-      <div class="font-label">OPTION 3: Raleway (Headers) + Lato (Body) — Geometric & Clean</div>
-      <div class="sample-content">
-        <h1>Comparium</h1>
-        <h2>The place for all things aquarium</h2>
-        <p class="tagline">The place for all things aquarium</p>
-        <p class="body-text">
-          Browse our extensive database of freshwater and saltwater fish species. Compare
-          compatibility, water parameters, tank requirements, and behavior patterns to create the
-          perfect aquarium environment.
+      <div class="font-label">Option 3 <span>High Contrast</span></div>
+      <div class="font-name">
+        Bodoni Moda + Atkinson Hyperlegible — dramatic didone serif meets accessibility-focused
+        sans. Unexpected.
+      </div>
+
+      <div class="sample-logo">Comparium</div>
+
+      <div class="sample-hero">
+        <h2>Your aquarium information in one place.</h2>
+        <p>
+          Research species. Check compatibility. Track maintenance.<br />Hundreds of freshwater fish
+          and growing.
         </p>
-        <div class="nav-sample">Species Database • My Tanks • Glossary • About</div>
+        <a href="#" class="sample-btn">Get Started</a>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="sample-card">
+        <h3>German Blue Ram</h3>
+        <p class="sample-scientific">Mikrogeophagus ramirezi</p>
+        <p>
+          Peaceful dwarf cichlids with metallic gold coloring and striking pink and black markings.
+        </p>
       </div>
     </div>
 
+    <!-- Option 4: Crimson Pro + Karla -->
     <div class="font-option option-4">
-      <div class="font-label">OPTION 4: Poppins (Everything) — Friendly & Rounded</div>
-      <div class="sample-content">
-        <h1>Comparium</h1>
-        <h2>The place for all things aquarium</h2>
-        <p class="tagline">The place for all things aquarium</p>
-        <p class="body-text">
-          Browse our extensive database of freshwater and saltwater fish species. Compare
-          compatibility, water parameters, tank requirements, and behavior patterns to create the
-          perfect aquarium environment.
+      <div class="font-label">Option 4 <span>Book Typography</span></div>
+      <div class="font-name">
+        Crimson Pro + Karla — old-style serif with true italic meets quirky grotesque. Scholarly but
+        approachable.
+      </div>
+
+      <div class="sample-logo">Comparium</div>
+
+      <div class="sample-hero">
+        <h2>Your aquarium information in one place.</h2>
+        <p>
+          Research species. Check compatibility. Track maintenance.<br />Hundreds of freshwater fish
+          and growing.
         </p>
-        <div class="nav-sample">Species Database • My Tanks • Glossary • About</div>
+        <a href="#" class="sample-btn">Get Started</a>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="sample-card">
+        <h3>German Blue Ram</h3>
+        <p class="sample-scientific">Mikrogeophagus ramirezi</p>
+        <p>
+          Peaceful dwarf cichlids with metallic gold coloring and striking pink and black markings.
+        </p>
       </div>
     </div>
 
+    <!-- Option 5: Sorts Mill Goudy + Lexend -->
     <div class="font-option option-5">
-      <div class="font-label">OPTION 5: Nunito (Everything) — Soft & Welcoming</div>
-      <div class="sample-content">
-        <h1>Comparium</h1>
-        <h2>The place for all things aquarium</h2>
-        <p class="tagline">The place for all things aquarium</p>
-        <p class="body-text">
-          Browse our extensive database of freshwater and saltwater fish species. Compare
-          compatibility, water parameters, tank requirements, and behavior patterns to create the
-          perfect aquarium environment.
+      <div class="font-label">Option 5 <span>Historical Revival</span></div>
+      <div class="font-name">
+        Sorts Mill Goudy + Lexend — 1916 Goudy revival meets reading-fluency optimized sans. Organic
+        and warm.
+      </div>
+
+      <div class="sample-logo">Comparium</div>
+
+      <div class="sample-hero">
+        <h2>Your aquarium information in one place.</h2>
+        <p>
+          Research species. Check compatibility. Track maintenance.<br />Hundreds of freshwater fish
+          and growing.
         </p>
-        <div class="nav-sample">Species Database • My Tanks • Glossary • About</div>
+        <a href="#" class="sample-btn">Get Started</a>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="sample-card">
+        <h3>German Blue Ram</h3>
+        <p class="sample-scientific">Mikrogeophagus ramirezi</p>
+        <p>
+          Peaceful dwarf cichlids with metallic gold coloring and striking pink and black markings.
+        </p>
+      </div>
+    </div>
+
+    <!-- Option 6: Spectral + Darker Grotesque -->
+    <div class="font-option option-6">
+      <div class="font-label">Option 6 <span>Tall & Literary</span></div>
+      <div class="font-name">
+        Spectral + Darker Grotesque — Google's literary serif meets an unusually tall grotesque.
+        Distinctive proportions.
+      </div>
+
+      <div class="sample-logo">Comparium</div>
+
+      <div class="sample-hero">
+        <h2>Your aquarium information in one place.</h2>
+        <p>
+          Research species. Check compatibility. Track maintenance.<br />Hundreds of freshwater fish
+          and growing.
+        </p>
+        <a href="#" class="sample-btn">Get Started</a>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="sample-card">
+        <h3>German Blue Ram</h3>
+        <p class="sample-scientific">Mikrogeophagus ramirezi</p>
+        <p>
+          Peaceful dwarf cichlids with metallic gold coloring and striking pink and black markings.
+        </p>
+      </div>
+    </div>
+
+    <!-- Option 7: Bricolage Grotesque -->
+    <div class="font-option option-7">
+      <div class="font-label">Option 7 <span>Eclectic</span></div>
+      <div class="font-name">
+        Bricolage Grotesque — variable font with optical sizing, designed to be expressive. New and
+        uncommon.
+      </div>
+
+      <div class="sample-logo">Comparium</div>
+
+      <div class="sample-hero">
+        <h2>Your aquarium information in one place.</h2>
+        <p>
+          Research species. Check compatibility. Track maintenance.<br />Hundreds of freshwater fish
+          and growing.
+        </p>
+        <a href="#" class="sample-btn">Get Started</a>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="sample-card">
+        <h3>German Blue Ram</h3>
+        <p class="sample-scientific">Mikrogeophagus ramirezi</p>
+        <p>
+          Peaceful dwarf cichlids with metallic gold coloring and striking pink and black markings.
+        </p>
+      </div>
+    </div>
+
+    <!-- Option 8: Darker Grotesque -->
+    <div class="font-option option-8">
+      <div class="font-label">Option 8 <span>Statement</span></div>
+      <div class="font-name">
+        Darker Grotesque — tall x-height, unusual proportions, makes a statement while staying
+        readable.
+      </div>
+
+      <div class="sample-logo">Comparium</div>
+
+      <div class="sample-hero">
+        <h2>Your aquarium information in one place.</h2>
+        <p>
+          Research species. Check compatibility. Track maintenance.<br />Hundreds of freshwater fish
+          and growing.
+        </p>
+        <a href="#" class="sample-btn">Get Started</a>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="sample-card">
+        <h3>German Blue Ram</h3>
+        <p class="sample-scientific">Mikrogeophagus ramirezi</p>
+        <p>
+          Peaceful dwarf cichlids with metallic gold coloring and striking pink and black markings.
+        </p>
       </div>
     </div>
   </body>

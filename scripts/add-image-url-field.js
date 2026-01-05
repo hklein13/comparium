@@ -34,8 +34,9 @@ const updatedFishData = fishDataContent.replace(
 );
 
 // Count how many additions were made
-const additionsCount = (updatedFishData.match(/imageUrl: null,/g) || []).length -
-                       (fishDataContent.match(/imageUrl: null,/g) || []).length;
+const additionsCount =
+  (updatedFishData.match(/imageUrl: null,/g) || []).length -
+  (fishDataContent.match(/imageUrl: null,/g) || []).length;
 
 writeFileSync(fishDataPath, updatedFishData, 'utf-8');
 console.log(`✅ Added imageUrl field to ${additionsCount} species in fish-data.js\n`);
@@ -57,11 +58,14 @@ const updatedGlossary = glossaryContent.replace(
 );
 
 // Count additions
-const glossaryAdditionsCount = (updatedGlossary.match(/imageUrl: null,/g) || []).length -
-                                (glossaryContent.match(/imageUrl: null,/g) || []).length;
+const glossaryAdditionsCount =
+  (updatedGlossary.match(/imageUrl: null,/g) || []).length -
+  (glossaryContent.match(/imageUrl: null,/g) || []).length;
 
 writeFileSync(glossaryPath, updatedGlossary, 'utf-8');
-console.log(`✅ Added imageUrl field to ${glossaryAdditionsCount} glossary entries in glossary.js\n`);
+console.log(
+  `✅ Added imageUrl field to ${glossaryAdditionsCount} glossary entries in glossary.js\n`
+);
 
 console.log('╔════════════════════════════════════════════════╗');
 console.log('║         Image URL Fields Added!                ║');

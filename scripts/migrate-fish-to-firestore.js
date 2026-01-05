@@ -38,7 +38,7 @@ try {
   const serviceAccount = JSON.parse(readFileSync(serviceAccountPath, 'utf-8'));
 
   admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
+    credential: admin.credential.cert(serviceAccount),
   });
 
   console.log('✅ Firebase Admin SDK initialized');
@@ -97,7 +97,6 @@ async function migrateFishData() {
 
         console.log(`  ✅ ${key.padEnd(25)} → ${fishData.commonName}`);
         successCount++;
-
       } catch (error) {
         console.error(`  ❌ ${key.padEnd(25)} → ERROR: ${error.message}`);
         errorCount++;
@@ -131,7 +130,6 @@ async function migrateFishData() {
     console.log('   2. Test your website - species should load from Firestore');
     console.log('   3. (Optional) Delete serviceAccountKey.json for security');
     console.log('\n✨ Migration complete!\n');
-
   } catch (error) {
     console.error('\n💥 Migration failed with error:');
     console.error(error);
@@ -142,7 +140,7 @@ async function migrateFishData() {
 // Run migration
 migrateFishData()
   .then(() => process.exit(0))
-  .catch((error) => {
+  .catch(error => {
     console.error('Fatal error:', error);
     process.exit(1);
   });
