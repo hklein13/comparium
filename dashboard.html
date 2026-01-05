@@ -58,8 +58,22 @@
         <div class="dashboard-header-actions">
           <!-- Notification Bell -->
           <div class="notification-wrapper">
-            <button id="notification-toggle" class="icon-btn" onclick="toggleNotifications()" aria-label="Notifications">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <button
+              id="notification-toggle"
+              class="icon-btn"
+              onclick="toggleNotifications()"
+              aria-label="Notifications"
+            >
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
                 <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
                 <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
               </svg>
@@ -81,10 +95,26 @@
 
           <!-- Settings Gear -->
           <div class="settings-wrapper">
-            <button id="settings-toggle" class="icon-btn" onclick="toggleSettings()" aria-label="Settings">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <button
+              id="settings-toggle"
+              class="icon-btn"
+              onclick="toggleSettings()"
+              aria-label="Settings"
+            >
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
                 <circle cx="12" cy="12" r="3"></circle>
-                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                <path
+                  d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"
+                ></path>
               </svg>
             </button>
             <div id="settings-dropdown" class="header-dropdown settings-dropdown">
@@ -97,7 +127,9 @@
                   <span class="settings-value" id="settings-username"></span>
                 </div>
                 <div class="settings-dropdown-divider"></div>
-                <button onclick="authManager.logout()" class="settings-dropdown-btn">Log Out</button>
+                <button onclick="authManager.logout()" class="settings-dropdown-btn">
+                  Log Out
+                </button>
               </div>
             </div>
           </div>
@@ -345,15 +377,17 @@
         let html = '<ul class="item-list">';
         comparisons.forEach(comp => {
           const speciesNames = comp.species.map(s => s.name).join(', ');
+          const speciesKeys = comp.species.map(s => s.key).join(',');
+          const compareUrl = `compare.html?species=${encodeURIComponent(speciesKeys)}`;
           const date = new Date(comp.date).toLocaleDateString();
           const icon = comp.compatible ? '&#10003;' : '&#9888;';
 
           html += `
                     <li>
-                        <div>
+                        <a href="${compareUrl}" class="item-link">
                             <strong>${icon} ${speciesNames}</strong><br>
                             <small>${date}</small>
-                        </div>
+                        </a>
                     </li>
                 `;
         });
@@ -373,13 +407,14 @@
         favorites.forEach(speciesKey => {
           const fish = fishDatabase[speciesKey];
           if (fish) {
+            // Use encodeURIComponent for URL and data-species for click handler (XSS-safe)
             html += `
                         <li>
-                            <div>
+                            <a href="species.html?fish=${encodeURIComponent(speciesKey)}" class="item-link">
                                 <strong>${fish.commonName}</strong><br>
                                 <small><em>${fish.scientificName}</em></small>
-                            </div>
-                            <span class="favorite-star active" onclick="removeFavorite('${speciesKey}')">&#9733;</span>
+                            </a>
+                            <span class="favorite-star active" data-species="${speciesKey}">&#9733;</span>
                         </li>
                     `;
           }
@@ -388,6 +423,14 @@
 
         container.innerHTML = html;
       }
+
+      // Delegated click handler for favorite stars (XSS-safe alternative to inline onclick)
+      document.getElementById('favorite-species').addEventListener('click', function (event) {
+        const star = event.target.closest('.favorite-star');
+        if (star && star.dataset.species) {
+          removeFavorite(star.dataset.species);
+        }
+      });
 
       async function removeFavorite(speciesKey) {
         const uid = authManager.getCurrentUid();
@@ -446,7 +489,7 @@
       }
 
       // Close dropdowns when clicking outside
-      document.addEventListener('click', function(event) {
+      document.addEventListener('click', function (event) {
         const notifWrapper = document.querySelector('.notification-wrapper');
         const settingsWrapper = document.querySelector('.settings-wrapper');
         const notifDropdown = document.getElementById('notification-dropdown');
@@ -491,13 +534,17 @@
         const unreadCount = notifications.filter(n => !n.read).length;
         updateNotificationBadge(unreadCount);
 
-        list.innerHTML = notifications.map(n => `
+        list.innerHTML = notifications
+          .map(
+            n => `
           <div class="notification-item ${n.read ? '' : 'unread'}" data-id="${n.id}">
             <div class="notification-item-title">${n.title}</div>
             <div class="notification-item-body">${n.body}</div>
             <div class="notification-item-time">${formatTimeAgo(n.created)}</div>
           </div>
-        `).join('');
+        `
+          )
+          .join('');
       }
 
       function formatTimeAgo(timestamp) {

@@ -87,6 +87,9 @@ async function initializeApp() {
     // Build the UI with loaded data
     buildPanels();
 
+    // Check for URL parameters to auto-load a comparison
+    loadComparisonFromUrl();
+
     console.log('App initialized with', Object.keys(fishDatabase).length, 'species');
   } catch (error) {
     console.error('Error initializing app:', error);
@@ -94,6 +97,47 @@ async function initializeApp() {
       'Unable to load fish species data. Please <a href="javascript:location.reload()">refresh the page</a> or try again later.'
     );
   }
+}
+
+/**
+ * Load comparison from URL parameters
+ * URL format: compare.html?species=neonTetra,cardinalTetra,cherryBarb
+ */
+function loadComparisonFromUrl() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const speciesParam = urlParams.get('species');
+
+  if (!speciesParam) return;
+
+  const speciesKeys = speciesParam.split(',').filter(key => fishDatabase[key]);
+
+  if (speciesKeys.length < 2) {
+    console.warn('URL species param needs at least 2 valid species keys');
+    return;
+  }
+
+  // Auto-select the species (max 3)
+  const panels = ['panel1', 'panel2', 'panel3'];
+  speciesKeys.slice(0, 3).forEach((key, index) => {
+    selectedSpecies[panels[index]] = key;
+
+    // Visual selection - find and highlight the item
+    const panel = document.getElementById(panels[index]);
+    if (panel) {
+      const item = panel.querySelector(`[data-key="${key}"]`);
+      if (item) {
+        item.classList.add('selected');
+        // Open the parent details element
+        const details = item.closest('.category-details');
+        if (details) details.setAttribute('open', '');
+      }
+    }
+  });
+
+  // Run the comparison after a brief delay for DOM updates
+  setTimeout(() => {
+    compareSpecies();
+  }, 100);
 }
 
 function showAppErrorState(message) {
@@ -723,8 +767,17 @@ buildPanels();
 function addFavoriteButton(speciesKey) {
   // Always show star for feature discovery and to prevent race conditions
   // toggleFavorite() handles the login check if user tries to use it
-  return `<span class="favorite-star" data-species="${speciesKey}" onclick="toggleFavorite('${speciesKey}', this)">★</span>`;
+  // Uses data-species attribute instead of inline onclick for XSS safety
+  return `<span class="favorite-star" data-species="${speciesKey}">★</span>`;
 }
+
+// Delegated click handler for favorite stars (XSS-safe alternative to inline onclick)
+document.getElementById('comparisonGrid').addEventListener('click', function (event) {
+  const star = event.target.closest('.favorite-star');
+  if (star && star.dataset.species) {
+    toggleFavorite(star.dataset.species, star);
+  }
+});
 
 // Toggle favorite species
 async function toggleFavorite(speciesKey, element) {
@@ -771,7 +824,8 @@ async function saveComparisonToHistory(fishData, isCompatible) {
 
   const comparison = {
     species: fishData.map(f => ({
-      key: f.commonName.toLowerCase().replace(/\s+/g, ''),
+      // Use the actual database key (attached in compareSpecies) for reliable URL linking
+      key: f._databaseKey || f.commonName.toLowerCase().replace(/\s+/g, ''),
       name: f.commonName,
     })),
     compatible: isCompatible,
@@ -796,7 +850,11 @@ compareSpecies = function () {
       const selectedFish = [fish1Key, fish2Key];
       if (fish3Key) selectedFish.push(fish3Key);
 
-      const fishData = selectedFish.map(key => fishDatabase[key]);
+      // Include _databaseKey for proper URL linking in comparison history
+      const fishData = selectedFish.map(key => ({
+        ...fishDatabase[key],
+        _databaseKey: key,
+      }));
 
       // Determine if compatible (simplified check)
       const isCompatible = true; // Would need actual compatibility logic
