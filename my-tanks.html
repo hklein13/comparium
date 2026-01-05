@@ -1,67 +1,71 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>My Tanks - Comparium</title>
-    <meta name="description" content="Manage your aquarium tank plans on Comparium.">
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/dark-mode.css">
-    <link rel="stylesheet" href="css/enhanced-ui.css">
-    <link rel="stylesheet" href="css/ocean-theme.css">
+    <meta name="description" content="Manage your aquarium tank plans on Comparium." />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/dark-mode.css" />
+    <link rel="stylesheet" href="css/enhanced-ui.css" />
+    <link rel="stylesheet" href="css/ocean-theme.css" />
     <!-- Redirect to dashboard -->
     <script>
-        // Redirect to dashboard tank section
-        // Preserving this page for backward compatibility with bookmarks and external links
-        window.location.replace('dashboard.html#my-tanks-section');
+      // Redirect to dashboard tank section
+      // Preserving this page for backward compatibility with bookmarks and external links
+      window.location.replace('dashboard.html#my-tanks-section');
     </script>
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VNY458QF3"></script>
     <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-8VNY458QF3');
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', 'G-8VNY458QF3');
     </script>
-</head>
-<body>
+  </head>
+  <body>
     <div class="header">
-        <div class="header-content">
-            <div class="header-left">
-                <a href="index.html" class="home-link">
-                    <h1><span class="logo-wave">Comparium</span></h1>
-                    <p>The place for all things aquarium</p>
-                </a>
-            </div>
-            <div class="header-nav">
-                <a href="index.html">Home</a>
-                <a href="compare.html">Compare Fish</a>
-                <a href="dashboard.html">Dashboard</a>
-                <a href="glossary.html">Glossary</a>
-                <a href="faq.html">FAQ</a>
-                <div id="auth-links"></div>
-            </div>
+      <div class="header-content">
+        <div class="header-left">
+          <a href="index.html" class="home-link">
+            <h1><span class="logo-wave">Comparium</span></h1>
+            <p>The place for all things aquarium</p>
+          </a>
         </div>
+        <div class="header-nav">
+          <a href="index.html">Home</a>
+          <a href="compare.html">Compare Fish</a>
+          <a href="dashboard.html">Dashboard</a>
+          <a href="glossary.html">Glossary</a>
+          <a href="faq.html">FAQ</a>
+          <div id="auth-links"></div>
+        </div>
+      </div>
     </div>
 
     <div class="dashboard-container">
-        <div class="dashboard-section" style="text-align: center; padding: 3rem;">
-            <h2>Redirecting to Dashboard...</h2>
-            <p>Tank management has moved to the <a href="dashboard.html#my-tanks-section">Dashboard</a>.</p>
-            <p style="margin-top: 1rem;">
-                <a href="dashboard.html#my-tanks-section" class="btn-small">Go to Dashboard</a>
-            </p>
-        </div>
+      <div class="dashboard-section" style="text-align: center; padding: 3rem">
+        <h2>Redirecting to Dashboard...</h2>
+        <p>
+          Tank management has moved to the <a href="dashboard.html#my-tanks-section">Dashboard</a>.
+        </p>
+        <p style="margin-top: 1rem">
+          <a href="dashboard.html#my-tanks-section" class="btn-small">Go to Dashboard</a>
+        </p>
+      </div>
     </div>
 
     <div class="footer">
-        <p>&copy; <span id="copyright-year"></span> Comparium.</p>
-        <p><a href="about.html">About</a> | <a href="mailto:contact@comparium.net">Contact</a></p>
+      <p>&copy; <span id="copyright-year"></span> Comparium.</p>
+      <p><a href="about.html">About</a> | <a href="mailto:contact@comparium.net">Contact</a></p>
     </div>
 
     <script>
-        document.getElementById('copyright-year').textContent = new Date().getFullYear();
+      document.getElementById('copyright-year').textContent = new Date().getFullYear();
     </script>
     <script src="js/theme-manager.js"></script>
-</body>
+  </body>
 </html>

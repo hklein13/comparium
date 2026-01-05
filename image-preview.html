@@ -1,0 +1,1482 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Comparium - Image Selection Preview</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: #f5f5f5;
+        margin: 0;
+        padding: 20px;
+      }
+      .header {
+        background: linear-gradient(135deg, #14b8a6, #1e3a8a);
+        color: white;
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+      .header h1 {
+        margin: 0 0 10px 0;
+      }
+      .controls {
+        background: white;
+        padding: 15px 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+      .controls button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+      }
+      .btn-primary {
+        background: #14b8a6;
+        color: white;
+      }
+      .btn-primary:hover {
+        background: #0d9488;
+      }
+      .btn-secondary {
+        background: #e5e7eb;
+        color: #374151;
+      }
+      .btn-secondary:hover {
+        background: #d1d5db;
+      }
+      .btn-danger {
+        background: #ef4444;
+        color: white;
+      }
+      .btn-danger:hover {
+        background: #dc2626;
+      }
+      .stats {
+        margin-left: auto;
+        font-size: 14px;
+        color: #666;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+      }
+      .card {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+      .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+      }
+      .card.selected {
+        outline: 3px solid #14b8a6;
+      }
+      .card.no-image {
+        opacity: 0.6;
+      }
+      .card-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        background: #e5e7eb;
+      }
+      .card-placeholder {
+        width: 100%;
+        height: 200px;
+        background: #e5e7eb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #999;
+        font-size: 14px;
+      }
+      .card-body {
+        padding: 15px;
+      }
+      .card-title {
+        font-weight: 600;
+        font-size: 16px;
+        margin: 0 0 5px 0;
+      }
+      .card-scientific {
+        font-style: italic;
+        color: #666;
+        font-size: 14px;
+        margin: 0 0 10px 0;
+      }
+      .card-license {
+        font-size: 12px;
+        color: #999;
+        margin-bottom: 10px;
+      }
+      .card-checkbox {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .card-checkbox input {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+      }
+      .card-checkbox label {
+        cursor: pointer;
+        font-size: 14px;
+      }
+      .output-area {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        margin-top: 20px;
+        display: none;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+      .output-area.visible {
+        display: block;
+      }
+      .output-area textarea {
+        width: 100%;
+        height: 150px;
+        font-family: monospace;
+        font-size: 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 10px;
+      }
+      .instructions {
+        background: #fef3c7;
+        border: 1px solid #f59e0b;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+      }
+      .instructions h3 {
+        margin: 0 0 10px 0;
+        color: #92400e;
+      }
+      .instructions ol {
+        margin: 0;
+        padding-left: 20px;
+      }
+      .instructions li {
+        margin-bottom: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>Comparium Image Selection</h1>
+      <p>Review and select images for 53 species</p>
+    </div>
+
+    <div class="instructions">
+      <h3>Instructions</h3>
+      <ol>
+        <li>
+          Review each image - check the box if it's a good quality photo of the correct species
+        </li>
+        <li>Click "Export Selected" when done</li>
+        <li>Copy the JSON output</li>
+        <li>Run: <code>npm run images:upload</code> and paste when prompted</li>
+      </ol>
+    </div>
+
+    <div class="controls">
+      <button class="btn-primary" onclick="selectAll()">Select All</button>
+      <button class="btn-secondary" onclick="deselectAll()">Deselect All</button>
+      <button class="btn-primary" onclick="exportSelected()">Export Selected</button>
+      <div class="stats">Selected: <span id="selectedCount">0</span> / 53</div>
+    </div>
+
+    <div class="grid">
+      <div class="card" data-key="corydoras">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/2/2b/Revue_suisse_de_zoologie_%28IA_revuesuissede11942012schw%29.pdf"
+          alt="Corydoras Catfish"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Corydoras Catfish</h3>
+          <p class="card-scientific">Corydoras spp.</p>
+          <p class="card-license">License: Public domain</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-corydoras"
+              data-key="corydoras"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/2/2b/Revue_suisse_de_zoologie_%28IA_revuesuissede11942012schw%29.pdf"
+              onchange="updateStats()"
+            />
+            <label for="check-corydoras">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="otocinclus">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/e/ed/Species_of_fishes_from_the_Chasqueiro_Stream_%28Mirim_Lagoon_system%29.jpg"
+          alt="Otocinclus Catfish"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Otocinclus Catfish</h3>
+          <p class="card-scientific">Otocinclus spp.</p>
+          <p class="card-license">License: CC BY 4.0</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-otocinclus"
+              data-key="otocinclus"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/e/ed/Species_of_fishes_from_the_Chasqueiro_Stream_%28Mirim_Lagoon_system%29.jpg"
+              onchange="updateStats()"
+            />
+            <label for="check-otocinclus">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="bristlenosePleco">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/c/cf/Journal_of_the_Bombay_Natural_History_Society_%28IA_journalof363431361936bomb%29.pdf"
+          alt="Bristlenose Pleco"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Bristlenose Pleco</h3>
+          <p class="card-scientific">Ancistrus spp.</p>
+          <p class="card-license">License: Public domain</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-bristlenosePleco"
+              data-key="bristlenosePleco"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/c/cf/Journal_of_the_Bombay_Natural_History_Society_%28IA_journalof363431361936bomb%29.pdf"
+              onchange="updateStats()"
+            />
+            <label for="check-bristlenosePleco">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="neriteSnail">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Bibliographia_zoologica_%28IA_bibliographiazo281915conc%29.pdf"
+          alt="Nerite Snail"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Nerite Snail</h3>
+          <p class="card-scientific">Neritina spp.</p>
+          <p class="card-license">License: Public domain</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-neriteSnail"
+              data-key="neriteSnail"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/7/7a/Bibliographia_zoologica_%28IA_bibliographiazo281915conc%29.pdf"
+              onchange="updateStats()"
+            />
+            <label for="check-neriteSnail">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="blackNeonTetra">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/2/2d/Black_neon_tetra.jpg"
+          alt="Black Neon Tetra"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Black Neon Tetra</h3>
+          <p class="card-scientific">Hyphessobrycon herbertaxelrodi</p>
+          <p class="card-license">License: CC BY-SA 3.0</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-blackNeonTetra"
+              data-key="blackNeonTetra"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/2/2d/Black_neon_tetra.jpg"
+              onchange="updateStats()"
+            />
+            <label for="check-blackNeonTetra">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="buenosAiresTetra">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/7/7b/Hyphessobrycon_anisitsi_albus.jpg"
+          alt="Buenos Aires Tetra"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Buenos Aires Tetra</h3>
+          <p class="card-scientific">Hyphessobrycon anisitsi</p>
+          <p class="card-license">License: Public domain</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-buenosAiresTetra"
+              data-key="buenosAiresTetra"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/7/7b/Hyphessobrycon_anisitsi_albus.jpg"
+              onchange="updateStats()"
+            />
+            <label for="check-buenosAiresTetra">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="lemonTetra">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/0/07/Hyphessobrycon_pulchripinnis.jpg"
+          alt="Lemon Tetra"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Lemon Tetra</h3>
+          <p class="card-scientific">Hyphessobrycon pulchripinnis</p>
+          <p class="card-license">License: CC BY 2.5</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-lemonTetra"
+              data-key="lemonTetra"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/0/07/Hyphessobrycon_pulchripinnis.jpg"
+              onchange="updateStats()"
+            />
+            <label for="check-lemonTetra">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="penguinTetra">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/5/5b/Thayeria_boehlkei.jpg"
+          alt="Penguin Tetra"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Penguin Tetra</h3>
+          <p class="card-scientific">Thayeria boehlkei</p>
+          <p class="card-license">License: CC BY-SA 3.0</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-penguinTetra"
+              data-key="penguinTetra"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/5/5b/Thayeria_boehlkei.jpg"
+              onchange="updateStats()"
+            />
+            <label for="check-penguinTetra">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="rosyBarb">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/c/c7/Rosy_Barbs.jpg"
+          alt="Rosy Barb"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Rosy Barb</h3>
+          <p class="card-scientific">Pethia conchonius</p>
+          <p class="card-license">License: CC BY 3.0</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-rosyBarb"
+              data-key="rosyBarb"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/c/c7/Rosy_Barbs.jpg"
+              onchange="updateStats()"
+            />
+            <label for="check-rosyBarb">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="goldBarb">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/b/bf/Gold_Barb_Puntius_semifasciolatus_6.png"
+          alt="Gold Barb"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Gold Barb</h3>
+          <p class="card-scientific">Barbodes semifasciolatus</p>
+          <p class="card-license">License: CC BY-SA 3.0</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-goldBarb"
+              data-key="goldBarb"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/b/bf/Gold_Barb_Puntius_semifasciolatus_6.png"
+              onchange="updateStats()"
+            />
+            <label for="check-goldBarb">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="odessaBarb">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/b/b2/Puntius_Padamya.jpg"
+          alt="Odessa Barb"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Odessa Barb</h3>
+          <p class="card-scientific">Pethia padamya</p>
+          <p class="card-license">License: CC BY-SA 3.0</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-odessaBarb"
+              data-key="odessaBarb"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/b/b2/Puntius_Padamya.jpg"
+              onchange="updateStats()"
+            />
+            <label for="check-odessaBarb">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="denisonBarb">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Puntius_denisonii_1.jpg"
+          alt="Denison Barb"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Denison Barb</h3>
+          <p class="card-scientific">Sahyadria denisonii</p>
+          <p class="card-license">License: CC BY-SA 3.0</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-denisonBarb"
+              data-key="denisonBarb"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/c/c5/Puntius_denisonii_1.jpg"
+              onchange="updateStats()"
+            />
+            <label for="check-denisonBarb">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="threadfinRainbowfish">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/4/47/Iriatherina_Werneri-Male_group.jpg"
+          alt="Threadfin Rainbowfish"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Threadfin Rainbowfish</h3>
+          <p class="card-scientific">Iriatherina werneri</p>
+          <p class="card-license">License: CC BY-SA 2.5</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-threadfinRainbowfish"
+              data-key="threadfinRainbowfish"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/4/47/Iriatherina_Werneri-Male_group.jpg"
+              onchange="updateStats()"
+            />
+            <label for="check-threadfinRainbowfish">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card no-image" data-key="balloonMolly">
+        <div class="card-placeholder">No image found</div>
+        <div class="card-body">
+          <h3 class="card-title">Balloon Molly</h3>
+          <p class="card-scientific">Poecilia sphenops (balloon morph)</p>
+          <p class="card-license">No suitable image found on Wikimedia</p>
+        </div>
+      </div>
+
+      <div class="card" data-key="variatusPlaty">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Xipho_variatus_maschio.jpg"
+          alt="Variatus Platy"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Variatus Platy</h3>
+          <p class="card-scientific">Xiphophorus variatus</p>
+          <p class="card-license">License: CC BY-SA 3.0</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-variatusPlaty"
+              data-key="variatusPlaty"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/0/0b/Xipho_variatus_maschio.jpg"
+              onchange="updateStats()"
+            />
+            <label for="check-variatusPlaty">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card no-image" data-key="blackMolly">
+        <div class="card-placeholder">No image found</div>
+        <div class="card-body">
+          <h3 class="card-title">Black Molly</h3>
+          <p class="card-scientific">Poecilia sphenops (melanistic)</p>
+          <p class="card-license">No suitable image found on Wikimedia</p>
+        </div>
+      </div>
+
+      <div class="card" data-key="threeSpotGourami">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/a/a6/Trichopodus_trichopterus_%283_spot_gourami%2C_Philippines%29_02.jpg"
+          alt="Three Spot Gourami"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Three Spot Gourami</h3>
+          <p class="card-scientific">Trichopodus trichopterus</p>
+          <p class="card-license">License: CC0</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-threeSpotGourami"
+              data-key="threeSpotGourami"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/a/a6/Trichopodus_trichopterus_%283_spot_gourami%2C_Philippines%29_02.jpg"
+              onchange="updateStats()"
+            />
+            <label for="check-threeSpotGourami">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="chocolateGourami">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/c/cf/Chocolate_gourami%2C_Sphaerichthys_osphromenoides.jpg"
+          alt="Chocolate Gourami"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Chocolate Gourami</h3>
+          <p class="card-scientific">Sphaerichthys osphromenoides</p>
+          <p class="card-license">License: CC BY 2.0</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-chocolateGourami"
+              data-key="chocolateGourami"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/c/cf/Chocolate_gourami%2C_Sphaerichthys_osphromenoides.jpg"
+              onchange="updateStats()"
+            />
+            <label for="check-chocolateGourami">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="paradiseFish">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/8/85/Macropodus_opercularis_-_front_%28aka%29.jpg"
+          alt="Paradise Fish"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Paradise Fish</h3>
+          <p class="card-scientific">Macropodus opercularis</p>
+          <p class="card-license">License: CC BY-SA 2.5</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-paradiseFish"
+              data-key="paradiseFish"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/8/85/Macropodus_opercularis_-_front_%28aka%29.jpg"
+              onchange="updateStats()"
+            />
+            <label for="check-paradiseFish">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="bettaImbellis">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/8/87/Betta_imbellis_%28female%29_20100511.jpg"
+          alt="Peaceful Betta"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Peaceful Betta</h3>
+          <p class="card-scientific">Betta imbellis</p>
+          <p class="card-license">License: CC BY-SA 3.0</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-bettaImbellis"
+              data-key="bettaImbellis"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/8/87/Betta_imbellis_%28female%29_20100511.jpg"
+              onchange="updateStats()"
+            />
+            <label for="check-bettaImbellis">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="kribensis">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/a/a2/P_pulcher_male_female.jpg"
+          alt="Kribensis"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Kribensis</h3>
+          <p class="card-scientific">Pelvicachromis pulcher</p>
+          <p class="card-license">License: CC BY-SA 3.0</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-kribensis"
+              data-key="kribensis"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/a/a2/P_pulcher_male_female.jpg"
+              onchange="updateStats()"
+            />
+            <label for="check-kribensis">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="bolivianRam">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/0/0f/Mikrogeophagus_altispinosus_PiaH.jpg"
+          alt="Bolivian Ram"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Bolivian Ram</h3>
+          <p class="card-scientific">Mikrogeophagus altispinosus</p>
+          <p class="card-license">License: CC BY 2.5</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-bolivianRam"
+              data-key="bolivianRam"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/0/0f/Mikrogeophagus_altispinosus_PiaH.jpg"
+              onchange="updateStats()"
+            />
+            <label for="check-bolivianRam">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="cockatooDwarfCichlid">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/1/19/Apistogramma_cacatuoides.jpg"
+          alt="Cockatoo Dwarf Cichlid"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Cockatoo Dwarf Cichlid</h3>
+          <p class="card-scientific">Apistogramma cacatuoides</p>
+          <p class="card-license">License: CC BY-SA 3.0</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-cockatooDwarfCichlid"
+              data-key="cockatooDwarfCichlid"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/1/19/Apistogramma_cacatuoides.jpg"
+              onchange="updateStats()"
+            />
+            <label for="check-cockatooDwarfCichlid">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="firemouthCichlid">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/a/a6/Thorichthys_meeki_2019_G1.jpg"
+          alt="Firemouth Cichlid"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Firemouth Cichlid</h3>
+          <p class="card-scientific">Thorichthys meeki</p>
+          <p class="card-license">License: Public domain</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-firemouthCichlid"
+              data-key="firemouthCichlid"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/a/a6/Thorichthys_meeki_2019_G1.jpg"
+              onchange="updateStats()"
+            />
+            <label for="check-firemouthCichlid">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="convictCichlid">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/6/6c/Archocentrus_nigrofasciatus_female.jpg"
+          alt="Convict Cichlid"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Convict Cichlid</h3>
+          <p class="card-scientific">Amatitlania nigrofasciata</p>
+          <p class="card-license">License: CC BY 2.5</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-convictCichlid"
+              data-key="convictCichlid"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/6/6c/Archocentrus_nigrofasciatus_female.jpg"
+              onchange="updateStats()"
+            />
+            <label for="check-convictCichlid">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="discus">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/c/c2/Symphysodon_aequifasciatus_-_Karlsruhe_Zoo_02.jpg"
+          alt="Discus"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Discus</h3>
+          <p class="card-scientific">Symphysodon aequifasciatus</p>
+          <p class="card-license">License: CC BY-SA 3.0</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-discus"
+              data-key="discus"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/c/c2/Symphysodon_aequifasciatus_-_Karlsruhe_Zoo_02.jpg"
+              onchange="updateStats()"
+            />
+            <label for="check-discus">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="yoyoLoach">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/9/9d/Yoyo_Loach.jpg"
+          alt="Yoyo Loach"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Yoyo Loach</h3>
+          <p class="card-scientific">Botia almorhae</p>
+          <p class="card-license">License: Public domain</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-yoyoLoach"
+              data-key="yoyoLoach"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/9/9d/Yoyo_Loach.jpg"
+              onchange="updateStats()"
+            />
+            <label for="check-yoyoLoach">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="hillstreamLoach">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/2/2e/Hillstream_Loach.JPG"
+          alt="Hillstream Loach"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Hillstream Loach</h3>
+          <p class="card-scientific">Sewellia lineolata</p>
+          <p class="card-license">License: CC BY-SA 3.0</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-hillstreamLoach"
+              data-key="hillstreamLoach"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/2/2e/Hillstream_Loach.JPG"
+              onchange="updateStats()"
+            />
+            <label for="check-hillstreamLoach">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="pepperedCory">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/6/69/Corydoras_paleatus_by_NiKo.jpg"
+          alt="Peppered Cory"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Peppered Cory</h3>
+          <p class="card-scientific">Corydoras paleatus</p>
+          <p class="card-license">License: Public domain</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-pepperedCory"
+              data-key="pepperedCory"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/6/69/Corydoras_paleatus_by_NiKo.jpg"
+              onchange="updateStats()"
+            />
+            <label for="check-pepperedCory">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="sterbaiCory">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/4/4b/Corydoras_Sterbai.jpg"
+          alt="Sterbai Cory"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Sterbai Cory</h3>
+          <p class="card-scientific">Corydoras sterbai</p>
+          <p class="card-license">License: Public domain</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-sterbaiCory"
+              data-key="sterbaiCory"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/4/4b/Corydoras_Sterbai.jpg"
+              onchange="updateStats()"
+            />
+            <label for="check-sterbaiCory">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="juliiCory">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/e/e0/Corydoras_julii.jpg"
+          alt="Julii Cory"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Julii Cory</h3>
+          <p class="card-scientific">Corydoras julii</p>
+          <p class="card-license">License: CC BY-SA 2.0</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-juliiCory"
+              data-key="juliiCory"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/e/e0/Corydoras_julii.jpg"
+              onchange="updateStats()"
+            />
+            <label for="check-juliiCory">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="albinoCory">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/1/18/Corydoras_aeneus_03.jpg"
+          alt="Albino Cory"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Albino Cory</h3>
+          <p class="card-scientific">Corydoras aeneus (albino)</p>
+          <p class="card-license">License: CC BY-SA 4.0</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-albinoCory"
+              data-key="albinoCory"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/1/18/Corydoras_aeneus_03.jpg"
+              onchange="updateStats()"
+            />
+            <label for="check-albinoCory">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="stripedRaphaelCatfish">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/3/31/Striped_Raphael_catfish_%28Platydoras_armatulus%29.jpg"
+          alt="Striped Raphael Catfish"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Striped Raphael Catfish</h3>
+          <p class="card-scientific">Platydoras armatulus</p>
+          <p class="card-license">License: CC BY-SA 4.0</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-stripedRaphaelCatfish"
+              data-key="stripedRaphaelCatfish"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/3/31/Striped_Raphael_catfish_%28Platydoras_armatulus%29.jpg"
+              onchange="updateStats()"
+            />
+            <label for="check-stripedRaphaelCatfish">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="glassCatfish">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/8/8d/Kryptopterus_species.jpg"
+          alt="Glass Catfish"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Glass Catfish</h3>
+          <p class="card-scientific">Kryptopterus vitreolus</p>
+          <p class="card-license">License: CC BY-SA 2.5</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-glassCatfish"
+              data-key="glassCatfish"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/8/8d/Kryptopterus_species.jpg"
+              onchange="updateStats()"
+            />
+            <label for="check-glassCatfish">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="bambooShrimp">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/5/56/Atyopsis_moluccensis_-_Molukken-F%C3%A4chergarnele.jpg"
+          alt="Bamboo Shrimp"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Bamboo Shrimp</h3>
+          <p class="card-scientific">Atyopsis moluccensis</p>
+          <p class="card-license">License: CC0</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-bambooShrimp"
+              data-key="bambooShrimp"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/5/56/Atyopsis_moluccensis_-_Molukken-F%C3%A4chergarnele.jpg"
+              onchange="updateStats()"
+            />
+            <label for="check-bambooShrimp">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="singaporeShrimp">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/1/17/Macrobrachium_Lanchesteri_%2819306434602%29.jpg"
+          alt="Singapore Shrimp"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Singapore Shrimp</h3>
+          <p class="card-scientific">Macrobrachium lanchesteri</p>
+          <p class="card-license">License: CC BY 2.0</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-singaporeShrimp"
+              data-key="singaporeShrimp"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/1/17/Macrobrachium_Lanchesteri_%2819306434602%29.jpg"
+              onchange="updateStats()"
+            />
+            <label for="check-singaporeShrimp">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="ramshornSnail">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/d/d2/Ramshorn_snail_on_the_wood.jpg"
+          alt="Ramshorn Snail"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Ramshorn Snail</h3>
+          <p class="card-scientific">Planorbidae family</p>
+          <p class="card-license">License: CC BY-SA 4.0</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-ramshornSnail"
+              data-key="ramshornSnail"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/d/d2/Ramshorn_snail_on_the_wood.jpg"
+              onchange="updateStats()"
+            />
+            <label for="check-ramshornSnail">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="emperorTetra">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Emperor_tetra.jpg"
+          alt="Emperor Tetra"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Emperor Tetra</h3>
+          <p class="card-scientific">Nematobrycon palmeri</p>
+          <p class="card-license">License: CC BY-SA 3.0</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-emperorTetra"
+              data-key="emperorTetra"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/5/5e/Emperor_tetra.jpg"
+              onchange="updateStats()"
+            />
+            <label for="check-emperorTetra">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="redPhantomTetra">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/5/52/Megalamphodussweglesi01.jpg"
+          alt="Red Phantom Tetra"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Red Phantom Tetra</h3>
+          <p class="card-scientific">Hyphessobrycon sweglesi</p>
+          <p class="card-license">License: Public domain</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-redPhantomTetra"
+              data-key="redPhantomTetra"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/5/52/Megalamphodussweglesi01.jpg"
+              onchange="updateStats()"
+            />
+            <label for="check-redPhantomTetra">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="brilliantRasbora">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/0/05/Rasbora_einthovenii.jpg"
+          alt="Brilliant Rasbora"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Brilliant Rasbora</h3>
+          <p class="card-scientific">Rasbora einthovenii</p>
+          <p class="card-license">License: CC BY-SA 3.0</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-brilliantRasbora"
+              data-key="brilliantRasbora"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/0/05/Rasbora_einthovenii.jpg"
+              onchange="updateStats()"
+            />
+            <label for="check-brilliantRasbora">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="phoenixRasbora">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/9/9f/Boraras_merah2.png"
+          alt="Phoenix Rasbora"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Phoenix Rasbora</h3>
+          <p class="card-scientific">Boraras merah</p>
+          <p class="card-license">License: CC BY-SA 4.0</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-phoenixRasbora"
+              data-key="phoenixRasbora"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/9/9f/Boraras_merah2.png"
+              onchange="updateStats()"
+            />
+            <label for="check-phoenixRasbora">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="strawberryRasbora">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/1/1b/Boraras_naevus.png"
+          alt="Strawberry Rasbora"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Strawberry Rasbora</h3>
+          <p class="card-scientific">Boraras naevus</p>
+          <p class="card-license">License: CC BY-SA 4.0</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-strawberryRasbora"
+              data-key="strawberryRasbora"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/1/1b/Boraras_naevus.png"
+              onchange="updateStats()"
+            />
+            <label for="check-strawberryRasbora">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card no-image" data-key="goldWhiteCloud">
+        <div class="card-placeholder">No image found</div>
+        <div class="card-body">
+          <h3 class="card-title">Gold White Cloud</h3>
+          <p class="card-scientific">Tanichthys albonubes (Gold Morph)</p>
+          <p class="card-license">No suitable image found on Wikimedia</p>
+        </div>
+      </div>
+
+      <div class="card" data-key="sailfinMolly">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/a/a1/Poecilia_velifera.jpg"
+          alt="Sailfin Molly"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Sailfin Molly</h3>
+          <p class="card-scientific">Poecilia velifera</p>
+          <p class="card-license">License: CC BY-SA 3.0</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-sailfinMolly"
+              data-key="sailfinMolly"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/a/a1/Poecilia_velifera.jpg"
+              onchange="updateStats()"
+            />
+            <label for="check-sailfinMolly">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card no-image" data-key="dalmatianMolly">
+        <div class="card-placeholder">No image found</div>
+        <div class="card-body">
+          <h3 class="card-title">Dalmatian Molly</h3>
+          <p class="card-scientific">Poecilia sphenops (Dalmatian)</p>
+          <p class="card-license">No suitable image found on Wikimedia</p>
+        </div>
+      </div>
+
+      <div class="card" data-key="oscar">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/0/08/Astronotus_ocellatus.jpg"
+          alt="Oscar"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Oscar</h3>
+          <p class="card-scientific">Astronotus ocellatus</p>
+          <p class="card-license">License: CC BY-SA 3.0</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-oscar"
+              data-key="oscar"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/0/08/Astronotus_ocellatus.jpg"
+              onchange="updateStats()"
+            />
+            <label for="check-oscar">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="yellowLabCichlid">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/8/83/Labidochromis_caeruleus_from_Lake_Malawi.jpg"
+          alt="Yellow Lab Cichlid"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Yellow Lab Cichlid</h3>
+          <p class="card-scientific">Labidochromis caeruleus</p>
+          <p class="card-license">License: CC BY-SA 2.5</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-yellowLabCichlid"
+              data-key="yellowLabCichlid"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/8/83/Labidochromis_caeruleus_from_Lake_Malawi.jpg"
+              onchange="updateStats()"
+            />
+            <label for="check-yellowLabCichlid">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="banditCory">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/c/c4/Acuario.jpg"
+          alt="Bandit Cory"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Bandit Cory</h3>
+          <p class="card-scientific">Corydoras metae</p>
+          <p class="card-license">License: CC BY-SA 2.0</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-banditCory"
+              data-key="banditCory"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/c/c4/Acuario.jpg"
+              onchange="updateStats()"
+            />
+            <label for="check-banditCory">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="pictusCatfish">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/1/1d/Pimelodus_pictus.jpg"
+          alt="Pictus Catfish"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Pictus Catfish</h3>
+          <p class="card-scientific">Pimelodus pictus</p>
+          <p class="card-license">License: CC BY-SA 2.0</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-pictusCatfish"
+              data-key="pictusCatfish"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/1/1d/Pimelodus_pictus.jpg"
+              onchange="updateStats()"
+            />
+            <label for="check-pictusCatfish">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="opalineGourami">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/a/a6/Trichopodus_trichopterus_%283_spot_gourami%2C_Philippines%29_02.jpg"
+          alt="Opaline Gourami"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Opaline Gourami</h3>
+          <p class="card-scientific">Trichopodus trichopterus</p>
+          <p class="card-license">License: CC0</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-opalineGourami"
+              data-key="opalineGourami"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/a/a6/Trichopodus_trichopterus_%283_spot_gourami%2C_Philippines%29_02.jpg"
+              onchange="updateStats()"
+            />
+            <label for="check-opalineGourami">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="goldGourami">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/4/40/The_animal_kingdom%2C_arranged_according_to_its_organization%2C_serving_as_a_foundation_for_the_natural_history_of_animals_-_and_an_introduction_to_comparative_anatomy_%28IA_animalkingdomarr02cuvier%29.pdf"
+          alt="Gold Gourami"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Gold Gourami</h3>
+          <p class="card-scientific">Trichopodus trichopterus (Gold)</p>
+          <p class="card-license">License: Public domain</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-goldGourami"
+              data-key="goldGourami"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/4/40/The_animal_kingdom%2C_arranged_according_to_its_organization%2C_serving_as_a_foundation_for_the_natural_history_of_animals_-_and_an_introduction_to_comparative_anatomy_%28IA_animalkingdomarr02cuvier%29.pdf"
+              onchange="updateStats()"
+            />
+            <label for="check-goldGourami">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="blueGourami">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/a/a6/Trichopodus_trichopterus_%283_spot_gourami%2C_Philippines%29_02.jpg"
+          alt="Blue Gourami"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Blue Gourami</h3>
+          <p class="card-scientific">Trichopodus trichopterus</p>
+          <p class="card-license">License: CC0</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-blueGourami"
+              data-key="blueGourami"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/a/a6/Trichopodus_trichopterus_%283_spot_gourami%2C_Philippines%29_02.jpg"
+              onchange="updateStats()"
+            />
+            <label for="check-blueGourami">Use this image</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="peaPuffer">
+        <img
+          class="card-image"
+          src="https://upload.wikimedia.org/wikipedia/commons/c/cf/Carinotetraodon_travancoricus_Seitenansicht.jpg"
+          alt="Freshwater Pufferfish (Pea Puffer)"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h3 class="card-title">Freshwater Pufferfish (Pea Puffer)</h3>
+          <p class="card-scientific">Carinotetraodon travancoricus</p>
+          <p class="card-license">License: CC0</p>
+          <div class="card-checkbox">
+            <input
+              type="checkbox"
+              id="check-peaPuffer"
+              data-key="peaPuffer"
+              data-url="https://upload.wikimedia.org/wikipedia/commons/c/cf/Carinotetraodon_travancoricus_Seitenansicht.jpg"
+              onchange="updateStats()"
+            />
+            <label for="check-peaPuffer">Use this image</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="output-area" id="outputArea">
+      <h3>Selected Species (copy this JSON)</h3>
+      <textarea id="outputJson" readonly></textarea>
+      <p style="margin-top: 10px; font-size: 14px; color: #666">
+        Now run: <code>npm run images:upload</code> and paste this JSON when prompted.
+      </p>
+    </div>
+
+    <script>
+      function updateStats() {
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+        document.getElementById('selectedCount').textContent = checkboxes.length;
+
+        // Update card styling
+        document.querySelectorAll('.card').forEach(card => {
+          const checkbox = card.querySelector('input[type="checkbox"]');
+          if (checkbox) {
+            card.classList.toggle('selected', checkbox.checked);
+          }
+        });
+      }
+
+      function selectAll() {
+        document.querySelectorAll('input[type="checkbox"]').forEach(cb => (cb.checked = true));
+        updateStats();
+      }
+
+      function deselectAll() {
+        document.querySelectorAll('input[type="checkbox"]').forEach(cb => (cb.checked = false));
+        updateStats();
+      }
+
+      function exportSelected() {
+        const selected = [];
+        document.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
+          selected.push({
+            key: cb.dataset.key,
+            url: cb.dataset.url,
+          });
+        });
+
+        const json = JSON.stringify(selected, null, 2);
+        document.getElementById('outputJson').value = json;
+        document.getElementById('outputArea').classList.add('visible');
+
+        // Copy to clipboard
+        navigator.clipboard.writeText(json).then(() => {
+          alert(
+            'Copied ' + selected.length + ' species to clipboard!\n\nNow run: npm run images:upload'
+          );
+        });
+      }
+
+      // Initial stats
+      updateStats();
+    </script>
+  </body>
+</html>

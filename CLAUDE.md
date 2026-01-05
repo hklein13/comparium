@@ -41,6 +41,17 @@ npm run images:upload            # Batch upload from preview selection (paste JS
 # Testing
 npm test                         # Run Playwright tests
 npm run test:headed              # Run tests with visible browser
+
+# Code Quality
+npm run lint                     # Check JS files for errors
+npm run lint:fix                 # Auto-fix linting issues
+npm run format                   # Format all code with Prettier
+npm run format:check             # Check formatting without changing files
+
+# Cloud Functions
+cd functions && npm install      # Install function dependencies (first time only)
+firebase deploy --only functions # Deploy Cloud Functions to Firebase
+firebase functions:log           # View function logs
 ```
 
 ## Architecture
@@ -99,6 +110,39 @@ For glossary pages specifically:
 ### Cross-Page Communication
 - **Add to Tank flow:** species-detail.js sets `sessionStorage.addToTank`, dashboard's tankManager reads it
 
+### Cloud Functions (`functions/` folder)
+Separate Node.js project using CommonJS (not ES6 modules).
+
+```
+functions/
+├── package.json     # Dependencies: firebase-admin, firebase-functions
+├── index.js         # All function definitions
+└── .gitignore       # Ignores node_modules, secrets
+```
+
+**Current Functions:**
+- `helloComparium` - Test function to verify deployment (HTTP trigger)
+
+**Deployment:** Functions deploy to Firebase separately from hosting. Always run `firebase deploy --only functions` after changing function code.
+
+## Project Roadmap
+
+Development follows a phased approach. See `DATA-MODEL.md` for complete specifications.
+
+| Phase | Status | Description |
+|-------|--------|-------------|
+| **Phase 1** | ✅ Complete | Tank management, maintenance events, schedules |
+| **Phase 2** | 🔄 In Progress | Notifications system (Cloud Functions foundation deployed) |
+| **Phase 3** | ⏳ Planned | Expanded glossary (equipment, plants, diseases) |
+| **Phase 4** | ⏳ Planned | Social features (follows, posts, comments) |
+| **Phase 5** | ⏳ Planned | Diagnostic tool (fish health decision tree) |
+
+### Phase 2 Breakdown (Current)
+1. ✅ Cloud Functions foundation - `functions/` folder, test function deployed
+2. ⏳ Notification UI - Bell icon in dashboard, notification dropdown
+3. ⏳ `checkDueSchedules` function - Daily scheduled function to create notifications
+4. ⏳ Push notifications (FCM) - Browser push when maintenance due
+
 ## Git Workflow
 
 ### Staging Branch (IMPORTANT)
@@ -134,6 +178,47 @@ For glossary pages specifically:
 ### 4. YAGNI
 - Don't build for hypothetical future requirements
 - Build what's needed now, refactor when actually needed
+
+## Automation & Quality Tools
+
+### Current Status (January 2026)
+- ✅ ESLint configured and passing (0 errors)
+- ✅ Prettier configured and all files formatted
+- ✅ Claude Code hooks set up in `.claude/settings.json`
+- ✅ All code committed to staging branch `claude/fix-species-links-Hv5Zn`
+
+**Note:** The `.claude/` folder is gitignored (contains local settings and hooks). Hooks are already configured and working.
+
+### Context7 Integration (MANDATORY)
+**ALWAYS use Context7 to fetch current documentation before writing code that uses external libraries.**
+
+This is NOT optional. Before writing or modifying code that uses:
+- Firebase SDK (Auth, Firestore, Storage, Functions)
+- Playwright testing APIs
+- Any npm package or external library
+
+You MUST call the Context7 MCP tools to fetch current documentation:
+1. Use `resolve-library-id` to find the library
+2. Use `get-library-docs` to fetch current docs
+3. Then write the code using the fetched documentation
+
+This prevents outdated API usage and ensures correct, working code on the first attempt.
+
+### Automated Quality Hooks
+The following run automatically (configured in `.claude/settings.json`):
+
+| Hook | When | What It Does |
+|------|------|--------------|
+| `lint-on-edit.sh` | After each JS file edit | Runs ESLint to catch errors immediately |
+| `final-checks.sh` | When Claude finishes | Full lint + format check on project |
+
+These hooks never block work - they report issues but always continue.
+
+### Pre-Deployment Checklist
+Before merging to main:
+1. Run `npm test` - Playwright tests must pass
+2. Run `npm run lint` - No ESLint errors
+3. Run `npm run format:check` - Code is formatted
 
 ## Firebase Setup
 
@@ -213,5 +298,6 @@ fishKey: {
 
 ## Related Documentation
 
+- `DATA-MODEL.md` - **Firestore structure and Phase 2-5 roadmap** (comprehensive)
 - `TESTING.md` - Comprehensive local testing guide with checklists
 - `README.md` - User-facing documentation, hosting guide, customization

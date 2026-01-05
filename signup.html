@@ -1,225 +1,226 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sign Up - Comparium</title>
-    <meta name="description" content="Create an Comparium account to save fish comparisons and build tank plans.">
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/dark-mode.css">
-    <link rel="stylesheet" href="css/enhanced-ui.css">
-    <link rel="stylesheet" href="css/ocean-theme.css">
+    <meta
+      name="description"
+      content="Create an Comparium account to save fish comparisons and build tank plans."
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/dark-mode.css" />
+    <link rel="stylesheet" href="css/enhanced-ui.css" />
+    <link rel="stylesheet" href="css/ocean-theme.css" />
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VNY458QF3"></script>
     <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-8VNY458QF3');
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', 'G-8VNY458QF3');
     </script>
-</head>
-<body>
+  </head>
+  <body>
     <div class="header">
-        <div class="header-content">
-            <div class="header-left">
-                <a href="index.html" class="home-link">
-                    <h1><span class="logo-wave">Comparium</span></h1>
-                    <p>The place for all things aquarium</p>
-                </a>
-            </div>
-            <div class="header-nav">
-                <a href="index.html">Home</a>
-                <a href="compare.html">Compare Fish</a>
-                <a href="dashboard.html">Dashboard</a>
-                <a href="glossary.html">Glossary</a>
-                <a href="faq.html">FAQ</a>
-                <div id="auth-links">
-                    <a href="login.html">Login</a>
-                    <a href="signup.html">Sign Up</a>
-                </div>
-            </div>
+      <div class="header-content">
+        <div class="header-left">
+          <a href="index.html" class="home-link">
+            <h1><span class="logo-wave">Comparium</span></h1>
+            <p>The place for all things aquarium</p>
+          </a>
         </div>
+        <div class="header-nav">
+          <a href="index.html">Home</a>
+          <a href="compare.html">Compare Fish</a>
+          <a href="dashboard.html">Dashboard</a>
+          <a href="glossary.html">Glossary</a>
+          <a href="faq.html">FAQ</a>
+          <div id="auth-links">
+            <a href="login.html">Login</a>
+            <a href="signup.html">Sign Up</a>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="auth-container">
-        <div class="auth-box">
-            <h2>Create Account</h2>
-            
-            <div id="message-display"></div>
+      <div class="auth-box">
+        <h2>Create Account</h2>
 
-            <form id="signup-form" onsubmit="handleSignup(event)">
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input 
-                        type="text" 
-                        id="username" 
-                        name="username" 
-                        required 
-                        minlength="3"
-                        autocomplete="username"
-                        placeholder="Choose a username (min 3 characters)"
-                    >
-                </div>
+        <div id="message-display"></div>
 
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input 
-                        type="email" 
-                        id="email" 
-                        name="email" 
-                        required 
-                        autocomplete="email"
-                        placeholder="your.email@example.com"
-                    >
-                </div>
+        <form id="signup-form" onsubmit="handleSignup(event)">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              required
+              minlength="3"
+              autocomplete="username"
+              placeholder="Choose a username (min 3 characters)"
+            />
+          </div>
 
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input 
-                        type="password" 
-                        id="password" 
-                        name="password" 
-                        required 
-                        minlength="6"
-                        autocomplete="new-password"
-                        placeholder="Choose a password (min 6 characters)"
-                    >
-                </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              required
+              autocomplete="email"
+              placeholder="your.email@example.com"
+            />
+          </div>
 
-                <div class="form-group">
-                    <label for="confirm-password">Confirm Password</label>
-                    <input 
-                        type="password" 
-                        id="confirm-password" 
-                        name="confirm-password" 
-                        required 
-                        minlength="6"
-                        autocomplete="new-password"
-                        placeholder="Re-enter your password"
-                    >
-                </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              required
+              minlength="6"
+              autocomplete="new-password"
+              placeholder="Choose a password (min 6 characters)"
+            />
+          </div>
 
-                <button type="submit" class="auth-button">Create Account</button>
-            </form>
+          <div class="form-group">
+            <label for="confirm-password">Confirm Password</label>
+            <input
+              type="password"
+              id="confirm-password"
+              name="confirm-password"
+              required
+              minlength="6"
+              autocomplete="new-password"
+              placeholder="Re-enter your password"
+            />
+          </div>
 
-            <div class="auth-links">
-                <p>Already have an account? <a href="login.html">Login here</a></p>
-                <p><a href="index.html">Continue without signing up</a></p>
-            </div>
+          <button type="submit" class="auth-button">Create Account</button>
+        </form>
+
+        <div class="auth-links">
+          <p>Already have an account? <a href="login.html">Login here</a></p>
+          <p><a href="index.html">Continue without signing up</a></p>
         </div>
+      </div>
     </div>
 
-   <div class="footer">
-    <p>&copy; <span id="copyright-year"></span> Comparium. </p>
-    <p><a href="about.html">About</a> | <a href="mailto:contact@comparium.net">Contact</a></p>
+    <div class="footer">
+      <p>&copy; <span id="copyright-year"></span> Comparium.</p>
+      <p><a href="about.html">About</a> | <a href="mailto:contact@comparium.net">Contact</a></p>
     </div>
 
     <script type="module" src="js/firebase-init.js"></script>
     <script src="js/storage-service.js"></script>
     <script src="js/auth-manager.js"></script>
     <script>
-        // Check if already logged in (wait for Firebase to initialize)
-        (async () => {
-            try {
-                // Wait for Firebase to initialize with timeout (5 seconds)
-                const firebaseTimeout = new Promise((_, reject) =>
-                    setTimeout(() => reject(new Error('Firebase initialization timeout')), 5000)
-                );
+      // Check if already logged in (wait for Firebase to initialize)
+      (async () => {
+        try {
+          // Wait for Firebase to initialize with timeout (5 seconds)
+          const firebaseTimeout = new Promise((_, reject) =>
+            setTimeout(() => reject(new Error('Firebase initialization timeout')), 5000)
+          );
 
-                // Wait for firebaseAuthReady to be defined
-                let attempts = 0;
-                while (!window.firebaseAuthReady && attempts < 100) {
-                    await new Promise(resolve => setTimeout(resolve, 50));
-                    attempts++;
-                }
+          // Wait for firebaseAuthReady to be defined
+          let attempts = 0;
+          while (!window.firebaseAuthReady && attempts < 100) {
+            await new Promise(resolve => setTimeout(resolve, 50));
+            attempts++;
+          }
 
-                if (!window.firebaseAuthReady) {
-                    console.warn('Firebase did not initialize - signup form will still work');
-                    return;
-                }
+          if (!window.firebaseAuthReady) {
+            console.warn('Firebase did not initialize - signup form will still work');
+            return;
+          }
 
-                // Wait for Firebase to complete initialization or timeout
-                const user = await Promise.race([
-                    window.firebaseAuthReady,
-                    firebaseTimeout
-                ]);
+          // Wait for Firebase to complete initialization or timeout
+          const user = await Promise.race([window.firebaseAuthReady, firebaseTimeout]);
 
-                if (user) {
-                    // Already logged in - redirect to dashboard
-                    window.location.href = 'dashboard.html';
-                }
-            } catch (error) {
-                console.error('Firebase initialization error:', error);
-                // Allow user to proceed with signup form even if Firebase fails to initialize
-                // The form will show appropriate errors when they try to sign up
-            }
-        })();
+          if (user) {
+            // Already logged in - redirect to dashboard
+            window.location.href = 'dashboard.html';
+          }
+        } catch (error) {
+          console.error('Firebase initialization error:', error);
+          // Allow user to proceed with signup form even if Firebase fails to initialize
+          // The form will show appropriate errors when they try to sign up
+        }
+      })();
 
-        async function handleSignup(e) {
-            e.preventDefault();
+      async function handleSignup(e) {
+        e.preventDefault();
 
-            const messageDisplay = document.getElementById('message-display');
-            const submitButton = e.target.querySelector('button[type="submit"]');
-            const username = document.getElementById('username').value;
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirm-password').value;
+        const messageDisplay = document.getElementById('message-display');
+        const submitButton = e.target.querySelector('button[type="submit"]');
+        const username = document.getElementById('username').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirm-password').value;
 
-            // Clear previous messages
-            messageDisplay.innerHTML = '';
+        // Clear previous messages
+        messageDisplay.innerHTML = '';
 
-            // Validate passwords match
-            if (password !== confirmPassword) {
-                messageDisplay.innerHTML = `<div class="error-message">Passwords do not match</div>`;
-                return;
-            }
-
-            // Disable button during signup
-            submitButton.disabled = true;
-            submitButton.textContent = 'Creating account...';
-
-            try {
-                const result = await authManager.register(username, password, email);
-
-                if (result.success) {
-                    messageDisplay.innerHTML = `<div class="success-message">${result.message} Redirecting...</div>`;
-
-                    // Redirect after short delay
-                    setTimeout(() => {
-                        window.location.href = 'dashboard.html';
-                    }, 1000);
-                } else {
-                    messageDisplay.innerHTML = `<div class="error-message">${result.message}</div>`;
-                    submitButton.disabled = false;
-                    submitButton.textContent = 'Create Account';
-                }
-            } catch (error) {
-                console.error('Signup error:', error);
-                messageDisplay.innerHTML = `<div class="error-message">Signup failed. Please try again.</div>`;
-                submitButton.disabled = false;
-                submitButton.textContent = 'Create Account';
-            }
+        // Validate passwords match
+        if (password !== confirmPassword) {
+          messageDisplay.innerHTML = `<div class="error-message">Passwords do not match</div>`;
+          return;
         }
 
-        // Real-time password match validation
-        document.getElementById('confirm-password').addEventListener('input', function() {
-            const password = document.getElementById('password').value;
-            const confirmPassword = this.value;
+        // Disable button during signup
+        submitButton.disabled = true;
+        submitButton.textContent = 'Creating account...';
 
-            if (confirmPassword && password !== confirmPassword) {
-                this.setCustomValidity('Passwords must match');
-            } else {
-                this.setCustomValidity('');
-            }
-        });
+        try {
+          const result = await authManager.register(username, password, email);
+
+          if (result.success) {
+            messageDisplay.innerHTML = `<div class="success-message">${result.message} Redirecting...</div>`;
+
+            // Redirect after short delay
+            setTimeout(() => {
+              window.location.href = 'dashboard.html';
+            }, 1000);
+          } else {
+            messageDisplay.innerHTML = `<div class="error-message">${result.message}</div>`;
+            submitButton.disabled = false;
+            submitButton.textContent = 'Create Account';
+          }
+        } catch (error) {
+          console.error('Signup error:', error);
+          messageDisplay.innerHTML = `<div class="error-message">Signup failed. Please try again.</div>`;
+          submitButton.disabled = false;
+          submitButton.textContent = 'Create Account';
+        }
+      }
+
+      // Real-time password match validation
+      document.getElementById('confirm-password').addEventListener('input', function () {
+        const password = document.getElementById('password').value;
+        const confirmPassword = this.value;
+
+        if (confirmPassword && password !== confirmPassword) {
+          this.setCustomValidity('Passwords must match');
+        } else {
+          this.setCustomValidity('');
+        }
+      });
     </script>
 
     <!-- Auto-update copyright year -->
     <script>
-        document.getElementById('copyright-year').textContent = new Date().getFullYear();
+      document.getElementById('copyright-year').textContent = new Date().getFullYear();
     </script>
 
     <script src="js/theme-manager.js"></script>
-</body>
+  </body>
 </html>
-

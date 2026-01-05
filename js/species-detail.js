@@ -7,15 +7,15 @@
  * Call this when user clicks on a fish species
  */
 function showSpeciesDetail(speciesKey) {
-    const fish = fishDatabase[speciesKey];
-    
-    if (!fish) {
-        console.error('Fish not found:', speciesKey);
-        return;
-    }
+  const fish = fishDatabase[speciesKey];
 
-    // Create or navigate to species page
-    window.location.href = `species.html?fish=${speciesKey}`;
+  if (!fish) {
+    console.error('Fish not found:', speciesKey);
+    return;
+  }
+
+  // Create or navigate to species page
+  window.location.href = `species.html?fish=${speciesKey}`;
 }
 
 /**
@@ -23,37 +23,37 @@ function showSpeciesDetail(speciesKey) {
  * This runs when species.html loads
  */
 function loadSpeciesDetail() {
-    // Get fish key from URL parameter
-    const urlParams = new URLSearchParams(window.location.search);
-    const fishKey = urlParams.get('fish');
-    
-    if (!fishKey) {
-        document.getElementById('species-content').innerHTML = `
+  // Get fish key from URL parameter
+  const urlParams = new URLSearchParams(window.location.search);
+  const fishKey = urlParams.get('fish');
+
+  if (!fishKey) {
+    document.getElementById('species-content').innerHTML = `
             <div class="empty-state">
                 <h2>No fish selected</h2>
                 <p><a href="index.html">Return to comparison tool</a></p>
             </div>
         `;
-        return;
-    }
+    return;
+  }
 
-    const fish = fishDatabase[fishKey];
-    
-    if (!fish) {
-        document.getElementById('species-content').innerHTML = `
+  const fish = fishDatabase[fishKey];
+
+  if (!fish) {
+    document.getElementById('species-content').innerHTML = `
             <div class="empty-state">
                 <h2>Fish not found</h2>
                 <p><a href="index.html">Return to comparison tool</a></p>
             </div>
         `;
-        return;
-    }
+    return;
+  }
 
-    // Update page title
-    document.title = `${fish.commonName} - Comparium`;
+  // Update page title
+  document.title = `${fish.commonName} - Comparium`;
 
-    // Generate content
-    const content = `
+  // Generate content
+  const content = `
         <div class="species-detail">
             <div class="species-header">
                 <div class="species-title">
@@ -62,7 +62,8 @@ function loadSpeciesDetail() {
                     ${generateFavoriteStar(fishKey)}
                 </div>
                 <div class="species-image-container">
-                    ${fish.imageUrl
+                    ${
+                      fish.imageUrl
                         ? `<img src="${fish.imageUrl}" alt="${fish.commonName}" class="species-image" loading="lazy">`
                         : `<div class="image-placeholder">🐠<p>Photo coming soon!</p></div>`
                     }
@@ -128,30 +129,42 @@ function loadSpeciesDetail() {
                     </table>
                 </div>
 
-                ${fish.specialCare ? `
+                ${
+                  fish.specialCare
+                    ? `
                 <div class="info-card warning-card">
                     <h3>⚠️ Special Care Notes</h3>
                     <p>${fish.specialCare}</p>
                 </div>
-                ` : ''}
+                `
+                    : ''
+                }
 
-                ${fish.notes ? `
+                ${
+                  fish.notes
+                    ? `
                 <div class="info-card">
                     <h3>📝 Additional Notes</h3>
                     <p>${fish.notes}</p>
                 </div>
-                ` : ''}
+                `
+                    : ''
+                }
             </div>
 
             <div class="species-actions">
                 <button onclick="window.location.href='index.html'" class="btn-small">
                     Compare with Other Fish
                 </button>
-                ${authManager && authManager.isLoggedIn() ? `
+                ${
+                  authManager && authManager.isLoggedIn()
+                    ? `
                     <button onclick="addToTankPlan('${fishKey}')" class="btn-small">
                         Add to Tank Plan
                     </button>
-                ` : ''}
+                `
+                    : ''
+                }
             </div>
 
             <div class="species-footer">
@@ -160,71 +173,71 @@ function loadSpeciesDetail() {
         </div>
     `;
 
-    document.getElementById('species-content').innerHTML = content;
+  document.getElementById('species-content').innerHTML = content;
 
-    // Load favorite state if logged in
-    if (authManager && authManager.isLoggedIn()) {
-        loadFavoriteStateForSpecies(fishKey);
-    }
+  // Load favorite state if logged in
+  if (authManager && authManager.isLoggedIn()) {
+    loadFavoriteStateForSpecies(fishKey);
+  }
 }
 
 /**
  * Generate favorite star for species detail page
  */
 function generateFavoriteStar(speciesKey) {
-    if (!authManager || !authManager.isLoggedIn()) {
-        return '';
-    }
-    
-    return `<span class="favorite-star" data-species="${speciesKey}" onclick="toggleFavorite('${speciesKey}', this)">★</span>`;
+  if (!authManager || !authManager.isLoggedIn()) {
+    return '';
+  }
+
+  return `<span class="favorite-star" data-species="${speciesKey}" onclick="toggleFavorite('${speciesKey}', this)">★</span>`;
 }
 
 /**
  * Load favorite state for species on detail page
  */
 async function loadFavoriteStateForSpecies(speciesKey) {
-    if (!authManager || !authManager.isLoggedIn()) return;
+  if (!authManager || !authManager.isLoggedIn()) return;
 
-    const uid = authManager.getCurrentUid();
-    const isFav = await storageService.isFavorite(uid, speciesKey);
-    
-    const star = document.querySelector(`.favorite-star[data-species="${speciesKey}"]`);
-    if (star && isFav) {
-        star.classList.add('active');
-    }
+  const uid = authManager.getCurrentUid();
+  const isFav = await storageService.isFavorite(uid, speciesKey);
+
+  const star = document.querySelector(`.favorite-star[data-species="${speciesKey}"]`);
+  if (star && isFav) {
+    star.classList.add('active');
+  }
 }
 
 /**
  * Get aggression badge HTML
  */
 function getAggressionBadge(level) {
-    const badges = {
-        'Peaceful': '<span class="badge badge-success">Peaceful</span>',
-        'Semi-Aggressive': '<span class="badge badge-warning">Semi-Aggressive</span>',
-        'Aggressive': '<span class="badge badge-danger">Aggressive</span>'
-    };
-    return badges[level] || level;
+  const badges = {
+    Peaceful: '<span class="badge badge-success">Peaceful</span>',
+    'Semi-Aggressive': '<span class="badge badge-warning">Semi-Aggressive</span>',
+    Aggressive: '<span class="badge badge-danger">Aggressive</span>',
+  };
+  return badges[level] || level;
 }
 
 /**
  * Add fish to tank plan (if logged in)
  */
 function addToTankPlan(speciesKey) {
-    if (!authManager || !authManager.isLoggedIn()) {
-        authManager.showMessage('Please login to add fish to tank plans', 'info');
-        return;
-    }
+  if (!authManager || !authManager.isLoggedIn()) {
+    authManager.showMessage('Please login to add fish to tank plans', 'info');
+    return;
+  }
 
-    // Store in session for tank builder (read by tankManager on dashboard)
-    sessionStorage.setItem('addToTank', speciesKey);
-    window.location.href = 'dashboard.html#my-tanks-section';
+  // Store in session for tank builder (read by tankManager on dashboard)
+  sessionStorage.setItem('addToTank', speciesKey);
+  window.location.href = 'dashboard.html#my-tanks-section';
 }
 
 // Initialize species detail page if we're on species.html
 if (window.location.pathname.includes('species.html')) {
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', loadSpeciesDetail);
-    } else {
-        loadSpeciesDetail();
-    }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadSpeciesDetail);
+  } else {
+    loadSpeciesDetail();
+  }
 }

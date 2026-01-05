@@ -1,201 +1,243 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Font Preview - Comparium</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@300;400;600&family=Playfair+Display:wght@400;600;700&family=Source+Sans+Pro:wght@300;400;600&family=Raleway:wght@400;600;700&family=Lato:wght@300;400;700&family=Merriweather:wght@400;700;900&family=Roboto:wght@300;400;500&family=Nunito:wght@400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@300;400;600&family=Playfair+Display:wght@400;600;700&family=Source+Sans+Pro:wght@300;400;600&family=Raleway:wght@400;600;700&family=Lato:wght@300;400;700&family=Merriweather:wght@400;700;900&family=Roboto:wght@300;400;500&family=Nunito:wght@400;600;700&family=Poppins:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-        body {
-            background: #f5f5f5;
-            padding: 20px;
-        }
+      body {
+        background: #f5f5f5;
+        padding: 20px;
+      }
 
-        .intro {
-            background: white;
-            padding: 30px;
-            margin-bottom: 30px;
-            border-radius: 8px;
-            text-align: center;
-        }
+      .intro {
+        background: white;
+        padding: 30px;
+        margin-bottom: 30px;
+        border-radius: 8px;
+        text-align: center;
+      }
 
-        .intro h1 {
-            font-family: system-ui;
-            margin-bottom: 10px;
-        }
+      .intro h1 {
+        font-family: system-ui;
+        margin-bottom: 10px;
+      }
 
-        .intro p {
-            font-family: system-ui;
-            color: #666;
-        }
+      .intro p {
+        font-family: system-ui;
+        color: #666;
+      }
 
-        .font-option {
-            background: white;
-            padding: 40px;
-            margin-bottom: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
+      .font-option {
+        background: white;
+        padding: 40px;
+        margin-bottom: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
 
-        .font-label {
-            font-family: system-ui;
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 20px;
-            padding: 10px;
-            background: #f0f0f0;
-            border-radius: 4px;
-            text-align: center;
-        }
+      .font-label {
+        font-family: system-ui;
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 20px;
+        padding: 10px;
+        background: #f0f0f0;
+        border-radius: 4px;
+        text-align: center;
+      }
 
-        .sample-content h1 {
-            font-size: 48px;
-            margin-bottom: 15px;
-            color: #1a1a1a;
-        }
+      .sample-content h1 {
+        font-size: 48px;
+        margin-bottom: 15px;
+        color: #1a1a1a;
+      }
 
-        .sample-content h2 {
-            font-size: 32px;
-            margin-bottom: 20px;
-            color: #2c3e50;
-        }
+      .sample-content h2 {
+        font-size: 32px;
+        margin-bottom: 20px;
+        color: #2c3e50;
+      }
 
-        .sample-content .tagline {
-            font-size: 18px;
-            margin-bottom: 20px;
-            color: #555;
-        }
+      .sample-content .tagline {
+        font-size: 18px;
+        margin-bottom: 20px;
+        color: #555;
+      }
 
-        .sample-content .body-text {
-            font-size: 16px;
-            line-height: 1.6;
-            color: #333;
-            margin-bottom: 15px;
-        }
+      .sample-content .body-text {
+        font-size: 16px;
+        line-height: 1.6;
+        color: #333;
+        margin-bottom: 15px;
+      }
 
-        .sample-content .nav-sample {
-            font-size: 16px;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
-        }
+      .sample-content .nav-sample {
+        font-size: 16px;
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+      }
 
-        /* Option 1: Montserrat + Open Sans */
-        .option-1 h1, .option-1 h2, .option-1 .nav-sample {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 600;
-        }
-        .option-1 .tagline, .option-1 .body-text {
-            font-family: 'Open Sans', sans-serif;
-        }
+      /* Option 1: Montserrat + Open Sans */
+      .option-1 h1,
+      .option-1 h2,
+      .option-1 .nav-sample {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 600;
+      }
+      .option-1 .tagline,
+      .option-1 .body-text {
+        font-family: 'Open Sans', sans-serif;
+      }
 
-        /* Option 2: Playfair Display + Source Sans Pro */
-        .option-2 h1, .option-2 h2, .option-2 .nav-sample {
-            font-family: 'Playfair Display', serif;
-            font-weight: 600;
-        }
-        .option-2 .tagline, .option-2 .body-text {
-            font-family: 'Source Sans Pro', sans-serif;
-        }
+      /* Option 2: Playfair Display + Source Sans Pro */
+      .option-2 h1,
+      .option-2 h2,
+      .option-2 .nav-sample {
+        font-family: 'Playfair Display', serif;
+        font-weight: 600;
+      }
+      .option-2 .tagline,
+      .option-2 .body-text {
+        font-family: 'Source Sans Pro', sans-serif;
+      }
 
-        /* Option 3: Raleway + Lato */
-        .option-3 h1, .option-3 h2, .option-3 .nav-sample {
-            font-family: 'Raleway', sans-serif;
-            font-weight: 600;
-        }
-        .option-3 .tagline, .option-3 .body-text {
-            font-family: 'Lato', sans-serif;
-        }
+      /* Option 3: Raleway + Lato */
+      .option-3 h1,
+      .option-3 h2,
+      .option-3 .nav-sample {
+        font-family: 'Raleway', sans-serif;
+        font-weight: 600;
+      }
+      .option-3 .tagline,
+      .option-3 .body-text {
+        font-family: 'Lato', sans-serif;
+      }
 
-        /* Option 4: Poppins (both) */
-        .option-4 h1, .option-4 h2, .option-4 .nav-sample {
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-        }
-        .option-4 .tagline, .option-4 .body-text {
-            font-family: 'Poppins', sans-serif;
-            font-weight: 400;
-        }
+      /* Option 4: Poppins (both) */
+      .option-4 h1,
+      .option-4 h2,
+      .option-4 .nav-sample {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+      }
+      .option-4 .tagline,
+      .option-4 .body-text {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 400;
+      }
 
-        /* Option 5: Nunito (both) */
-        .option-5 h1, .option-5 h2, .option-5 .nav-sample {
-            font-family: 'Nunito', sans-serif;
-            font-weight: 700;
-        }
-        .option-5 .tagline, .option-5 .body-text {
-            font-family: 'Nunito', sans-serif;
-            font-weight: 400;
-        }
+      /* Option 5: Nunito (both) */
+      .option-5 h1,
+      .option-5 h2,
+      .option-5 .nav-sample {
+        font-family: 'Nunito', sans-serif;
+        font-weight: 700;
+      }
+      .option-5 .tagline,
+      .option-5 .body-text {
+        font-family: 'Nunito', sans-serif;
+        font-weight: 400;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="intro">
-        <h1>Font Preview for Comparium</h1>
-        <p>Scroll through each option to see how different fonts look with your actual content</p>
+      <h1>Font Preview for Comparium</h1>
+      <p>Scroll through each option to see how different fonts look with your actual content</p>
     </div>
 
     <div class="font-option option-1">
-        <div class="font-label">OPTION 1: Montserrat (Headers) + Open Sans (Body) — Modern & Professional</div>
-        <div class="sample-content">
-            <h1>Comparium</h1>
-            <h2>The place for all things aquarium</h2>
-            <p class="tagline">The place for all things aquarium</p>
-            <p class="body-text">Browse our extensive database of freshwater and saltwater fish species. Compare compatibility, water parameters, tank requirements, and behavior patterns to create the perfect aquarium environment.</p>
-            <div class="nav-sample">Species Database • My Tanks • Glossary • About</div>
-        </div>
+      <div class="font-label">
+        OPTION 1: Montserrat (Headers) + Open Sans (Body) — Modern & Professional
+      </div>
+      <div class="sample-content">
+        <h1>Comparium</h1>
+        <h2>The place for all things aquarium</h2>
+        <p class="tagline">The place for all things aquarium</p>
+        <p class="body-text">
+          Browse our extensive database of freshwater and saltwater fish species. Compare
+          compatibility, water parameters, tank requirements, and behavior patterns to create the
+          perfect aquarium environment.
+        </p>
+        <div class="nav-sample">Species Database • My Tanks • Glossary • About</div>
+      </div>
     </div>
 
     <div class="font-option option-2">
-        <div class="font-label">OPTION 2: Playfair Display (Headers) + Source Sans Pro (Body) — Elegant & Classic</div>
-        <div class="sample-content">
-            <h1>Comparium</h1>
-            <h2>The place for all things aquarium</h2>
-            <p class="tagline">The place for all things aquarium</p>
-            <p class="body-text">Browse our extensive database of freshwater and saltwater fish species. Compare compatibility, water parameters, tank requirements, and behavior patterns to create the perfect aquarium environment.</p>
-            <div class="nav-sample">Species Database • My Tanks • Glossary • About</div>
-        </div>
+      <div class="font-label">
+        OPTION 2: Playfair Display (Headers) + Source Sans Pro (Body) — Elegant & Classic
+      </div>
+      <div class="sample-content">
+        <h1>Comparium</h1>
+        <h2>The place for all things aquarium</h2>
+        <p class="tagline">The place for all things aquarium</p>
+        <p class="body-text">
+          Browse our extensive database of freshwater and saltwater fish species. Compare
+          compatibility, water parameters, tank requirements, and behavior patterns to create the
+          perfect aquarium environment.
+        </p>
+        <div class="nav-sample">Species Database • My Tanks • Glossary • About</div>
+      </div>
     </div>
 
     <div class="font-option option-3">
-        <div class="font-label">OPTION 3: Raleway (Headers) + Lato (Body) — Geometric & Clean</div>
-        <div class="sample-content">
-            <h1>Comparium</h1>
-            <h2>The place for all things aquarium</h2>
-            <p class="tagline">The place for all things aquarium</p>
-            <p class="body-text">Browse our extensive database of freshwater and saltwater fish species. Compare compatibility, water parameters, tank requirements, and behavior patterns to create the perfect aquarium environment.</p>
-            <div class="nav-sample">Species Database • My Tanks • Glossary • About</div>
-        </div>
+      <div class="font-label">OPTION 3: Raleway (Headers) + Lato (Body) — Geometric & Clean</div>
+      <div class="sample-content">
+        <h1>Comparium</h1>
+        <h2>The place for all things aquarium</h2>
+        <p class="tagline">The place for all things aquarium</p>
+        <p class="body-text">
+          Browse our extensive database of freshwater and saltwater fish species. Compare
+          compatibility, water parameters, tank requirements, and behavior patterns to create the
+          perfect aquarium environment.
+        </p>
+        <div class="nav-sample">Species Database • My Tanks • Glossary • About</div>
+      </div>
     </div>
 
     <div class="font-option option-4">
-        <div class="font-label">OPTION 4: Poppins (Everything) — Friendly & Rounded</div>
-        <div class="sample-content">
-            <h1>Comparium</h1>
-            <h2>The place for all things aquarium</h2>
-            <p class="tagline">The place for all things aquarium</p>
-            <p class="body-text">Browse our extensive database of freshwater and saltwater fish species. Compare compatibility, water parameters, tank requirements, and behavior patterns to create the perfect aquarium environment.</p>
-            <div class="nav-sample">Species Database • My Tanks • Glossary • About</div>
-        </div>
+      <div class="font-label">OPTION 4: Poppins (Everything) — Friendly & Rounded</div>
+      <div class="sample-content">
+        <h1>Comparium</h1>
+        <h2>The place for all things aquarium</h2>
+        <p class="tagline">The place for all things aquarium</p>
+        <p class="body-text">
+          Browse our extensive database of freshwater and saltwater fish species. Compare
+          compatibility, water parameters, tank requirements, and behavior patterns to create the
+          perfect aquarium environment.
+        </p>
+        <div class="nav-sample">Species Database • My Tanks • Glossary • About</div>
+      </div>
     </div>
 
     <div class="font-option option-5">
-        <div class="font-label">OPTION 5: Nunito (Everything) — Soft & Welcoming</div>
-        <div class="sample-content">
-            <h1>Comparium</h1>
-            <h2>The place for all things aquarium</h2>
-            <p class="tagline">The place for all things aquarium</p>
-            <p class="body-text">Browse our extensive database of freshwater and saltwater fish species. Compare compatibility, water parameters, tank requirements, and behavior patterns to create the perfect aquarium environment.</p>
-            <div class="nav-sample">Species Database • My Tanks • Glossary • About</div>
-        </div>
+      <div class="font-label">OPTION 5: Nunito (Everything) — Soft & Welcoming</div>
+      <div class="sample-content">
+        <h1>Comparium</h1>
+        <h2>The place for all things aquarium</h2>
+        <p class="tagline">The place for all things aquarium</p>
+        <p class="body-text">
+          Browse our extensive database of freshwater and saltwater fish species. Compare
+          compatibility, water parameters, tank requirements, and behavior patterns to create the
+          perfect aquarium environment.
+        </p>
+        <div class="nav-sample">Species Database • My Tanks • Glossary • About</div>
+      </div>
     </div>
-</body>
+  </body>
 </html>
