@@ -30,7 +30,7 @@ class GlossaryManager {
       {
         id: 'species',
         title: 'Species',
-        icon: '🐟',
+        icon: '',
         description: 'Fish species information and care guides',
         imageUrl: null,
         firestoreSubcollection: 'species_entries', // For future Firestore migration
@@ -38,7 +38,7 @@ class GlossaryManager {
       {
         id: 'diseases',
         title: 'Diseases',
-        icon: '🏥',
+        icon: '',
         description: 'Common fish diseases and treatments',
         imageUrl: null,
         firestoreSubcollection: 'disease_entries',
@@ -46,7 +46,7 @@ class GlossaryManager {
       {
         id: 'equipment',
         title: 'Equipment',
-        icon: '🔧',
+        icon: '',
         description: 'Aquarium equipment and supplies',
         imageUrl: null,
         firestoreSubcollection: 'equipment_entries',
@@ -54,7 +54,7 @@ class GlossaryManager {
       {
         id: 'terminology',
         title: 'Terminology',
-        icon: '📖',
+        icon: '',
         description: 'Aquarium terms and definitions',
         imageUrl: null,
         firestoreSubcollection: 'terminology_entries',
@@ -914,7 +914,7 @@ class GlossaryManager {
         ...doc.data(),
       }));
 
-      console.log(`✅ Loaded ${entries.length} ${category} entries from Firestore`);
+      console.log(`Loaded ${entries.length} ${category} entries from Firestore`);
       return entries;
     } catch (error) {
       console.error(`Error loading ${category} from Firestore:`, error);
@@ -965,7 +965,7 @@ class GlossaryManager {
     if (contentContainer) {
       contentContainer.innerHTML = `
                 <div class="empty-state">
-                    <div class="empty-state-icon">⚠️</div>
+                    <div class="empty-state-icon"></div>
                     <h3>Error Loading Glossary</h3>
                     <p style="margin-top: 1rem;">${message}</p>
                 </div>
@@ -1036,7 +1036,7 @@ class GlossaryManager {
       // Show empty state
       container.innerHTML = `
                 <div class="empty-state">
-                    <div class="empty-state-icon">📖</div>
+                    <div class="empty-state-icon"></div>
                     <h3>Select a category above to browse</h3>
                     <p>Or use the search bar to find specific terms</p>
                 </div>
@@ -1048,7 +1048,7 @@ class GlossaryManager {
       // Show no results
       container.innerHTML = `
                 <div class="empty-state">
-                    <div class="empty-state-icon">🔍</div>
+                    <div class="empty-state-icon"></div>
                     <h3>No results found</h3>
                     <p>Try a different search term or browse by category</p>
                 </div>
@@ -1189,7 +1189,7 @@ class GlossaryManager {
       ? `<div class="glossary-item-meta">${entry.scientificName}</div>`
       : '';
 
-    const verifiedBadge = entry.verified ? '<span title="Verified by Comparium team">✓</span>' : '';
+    const verifiedBadge = entry.verified ? '<span class="verified-badge" title="Verified by Comparium team">Verified</span>' : '';
 
     const tags =
       entry.tags && entry.tags.length > 0
@@ -1277,7 +1277,7 @@ class GlossaryManager {
     if (allMatches.length === 0) {
       container.innerHTML = `
                 <div class="empty-state">
-                    <div class="empty-state-icon">🔍</div>
+                    <div class="empty-state-icon"></div>
                     <h3>No results found for "${this.searchTerm}"</h3>
                     <p>Try a different search term or browse by category</p>
                 </div>

@@ -65,14 +65,14 @@ function loadSpeciesDetail() {
                     ${
                       fish.imageUrl
                         ? `<img src="${fish.imageUrl}" alt="${fish.commonName}" class="species-image" loading="lazy">`
-                        : `<div class="image-placeholder">🐠<p>Photo coming soon!</p></div>`
+                        : `<div class="image-placeholder"><p>Photo coming soon</p></div>`
                     }
                 </div>
             </div>
 
             <div class="species-info-grid">
                 <div class="info-card">
-                    <h3>📏 Size & Tank Requirements</h3>
+                    <h3>Size & Tank Requirements</h3>
                     <table class="info-table">
                         <tr>
                             <td><strong>Maximum Size:</strong></td>
@@ -90,7 +90,7 @@ function loadSpeciesDetail() {
                 </div>
 
                 <div class="info-card">
-                    <h3>🌡️ Water Parameters</h3>
+                    <h3>Water Parameters</h3>
                     <table class="info-table">
                         <tr>
                             <td><strong>Temperature:</strong></td>
@@ -108,7 +108,7 @@ function loadSpeciesDetail() {
                 </div>
 
                 <div class="info-card">
-                    <h3>🐟 Behavior & Care</h3>
+                    <h3>Behavior & Care</h3>
                     <table class="info-table">
                         <tr>
                             <td><strong>Aggression Level:</strong></td>
@@ -133,7 +133,7 @@ function loadSpeciesDetail() {
                   fish.specialCare
                     ? `
                 <div class="info-card warning-card">
-                    <h3>⚠️ Special Care Notes</h3>
+                    <h3>Special Care Notes</h3>
                     <p>${fish.specialCare}</p>
                 </div>
                 `
@@ -144,7 +144,7 @@ function loadSpeciesDetail() {
                   fish.notes
                     ? `
                 <div class="info-card">
-                    <h3>📝 Additional Notes</h3>
+                    <h3>Additional Notes</h3>
                     <p>${fish.notes}</p>
                 </div>
                 `

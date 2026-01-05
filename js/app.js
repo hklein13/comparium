@@ -56,7 +56,7 @@ async function loadFishFromFirestore() {
       firestoreData[doc.id] = doc.data();
     });
 
-    console.log(`✅ Loaded ${snapshot.size} species from Firestore`);
+    console.log(`Loaded ${snapshot.size} species from Firestore`);
     return firestoreData;
   } catch (error) {
     console.error('Error loading from Firestore, using fallback data:', error);
@@ -87,7 +87,7 @@ async function initializeApp() {
     // Build the UI with loaded data
     buildPanels();
 
-    console.log('✅ App initialized with', Object.keys(fishDatabase).length, 'species');
+    console.log('App initialized with', Object.keys(fishDatabase).length, 'species');
   } catch (error) {
     console.error('Error initializing app:', error);
     showAppErrorState(
@@ -101,7 +101,7 @@ function showAppErrorState(message) {
   panels.forEach(panel => {
     panel.innerHTML = `
             <div style="padding: 2rem; text-align: center;">
-                <p style="color: #dc3545; font-weight: bold; margin-bottom: 1rem;">⚠️ Error</p>
+                <p style="color: #dc3545; font-weight: bold; margin-bottom: 1rem;">Error</p>
                 <p style="color: #666; margin: 0;">${message}</p>
             </div>
         `;
@@ -436,61 +436,61 @@ function displayComparison(fishData) {
   });
   html += '</div>';
 
-  html += '<div class="comparison-row"><div class="attribute-label">🌡️ Temperature Range</div>';
+  html += '<div class="comparison-row"><div class="attribute-label">Temperature Range</div>';
   fishData.forEach(fish => {
     html += `<div class="attribute-value">${fish.tempMin}-${fish.tempMax}${fish.tempUnit}</div>`;
   });
   html += '</div>';
 
-  html += '<div class="comparison-row"><div class="attribute-label">💧 pH Range</div>';
+  html += '<div class="comparison-row"><div class="attribute-label">pH Range</div>';
   fishData.forEach(fish => {
     html += `<div class="attribute-value">${fish.phMin}-${fish.phMax}</div>`;
   });
   html += '</div>';
 
-  html += '<div class="comparison-row"><div class="attribute-label">🔬 Water Hardness</div>';
+  html += '<div class="comparison-row"><div class="attribute-label">Water Hardness</div>';
   fishData.forEach(fish => {
     html += `<div class="attribute-value">${fish.waterHardness}</div>`;
   });
   html += '</div>';
 
-  html += '<div class="comparison-row"><div class="attribute-label">🏠 Minimum Tank Size</div>';
+  html += '<div class="comparison-row"><div class="attribute-label">Minimum Tank Size</div>';
   fishData.forEach(fish => {
     html += `<div class="attribute-value">${fish.tankSizeMin} ${fish.tankSizeUnit}</div>`;
   });
   html += '</div>';
 
-  html += '<div class="comparison-row"><div class="attribute-label">📏 Adult Size</div>';
+  html += '<div class="comparison-row"><div class="attribute-label">Adult Size</div>';
   fishData.forEach(fish => {
     html += `<div class="attribute-value">${fish.maxSize} ${fish.sizeUnit}</div>`;
   });
   html += '</div>';
 
-  html += '<div class="comparison-row"><div class="attribute-label">⚔️ Temperament</div>';
+  html += '<div class="comparison-row"><div class="attribute-label">Temperament</div>';
   fishData.forEach(fish => {
     html += `<div class="attribute-value">${getAggressionBadge(fish.aggression)}</div>`;
   });
   html += '</div>';
 
-  html += '<div class="comparison-row"><div class="attribute-label">🍽️ Diet</div>';
+  html += '<div class="comparison-row"><div class="attribute-label">Diet</div>';
   fishData.forEach(fish => {
     html += `<div class="attribute-value">${fish.diet}</div>`;
   });
   html += '</div>';
 
-  html += '<div class="comparison-row"><div class="attribute-label">👥 Social Needs</div>';
+  html += '<div class="comparison-row"><div class="attribute-label">Social Needs</div>';
   fishData.forEach(fish => {
     html += `<div class="attribute-value">${fish.schooling}</div>`;
   });
   html += '</div>';
 
-  html += '<div class="comparison-row"><div class="attribute-label">⏱️ Lifespan</div>';
+  html += '<div class="comparison-row"><div class="attribute-label">Lifespan</div>';
   fishData.forEach(fish => {
     html += `<div class="attribute-value">${fish.lifespan}</div>`;
   });
   html += '</div>';
 
-  html += '<div class="comparison-row"><div class="attribute-label">📚 Care Level</div>';
+  html += '<div class="comparison-row"><div class="attribute-label">Care Level</div>';
   fishData.forEach(fish => {
     html += `<div class="attribute-value">${fish.careLevel}</div>`;
   });
@@ -682,12 +682,12 @@ function analyzeCompatibility(fishData) {
   else if (warnings.length > 0) alertClass = 'warning';
 
   let alertHtml = `<div class="compatibility-alert ${alertClass}">`;
-  alertHtml += '<h3>🔍 Compatibility Analysis</h3>';
+  alertHtml += '<h3>Compatibility Analysis</h3>';
 
   if (positive.length > 0) {
     alertHtml += '<ul>';
     positive.forEach(item => {
-      alertHtml += `<li>✅ ${item}</li>`;
+      alertHtml += `<li class="compat-good">${item}</li>`;
     });
     alertHtml += '</ul>';
   }
@@ -695,7 +695,7 @@ function analyzeCompatibility(fishData) {
   if (warnings.length > 0) {
     alertHtml += '<ul>';
     warnings.forEach(item => {
-      alertHtml += `<li>⚠️ ${item}</li>`;
+      alertHtml += `<li class="compat-warning">${item}</li>`;
     });
     alertHtml += '</ul>';
   }
@@ -703,7 +703,7 @@ function analyzeCompatibility(fishData) {
   if (issues.length > 0) {
     alertHtml += '<ul>';
     issues.forEach(item => {
-      alertHtml += `<li>❌ ${item}</li>`;
+      alertHtml += `<li class="compat-critical">${item}</li>`;
     });
     alertHtml += '</ul>';
   }

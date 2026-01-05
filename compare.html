@@ -37,11 +37,16 @@
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
 
-    <!-- Stylesheet -->
-    <link rel="stylesheet" href="css/styles.css" />
-    <link rel="stylesheet" href="css/dark-mode.css" />
-    <link rel="stylesheet" href="css/enhanced-ui.css" />
-    <link rel="stylesheet" href="css/ocean-theme.css" />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/naturalist.css" />
 
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VNY458QF3"></script>
@@ -55,29 +60,23 @@
     </script>
   </head>
   <body>
-    <div class="header">
-      <div class="header-content">
-        <div class="header-left">
-          <a href="index.html" class="home-link">
-            <h1><span class="logo-wave">Comparium</span></h1>
-            <p>The place for all things aquarium</p>
-          </a>
+    <!-- Header -->
+    <header class="header">
+      <a href="index.html" class="logo">Comparium</a>
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="compare.html" class="active">Compare</a>
+        <a href="glossary.html">Glossary</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="faq.html">FAQ</a>
+        <div id="auth-links">
+          <a href="login.html">Login</a>
+          <a href="signup.html" class="nav-cta">Sign Up</a>
         </div>
-        <div class="header-nav">
-          <a href="index.html">Home</a>
-          <a href="compare.html">Compare Fish</a>
-          <a href="dashboard.html">Dashboard</a>
-          <a href="glossary.html">Glossary</a>
-          <a href="faq.html">FAQ</a>
-          <div id="auth-links">
-            <a href="login.html">Login</a>
-            <a href="signup.html">Sign Up</a>
-          </div>
-        </div>
-      </div>
-    </div>
+      </nav>
+    </header>
 
-    <div class="container">
+    <div class="container" style="padding-top: 2rem; padding-bottom: 2rem">
       <div class="selection-section">
         <h2>Select Fish Species to Compare</h2>
         <div class="fish-selector">
@@ -129,16 +128,16 @@
       </div>
     </div>
 
-    <div class="footer">
-      <p>&copy; <span id="copyright-year"></span> Comparium.</p>
-      <p><a href="about.html">About</a> | <a href="mailto:contact@comparium.net">Contact</a></p>
-      <p>
-        <small
-          >Always research thoroughly and consult with experienced aquarists before adding new fish
-          to your tank.</small
-        >
-      </p>
-    </div>
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-logo">Comparium</div>
+      <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="faq.html">FAQ</a>
+        <a href="glossary.html">Glossary</a>
+      </div>
+      <p class="footer-copy">&copy; <span id="copyright-year"></span> Comparium</p>
+    </footer>
 
     <!-- Auto-update copyright year -->
     <script>
@@ -153,6 +152,5 @@
     <script src="js/app.js"></script>
     <script src="js/species-detail.js"></script>
     <script src="js/app-enhancements.js"></script>
-    <script src="js/theme-manager.js"></script>
   </body>
 </html>

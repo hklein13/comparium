@@ -8,260 +8,79 @@
       name="description"
       content="Detailed information about aquarium fish species including care requirements, tank size, and compatibility."
     />
-    <link rel="stylesheet" href="css/styles.css" />
-    <link rel="stylesheet" href="css/dark-mode.css" />
-    <style>
-      /* Species detail specific styles */
-      .species-detail {
-        max-width: 1000px;
-        margin: 2rem auto;
-        padding: 2rem;
+    <meta name="author" content="Comparium" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/naturalist.css" />
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VNY458QF3"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
       }
-
-      .species-header {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 2rem;
-        margin-bottom: 2rem;
-        padding-bottom: 2rem;
-        border-bottom: 2px solid var(--border-color);
-      }
-
-      .species-title {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-      }
-
-      .species-title h1 {
-        color: var(--gradient-start);
-        margin-bottom: 0.5rem;
-        font-size: 2.5rem;
-      }
-
-      .scientific-name {
-        font-size: 1.2rem;
-        color: var(--text-secondary);
-        margin-bottom: 1rem;
-      }
-
-      .species-image-container {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .species-image {
-        width: 100%;
-        max-height: 350px;
-        object-fit: cover;
-        border-radius: 12px;
-      }
-
-      .image-placeholder {
-        width: 100%;
-        height: 300px;
-        background: var(--bg-secondary);
-        border-radius: 12px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        font-size: 4rem;
-        color: var(--text-secondary);
-      }
-
-      .image-placeholder p {
-        font-size: 1rem;
-        margin-top: 1rem;
-      }
-
-      .species-info-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 1.5rem;
-        margin-bottom: 2rem;
-      }
-
-      .info-card {
-        background: var(--bg-card);
-        border-radius: 12px;
-        padding: 1.5rem;
-        box-shadow: 0 2px 8px var(--shadow);
-      }
-
-      .info-card h3 {
-        color: var(--text-primary);
-        margin-bottom: 1rem;
-        font-size: 1.3rem;
-      }
-
-      .info-table {
-        width: 100%;
-      }
-
-      .info-table tr {
-        border-bottom: 1px solid var(--border-color);
-      }
-
-      .info-table tr:last-child {
-        border-bottom: none;
-      }
-
-      .info-table td {
-        padding: 0.75rem 0;
-      }
-
-      .info-table td:first-child {
-        width: 50%;
-      }
-
-      .warning-card {
-        background: rgba(255, 193, 7, 0.1);
-        border: 2px solid #ffc107;
-      }
-
-      .badge {
-        padding: 0.25rem 0.75rem;
-        border-radius: 20px;
-        font-size: 0.9rem;
-        font-weight: 600;
-      }
-
-      .badge-success {
-        background: #d4edda;
-        color: #155724;
-      }
-
-      .badge-warning {
-        background: #fff3cd;
-        color: #856404;
-      }
-
-      .badge-danger {
-        background: #f8d7da;
-        color: #721c24;
-      }
-
-      [data-theme='dark'] .badge-success {
-        background: rgba(40, 167, 69, 0.3);
-        color: #90ee90;
-      }
-
-      [data-theme='dark'] .badge-warning {
-        background: rgba(255, 193, 7, 0.3);
-        color: #ffd700;
-      }
-
-      [data-theme='dark'] .badge-danger {
-        background: rgba(220, 53, 69, 0.3);
-        color: #ff6b6b;
-      }
-
-      .species-actions {
-        display: flex;
-        gap: 1rem;
-        justify-content: center;
-        margin-bottom: 2rem;
-      }
-
-      .species-footer {
-        text-align: center;
-        color: var(--text-secondary);
-        padding-top: 2rem;
-        border-top: 1px solid var(--border-color);
-      }
-
-      .favorite-star {
-        font-size: 2rem;
-        cursor: pointer;
-        color: #ddd;
-        transition: color 0.2s ease;
-        display: inline-block;
-        margin-left: 1rem;
-      }
-
-      .favorite-star.active {
-        color: #ffc107;
-      }
-
-      .favorite-star:hover {
-        color: #ffb300;
-      }
-
-      /* Mobile responsive */
-      @media (max-width: 768px) {
-        .species-detail {
-          padding: 1rem;
-        }
-
-        .species-header {
-          grid-template-columns: 1fr;
-        }
-
-        .species-title h1 {
-          font-size: 2rem;
-        }
-
-        .species-info-grid {
-          grid-template-columns: 1fr;
-        }
-
-        .species-actions {
-          flex-direction: column;
-        }
-      }
-    </style>
+      gtag('js', new Date());
+      gtag('config', 'G-8VNY458QF3');
+    </script>
   </head>
   <body>
-    <div class="header">
-      <div class="header-content">
-        <div class="header-left">
-          <a href="index.html" class="home-link">
-            <h1><span class="logo-wave">Comparium</span></h1>
-            <p>The place for all things aquarium</p>
-          </a>
+    <!-- Header -->
+    <header class="header">
+      <a href="index.html" class="logo">Comparium</a>
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="compare.html">Compare</a>
+        <a href="glossary.html" class="active">Glossary</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="faq.html">FAQ</a>
+        <div id="auth-links">
+          <a href="login.html">Login</a>
+          <a href="signup.html" class="nav-cta">Sign Up</a>
         </div>
-        <div class="header-nav">
-          <a href="index.html">Home</a>
-          <a href="compare.html">Compare Fish</a>
-          <a href="dashboard.html">Dashboard</a>
-          <a href="glossary.html">Glossary</a>
-          <a href="faq.html">FAQ</a>
-          <div id="auth-links">
-            <a href="login.html">Login</a>
-            <a href="signup.html">Sign Up</a>
-          </div>
-        </div>
-      </div>
-    </div>
+      </nav>
+    </header>
 
     <div id="species-content">
-      <div class="loading-container">
-        <div class="bubble-loader">
-          <div class="bubble"></div>
-          <div class="bubble"></div>
-          <div class="bubble"></div>
+      <div class="species-detail">
+        <div class="loading-state">
+          <p>Loading species information...</p>
         </div>
-        <div class="loading-text">Loading species information...</div>
       </div>
     </div>
 
-    <div class="footer">
-      <p>&copy; <span id="copyright-year"></span> Comparium.</p>
-      <p><a href="about.html">About</a> | <a href="mailto:contact@comparium.net">Contact</a></p>
-    </div>
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-logo">Comparium</div>
+      <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="faq.html">FAQ</a>
+        <a href="glossary.html">Glossary</a>
+      </div>
+      <p class="footer-copy">&copy; <span id="copyright-year"></span> Comparium</p>
+    </footer>
 
     <!-- Auto-update copyright year -->
     <script>
       document.getElementById('copyright-year').textContent = new Date().getFullYear();
     </script>
 
-    <script src="js/fish-data.js"></script>
-    <script src="js/storage-service.js"></script>
+    <!-- Scripts -->
     <script type="module" src="js/firebase-init.js"></script>
+    <script src="js/storage-service.js"></script>
     <script src="js/auth-manager.js"></script>
+    <script src="js/fish-data.js"></script>
     <script src="js/species-detail.js"></script>
-    <script src="js/theme-manager.js"></script>
   </body>
 </html>
