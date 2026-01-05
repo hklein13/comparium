@@ -183,13 +183,14 @@ function loadSpeciesDetail() {
 
 /**
  * Generate favorite star for species detail page
+ * Uses data-species attribute instead of inline onclick for XSS safety
  */
 function generateFavoriteStar(speciesKey) {
   if (!authManager || !authManager.isLoggedIn()) {
     return '';
   }
 
-  return `<span class="favorite-star" data-species="${speciesKey}" onclick="toggleFavorite('${speciesKey}', this)">★</span>`;
+  return `<span class="favorite-star" data-species="${speciesKey}">★</span>`;
 }
 
 /**
@@ -235,9 +236,26 @@ function addToTankPlan(speciesKey) {
 
 // Initialize species detail page if we're on species.html
 if (window.location.pathname.includes('species.html')) {
+  // Set up delegated click handler for favorite stars (XSS-safe alternative to inline onclick)
+  function setupFavoriteStarHandler() {
+    const content = document.getElementById('species-content');
+    if (content) {
+      content.addEventListener('click', function (event) {
+        const star = event.target.closest('.favorite-star');
+        if (star && star.dataset.species) {
+          toggleFavorite(star.dataset.species, star);
+        }
+      });
+    }
+  }
+
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', loadSpeciesDetail);
+    document.addEventListener('DOMContentLoaded', () => {
+      setupFavoriteStarHandler();
+      loadSpeciesDetail();
+    });
   } else {
+    setupFavoriteStarHandler();
     loadSpeciesDetail();
   }
 }

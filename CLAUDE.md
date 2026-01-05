@@ -41,6 +41,7 @@ npm run images:upload            # Batch upload from preview selection (paste JS
 # Testing
 npm test                         # Run Playwright tests
 npm run test:headed              # Run tests with visible browser
+npx playwright test tests/user-flow.spec.js  # Run single test file
 
 # Code Quality
 npm run lint                     # Check JS files for errors
@@ -128,7 +129,7 @@ functions/
 ## Design System
 
 ### Naturalist Theme (Current)
-- **CSS:** `css/naturalist.css` - Single stylesheet for entire site
+- **CSS:** `css/naturalist.css` - Single stylesheet for entire site (includes tank/maintenance/modal styles)
 - **Fonts:** Darker Grotesque (display/body), Libre Baskerville (serif accents), Source Sans 3 (fallback)
 - **No emojis** - Design uses typography and color for visual hierarchy
 - **Color palette:** Forest green (`#234a3a`), ivory/stone backgrounds, ink text hierarchy
@@ -164,9 +165,11 @@ Development follows a phased approach. See `DATA-MODEL.md` for complete specific
 
 ### Phase 2 Breakdown (Current)
 1. ✅ Cloud Functions foundation - `functions/` folder, test function deployed
-2. ⏳ Notification UI - Bell icon in dashboard, notification dropdown
+2. ✅ Notification UI - Bell icon + settings gear in dashboard header, dropdowns with empty states
 3. ⏳ `checkDueSchedules` function - Daily scheduled function to create notifications
 4. ⏳ Push notifications (FCM) - Browser push when maintenance due
+
+**Session Note:** See `project-changes-tracking.md` for detailed progress and next steps.
 
 ## Git Workflow
 

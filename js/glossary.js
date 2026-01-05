@@ -1189,7 +1189,9 @@ class GlossaryManager {
       ? `<div class="glossary-item-meta">${entry.scientificName}</div>`
       : '';
 
-    const verifiedBadge = entry.verified ? '<span class="verified-badge" title="Verified by Comparium team">Verified</span>' : '';
+    const verifiedBadge = entry.verified
+      ? '<span class="verified-badge" title="Verified by Comparium team">Verified</span>'
+      : '';
 
     const tags =
       entry.tags && entry.tags.length > 0
@@ -1202,12 +1204,20 @@ class GlossaryManager {
       ? `<img src="${entry.imageUrl}" alt="${entry.title}" class="glossary-item-image" loading="lazy">`
       : '';
 
+    // For species entries, make the title a clickable link to the species detail page
+    const isSpeciesWithDetailPage =
+      entry.category === 'species' && typeof fishDatabase !== 'undefined' && fishDatabase[entry.id];
+
+    const titleContent = isSpeciesWithDetailPage
+      ? `<a href="species.html?fish=${encodeURIComponent(entry.id)}" class="glossary-title-link">${entry.title}</a>`
+      : entry.title;
+
     return `
             <div class="glossary-item ${entry.imageUrl ? 'has-image' : ''}">
                 ${image}
                 <div class="glossary-item-content">
                     <div class="glossary-item-title">
-                        ${entry.title}
+                        ${titleContent}
                         ${verifiedBadge}
                     </div>
                     ${scientificName}
