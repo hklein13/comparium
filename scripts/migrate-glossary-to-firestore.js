@@ -40,14 +40,16 @@ try {
   const serviceAccount = JSON.parse(readFileSync(serviceAccountPath, 'utf-8'));
 
   admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
+    credential: admin.credential.cert(serviceAccount),
   });
 
   console.log('✅ Firebase Admin SDK initialized');
 } catch (error) {
   console.error('\n❌ ERROR: Could not load service account key\n');
   console.error('SETUP INSTRUCTIONS:');
-  console.error('1. Go to: https://console.firebase.google.com/project/comparium-21b69/settings/serviceaccounts/adminsdk');
+  console.error(
+    '1. Go to: https://console.firebase.google.com/project/comparium-21b69/settings/serviceaccounts/adminsdk'
+  );
   console.error('2. Click "Generate new private key"');
   console.error('3. Save the downloaded file as: scripts/serviceAccountKey.json');
   console.error('4. Run this script again\n');
@@ -95,107 +97,111 @@ function loadFishDescriptions() {
 // This is a one-time migration script, so some duplication is acceptable (KISS principle)
 
 function toKebabCase(str) {
-    return str.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
+  return str.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
 }
 
 function generateFishTags(fish) {
-    const tags = [];
+  const tags = [];
 
-    // Care level tags
-    if (fish.careLevel === 'Very Easy' || fish.careLevel === 'Easy') {
-        tags.push('Beginner Friendly');
-    } else if (fish.careLevel === 'Moderate') {
-        tags.push('Intermediate');
-    } else if (fish.careLevel === 'Difficult' || fish.careLevel === 'Very Difficult') {
-        tags.push('Advanced');
+  // Care level tags
+  if (fish.careLevel === 'Very Easy' || fish.careLevel === 'Easy') {
+    tags.push('Beginner Friendly');
+  } else if (fish.careLevel === 'Moderate') {
+    tags.push('Intermediate');
+  } else if (fish.careLevel === 'Difficult' || fish.careLevel === 'Very Difficult') {
+    tags.push('Advanced');
+  }
+
+  // Temperament tag
+  if (fish.aggression) {
+    tags.push(fish.aggression);
+  }
+
+  // Schooling tag
+  if (fish.schooling && (fish.schooling.includes('School') || fish.schooling.includes('Group'))) {
+    tags.push('Schooling Fish');
+  }
+
+  // Size tags
+  const sizeNum = parseFloat(fish.maxSize);
+  if (!isNaN(sizeNum)) {
+    if (sizeNum < 2) {
+      tags.push('Small');
+    } else if (sizeNum <= 5) {
+      tags.push('Medium');
+    } else {
+      tags.push('Large');
     }
+  }
 
-    // Temperament tag
-    if (fish.aggression) {
-        tags.push(fish.aggression);
-    }
+  // Diet tag
+  if (fish.diet) {
+    tags.push(fish.diet);
+  }
 
-    // Schooling tag
-    if (fish.schooling && (fish.schooling.includes('School') || fish.schooling.includes('Group'))) {
-        tags.push('Schooling Fish');
-    }
-
-    // Size tags
-    const sizeNum = parseFloat(fish.maxSize);
-    if (!isNaN(sizeNum)) {
-        if (sizeNum < 2) {
-            tags.push('Small');
-        } else if (sizeNum <= 5) {
-            tags.push('Medium');
-        } else {
-            tags.push('Large');
-        }
-    }
-
-    // Diet tag
-    if (fish.diet) {
-        tags.push(fish.diet);
-    }
-
-    return tags;
+  return tags;
 }
 
 function generateFishDescription(key, fish, descriptions) {
-    // Use curated description if available
-    if (descriptions && descriptions[key]) {
-        return descriptions[key];
-    }
+  // Use curated description if available
+  if (descriptions && descriptions[key]) {
+    return descriptions[key];
+  }
 
-    // Generate basic description from attributes
-    const tempRange = `${fish.tempMin}-${fish.tempMax}°F`;
-    const phRange = `${fish.phMin}-${fish.phMax}`;
+  // Generate basic description from attributes
+  const tempRange = `${fish.tempMin}-${fish.tempMax}°F`;
+  const phRange = `${fish.phMin}-${fish.phMax}`;
 
-    let careDesc = 'moderate care';
-    if (fish.careLevel === 'Very Easy' || fish.careLevel === 'Easy') {
-        careDesc = 'easy to care for';
-    } else if (fish.careLevel === 'Difficult' || fish.careLevel === 'Very Difficult') {
-        careDesc = 'challenging to maintain';
-    }
+  let careDesc = 'moderate care';
+  if (fish.careLevel === 'Very Easy' || fish.careLevel === 'Easy') {
+    careDesc = 'easy to care for';
+  } else if (fish.careLevel === 'Difficult' || fish.careLevel === 'Very Difficult') {
+    careDesc = 'challenging to maintain';
+  }
 
-    let tempDesc = 'peaceful community fish';
-    if (fish.aggression === 'Semi-aggressive') {
-        tempDesc = 'semi-aggressive species requiring careful tankmate selection';
-    } else if (fish.aggression === 'Aggressive') {
-        tempDesc = 'aggressive species best in species-only tanks';
-    }
+  let tempDesc = 'peaceful community fish';
+  if (fish.aggression === 'Semi-aggressive') {
+    tempDesc = 'semi-aggressive species requiring careful tankmate selection';
+  } else if (fish.aggression === 'Aggressive') {
+    tempDesc = 'aggressive species best in species-only tanks';
+  }
 
-    const schoolingDesc = fish.schooling && (fish.schooling.includes('School') || fish.schooling.includes('Group'))
-        ? ` Best kept in groups (${fish.schooling}).`
-        : ' Can be kept individually or in compatible groups.';
+  const schoolingDesc =
+    fish.schooling && (fish.schooling.includes('School') || fish.schooling.includes('Group'))
+      ? ` Best kept in groups (${fish.schooling}).`
+      : ' Can be kept individually or in compatible groups.';
 
-    return `${tempDesc} reaching ${fish.maxSize} inches, ${careDesc}. Thrives in ${tempRange} water with pH ${phRange} and minimum tank size of ${fish.tankSizeMin} gallons.${schoolingDesc} Lifespan of ${fish.lifespan}.`.replace(/\s+/g, ' ');
+  return `${tempDesc} reaching ${fish.maxSize} inches, ${careDesc}. Thrives in ${tempRange} water with pH ${phRange} and minimum tank size of ${fish.tankSizeMin} gallons.${schoolingDesc} Lifespan of ${fish.lifespan}.`.replace(
+    /\s+/g,
+    ' '
+  );
 }
 
 function generateGlossaryEntry(key, fish, descriptions = {}) {
-    return {
-        id: toKebabCase(key),
-        title: fish.commonName,
-        scientificName: fish.scientificName,
-        description: generateFishDescription(key, fish, descriptions),
-        imageUrl: fish.imageUrl || null,
-        tags: generateFishTags(fish),
-        category: 'species',
-        author: 'System',
-        firestoreId: null,
-        userId: null,
-        upvotes: 0,
-        verified: true
-    };
+  return {
+    id: toKebabCase(key),
+    title: fish.commonName,
+    scientificName: fish.scientificName,
+    description: generateFishDescription(key, fish, descriptions),
+    imageUrl: fish.imageUrl || null,
+    tags: generateFishTags(fish),
+    category: 'species',
+    author: 'System',
+    firestoreId: null,
+    userId: null,
+    upvotes: 0,
+    verified: true,
+  };
 }
 
 function generateGlossaryEntries(fishDatabase, descriptions = {}) {
-    const entries = [];
+  const entries = [];
 
-    for (const [key, fish] of Object.entries(fishDatabase)) {
-        entries.push(generateGlossaryEntry(key, fish, descriptions));
-    }
+  for (const [key, fish] of Object.entries(fishDatabase)) {
+    entries.push(generateGlossaryEntry(key, fish, descriptions));
+  }
 
-    return entries;
+  return entries;
 }
 
 // Load diseases, equipment, and terminology from glossary.js
@@ -232,19 +238,16 @@ async function migrateGlossaryData() {
 
     console.log('📖 Loading other glossary data (diseases, equipment, terminology)...');
     const { diseases, equipment, terminology } = loadOtherGlossaryData();
-    console.log(`✅ Loaded ${diseases.length} diseases, ${equipment.length} equipment, ${terminology.length} terminology\n`);
+    console.log(
+      `✅ Loaded ${diseases.length} diseases, ${equipment.length} equipment, ${terminology.length} terminology\n`
+    );
 
     console.log('🔄 Generating species entries dynamically...');
     const speciesEntries = generateGlossaryEntries(fishDatabase, fishDescriptions);
     console.log(`✅ Generated ${speciesEntries.length} species entries\n`);
 
     // Combine all entries
-    const allEntries = [
-      ...speciesEntries,
-      ...diseases,
-      ...equipment,
-      ...terminology
-    ];
+    const allEntries = [...speciesEntries, ...diseases, ...equipment, ...terminology];
 
     console.log(`📊 Total entries to migrate: ${allEntries.length}`);
     console.log(`   - Species: ${speciesEntries.length}`);
@@ -273,14 +276,13 @@ async function migrateGlossaryData() {
           const entryWithTimestamps = {
             ...entry,
             created: admin.firestore.FieldValue.serverTimestamp(),
-            updated: admin.firestore.FieldValue.serverTimestamp()
+            updated: admin.firestore.FieldValue.serverTimestamp(),
           };
 
           batch.set(docRef, entryWithTimestamps);
 
           console.log(`  ✅ ${entry.id.padEnd(30)} → ${entry.title}`);
           successCount++;
-
         } catch (error) {
           console.error(`  ❌ ${entry.id.padEnd(30)} → ERROR: ${error.message}`);
           errorCount++;
@@ -315,7 +317,6 @@ async function migrateGlossaryData() {
     console.log('   2. Visit your website and check the glossary page');
     console.log('   3. (Optional) Delete serviceAccountKey.json for security');
     console.log('\n✨ Migration complete!\n');
-
   } catch (error) {
     console.error('\n💥 Migration failed with error:');
     console.error(error);
@@ -326,7 +327,7 @@ async function migrateGlossaryData() {
 // Run migration
 migrateGlossaryData()
   .then(() => process.exit(0))
-  .catch((error) => {
+  .catch(error => {
     console.error('Fatal error:', error);
     process.exit(1);
   });

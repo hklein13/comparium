@@ -14,72 +14,72 @@ const __dirname = dirname(__filename);
 
 // Load fish database
 function loadFishDatabase() {
-    const fishDataPath = join(__dirname, '..', 'js', 'fish-data.js');
-    const content = readFileSync(fishDataPath, 'utf8');
+  const fishDataPath = join(__dirname, '..', 'js', 'fish-data.js');
+  const content = readFileSync(fishDataPath, 'utf8');
 
-    const match = content.match(/(?:var|const|let)\s+fishDatabase\s*=\s*\{[\s\S]*?\n\s*\};/);
-    if (!match) {
-        throw new Error('Could not parse fish-data.js');
-    }
+  const match = content.match(/(?:var|const|let)\s+fishDatabase\s*=\s*\{[\s\S]*?\n\s*\};/);
+  if (!match) {
+    throw new Error('Could not parse fish-data.js');
+  }
 
-    const fishDbCode = match[0].replace(/(?:var|const|let)\s+fishDatabase\s*=\s*/, 'return ');
-    const fishDatabase = new Function(fishDbCode)();
+  const fishDbCode = match[0].replace(/(?:var|const|let)\s+fishDatabase\s*=\s*/, 'return ');
+  const fishDatabase = new Function(fishDbCode)();
 
-    return fishDatabase;
+  return fishDatabase;
 }
 
 // Query Wikimedia Commons API
 async function searchWikimedia(scientificName) {
-    const searchQuery = encodeURIComponent(scientificName);
-    const url = `https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=${searchQuery}&gsrnamespace=6&gsrlimit=3&prop=imageinfo&iiprop=url|extmetadata|size&iiurlwidth=400&format=json&origin=*`;
+  const searchQuery = encodeURIComponent(scientificName);
+  const url = `https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=${searchQuery}&gsrnamespace=6&gsrlimit=3&prop=imageinfo&iiprop=url|extmetadata|size&iiurlwidth=400&format=json&origin=*`;
 
-    try {
-        const response = await fetch(url, {
-            headers: {
-                'User-Agent': 'Comparium/1.0 (https://comparium.net; contact@comparium.net) Node.js'
-            }
-        });
+  try {
+    const response = await fetch(url, {
+      headers: {
+        'User-Agent': 'Comparium/1.0 (https://comparium.net; contact@comparium.net) Node.js',
+      },
+    });
 
-        // Check for valid JSON response
-        const contentType = response.headers.get('content-type');
-        if (!contentType || !contentType.includes('application/json')) {
-            console.error(`\n  Warning: Non-JSON response for ${scientificName}`);
-            return [];
-        }
-
-        const data = await response.json();
-
-        const pages = data.query?.pages;
-        if (!pages) return [];
-
-        const results = [];
-        for (const page of Object.values(pages)) {
-            const imageInfo = page.imageinfo?.[0];
-            if (imageInfo?.url) {
-                if (imageInfo.url.endsWith('.svg') || (imageInfo.width && imageInfo.width < 400)) {
-                    continue;
-                }
-
-                const license = imageInfo.extmetadata?.LicenseShortName?.value || 'Unknown';
-                results.push({
-                    title: page.title.replace('File:', ''),
-                    thumbUrl: imageInfo.url,
-                    fullUrl: imageInfo.url,
-                    license: license
-                });
-            }
-        }
-
-        return results;
-    } catch (error) {
-        console.error(`Error searching for ${scientificName}:`, error.message);
-        return [];
+    // Check for valid JSON response
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      console.error(`\n  Warning: Non-JSON response for ${scientificName}`);
+      return [];
     }
+
+    const data = await response.json();
+
+    const pages = data.query?.pages;
+    if (!pages) return [];
+
+    const results = [];
+    for (const page of Object.values(pages)) {
+      const imageInfo = page.imageinfo?.[0];
+      if (imageInfo?.url) {
+        if (imageInfo.url.endsWith('.svg') || (imageInfo.width && imageInfo.width < 400)) {
+          continue;
+        }
+
+        const license = imageInfo.extmetadata?.LicenseShortName?.value || 'Unknown';
+        results.push({
+          title: page.title.replace('File:', ''),
+          thumbUrl: imageInfo.url,
+          fullUrl: imageInfo.url,
+          license: license,
+        });
+      }
+    }
+
+    return results;
+  } catch (error) {
+    console.error(`Error searching for ${scientificName}:`, error.message);
+    return [];
+  }
 }
 
 // Generate HTML preview page
 function generateHTML(speciesData) {
-    return `<!DOCTYPE html>
+  return `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -259,16 +259,20 @@ function generateHTML(speciesData) {
     </div>
 
     <div class="grid">
-        ${speciesData.map(species => `
+        ${speciesData
+          .map(
+            species => `
             <div class="card ${species.images.length === 0 ? 'no-image' : ''}" data-key="${species.key}">
-                ${species.images.length > 0
+                ${
+                  species.images.length > 0
                     ? `<img class="card-image" src="${species.images[0].thumbUrl}" alt="${species.commonName}" loading="lazy">`
                     : `<div class="card-placeholder">No image found</div>`
                 }
                 <div class="card-body">
                     <h3 class="card-title">${species.commonName}</h3>
                     <p class="card-scientific">${species.scientificName}</p>
-                    ${species.images.length > 0
+                    ${
+                      species.images.length > 0
                         ? `<p class="card-license">License: ${species.images[0].license}</p>
                            <div class="card-checkbox">
                                <input type="checkbox" id="check-${species.key}" data-key="${species.key}" data-url="${species.images[0].fullUrl}" onchange="updateStats()">
@@ -278,7 +282,9 @@ function generateHTML(speciesData) {
                     }
                 </div>
             </div>
-        `).join('')}
+        `
+          )
+          .join('')}
     </div>
 
     <div class="output-area" id="outputArea">
@@ -341,52 +347,54 @@ function generateHTML(speciesData) {
 
 // Main function
 async function main() {
-    console.log('Loading fish database...');
-    const fishDatabase = loadFishDatabase();
+  console.log('Loading fish database...');
+  const fishDatabase = loadFishDatabase();
 
-    // Get species without images
-    const speciesWithoutImages = Object.entries(fishDatabase)
-        .filter(([key, fish]) => !fish.imageUrl)
-        .map(([key, fish]) => ({ key, ...fish }));
+  // Get species without images
+  const speciesWithoutImages = Object.entries(fishDatabase)
+    .filter(([key, fish]) => !fish.imageUrl)
+    .map(([key, fish]) => ({ key, ...fish }));
 
-    console.log(`Found ${speciesWithoutImages.length} species without images\n`);
+  console.log(`Found ${speciesWithoutImages.length} species without images\n`);
 
-    if (speciesWithoutImages.length === 0) {
-        console.log('All species already have images!');
-        return;
-    }
+  if (speciesWithoutImages.length === 0) {
+    console.log('All species already have images!');
+    return;
+  }
 
-    // Query Wikimedia for each species
-    const speciesData = [];
-    for (let i = 0; i < speciesWithoutImages.length; i++) {
-        const species = speciesWithoutImages[i];
-        process.stdout.write(`\rSearching Wikimedia: ${i + 1}/${speciesWithoutImages.length} - ${species.commonName}...`);
+  // Query Wikimedia for each species
+  const speciesData = [];
+  for (let i = 0; i < speciesWithoutImages.length; i++) {
+    const species = speciesWithoutImages[i];
+    process.stdout.write(
+      `\rSearching Wikimedia: ${i + 1}/${speciesWithoutImages.length} - ${species.commonName}...`
+    );
 
-        const images = await searchWikimedia(species.scientificName);
-        speciesData.push({
-            key: species.key,
-            commonName: species.commonName,
-            scientificName: species.scientificName,
-            images: images
-        });
+    const images = await searchWikimedia(species.scientificName);
+    speciesData.push({
+      key: species.key,
+      commonName: species.commonName,
+      scientificName: species.scientificName,
+      images: images,
+    });
 
-        // Delay to avoid Wikimedia rate limiting
-        await new Promise(resolve => setTimeout(resolve, 300));
-    }
+    // Delay to avoid Wikimedia rate limiting
+    await new Promise(resolve => setTimeout(resolve, 300));
+  }
 
-    console.log('\n\nGenerating preview page...');
+  console.log('\n\nGenerating preview page...');
 
-    // Generate HTML
-    const html = generateHTML(speciesData);
-    const outputPath = join(__dirname, '..', 'image-preview.html');
-    writeFileSync(outputPath, html);
+  // Generate HTML
+  const html = generateHTML(speciesData);
+  const outputPath = join(__dirname, '..', 'image-preview.html');
+  writeFileSync(outputPath, html);
 
-    console.log(`\nDone! Preview page created: image-preview.html`);
-    console.log('\nNext steps:');
-    console.log('1. Open image-preview.html in your browser');
-    console.log('2. Check the images you want to use');
-    console.log('3. Click "Export Selected"');
-    console.log('4. Run: npm run images:upload');
+  console.log(`\nDone! Preview page created: image-preview.html`);
+  console.log('\nNext steps:');
+  console.log('1. Open image-preview.html in your browser');
+  console.log('2. Check the images you want to use');
+  console.log('3. Click "Export Selected"');
+  console.log('4. Run: npm run images:upload');
 }
 
 main().catch(console.error);

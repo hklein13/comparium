@@ -18,10 +18,7 @@ export default defineConfig({
   workers: 1, // Run one test at a time
 
   // Reporter to use
-  reporter: [
-    ['html'],
-    ['list']
-  ],
+  reporter: [['html'], ['list']],
 
   // Shared settings for all projects
   use: {
@@ -47,10 +44,12 @@ export default defineConfig({
   ],
 
   // Run local dev server if TEST_URL is not set
-  webServer: process.env.TEST_URL ? undefined : {
-    command: 'npx http-server -p 8080 -c-1',
-    port: 8080,
-    reuseExistingServer: true,
-    timeout: 10 * 1000,
-  },
+  webServer: process.env.TEST_URL
+    ? undefined
+    : {
+        command: 'npx http-server -p 8080 -c-1',
+        port: 8080,
+        reuseExistingServer: true,
+        timeout: 10 * 1000,
+      },
 });

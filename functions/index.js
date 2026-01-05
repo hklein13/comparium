@@ -10,9 +10,9 @@
  * Logs: firebase functions:log
  */
 
-const { onRequest } = require("firebase-functions/v2/https");
-const { initializeApp } = require("firebase-admin/app");
-const { getFirestore } = require("firebase-admin/firestore");
+const { onRequest } = require('firebase-functions/v2/https');
+const { initializeApp } = require('firebase-admin/app');
+const { getFirestore } = require('firebase-admin/firestore');
 
 // Initialize Firebase Admin SDK
 // In Cloud Functions environment, this automatically uses project credentials
@@ -52,20 +52,20 @@ exports.helloComparium = onRequest(async (req, res) => {
 
   try {
     // Test Firestore connection by querying tankSchedules collection
-    const schedulesSnap = await db.collection("tankSchedules").limit(1).get();
+    const schedulesSnap = await db.collection('tankSchedules').limit(1).get();
 
     res.json({
       success: true,
-      message: "Hello from Comparium Cloud Functions!",
+      message: 'Hello from Comparium Cloud Functions!',
       firestoreConnected: true,
       tankSchedulesExist: !schedulesSnap.empty,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error("Error in helloComparium:", error);
+    console.error('Error in helloComparium:', error);
     res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });
