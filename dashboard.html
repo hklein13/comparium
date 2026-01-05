@@ -1,158 +1,191 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard - Comparium</title>
-    <meta name="description" content="Your Comparium dashboard - view your saved comparisons, tanks, and favorite fish.">
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/dark-mode.css">
-    <link rel="stylesheet" href="css/enhanced-ui.css">
-    <link rel="stylesheet" href="css/ocean-theme.css">
+    <meta
+      name="description"
+      content="Your Comparium dashboard - view your saved comparisons, tanks, and favorite fish."
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/dark-mode.css" />
+    <link rel="stylesheet" href="css/enhanced-ui.css" />
+    <link rel="stylesheet" href="css/ocean-theme.css" />
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VNY458QF3"></script>
     <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-8VNY458QF3');
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', 'G-8VNY458QF3');
     </script>
-</head>
-<body>
+  </head>
+  <body>
     <div class="header">
-        <div class="header-content">
-            <div class="header-left">
-                <a href="index.html" class="home-link">
-                    <h1><span class="logo-wave">Comparium</span></h1>
-                    <p>The place for all things aquarium</p>
-                </a>
-            </div>
-            <div class="header-nav">
-                <a href="index.html">Home</a>
-                <a href="compare.html">Compare Fish</a>
-                <a href="dashboard.html">Dashboard</a>
-                <a href="glossary.html">Glossary</a>
-                <a href="faq.html">FAQ</a>
-                <div id="auth-links"></div>
-            </div>
+      <div class="header-content">
+        <div class="header-left">
+          <a href="index.html" class="home-link">
+            <h1><span class="logo-wave">Comparium</span></h1>
+            <p>The place for all things aquarium</p>
+          </a>
         </div>
+        <div class="header-nav">
+          <a href="index.html">Home</a>
+          <a href="compare.html">Compare Fish</a>
+          <a href="dashboard.html">Dashboard</a>
+          <a href="glossary.html">Glossary</a>
+          <a href="faq.html">FAQ</a>
+          <div id="auth-links"></div>
+        </div>
+      </div>
     </div>
 
     <div class="dashboard-container">
-        <div class="dashboard-header">
-            <h1>Welcome back, <span id="username-display"></span>!</h1>
-            <p>Manage your fish comparisons, tanks, and favorites</p>
+      <div class="dashboard-header">
+        <h1>Welcome back, <span id="username-display"></span>!</h1>
+        <p>Manage your fish comparisons, tanks, and favorites</p>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="dashboard-stats">
+        <div class="stat-card">
+          <span class="stat-number" id="comparison-count">0</span>
+          <span class="stat-label">Comparisons Saved</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number" id="tank-count">0</span>
+          <span class="stat-label">Tanks Created</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number" id="favorite-count">0</span>
+          <span class="stat-label">Favorite Species</span>
+        </div>
+      </div>
+
+      <!-- Recent Comparisons -->
+      <div class="dashboard-section">
+        <h2>📊 Recent Comparisons</h2>
+        <div id="recent-comparisons">
+          <div class="empty-state-small">
+            <p>No comparisons yet. <a href="compare.html">Start comparing fish!</a></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- My Tanks - Full Management -->
+      <div class="dashboard-section" id="my-tanks-section">
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1rem;
+          "
+        >
+          <h2 style="margin: 0">🏠 My Tanks</h2>
+          <button onclick="showNewTankForm()" class="btn-small">+ Create New Tank</button>
         </div>
 
-        <!-- Stats Cards -->
-        <div class="dashboard-stats">
-            <div class="stat-card">
-                <span class="stat-number" id="comparison-count">0</span>
-                <span class="stat-label">Comparisons Saved</span>
+        <!-- Tank Form (Initially Hidden) -->
+        <div id="tank-form-container" class="tank-form" style="display: none">
+          <h3 id="form-title">Create New Tank</h3>
+          <form id="tank-form" onsubmit="saveTank(event)">
+            <input type="hidden" id="tank-id" />
+
+            <div class="form-group">
+              <label for="tank-name">Tank Name</label>
+              <input type="text" id="tank-name" required placeholder="e.g., Living Room 55g" />
             </div>
-            <div class="stat-card">
-                <span class="stat-number" id="tank-count">0</span>
-                <span class="stat-label">Tanks Created</span>
+
+            <div class="form-group">
+              <label for="tank-size">Tank Size (gallons)</label>
+              <input type="number" id="tank-size" required min="1" placeholder="e.g., 55" />
             </div>
-            <div class="stat-card">
-                <span class="stat-number" id="favorite-count">0</span>
-                <span class="stat-label">Favorite Species</span>
+
+            <div class="form-group">
+              <label for="tank-notes">Notes (Optional)</label>
+              <textarea
+                id="tank-notes"
+                rows="3"
+                placeholder="Equipment, substrate, plans..."
+              ></textarea>
             </div>
+
+            <div class="form-group">
+              <label>Select Fish Species</label>
+              <input
+                type="text"
+                id="species-search"
+                placeholder="Search species..."
+                oninput="filterSpeciesSelector()"
+                style="margin-bottom: 0.5rem"
+              />
+              <select
+                id="species-selector"
+                onchange="addSpeciesToTank()"
+                size="6"
+                style="width: 100%"
+              >
+                <option value="">-- Choose a species to add --</option>
+              </select>
+              <small style="color: var(--text-secondary); display: block; margin-top: 0.25rem"
+                >Type to filter, click to add</small
+              >
+            </div>
+
+            <div id="selected-species-list" style="margin: 1rem 0">
+              <strong style="font-size: 0.95rem">Selected Species:</strong>
+              <ul id="species-list" class="fish-list"></ul>
+            </div>
+
+            <div style="display: flex; gap: 1rem">
+              <button type="submit" class="btn-small">Save Tank</button>
+              <button type="button" onclick="cancelForm()" class="btn-small btn-danger">
+                Cancel
+              </button>
+            </div>
+          </form>
         </div>
 
-        <!-- Recent Comparisons -->
-        <div class="dashboard-section">
-            <h2>📊 Recent Comparisons</h2>
-            <div id="recent-comparisons">
-                <div class="empty-state-small">
-                    <p>No comparisons yet. <a href="compare.html">Start comparing fish!</a></p>
-                </div>
+        <!-- Tanks List -->
+        <div id="tanks-container">
+          <div class="loading-container">
+            <div class="bubble-loader">
+              <div class="bubble"></div>
+              <div class="bubble"></div>
+              <div class="bubble"></div>
             </div>
+            <div class="loading-text">Loading tanks...</div>
+          </div>
         </div>
+      </div>
 
-        <!-- My Tanks - Full Management -->
-        <div class="dashboard-section" id="my-tanks-section">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem;">
-                <h2 style="margin: 0;">🏠 My Tanks</h2>
-                <button onclick="showNewTankForm()" class="btn-small">+ Create New Tank</button>
-            </div>
-
-            <!-- Tank Form (Initially Hidden) -->
-            <div id="tank-form-container" class="tank-form" style="display: none;">
-                <h3 id="form-title">Create New Tank</h3>
-                <form id="tank-form" onsubmit="saveTank(event)">
-                    <input type="hidden" id="tank-id">
-
-                    <div class="form-group">
-                        <label for="tank-name">Tank Name</label>
-                        <input type="text" id="tank-name" required placeholder="e.g., Living Room 55g">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="tank-size">Tank Size (gallons)</label>
-                        <input type="number" id="tank-size" required min="1" placeholder="e.g., 55">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="tank-notes">Notes (Optional)</label>
-                        <textarea id="tank-notes" rows="3" placeholder="Equipment, substrate, plans..."></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Select Fish Species</label>
-                        <input type="text" id="species-search" placeholder="Search species..." oninput="filterSpeciesSelector()" style="margin-bottom: 0.5rem;">
-                        <select id="species-selector" onchange="addSpeciesToTank()" size="6" style="width: 100%;">
-                            <option value="">-- Choose a species to add --</option>
-                        </select>
-                        <small style="color: var(--text-secondary); display: block; margin-top: 0.25rem;">Type to filter, click to add</small>
-                    </div>
-
-                    <div id="selected-species-list" style="margin: 1rem 0;">
-                        <strong style="font-size: 0.95rem;">Selected Species:</strong>
-                        <ul id="species-list" class="fish-list"></ul>
-                    </div>
-
-                    <div style="display: flex; gap: 1rem;">
-                        <button type="submit" class="btn-small">Save Tank</button>
-                        <button type="button" onclick="cancelForm()" class="btn-small btn-danger">Cancel</button>
-                    </div>
-                </form>
-            </div>
-
-            <!-- Tanks List -->
-            <div id="tanks-container">
-                <div class="loading-container">
-                    <div class="bubble-loader">
-                        <div class="bubble"></div>
-                        <div class="bubble"></div>
-                        <div class="bubble"></div>
-                    </div>
-                    <div class="loading-text">Loading tanks...</div>
-                </div>
-            </div>
+      <!-- Favorite Species -->
+      <div class="dashboard-section">
+        <h2>⭐ Favorite Species</h2>
+        <div id="favorite-species">
+          <div class="empty-state-small">
+            <p>No favorites yet. Click the ★ on species when comparing to save them!</p>
+          </div>
         </div>
+      </div>
 
-        <!-- Favorite Species -->
-        <div class="dashboard-section">
-            <h2>⭐ Favorite Species</h2>
-            <div id="favorite-species">
-                <div class="empty-state-small">
-                    <p>No favorites yet. Click the ★ on species when comparing to save them!</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Export Data -->
-        <div class="dashboard-section">
-            <h2>💾 Data Management</h2>
-            <p>Export your data to back it up or transfer to another device.</p>
-            <button onclick="exportData()" class="btn-small">Export My Data (JSON)</button>
-        </div>
+      <!-- Export Data -->
+      <div class="dashboard-section">
+        <h2>💾 Data Management</h2>
+        <p>Export your data to back it up or transfer to another device.</p>
+        <button onclick="exportData()" class="btn-small">Export My Data (JSON)</button>
+      </div>
     </div>
 
     <div class="footer">
-    <p>&copy; <span id="copyright-year"></span> Comparium. </p>
-    <p><a href="about.html">About</a> | <a href="mailto:contact@comparium.net">Contact</a></p>
+      <p>&copy; <span id="copyright-year"></span> Comparium.</p>
+      <p><a href="about.html">About</a> | <a href="mailto:contact@comparium.net">Contact</a></p>
     </div>
 
     <script src="js/fish-data.js"></script>
@@ -162,50 +195,49 @@
     <script src="js/tank-manager.js"></script>
     <script src="js/maintenance-manager.js"></script>
     <script>
-        // PRODUCTION: Proper auth check using Firebase's event system
-        (async () => {
-            try {
-                // Wait for Firebase to initialize with timeout
-                const firebaseTimeout = new Promise((_, reject) =>
-                    setTimeout(() => reject(new Error('Firebase initialization timeout')), 10000)
-                );
+      // PRODUCTION: Proper auth check using Firebase's event system
+      (async () => {
+        try {
+          // Wait for Firebase to initialize with timeout
+          const firebaseTimeout = new Promise((_, reject) =>
+            setTimeout(() => reject(new Error('Firebase initialization timeout')), 10000)
+          );
 
-                // Wait for firebaseAuthReady to be defined
-                let attempts = 0;
-                while (!window.firebaseAuthReady && attempts < 200) {
-                    await new Promise(resolve => setTimeout(resolve, 50));
-                    attempts++;
-                }
+          // Wait for firebaseAuthReady to be defined
+          let attempts = 0;
+          while (!window.firebaseAuthReady && attempts < 200) {
+            await new Promise(resolve => setTimeout(resolve, 50));
+            attempts++;
+          }
 
-                if (!window.firebaseAuthReady) {
-                    throw new Error('Firebase failed to initialize');
-                }
+          if (!window.firebaseAuthReady) {
+            throw new Error('Firebase failed to initialize');
+          }
 
-                // Wait for Firebase Auth to complete its initial state check or timeout
-                const user = await Promise.race([
-                    window.firebaseAuthReady,
-                    firebaseTimeout
-                ]);
+          // Wait for Firebase Auth to complete its initial state check or timeout
+          const user = await Promise.race([window.firebaseAuthReady, firebaseTimeout]);
 
-                if (!user) {
-                    // Not authenticated - redirect to login
-                    console.log('Not authenticated, redirecting to login');
-                    window.location.href = 'login.html';
-                    return;
-                }
+          if (!user) {
+            // Not authenticated - redirect to login
+            console.log('Not authenticated, redirecting to login');
+            window.location.href = 'login.html';
+            return;
+          }
 
-                // User is authenticated - load dashboard
-                await loadDashboard(user);
-            } catch (error) {
-                console.error('Dashboard initialization error:', error);
-                showErrorState('Unable to load dashboard. Please check your connection and <a href="javascript:location.reload()">refresh the page</a>.');
-            }
-        })();
+          // User is authenticated - load dashboard
+          await loadDashboard(user);
+        } catch (error) {
+          console.error('Dashboard initialization error:', error);
+          showErrorState(
+            'Unable to load dashboard. Please check your connection and <a href="javascript:location.reload()">refresh the page</a>.'
+          );
+        }
+      })();
 
-        function showErrorState(message) {
-            const container = document.querySelector('.dashboard-container');
-            if (container) {
-                container.innerHTML = `
+      function showErrorState(message) {
+        const container = document.querySelector('.dashboard-container');
+        if (container) {
+          container.innerHTML = `
                     <div class="dashboard-section" style="text-align: center; padding: 3rem;">
                         <h2 style="color: #dc3545;">⚠️ Error Loading Dashboard</h2>
                         <p style="margin: 1rem 0;">${message}</p>
@@ -214,62 +246,64 @@
                         </p>
                     </div>
                 `;
-            }
+        }
+      }
+
+      async function loadDashboard(user) {
+        try {
+          // Load profile
+          const profile = await window.firestoreGetProfile(user.uid);
+
+          if (!profile) {
+            console.error('Profile not found');
+            window.location.href = 'login.html';
+            return;
+          }
+
+          // Display username
+          document.getElementById('username-display').textContent = profile.username || 'User';
+
+          if (profile) {
+            // Update stats
+            const comparisons = profile.profile.comparisonHistory || [];
+            const tanks = profile.profile.tanks || [];
+            const favorites = profile.profile.favoriteSpecies || [];
+
+            document.getElementById('comparison-count').textContent = comparisons.length;
+            document.getElementById('tank-count').textContent = tanks.length;
+            document.getElementById('favorite-count').textContent = favorites.length;
+
+            // Load recent comparisons
+            loadRecentComparisons(comparisons.slice(0, 5));
+
+            // Initialize tank manager (loads full tank list)
+            await window.tankManager.init();
+
+            // Load favorites
+            loadFavorites(favorites);
+          }
+        } catch (error) {
+          console.error('Error loading dashboard data:', error);
+          showErrorState(
+            'Failed to load your data. Please <a href="javascript:location.reload()">refresh the page</a>.'
+          );
+        }
+      }
+
+      function loadRecentComparisons(comparisons) {
+        const container = document.getElementById('recent-comparisons');
+
+        if (comparisons.length === 0) {
+          return; // Keep empty state
         }
 
-        async function loadDashboard(user) {
-            try {
-                // Load profile
-                const profile = await window.firestoreGetProfile(user.uid);
+        let html = '<ul class="item-list">';
+        comparisons.forEach(comp => {
+          const speciesNames = comp.species.map(s => s.name).join(', ');
+          const date = new Date(comp.date).toLocaleDateString();
+          const icon = comp.compatible ? '✅' : '⚠️';
 
-                if (!profile) {
-                    console.error('Profile not found');
-                    window.location.href = 'login.html';
-                    return;
-                }
-
-                // Display username
-                document.getElementById('username-display').textContent = profile.username || 'User';
-
-                if (profile) {
-                    // Update stats
-                    const comparisons = profile.profile.comparisonHistory || [];
-                    const tanks = profile.profile.tanks || [];
-                    const favorites = profile.profile.favoriteSpecies || [];
-
-                    document.getElementById('comparison-count').textContent = comparisons.length;
-                    document.getElementById('tank-count').textContent = tanks.length;
-                    document.getElementById('favorite-count').textContent = favorites.length;
-
-                    // Load recent comparisons
-                    loadRecentComparisons(comparisons.slice(0, 5));
-
-                    // Initialize tank manager (loads full tank list)
-                    await window.tankManager.init();
-
-                    // Load favorites
-                    loadFavorites(favorites);
-                }
-            } catch (error) {
-                console.error('Error loading dashboard data:', error);
-                showErrorState('Failed to load your data. Please <a href="javascript:location.reload()">refresh the page</a>.');
-            }
-        }
-
-        function loadRecentComparisons(comparisons) {
-            const container = document.getElementById('recent-comparisons');
-            
-            if (comparisons.length === 0) {
-                return; // Keep empty state
-            }
-
-            let html = '<ul class="item-list">';
-            comparisons.forEach(comp => {
-                const speciesNames = comp.species.map(s => s.name).join(', ');
-                const date = new Date(comp.date).toLocaleDateString();
-                const icon = comp.compatible ? '✅' : '⚠️';
-                
-                html += `
+          html += `
                     <li>
                         <div>
                             <strong>${icon} ${speciesNames}</strong><br>
@@ -277,24 +311,24 @@
                         </div>
                     </li>
                 `;
-            });
-            html += '</ul>';
-            
-            container.innerHTML = html;
+        });
+        html += '</ul>';
+
+        container.innerHTML = html;
+      }
+
+      function loadFavorites(favorites) {
+        const container = document.getElementById('favorite-species');
+
+        if (favorites.length === 0) {
+          return; // Keep empty state
         }
 
-        function loadFavorites(favorites) {
-            const container = document.getElementById('favorite-species');
-            
-            if (favorites.length === 0) {
-                return; // Keep empty state
-            }
-
-            let html = '<ul class="item-list">';
-            favorites.forEach(speciesKey => {
-                const fish = fishDatabase[speciesKey];
-                if (fish) {
-                    html += `
+        let html = '<ul class="item-list">';
+        favorites.forEach(speciesKey => {
+          const fish = fishDatabase[speciesKey];
+          if (fish) {
+            html += `
                         <li>
                             <div>
                                 <strong>${fish.commonName}</strong><br>
@@ -303,45 +337,45 @@
                             <span class="favorite-star active" onclick="removeFavorite('${speciesKey}')">★</span>
                         </li>
                     `;
-                }
-            });
-            html += '</ul>';
-            
-            container.innerHTML = html;
-        }
+          }
+        });
+        html += '</ul>';
 
-        async function removeFavorite(speciesKey) {
-            const uid = authManager.getCurrentUid();
-            await storageService.removeFavorite(uid, speciesKey);
-            authManager.showMessage('Removed from favorites', 'success');
-            loadDashboard(); // Reload to update display
-        }
+        container.innerHTML = html;
+      }
 
-        async function exportData() {
-            const uid = authManager.getCurrentUid();
-            const data = await storageService.exportUserData(uid);
-            
-            if (data) {
-                // Create download
-                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `Comparium-${username}-${new Date().toISOString().split('T')[0]}.json`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-                
-                authManager.showMessage('Data exported successfully', 'success');
-            }
+      async function removeFavorite(speciesKey) {
+        const uid = authManager.getCurrentUid();
+        await storageService.removeFavorite(uid, speciesKey);
+        authManager.showMessage('Removed from favorites', 'success');
+        loadDashboard(); // Reload to update display
+      }
+
+      async function exportData() {
+        const uid = authManager.getCurrentUid();
+        const data = await storageService.exportUserData(uid);
+
+        if (data) {
+          // Create download
+          const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `Comparium-${username}-${new Date().toISOString().split('T')[0]}.json`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+
+          authManager.showMessage('Data exported successfully', 'success');
         }
+      }
     </script>
     <!-- Auto-update copyright year -->
     <script>
-        document.getElementById('copyright-year').textContent = new Date().getFullYear();
+      document.getElementById('copyright-year').textContent = new Date().getFullYear();
     </script>
 
     <script src="js/theme-manager.js"></script>
-</body>
+  </body>
 </html>

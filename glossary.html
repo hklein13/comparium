@@ -1,523 +1,545 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <!-- SEO Meta Tags -->
     <title>Glossary - Comparium | Aquarium Species, Diseases, and Equipment Reference</title>
-    <meta name="description" content="Comprehensive aquarium glossary covering fish species, diseases, equipment, and terminology. Search and learn about aquarium concepts and best practices.">
-    <meta name="keywords" content="aquarium glossary, fish diseases, aquarium equipment, fish species, aquarium terms, fishkeeping guide">
-    
+    <meta
+      name="description"
+      content="Comprehensive aquarium glossary covering fish species, diseases, equipment, and terminology. Search and learn about aquarium concepts and best practices."
+    />
+    <meta
+      name="keywords"
+      content="aquarium glossary, fish diseases, aquarium equipment, fish species, aquarium terms, fishkeeping guide"
+    />
+
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-    
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/dark-mode.css">
-    <link rel="stylesheet" href="css/enhanced-ui.css">
-    <link rel="stylesheet" href="css/ocean-theme.css">
-    
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/dark-mode.css" />
+    <link rel="stylesheet" href="css/enhanced-ui.css" />
+    <link rel="stylesheet" href="css/ocean-theme.css" />
+
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VNY458QF3"></script>
     <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-8VNY458QF3');
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', 'G-8VNY458QF3');
     </script>
-    
-    <style>
-        /* Glossary-specific styles */
-        .glossary-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
 
-        .glossary-header {
-            text-align: center;
-            margin-bottom: 3rem;
+    <style>
+      /* Glossary-specific styles */
+      .glossary-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+      }
+
+      .glossary-header {
+        text-align: center;
+        margin-bottom: 3rem;
+      }
+
+      .glossary-header h1 {
+        color: var(--gradient-start, #14b8a6);
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .glossary-header p {
+        color: var(--text-secondary, #666);
+        font-size: 1.2rem;
+      }
+
+      .glossary-search {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      }
+
+      .search-box {
+        position: relative;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .search-box input {
+        width: 100%;
+        padding: 1rem 1rem 1rem 3rem;
+        font-size: 1.1rem;
+        border: 2px solid #e1e8ed;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+      }
+
+      .search-box input:focus {
+        outline: none;
+        border-color: #14b8a6;
+        box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1);
+      }
+
+      .search-icon {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #999;
+        font-size: 1.2rem;
+      }
+
+      .glossary-categories {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 3rem;
+      }
+
+      .category-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+      }
+
+      .category-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+        border-color: #14b8a6;
+      }
+
+      .category-card.active {
+        border-color: #14b8a6;
+        background: linear-gradient(135deg, #f0fdfa 0%, #f0f9ff 100%);
+      }
+
+      .category-icon {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .category-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+      }
+
+      .category-count {
+        color: #666;
+        font-size: 0.9rem;
+      }
+
+      .glossary-content {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        min-height: 400px;
+      }
+
+      .section-title {
+        font-size: 2rem;
+        color: #14b8a6;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid #14b8a6;
+      }
+
+      .glossary-items {
+        display: grid;
+        gap: 1rem;
+      }
+
+      .glossary-item {
+        padding: 1.5rem;
+        border: 1px solid #e1e8ed;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+      }
+
+      .glossary-item.has-image {
+        display: flex;
+        gap: 1.5rem;
+      }
+
+      .glossary-item-image {
+        width: 150px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 8px;
+        flex-shrink: 0;
+      }
+
+      .glossary-item-content {
+        flex: 1;
+      }
+
+      .glossary-item:hover {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border-color: #14b8a6;
+      }
+
+      .glossary-item-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .glossary-item-meta {
+        font-size: 0.9rem;
+        color: #666;
+        font-style: italic;
+        margin-bottom: 0.5rem;
+      }
+
+      .glossary-item-description {
+        color: #2c3e50;
+        line-height: 1.6;
+        margin-bottom: 1rem;
+      }
+
+      .glossary-item-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .tag {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        background: #f0f9ff;
+        color: #0369a1;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 500;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: #666;
+      }
+
+      .empty-state-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        opacity: 0.3;
+      }
+
+      .contribute-banner {
+        background: linear-gradient(135deg, #14b8a6 0%, #1e3a8a 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 12px;
+        text-align: center;
+        margin-top: 2rem;
+      }
+
+      .contribute-banner h3 {
+        margin-bottom: 0.5rem;
+      }
+
+      .contribute-banner p {
+        margin-bottom: 1rem;
+        opacity: 0.9;
+      }
+
+      .btn-contribute {
+        background: white;
+        color: #14b8a6;
+        padding: 0.75rem 2rem;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .btn-contribute:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      }
+
+      /* Dark mode support */
+      [data-theme='dark'] .glossary-search,
+      [data-theme='dark'] .category-card,
+      [data-theme='dark'] .glossary-content,
+      [data-theme='dark'] .glossary-item {
+        background: var(--bg-card, #1e293b);
+        color: var(--text-primary, #e2e8f0);
+      }
+
+      [data-theme='dark'] .category-card.active {
+        background: linear-gradient(
+          135deg,
+          rgba(20, 184, 166, 0.2) 0%,
+          rgba(30, 58, 138, 0.2) 100%
+        );
+      }
+
+      [data-theme='dark'] .category-title,
+      [data-theme='dark'] .glossary-item-title {
+        color: var(--text-primary, #e2e8f0);
+      }
+
+      /* Additional dark mode contrast fixes */
+      [data-theme='dark'] .glossary-header p,
+      [data-theme='dark'] .glossary-item-description,
+      [data-theme='dark'] .section-title,
+      [data-theme='dark'] .empty-state h3 {
+        color: var(--text-primary, #e2e8f0);
+      }
+
+      [data-theme='dark'] .category-count,
+      [data-theme='dark'] .glossary-item-meta,
+      [data-theme='dark'] .search-box input::placeholder,
+      [data-theme='dark'] .search-icon,
+      [data-theme='dark'] .empty-state {
+        color: var(--text-secondary, #bbb);
+      }
+
+      [data-theme='dark'] .search-box input {
+        background: var(--bg-secondary, #16213e);
+        color: var(--text-primary, #e2e8f0);
+        border-color: var(--border-color, #2d3e5f);
+      }
+
+      [data-theme='dark'] .section-title {
+        border-bottom-color: var(--border-color, #2d3e5f);
+      }
+
+      [data-theme='dark'] .glossary-item {
+        border-color: var(--border-color, #2d3e5f);
+      }
+
+      [data-theme='dark'] .tag {
+        background: var(--bg-secondary, #16213e);
+        color: var(--text-primary, #e2e8f0);
+      }
+
+      [data-theme='dark'] .contribute-banner {
+        background: linear-gradient(135deg, #0f766e 0%, #1e3a8a 100%);
+      }
+
+      /* Pagination styles */
+      .pagination-info {
+        color: var(--text-secondary, #666);
+        font-size: 0.95rem;
+        margin-bottom: 1rem;
+      }
+
+      .pagination-controls {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #e1e8ed;
+        flex-wrap: wrap;
+      }
+
+      .pagination-btn {
+        padding: 0.5rem 1rem;
+        border: 1px solid #e1e8ed;
+        background: white;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.95rem;
+        transition: all 0.2s ease;
+        color: #2c3e50;
+      }
+
+      .pagination-btn:hover:not([disabled]) {
+        border-color: #14b8a6;
+        background: #f0fdfa;
+        color: #14b8a6;
+      }
+
+      .pagination-btn.active {
+        background: #14b8a6;
+        border-color: #14b8a6;
+        color: white;
+      }
+
+      .pagination-btn[disabled] {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .pagination-prev,
+      .pagination-next {
+        font-weight: 500;
+      }
+
+      .pagination-ellipsis {
+        padding: 0.5rem;
+        color: #666;
+      }
+
+      /* Dark mode pagination */
+      [data-theme='dark'] .pagination-controls {
+        border-top-color: var(--border-color, #2d3e5f);
+      }
+
+      [data-theme='dark'] .pagination-btn {
+        background: var(--bg-secondary, #16213e);
+        border-color: var(--border-color, #2d3e5f);
+        color: var(--text-primary, #e2e8f0);
+      }
+
+      [data-theme='dark'] .pagination-btn:hover:not([disabled]) {
+        border-color: #14b8a6;
+        background: rgba(20, 184, 166, 0.2);
+        color: #14b8a6;
+      }
+
+      [data-theme='dark'] .pagination-btn.active {
+        background: #14b8a6;
+        border-color: #14b8a6;
+        color: white;
+      }
+
+      [data-theme='dark'] .pagination-info {
+        color: var(--text-secondary, #bbb);
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .glossary-container {
+          padding: 1rem;
         }
 
         .glossary-header h1 {
-            color: var(--gradient-start, #14b8a6);
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .glossary-header p {
-            color: var(--text-secondary, #666);
-            font-size: 1.2rem;
-        }
-
-        .glossary-search {
-            background: white;
-            border-radius: 12px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        }
-
-        .search-box {
-            position: relative;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .search-box input {
-            width: 100%;
-            padding: 1rem 1rem 1rem 3rem;
-            font-size: 1.1rem;
-            border: 2px solid #e1e8ed;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .search-box input:focus {
-            outline: none;
-            border-color: #14b8a6;
-            box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1);
-        }
-
-        .search-icon {
-            position: absolute;
-            left: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #999;
-            font-size: 1.2rem;
+          font-size: 2rem;
         }
 
         .glossary-categories {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 3rem;
-        }
-
-        .category-card {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-        }
-
-        .category-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
-            border-color: #14b8a6;
-        }
-
-        .category-card.active {
-            border-color: #14b8a6;
-            background: linear-gradient(135deg, #f0fdfa 0%, #f0f9ff 100%);
-        }
-
-        .category-icon {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .category-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: #2c3e50;
-            margin-bottom: 0.5rem;
-        }
-
-        .category-count {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .glossary-content {
-            background: white;
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            min-height: 400px;
-        }
-
-        .section-title {
-            font-size: 2rem;
-            color: #14b8a6;
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid #14b8a6;
-        }
-
-        .glossary-items {
-            display: grid;
-            gap: 1rem;
-        }
-
-        .glossary-item {
-            padding: 1.5rem;
-            border: 1px solid #e1e8ed;
-            border-radius: 8px;
-            transition: all 0.2s ease;
+          grid-template-columns: 1fr;
         }
 
         .glossary-item.has-image {
-            display: flex;
-            gap: 1.5rem;
+          flex-direction: column;
         }
 
         .glossary-item-image {
-            width: 150px;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 8px;
-            flex-shrink: 0;
-        }
-
-        .glossary-item-content {
-            flex: 1;
-        }
-
-        .glossary-item:hover {
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            border-color: #14b8a6;
-        }
-
-        .glossary-item-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: #2c3e50;
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .glossary-item-meta {
-            font-size: 0.9rem;
-            color: #666;
-            font-style: italic;
-            margin-bottom: 0.5rem;
-        }
-
-        .glossary-item-description {
-            color: #2c3e50;
-            line-height: 1.6;
-            margin-bottom: 1rem;
-        }
-
-        .glossary-item-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .tag {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            background: #f0f9ff;
-            color: #0369a1;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 500;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 4rem 2rem;
-            color: #666;
-        }
-
-        .empty-state-icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            opacity: 0.3;
-        }
-
-        .contribute-banner {
-            background: linear-gradient(135deg, #14b8a6 0%, #1e3a8a 100%);
-            color: white;
-            padding: 2rem;
-            border-radius: 12px;
-            text-align: center;
-            margin-top: 2rem;
-        }
-
-        .contribute-banner h3 {
-            margin-bottom: 0.5rem;
-        }
-
-        .contribute-banner p {
-            margin-bottom: 1rem;
-            opacity: 0.9;
-        }
-
-        .btn-contribute {
-            background: white;
-            color: #14b8a6;
-            padding: 0.75rem 2rem;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .btn-contribute:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        }
-
-        /* Dark mode support */
-        [data-theme="dark"] .glossary-search,
-        [data-theme="dark"] .category-card,
-        [data-theme="dark"] .glossary-content,
-        [data-theme="dark"] .glossary-item {
-            background: var(--bg-card, #1e293b);
-            color: var(--text-primary, #e2e8f0);
-        }
-
-        [data-theme="dark"] .category-card.active {
-            background: linear-gradient(135deg, rgba(20, 184, 166, 0.2) 0%, rgba(30, 58, 138, 0.2) 100%);
-        }
-
-        [data-theme="dark"] .category-title,
-        [data-theme="dark"] .glossary-item-title {
-            color: var(--text-primary, #e2e8f0);
-        }
-
-        /* Additional dark mode contrast fixes */
-        [data-theme="dark"] .glossary-header p,
-        [data-theme="dark"] .glossary-item-description,
-        [data-theme="dark"] .section-title,
-        [data-theme="dark"] .empty-state h3 {
-            color: var(--text-primary, #e2e8f0);
-        }
-
-        [data-theme="dark"] .category-count,
-        [data-theme="dark"] .glossary-item-meta,
-        [data-theme="dark"] .search-box input::placeholder,
-        [data-theme="dark"] .search-icon,
-        [data-theme="dark"] .empty-state {
-            color: var(--text-secondary, #bbb);
-        }
-
-        [data-theme="dark"] .search-box input {
-            background: var(--bg-secondary, #16213e);
-            color: var(--text-primary, #e2e8f0);
-            border-color: var(--border-color, #2d3e5f);
-        }
-
-        [data-theme="dark"] .section-title {
-            border-bottom-color: var(--border-color, #2d3e5f);
-        }
-
-        [data-theme="dark"] .glossary-item {
-            border-color: var(--border-color, #2d3e5f);
-        }
-
-        [data-theme="dark"] .tag {
-            background: var(--bg-secondary, #16213e);
-            color: var(--text-primary, #e2e8f0);
-        }
-
-        [data-theme="dark"] .contribute-banner {
-            background: linear-gradient(135deg, #0f766e 0%, #1e3a8a 100%);
-        }
-
-        /* Pagination styles */
-        .pagination-info {
-            color: var(--text-secondary, #666);
-            font-size: 0.95rem;
-            margin-bottom: 1rem;
+          width: 100%;
+          height: 150px;
         }
 
         .pagination-controls {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 0.5rem;
-            margin-top: 2rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid #e1e8ed;
-            flex-wrap: wrap;
+          gap: 0.25rem;
         }
 
         .pagination-btn {
-            padding: 0.5rem 1rem;
-            border: 1px solid #e1e8ed;
-            background: white;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.95rem;
-            transition: all 0.2s ease;
-            color: #2c3e50;
-        }
-
-        .pagination-btn:hover:not([disabled]) {
-            border-color: #14b8a6;
-            background: #f0fdfa;
-            color: #14b8a6;
-        }
-
-        .pagination-btn.active {
-            background: #14b8a6;
-            border-color: #14b8a6;
-            color: white;
-        }
-
-        .pagination-btn[disabled] {
-            opacity: 0.5;
-            cursor: not-allowed;
+          padding: 0.4rem 0.6rem;
+          font-size: 0.85rem;
         }
 
         .pagination-prev,
         .pagination-next {
-            font-weight: 500;
+          padding: 0.4rem 0.8rem;
         }
-
-        .pagination-ellipsis {
-            padding: 0.5rem;
-            color: #666;
-        }
-
-        /* Dark mode pagination */
-        [data-theme="dark"] .pagination-controls {
-            border-top-color: var(--border-color, #2d3e5f);
-        }
-
-        [data-theme="dark"] .pagination-btn {
-            background: var(--bg-secondary, #16213e);
-            border-color: var(--border-color, #2d3e5f);
-            color: var(--text-primary, #e2e8f0);
-        }
-
-        [data-theme="dark"] .pagination-btn:hover:not([disabled]) {
-            border-color: #14b8a6;
-            background: rgba(20, 184, 166, 0.2);
-            color: #14b8a6;
-        }
-
-        [data-theme="dark"] .pagination-btn.active {
-            background: #14b8a6;
-            border-color: #14b8a6;
-            color: white;
-        }
-
-        [data-theme="dark"] .pagination-info {
-            color: var(--text-secondary, #bbb);
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .glossary-container {
-                padding: 1rem;
-            }
-
-            .glossary-header h1 {
-                font-size: 2rem;
-            }
-
-            .glossary-categories {
-                grid-template-columns: 1fr;
-            }
-
-            .glossary-item.has-image {
-                flex-direction: column;
-            }
-
-            .glossary-item-image {
-                width: 100%;
-                height: 150px;
-            }
-
-            .pagination-controls {
-                gap: 0.25rem;
-            }
-
-            .pagination-btn {
-                padding: 0.4rem 0.6rem;
-                font-size: 0.85rem;
-            }
-
-            .pagination-prev,
-            .pagination-next {
-                padding: 0.4rem 0.8rem;
-            }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="header">
-        <div class="header-content">
-            <div class="header-left">
-                <a href="index.html" class="home-link">
-                    <h1><span class="logo-wave">Comparium</span></h1>
-                    <p>The place for all things aquarium</p>
-                </a>
-            </div>
-            <div class="header-nav">
-                <a href="index.html">Home</a>
-                <a href="compare.html">Compare Fish</a>
-                <a href="dashboard.html">Dashboard</a>
-                <a href="glossary.html">Glossary</a>
-                <a href="faq.html">FAQ</a>
-                <div id="auth-links">
-                    <a href="login.html">Login</a>
-                    <a href="signup.html">Sign Up</a>
-                </div>
-            </div>
+      <div class="header-content">
+        <div class="header-left">
+          <a href="index.html" class="home-link">
+            <h1><span class="logo-wave">Comparium</span></h1>
+            <p>The place for all things aquarium</p>
+          </a>
         </div>
+        <div class="header-nav">
+          <a href="index.html">Home</a>
+          <a href="compare.html">Compare Fish</a>
+          <a href="dashboard.html">Dashboard</a>
+          <a href="glossary.html">Glossary</a>
+          <a href="faq.html">FAQ</a>
+          <div id="auth-links">
+            <a href="login.html">Login</a>
+            <a href="signup.html">Sign Up</a>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="glossary-container">
-        <div class="glossary-header">
-            <h1>📚 Aquarium Glossary</h1>
-            <p>Search and learn about fish species, diseases, equipment, and aquarium terminology</p>
-        </div>
+      <div class="glossary-header">
+        <h1>📚 Aquarium Glossary</h1>
+        <p>Search and learn about fish species, diseases, equipment, and aquarium terminology</p>
+      </div>
 
-        <div class="glossary-search">
-            <div class="search-box">
-                <span class="search-icon">🔍</span>
-                <input 
-                    type="text" 
-                    id="glossarySearch" 
-                    placeholder="Search glossary terms, species, diseases, equipment..."
-                    oninput="searchGlossary()"
-                >
-            </div>
+      <div class="glossary-search">
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input
+            type="text"
+            id="glossarySearch"
+            placeholder="Search glossary terms, species, diseases, equipment..."
+            oninput="searchGlossary()"
+          />
         </div>
+      </div>
 
-        <div class="glossary-categories" id="glossaryCategories">
-            <!-- Categories will be populated by JavaScript -->
-        </div>
+      <div class="glossary-categories" id="glossaryCategories">
+        <!-- Categories will be populated by JavaScript -->
+      </div>
 
-        <div class="glossary-content" id="glossaryContent">
-            <div class="empty-state">
-                <div class="empty-state-icon">📖</div>
-                <h3>Select a category above to browse</h3>
-                <p>Or use the search bar to find specific terms</p>
-            </div>
+      <div class="glossary-content" id="glossaryContent">
+        <div class="empty-state">
+          <div class="empty-state-icon">📖</div>
+          <h3>Select a category above to browse</h3>
+          <p>Or use the search bar to find specific terms</p>
         </div>
+      </div>
 
-        <div class="contribute-banner">
-            <h3>🌟 Help Grow the Glossary</h3>
-            <p>Have knowledge to share? We're building a comprehensive resource for the aquarium community.</p>
-            <button class="btn-contribute" onclick="showContributeInfo()">Learn How to Contribute</button>
-        </div>
+      <div class="contribute-banner">
+        <h3>🌟 Help Grow the Glossary</h3>
+        <p>
+          Have knowledge to share? We're building a comprehensive resource for the aquarium
+          community.
+        </p>
+        <button class="btn-contribute" onclick="showContributeInfo()">
+          Learn How to Contribute
+        </button>
+      </div>
     </div>
 
     <div class="footer">
-        <p>&copy; <span id="copyright-year"></span> Comparium.</p>
-        <p><a href="about.html">About</a> | <a href="mailto:contact@comparium.net">Contact</a></p>
-        <p><small>Always research thoroughly and consult with experienced aquarists before adding new fish to your tank.</small></p>
+      <p>&copy; <span id="copyright-year"></span> Comparium.</p>
+      <p><a href="about.html">About</a> | <a href="mailto:contact@comparium.net">Contact</a></p>
+      <p>
+        <small
+          >Always research thoroughly and consult with experienced aquarists before adding new fish
+          to your tank.</small
+        >
+      </p>
     </div>
 
     <!-- Auto-update copyright year -->
     <script>
-        document.getElementById('copyright-year').textContent = new Date().getFullYear();
+      document.getElementById('copyright-year').textContent = new Date().getFullYear();
     </script>
 
     <script src="js/storage-service.js"></script>
@@ -528,5 +550,5 @@
     <script type="module" src="js/firebase-init.js"></script>
     <script src="js/theme-manager.js"></script>
     <script src="js/glossary.js"></script>
-</body>
+  </body>
 </html>
