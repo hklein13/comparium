@@ -42,6 +42,12 @@ npm run images:upload            # Batch upload from preview selection (paste JS
 npm test                         # Run Playwright tests
 npm run test:headed              # Run tests with visible browser
 
+# Code Quality
+npm run lint                     # Check JS files for errors
+npm run lint:fix                 # Auto-fix linting issues
+npm run format                   # Format all code with Prettier
+npm run format:check             # Check formatting without changing files
+
 # Cloud Functions
 cd functions && npm install      # Install function dependencies (first time only)
 firebase deploy --only functions # Deploy Cloud Functions to Firebase
@@ -172,6 +178,39 @@ Development follows a phased approach. See `DATA-MODEL.md` for complete specific
 ### 4. YAGNI
 - Don't build for hypothetical future requirements
 - Build what's needed now, refactor when actually needed
+
+## Automation & Quality Tools
+
+### Context7 Integration (MANDATORY)
+**ALWAYS use Context7 to fetch current documentation before writing code that uses external libraries.**
+
+This is NOT optional. Before writing or modifying code that uses:
+- Firebase SDK (Auth, Firestore, Storage, Functions)
+- Playwright testing APIs
+- Any npm package or external library
+
+You MUST call the Context7 MCP tools to fetch current documentation:
+1. Use `resolve-library-id` to find the library
+2. Use `get-library-docs` to fetch current docs
+3. Then write the code using the fetched documentation
+
+This prevents outdated API usage and ensures correct, working code on the first attempt.
+
+### Automated Quality Hooks
+The following run automatically (configured in `.claude/settings.json`):
+
+| Hook | When | What It Does |
+|------|------|--------------|
+| `lint-on-edit.sh` | After each JS file edit | Runs ESLint to catch errors immediately |
+| `final-checks.sh` | When Claude finishes | Full lint + format check on project |
+
+These hooks never block work - they report issues but always continue.
+
+### Pre-Deployment Checklist
+Before merging to main:
+1. Run `npm test` - Playwright tests must pass
+2. Run `npm run lint` - No ESLint errors
+3. Run `npm run format:check` - Code is formatted
 
 ## Firebase Setup
 
