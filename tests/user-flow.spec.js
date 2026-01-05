@@ -57,7 +57,9 @@ test.describe('Complete User Flow', () => {
       await page.waitForURL('**/dashboard.html', { timeout: 10000 });
 
       // Verify we're on dashboard
-      await expect(page.locator('#username-display')).toHaveText(testUser.username, { timeout: 5000 });
+      await expect(page.locator('#username-display')).toHaveText(testUser.username, {
+        timeout: 5000,
+      });
 
       console.log(`✓ Registration successful for user: ${testUser.username}`);
     });
@@ -91,7 +93,9 @@ test.describe('Complete User Flow', () => {
       await page.click('button:has-text("Save Tank")');
 
       // Wait for success message
-      await expect(page.locator('.message-alert:has-text("Tank saved")')).toBeVisible({ timeout: 5000 });
+      await expect(page.locator('.message-alert:has-text("Tank saved")')).toBeVisible({
+        timeout: 5000,
+      });
 
       // Verify tank appears in list
       await expect(page.locator('.tank-card:has-text("Test Community Tank")')).toBeVisible();
@@ -113,10 +117,14 @@ test.describe('Complete User Flow', () => {
       await waterChangeBtn.click();
 
       // Wait for success message
-      await expect(page.locator('.message-alert:has-text("Water Change logged")')).toBeVisible({ timeout: 5000 });
+      await expect(page.locator('.message-alert:has-text("Water Change logged")')).toBeVisible({
+        timeout: 5000,
+      });
 
       // Verify event appears in recent events
-      await expect(tankCard.locator('.event-item:has-text("Water Change")')).toBeVisible({ timeout: 3000 });
+      await expect(tankCard.locator('.event-item:has-text("Water Change")')).toBeVisible({
+        timeout: 3000,
+      });
 
       // Wait for all success messages to disappear before next action
       await page.waitForTimeout(2000); // Give messages time to auto-dismiss
@@ -149,13 +157,17 @@ test.describe('Complete User Flow', () => {
       await page.locator('.event-modal-footer button:has-text("Log Event")').click();
 
       // Wait for success message
-      await expect(page.locator('.message-alert:has-text("Parameter Test logged")')).toBeVisible({ timeout: 5000 });
+      await expect(page.locator('.message-alert:has-text("Parameter Test logged")')).toBeVisible({
+        timeout: 5000,
+      });
 
       // Verify modal closed
       await expect(page.locator('.event-modal')).not.toBeVisible();
 
       // Verify event appears in list
-      await expect(tankCard.locator('.event-item:has-text("Parameter Test")')).toBeVisible({ timeout: 3000 });
+      await expect(tankCard.locator('.event-item:has-text("Parameter Test")')).toBeVisible({
+        timeout: 3000,
+      });
 
       console.log('✓ Detailed parameter test event logged');
     });
@@ -194,10 +206,14 @@ test.describe('Complete User Flow', () => {
       await page.click('button:has-text("Create Schedule")');
 
       // Wait for success message
-      await expect(page.locator('.message-alert:has-text("schedule created")')).toBeVisible({ timeout: 5000 });
+      await expect(page.locator('.message-alert:has-text("schedule created")')).toBeVisible({
+        timeout: 5000,
+      });
 
       // Verify schedule pill appears
-      await expect(tankCard.locator('.schedule-pill:has-text("Water Change")')).toBeVisible({ timeout: 3000 });
+      await expect(tankCard.locator('.schedule-pill:has-text("Water Change")')).toBeVisible({
+        timeout: 3000,
+      });
 
       console.log('✓ Maintenance schedule created');
     });
@@ -213,10 +229,14 @@ test.describe('Complete User Flow', () => {
       await schedulePill.locator('.schedule-complete-btn').click();
 
       // Wait for success message
-      await expect(page.locator('.message-alert:has-text("completed")')).toBeVisible({ timeout: 5000 });
+      await expect(page.locator('.message-alert:has-text("completed")')).toBeVisible({
+        timeout: 5000,
+      });
 
       // Verify an event was also logged (completing a schedule logs an event)
-      await expect(tankCard.locator('.event-item:has-text("Water Change")')).toHaveCount(2, { timeout: 3000 });
+      await expect(tankCard.locator('.event-item:has-text("Water Change")')).toHaveCount(2, {
+        timeout: 3000,
+      });
 
       console.log('✓ Schedule marked complete and event logged');
     });
@@ -243,10 +263,14 @@ test.describe('Complete User Flow', () => {
       await page.click('button:has-text("Create Schedule")');
 
       // Verify success
-      await expect(page.locator('.message-alert:has-text("schedule created")')).toBeVisible({ timeout: 5000 });
+      await expect(page.locator('.message-alert:has-text("schedule created")')).toBeVisible({
+        timeout: 5000,
+      });
 
       // Verify custom schedule pill appears
-      await expect(tankCard.locator('.schedule-pill:has-text("Check CO2")')).toBeVisible({ timeout: 3000 });
+      await expect(tankCard.locator('.schedule-pill:has-text("Check CO2")')).toBeVisible({
+        timeout: 3000,
+      });
 
       console.log('✓ Custom schedule created');
     });
@@ -266,7 +290,10 @@ test.describe('Complete User Flow', () => {
       await page.waitForTimeout(500); // Wait for filter
 
       // Click on the species item to select it
-      const cardinalItem = page.locator('#panel1 .species-item').filter({ hasText: 'Cardinal Tetra' }).first();
+      const cardinalItem = page
+        .locator('#panel1 .species-item')
+        .filter({ hasText: 'Cardinal Tetra' })
+        .first();
       await cardinalItem.click({ timeout: 5000 });
 
       // Wait a moment for selection to register
@@ -277,7 +304,9 @@ test.describe('Complete User Flow', () => {
       if (await favoriteStars.isVisible({ timeout: 2000 }).catch(() => false)) {
         await favoriteStars.click();
         // Wait for success message
-        await expect(page.locator('.message-alert').filter({ hasText: /favorite/i })).toBeVisible({ timeout: 5000 });
+        await expect(page.locator('.message-alert').filter({ hasText: /favorite/i })).toBeVisible({
+          timeout: 5000,
+        });
         console.log('✓ Favorite added successfully');
       } else {
         console.log('⚠ Favorite star not visible (may require login or species not selected)');
@@ -292,7 +321,10 @@ test.describe('Complete User Flow', () => {
       // Clear search and select species for comparison
       await page.fill('#search1', 'Neon');
       await page.waitForTimeout(500);
-      const neonItem = page.locator('#panel1 .species-item').filter({ hasText: 'Neon Tetra' }).first();
+      const neonItem = page
+        .locator('#panel1 .species-item')
+        .filter({ hasText: 'Neon Tetra' })
+        .first();
       await neonItem.click();
 
       await page.fill('#search2', 'Guppy');
@@ -307,7 +339,11 @@ test.describe('Complete User Flow', () => {
       await page.waitForTimeout(2000);
 
       // Verify the empty state is gone (comparison was made)
-      const hasResults = await page.locator('.comparison-grid').locator('.empty-state').isHidden().catch(() => true);
+      const hasResults = await page
+        .locator('.comparison-grid')
+        .locator('.empty-state')
+        .isHidden()
+        .catch(() => true);
       if (hasResults) {
         console.log('✓ Comparison created successfully');
       } else {
@@ -320,8 +356,18 @@ test.describe('Complete User Flow', () => {
     // ========================================================================
 
     await test.step('Logout from account', async () => {
-      // Click logout link in navigation
-      await page.click('a:has-text("Logout")');
+      // Navigate to dashboard where logout is in Settings dropdown
+      await page.goto('/dashboard.html');
+
+      // Wait for settings toggle to appear (dashboard loaded)
+      await page.waitForSelector('#settings-toggle', { timeout: 15000 });
+
+      // Click settings gear to open dropdown
+      await page.click('#settings-toggle');
+
+      // Wait for dropdown to open and click logout button
+      await page.waitForSelector('.settings-dropdown.open', { timeout: 5000 });
+      await page.click('.settings-dropdown-btn:has-text("Log Out")');
 
       // Wait for redirect to home page
       await page.waitForURL(/index\.html|\/$/);
@@ -357,7 +403,9 @@ test.describe('Complete User Flow', () => {
       await page.waitForURL('**/dashboard.html', { timeout: 10000 });
 
       // Verify we're logged in
-      await expect(page.locator('#username-display')).toHaveText(testUser.username, { timeout: 5000 });
+      await expect(page.locator('#username-display')).toHaveText(testUser.username, {
+        timeout: 5000,
+      });
 
       console.log('✓ Login successful');
     });
@@ -431,7 +479,9 @@ test.describe('Complete User Flow', () => {
 
       if (eventCount >= 3) {
         // Verify specific events are present
-        const waterChangeCount = await tankCard.locator('.event-item:has-text("Water Change")').count();
+        const waterChangeCount = await tankCard
+          .locator('.event-item:has-text("Water Change")')
+          .count();
         expect(waterChangeCount).toBeGreaterThanOrEqual(2);
         await expect(tankCard.locator('.event-item:has-text("Parameter Test")')).toBeVisible();
         console.log('✓ Maintenance events persisted correctly');
@@ -506,7 +556,11 @@ test.describe('Authentication Edge Cases', () => {
       await page.click('button[type="submit"]');
 
       // Should show error message (username already taken) - check for various possible messages
-      const errorVisible = await page.locator('.message-alert').filter({ hasText: /already|taken|exists|in use/i }).isVisible({ timeout: 5000 }).catch(() => false);
+      const errorVisible = await page
+        .locator('.message-alert')
+        .filter({ hasText: /already|taken|exists|in use/i })
+        .isVisible({ timeout: 5000 })
+        .catch(() => false);
 
       if (errorVisible) {
         console.log('✓ Duplicate username correctly rejected');
@@ -537,7 +591,10 @@ test.describe('Authentication Edge Cases', () => {
       // Verify we're still on login page (didn't successfully login)
       const url = page.url();
       const stillOnLogin = url.includes('login.html');
-      const errorShown = await page.locator('.message-alert').isVisible().catch(() => false);
+      const errorShown = await page
+        .locator('.message-alert')
+        .isVisible()
+        .catch(() => false);
 
       if (stillOnLogin || errorShown) {
         console.log('✓ Invalid credentials correctly rejected');
@@ -612,7 +669,9 @@ test.describe.skip('Maintenance Features', () => {
       await tankCard.locator('.event-delete').first().click();
 
       // Wait for success message
-      await expect(page.locator('.message-alert:has-text("deleted")')).toBeVisible({ timeout: 5000 });
+      await expect(page.locator('.message-alert:has-text("deleted")')).toBeVisible({
+        timeout: 5000,
+      });
 
       // Verify count decreased
       const newCount = await tankCard.locator('.event-item').count();
@@ -645,7 +704,9 @@ test.describe.skip('Maintenance Features', () => {
       await page.click('button:has-text("Save Changes")');
 
       // Verify success
-      await expect(page.locator('.message-alert:has-text("updated")')).toBeVisible({ timeout: 5000 });
+      await expect(page.locator('.message-alert:has-text("updated")')).toBeVisible({
+        timeout: 5000,
+      });
 
       console.log('✓ Schedule edited successfully');
     } else {
@@ -671,7 +732,9 @@ test.describe.skip('Maintenance Features', () => {
 
       // Save
       await page.click('button:has-text("Save Changes")');
-      await expect(page.locator('.message-alert:has-text("updated")')).toBeVisible({ timeout: 5000 });
+      await expect(page.locator('.message-alert:has-text("updated")')).toBeVisible({
+        timeout: 5000,
+      });
 
       // Verify pill shows "Paused"
       await expect(tankCard.locator('.schedule-pill:has-text("Paused")')).toBeVisible();
@@ -708,7 +771,9 @@ test.describe.skip('Maintenance Features', () => {
       await page.click('button:has-text("Delete")');
 
       // Verify success
-      await expect(page.locator('.message-alert:has-text("deleted")')).toBeVisible({ timeout: 5000 });
+      await expect(page.locator('.message-alert:has-text("deleted")')).toBeVisible({
+        timeout: 5000,
+      });
 
       // Verify count decreased
       const newCount = await tankCard.locator('.schedule-pill').count();
@@ -749,10 +814,8 @@ test.describe('Page Load Tests', () => {
         await expect(page).toHaveTitle(p.title);
 
         // No critical JS errors (filter out expected warnings)
-        const criticalErrors = errors.filter(e =>
-          !e.includes('favicon') &&
-          !e.includes('404') &&
-          !e.includes('net::')
+        const criticalErrors = errors.filter(
+          e => !e.includes('favicon') && !e.includes('404') && !e.includes('net::')
         );
 
         if (criticalErrors.length > 0) {
@@ -768,7 +831,9 @@ test.describe('Page Load Tests', () => {
     await page.goto('/glossary.html');
 
     // Wait for the glossary container to be ready
-    await page.waitForSelector('.glossary-container, #glossary-container, .glossary-items', { timeout: 10000 });
+    await page.waitForSelector('.glossary-container, #glossary-container, .glossary-items', {
+      timeout: 10000,
+    });
 
     // Wait a bit more for items to render (data might come from Firestore)
     await page.waitForTimeout(3000);
@@ -782,8 +847,12 @@ test.describe('Page Load Tests', () => {
       console.log(`✓ Glossary displays ${count} species`);
     } else {
       // If no items rendered, check if there's an error state or loading
-      const hasContent = await page.locator('.glossary-container, #glossary-container').textContent();
-      console.log(`⚠ Glossary page loaded but no species items found. Content preview: ${hasContent?.slice(0, 100)}...`);
+      const hasContent = await page
+        .locator('.glossary-container, #glossary-container')
+        .textContent();
+      console.log(
+        `⚠ Glossary page loaded but no species items found. Content preview: ${hasContent?.slice(0, 100)}...`
+      );
     }
   });
 

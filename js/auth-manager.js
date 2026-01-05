@@ -26,7 +26,7 @@ class AuthManager {
 
         // Create polling promise
         // eslint-disable-next-line no-async-promise-executor -- Works correctly, refactoring is risky
-        const poll = new Promise(async (resolve) => {
+        const poll = new Promise(async resolve => {
           let attempts = 0;
           while (!window.firebaseAuthState && attempts < 100) {
             await new Promise(r => setTimeout(r, 50));
@@ -195,15 +195,9 @@ class AuthManager {
     // Update navigation
     const authLinks = document.getElementById('auth-links');
     if (authLinks) {
-      // On dashboard page, logout is in Settings section, so hide from header
-      const isDashboard = window.location.pathname.includes('dashboard');
-      if (isDashboard) {
-        authLinks.innerHTML = '';
-      } else {
-        authLinks.innerHTML = `
-                <a href="#" onclick="authManager.logout(); return false;">Logout</a>
-            `;
-      }
+      // Logout is in dashboard Settings dropdown, so keep header clean
+      // Users navigate to Dashboard to access account settings and logout
+      authLinks.innerHTML = '';
     }
 
     // Show user-specific features
