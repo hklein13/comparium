@@ -17,22 +17,22 @@ function escapeRegex(string) {
  * Call this after displaying results
  */
 function makeSpeciesNamesClickable() {
-  console.log('🔍 makeSpeciesNamesClickable started');
+  console.log('makeSpeciesNamesClickable started');
 
   // Find the comparison grid (not .results!)
   const resultsDiv = document.getElementById('comparisonGrid');
   if (!resultsDiv) {
-    console.log('❌ No comparisonGrid found');
+    console.log('No comparisonGrid found');
     return;
   }
-  console.log('✅ Found comparisonGrid');
+  console.log('Found comparisonGrid');
 
   // Safety check: ensure selectedSpecies exists
   if (typeof selectedSpecies === 'undefined') {
-    console.log('❌ selectedSpecies is undefined');
+    console.log('selectedSpecies is undefined');
     return;
   }
-  console.log('✅ selectedSpecies exists:', selectedSpecies);
+  console.log('selectedSpecies exists:', selectedSpecies);
 
   // Get all the fish data from selected panels
   const fish1Key = selectedSpecies.panel1;
@@ -40,17 +40,17 @@ function makeSpeciesNamesClickable() {
   const fish3Key = selectedSpecies.panel3;
 
   const selectedFish = [fish1Key, fish2Key, fish3Key].filter(Boolean);
-  console.log('🐟 Selected fish:', selectedFish);
+  console.log('Selected fish:', selectedFish);
 
   // Replace each fish name with clickable link
   selectedFish.forEach(fishKey => {
     const fish = fishDatabase[fishKey];
     if (!fish) {
-      console.log('❌ Fish not found in database:', fishKey);
+      console.log('Fish not found in database:', fishKey);
       return;
     }
 
-    console.log('🔧 Processing:', fish.commonName, 'key:', fishKey);
+    console.log('Processing:', fish.commonName, 'key:', fishKey);
 
     // Find all instances of this fish name in results
     // Escape special regex characters (fixes species with parentheses like "Bichir (Senegal)")
@@ -67,16 +67,16 @@ function makeSpeciesNamesClickable() {
     const afterHTML = resultsDiv.innerHTML;
 
     if (beforeHTML !== afterHTML) {
-      console.log('✅ Replaced text for:', fish.commonName);
+      console.log('Replaced text for:', fish.commonName);
     } else {
-      console.log('⚠️ No replacement occurred for:', fish.commonName);
+      console.log('No replacement occurred for:', fish.commonName);
     }
   });
 
   // Favorite stars are now added directly in displayComparison() in app.js
   // No need to add them here - prevents duplicate stars
 
-  console.log('✅ makeSpeciesNamesClickable completed');
+  console.log('makeSpeciesNamesClickable completed');
 }
 
 /**
@@ -150,24 +150,24 @@ console.log('app-enhancements.js loaded');
 console.log('compareSpecies exists?', typeof compareSpecies);
 
 if (typeof compareSpecies !== 'undefined') {
-  console.log('✅ Wrapping compareSpecies function');
+  console.log('Wrapping compareSpecies function');
   const originalCompareSpecies = compareSpecies;
   compareSpecies = function () {
-    console.log('🎯 Enhanced compareSpecies called!');
+    console.log('Enhanced compareSpecies called!');
     // Call original function
     const result = originalCompareSpecies();
 
-    console.log('⏰ Scheduling makeSpeciesNamesClickable...');
+    console.log('Scheduling makeSpeciesNamesClickable...');
     // Add enhancements after a brief delay to ensure DOM is updated
     setTimeout(() => {
-      console.log('🔧 Calling makeSpeciesNamesClickable now');
+      console.log('Calling makeSpeciesNamesClickable now');
       makeSpeciesNamesClickable();
     }, 100);
 
     return result;
   };
 } else {
-  console.log('❌ compareSpecies NOT FOUND - cannot wrap');
+  console.log('compareSpecies NOT FOUND - cannot wrap');
 }
 
 /**
@@ -262,7 +262,7 @@ function addViewDetailsButtons() {
     // Create button
     const button = document.createElement('button');
     button.className = 'btn-small view-details-btn';
-    button.textContent = '📖 View Details';
+    button.textContent = 'View Details';
     button.style.marginTop = '1rem';
     button.style.width = '100%';
     button.style.display = 'none'; // Hidden until species selected

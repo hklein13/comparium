@@ -4,18 +4,18 @@
  */
 
 window.maintenanceManager = {
-  // Event type definitions with icons and labels
+  // Event type definitions with labels
   eventTypes: {
-    waterChange: { icon: '💧', label: 'Water Change', quickLog: true },
-    parameterTest: { icon: '🧪', label: 'Parameter Test', quickLog: true },
-    filterMaintenance: { icon: '🔧', label: 'Filter Maintenance', quickLog: true },
-    fishAdded: { icon: '🐟', label: 'Fish Added', quickLog: false },
-    fishRemoved: { icon: '🐟', label: 'Fish Removed', quickLog: false },
-    feeding: { icon: '🍽️', label: 'Special Feeding', quickLog: false },
-    medication: { icon: '💊', label: 'Medication', quickLog: false },
-    plantChange: { icon: '🌿', label: 'Plant Change', quickLog: false },
-    equipmentChange: { icon: '⚙️', label: 'Equipment Change', quickLog: false },
-    note: { icon: '📝', label: 'Note', quickLog: false },
+    waterChange: { icon: '', label: 'Water Change', quickLog: true },
+    parameterTest: { icon: '', label: 'Parameter Test', quickLog: true },
+    filterMaintenance: { icon: '', label: 'Filter Maintenance', quickLog: true },
+    fishAdded: { icon: '', label: 'Fish Added', quickLog: false },
+    fishRemoved: { icon: '', label: 'Fish Removed', quickLog: false },
+    feeding: { icon: '', label: 'Special Feeding', quickLog: false },
+    medication: { icon: '', label: 'Medication', quickLog: false },
+    plantChange: { icon: '', label: 'Plant Change', quickLog: false },
+    equipmentChange: { icon: '', label: 'Equipment Change', quickLog: false },
+    note: { icon: '', label: 'Note', quickLog: false },
   },
 
   // Cache for loaded events and schedules
@@ -38,7 +38,7 @@ window.maintenanceManager = {
    * Get formatted event type info
    */
   getEventTypeInfo(type) {
-    return this.eventTypes[type] || { icon: '📌', label: type };
+    return this.eventTypes[type] || { icon: '', label: type };
   },
 
   /**
@@ -578,14 +578,14 @@ window.maintenanceManager = {
 
   // Schedule type definitions
   scheduleTypes: {
-    waterChange: { icon: '💧', label: 'Water Change', defaultDays: 7 },
-    parameterTest: { icon: '🧪', label: 'Parameter Test', defaultDays: 7 },
-    filterMaintenance: { icon: '🔧', label: 'Filter Maintenance', defaultDays: 30 },
-    feeding: { icon: '🍽️', label: 'Special Feeding', defaultDays: 7 },
-    glassClean: { icon: '✨', label: 'Glass Cleaning', defaultDays: 7 },
-    gravel: { icon: '🪨', label: 'Gravel Vacuum', defaultDays: 14 },
-    plantTrim: { icon: '🌿', label: 'Plant Trimming', defaultDays: 14 },
-    custom: { icon: '📋', label: 'Custom Task', defaultDays: 7 },
+    waterChange: { icon: '', label: 'Water Change', defaultDays: 7 },
+    parameterTest: { icon: '', label: 'Parameter Test', defaultDays: 7 },
+    filterMaintenance: { icon: '', label: 'Filter Maintenance', defaultDays: 30 },
+    feeding: { icon: '', label: 'Special Feeding', defaultDays: 7 },
+    glassClean: { icon: '', label: 'Glass Cleaning', defaultDays: 7 },
+    gravel: { icon: '', label: 'Gravel Vacuum', defaultDays: 14 },
+    plantTrim: { icon: '', label: 'Plant Trimming', defaultDays: 14 },
+    custom: { icon: '', label: 'Custom Task', defaultDays: 7 },
   },
 
   /**
@@ -864,7 +864,7 @@ window.maintenanceManager = {
 
     container.innerHTML = sortedSchedules
       .map(schedule => {
-        const typeInfo = this.scheduleTypes[schedule.type] || { icon: '📋', label: 'Task' };
+        const typeInfo = this.scheduleTypes[schedule.type] || { icon: '', label: 'Task' };
         const label =
           schedule.type === 'custom' && schedule.customLabel
             ? schedule.customLabel
@@ -884,7 +884,7 @@ window.maintenanceManager = {
                         <button class="schedule-complete-btn"
                                 onclick="event.stopPropagation(); maintenanceManager.markScheduleComplete('${schedule.id}', '${tankId}', '${schedule.type}')"
                                 title="Mark complete">
-                            ✓
+                            Done
                         </button>
                     `
                         : ''

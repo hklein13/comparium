@@ -8,10 +8,22 @@
       name="description"
       content="Your Comparium dashboard - view your saved comparisons, tanks, and favorite fish."
     />
-    <link rel="stylesheet" href="css/styles.css" />
-    <link rel="stylesheet" href="css/dark-mode.css" />
-    <link rel="stylesheet" href="css/enhanced-ui.css" />
-    <link rel="stylesheet" href="css/ocean-theme.css" />
+    <meta name="author" content="Comparium" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/naturalist.css" />
+
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VNY458QF3"></script>
     <script>
@@ -24,28 +36,22 @@
     </script>
   </head>
   <body>
-    <div class="header">
-      <div class="header-content">
-        <div class="header-left">
-          <a href="index.html" class="home-link">
-            <h1><span class="logo-wave">Comparium</span></h1>
-            <p>The place for all things aquarium</p>
-          </a>
-        </div>
-        <div class="header-nav">
-          <a href="index.html">Home</a>
-          <a href="compare.html">Compare Fish</a>
-          <a href="dashboard.html">Dashboard</a>
-          <a href="glossary.html">Glossary</a>
-          <a href="faq.html">FAQ</a>
-          <div id="auth-links"></div>
-        </div>
-      </div>
-    </div>
+    <!-- Header -->
+    <header class="header">
+      <a href="index.html" class="logo">Comparium</a>
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="compare.html">Compare</a>
+        <a href="glossary.html">Glossary</a>
+        <a href="dashboard.html" class="active">Dashboard</a>
+        <a href="faq.html">FAQ</a>
+        <div id="auth-links"></div>
+      </nav>
+    </header>
 
     <div class="dashboard-container">
       <div class="dashboard-header">
-        <h1>Welcome back, <span id="username-display"></span>!</h1>
+        <h1>Welcome back, <span id="username-display"></span></h1>
         <p>Manage your fish comparisons, tanks, and favorites</p>
       </div>
 
@@ -67,7 +73,7 @@
 
       <!-- Recent Comparisons -->
       <div class="dashboard-section">
-        <h2>📊 Recent Comparisons</h2>
+        <h2>Recent Comparisons</h2>
         <div id="recent-comparisons">
           <div class="empty-state-small">
             <p>No comparisons yet. <a href="compare.html">Start comparing fish!</a></p>
@@ -77,18 +83,9 @@
 
       <!-- My Tanks - Full Management -->
       <div class="dashboard-section" id="my-tanks-section">
-        <div
-          style="
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-bottom: 1rem;
-          "
-        >
-          <h2 style="margin: 0">🏠 My Tanks</h2>
-          <button onclick="showNewTankForm()" class="btn-small">+ Create New Tank</button>
+        <div class="dashboard-section-header">
+          <h2>My Tanks</h2>
+          <button onclick="showNewTankForm()" class="btn btn-primary">+ Create New Tank</button>
         </div>
 
         <!-- Tank Form (Initially Hidden) -->
@@ -123,75 +120,72 @@
                 id="species-search"
                 placeholder="Search species..."
                 oninput="filterSpeciesSelector()"
-                style="margin-bottom: 0.5rem"
               />
-              <select
-                id="species-selector"
-                onchange="addSpeciesToTank()"
-                size="6"
-                style="width: 100%"
-              >
+              <select id="species-selector" onchange="addSpeciesToTank()" size="6">
                 <option value="">-- Choose a species to add --</option>
               </select>
-              <small style="color: var(--text-secondary); display: block; margin-top: 0.25rem"
-                >Type to filter, click to add</small
-              >
+              <small class="form-hint">Type to filter, click to add</small>
             </div>
 
-            <div id="selected-species-list" style="margin: 1rem 0">
-              <strong style="font-size: 0.95rem">Selected Species:</strong>
+            <div id="selected-species-list" class="selected-species">
+              <strong>Selected Species:</strong>
               <ul id="species-list" class="fish-list"></ul>
             </div>
 
-            <div style="display: flex; gap: 1rem">
-              <button type="submit" class="btn-small">Save Tank</button>
-              <button type="button" onclick="cancelForm()" class="btn-small btn-danger">
-                Cancel
-              </button>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">Save Tank</button>
+              <button type="button" onclick="cancelForm()" class="btn btn-ghost">Cancel</button>
             </div>
           </form>
         </div>
 
         <!-- Tanks List -->
         <div id="tanks-container">
-          <div class="loading-container">
-            <div class="bubble-loader">
-              <div class="bubble"></div>
-              <div class="bubble"></div>
-              <div class="bubble"></div>
-            </div>
-            <div class="loading-text">Loading tanks...</div>
+          <div class="loading-state">
+            <p>Loading tanks...</p>
           </div>
         </div>
       </div>
 
       <!-- Favorite Species -->
       <div class="dashboard-section">
-        <h2>⭐ Favorite Species</h2>
+        <h2>Favorite Species</h2>
         <div id="favorite-species">
           <div class="empty-state-small">
-            <p>No favorites yet. Click the ★ on species when comparing to save them!</p>
+            <p>No favorites yet. Click the star on species when comparing to save them!</p>
           </div>
         </div>
       </div>
 
       <!-- Export Data -->
       <div class="dashboard-section">
-        <h2>💾 Data Management</h2>
+        <h2>Data Management</h2>
         <p>Export your data to back it up or transfer to another device.</p>
-        <button onclick="exportData()" class="btn-small">Export My Data (JSON)</button>
+        <button onclick="exportData()" class="btn btn-ghost">Export My Data (JSON)</button>
       </div>
     </div>
 
-    <div class="footer">
-      <p>&copy; <span id="copyright-year"></span> Comparium.</p>
-      <p><a href="about.html">About</a> | <a href="mailto:contact@comparium.net">Contact</a></p>
-    </div>
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-logo">Comparium</div>
+      <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="faq.html">FAQ</a>
+        <a href="glossary.html">Glossary</a>
+      </div>
+      <p class="footer-copy">&copy; <span id="copyright-year"></span> Comparium</p>
+    </footer>
 
-    <script src="js/fish-data.js"></script>
+    <!-- Auto-update copyright year -->
+    <script>
+      document.getElementById('copyright-year').textContent = new Date().getFullYear();
+    </script>
+
+    <!-- Scripts -->
     <script type="module" src="js/firebase-init.js"></script>
     <script src="js/storage-service.js"></script>
     <script src="js/auth-manager.js"></script>
+    <script src="js/fish-data.js"></script>
     <script src="js/tank-manager.js"></script>
     <script src="js/maintenance-manager.js"></script>
     <script>
@@ -239,10 +233,10 @@
         if (container) {
           container.innerHTML = `
                     <div class="dashboard-section" style="text-align: center; padding: 3rem;">
-                        <h2 style="color: #dc3545;">⚠️ Error Loading Dashboard</h2>
+                        <h2 style="color: #dc3545;">Error Loading Dashboard</h2>
                         <p style="margin: 1rem 0;">${message}</p>
                         <p style="margin-top: 2rem;">
-                            <a href="login.html" class="btn-small">Return to Login</a>
+                            <a href="login.html" class="btn btn-primary">Return to Login</a>
                         </p>
                     </div>
                 `;
@@ -301,7 +295,7 @@
         comparisons.forEach(comp => {
           const speciesNames = comp.species.map(s => s.name).join(', ');
           const date = new Date(comp.date).toLocaleDateString();
-          const icon = comp.compatible ? '✅' : '⚠️';
+          const icon = comp.compatible ? '&#10003;' : '&#9888;';
 
           html += `
                     <li>
@@ -334,7 +328,7 @@
                                 <strong>${fish.commonName}</strong><br>
                                 <small><em>${fish.scientificName}</em></small>
                             </div>
-                            <span class="favorite-star active" onclick="removeFavorite('${speciesKey}')">★</span>
+                            <span class="favorite-star active" onclick="removeFavorite('${speciesKey}')">&#9733;</span>
                         </li>
                     `;
           }
@@ -371,11 +365,5 @@
         }
       }
     </script>
-    <!-- Auto-update copyright year -->
-    <script>
-      document.getElementById('copyright-year').textContent = new Date().getFullYear();
-    </script>
-
-    <script src="js/theme-manager.js"></script>
   </body>
 </html>
