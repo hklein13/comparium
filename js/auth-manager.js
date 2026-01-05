@@ -196,7 +196,6 @@ class AuthManager {
     const authLinks = document.getElementById('auth-links');
     if (authLinks) {
       authLinks.innerHTML = `
-                <span class="welcome-text">Welcome, ${this.currentUser}!</span>
                 <a href="#" onclick="authManager.logout(); return false;">Logout</a>
             `;
     }
