@@ -1,18 +1,51 @@
 # Project Changes Tracking
 
 _This document tracks pending changes and improvements for the Comparium project._
+_Last Updated: January 2026_
 
 ---
 
-## COMPLETED
+## COMPLETED (This Session - Not Yet Pushed)
 
-- [x] Remove "Data sourced from SeriouslyFish, Aquarium Co-Op, and FishBase." (removed entire origin note)
+### Batch 1: Quick Polish
+- [x] Remove "Data sourced from SeriouslyFish..." (removed entire origin note section)
 - [x] Change tagline to "The place for all things aquarium."
 - [x] "Species Encyclopedia" → "Encyclopedia" on glossary page
 - [x] Mobile photo collage alignment - centered horizontally
-- [x] Welcome message - already exists on dashboard ("Welcome back, [username]")
-- [x] Remove welcome message from header (now only shows Logout)
+- [x] Remove welcome message from header (now only shows Logout on non-dashboard pages)
 - [x] Swap FAQ and Dashboard in header nav (Dashboard now rightmost)
+
+### Batch 2: Notification UI Foundation (Phase 2A)
+- [x] Add notification bell icon to dashboard header
+- [x] Create notification dropdown with empty state ("Maintenance reminders will appear here")
+- [x] Add settings gear icon next to bell icon
+- [x] Create settings dropdown with account info and Log Out button
+- [x] Move Logout from header to settings dropdown (dashboard only)
+- [x] Click-outside handling to close dropdowns
+- [x] Only one dropdown open at a time (clicking one closes the other)
+
+**Files Modified (uncommitted):**
+- `dashboard.html` - Bell icon, gear icon, dropdowns, JavaScript functions
+- `css/naturalist.css` - Icon button styles, dropdown styles, notification/settings UI
+- `js/auth-manager.js` - Hide header logout on dashboard page
+- `index.html`, `glossary.html`, `about.html`, `compare.html`, `faq.html`, `login.html`, `signup.html`, `species.html` - Nav order swap
+
+---
+
+## COMPLETED (Previously Pushed)
+
+- [x] Welcome message on dashboard ("Welcome back, [username]") - was already implemented
+
+---
+
+## IN PROGRESS
+
+### Phase 2B: Firestore Notifications Read
+- [ ] Add `loadNotifications()` function to query Firestore `notifications` collection
+- [ ] Call from `loadDashboard()` after user authenticated
+- [ ] Wire up `renderNotifications()` function (already written, just needs data)
+
+**Note:** The notification UI is complete. It just needs the Cloud Function (`checkDueSchedules`) to create notifications in Firestore, then this read will populate the dropdown.
 
 ---
 
@@ -25,8 +58,6 @@ _This document tracks pending changes and improvements for the Comparium project
 - [ ] Make Dashboard nav link visually distinct (button style like Sign Up)
 - [ ] Make recent comparisons functional - show 3-5, link to comparison results
 - [ ] Make favorited species clickable → species detail page
-- [ ] Add settings section to dashboard
-- [ ] Move "Logout" to settings section
 
 ### GLOSSARY PAGE
 - [ ] Add remaining photos
@@ -48,11 +79,12 @@ _This document tracks pending changes and improvements for the Comparium project
 
 ---
 
-## DEFERRED TO PHASE 2 (Notifications)
+## PHASE 2 REMAINING (Notifications)
 
-- [ ] Notification bell icon in dashboard header
-- [ ] Notification dropdown UI
-- [ ] checkDueSchedules Cloud Function
+- [ ] `checkDueSchedules` Cloud Function (daily scheduled function)
+- [ ] Query `tankSchedules` where `nextDue <= today`
+- [ ] Create notification documents in `notifications` collection
+- [ ] Deploy and test
 
 ---
 
@@ -88,9 +120,45 @@ _This document tracks pending changes and improvements for the Comparium project
 
 ---
 
+## Current Branch Status
+
+**Branch:** `claude/fix-species-links-Hv5Zn`
+**Last Pushed Commit:** `6038497` - "UI polish: update text, nav order, and add tracking doc"
+**Uncommitted Changes:** Notification UI + Settings gear icon (Batch 2 work)
+
+To commit current work:
+```bash
+git add dashboard.html css/naturalist.css js/auth-manager.js
+git commit -m "Add notification bell and settings gear to dashboard header"
+git push
+```
+
+---
+
+## Architecture Notes
+
+### Notification System (Phase 2)
+```
+tankSchedules (Firestore)
+    ↓ [checkDueSchedules Cloud Function - runs daily]
+notifications (Firestore)
+    ↓ [dashboard.js loadNotifications()]
+Notification dropdown UI
+```
+
+### Key Files for Notification Work
+- `dashboard.html` - UI and JavaScript (toggleNotifications, renderNotifications, updateNotificationBadge)
+- `css/naturalist.css` - Styles (.notification-*, .settings-*, .icon-btn, .header-dropdown)
+- `functions/index.js` - Cloud Functions (checkDueSchedules to be added)
+- `DATA-MODEL.md` - Firestore schema for notifications collection
+
+---
+
 ## Notes
 
 Reorganized January 2026 based on development roadmap analysis. Items categorized by:
+- **Completed**: Done, may need commit/push
+- **In Progress**: Partially done, clear next step
 - **Active**: Ready to implement now
 - **Waiting on User**: Blocked on content/decisions
 - **Deferred**: Assigned to future phases per DATA-MODEL.md

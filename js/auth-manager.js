@@ -195,9 +195,15 @@ class AuthManager {
     // Update navigation
     const authLinks = document.getElementById('auth-links');
     if (authLinks) {
-      authLinks.innerHTML = `
+      // On dashboard page, logout is in Settings section, so hide from header
+      const isDashboard = window.location.pathname.includes('dashboard');
+      if (isDashboard) {
+        authLinks.innerHTML = '';
+      } else {
+        authLinks.innerHTML = `
                 <a href="#" onclick="authManager.logout(); return false;">Logout</a>
             `;
+      }
     }
 
     // Show user-specific features

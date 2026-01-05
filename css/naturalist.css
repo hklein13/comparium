@@ -1328,11 +1328,228 @@ p {
     border-radius: var(--radius-xl);
     padding: var(--space-xl);
     margin-bottom: var(--space-xl);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--space-lg);
+}
+
+.dashboard-header-text {
+    flex: 1;
 }
 
 .dashboard-header h1 {
     color: var(--forest);
     margin-bottom: var(--space-sm);
+}
+
+.dashboard-header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+/* Dashboard Header Icon Buttons */
+.notification-wrapper,
+.settings-wrapper {
+    position: relative;
+}
+
+.icon-btn {
+    background: var(--stone);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    color: var(--ink);
+}
+
+.icon-btn:hover {
+    background: var(--ivory);
+    border-color: var(--forest);
+    color: var(--forest);
+}
+
+.notification-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: var(--forest);
+    color: var(--white);
+    font-size: 0.7rem;
+    font-weight: 600;
+    min-width: 18px;
+    height: 18px;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+}
+
+.notification-badge:empty,
+.notification-badge[data-count="0"] {
+    display: none;
+}
+
+/* Shared Dropdown Styles */
+.header-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    z-index: 1000;
+    display: none;
+    overflow: hidden;
+}
+
+.header-dropdown.open {
+    display: block;
+}
+
+.dropdown-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-md);
+    border-bottom: 1px solid var(--border);
+}
+
+.dropdown-header h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.dropdown-action {
+    background: none;
+    border: none;
+    color: var(--forest);
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.dropdown-action:hover {
+    text-decoration: underline;
+}
+
+/* Notification Dropdown */
+.notification-dropdown {
+    width: 320px;
+    max-height: 400px;
+}
+
+.notification-list {
+    max-height: 320px;
+    overflow-y: auto;
+}
+
+.notification-empty {
+    padding: var(--space-xl);
+    text-align: center;
+    color: var(--ink-secondary);
+}
+
+.notification-empty p {
+    margin-bottom: var(--space-xs);
+}
+
+.notification-empty small {
+    font-size: 0.85rem;
+}
+
+.notification-item {
+    padding: var(--space-md);
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.notification-item:hover {
+    background: var(--ivory);
+}
+
+.notification-item:last-child {
+    border-bottom: none;
+}
+
+.notification-item.unread {
+    background: rgba(35, 74, 58, 0.05);
+}
+
+.notification-item-title {
+    font-weight: 500;
+    margin-bottom: var(--space-xs);
+}
+
+.notification-item-body {
+    font-size: 0.9rem;
+    color: var(--ink-secondary);
+    margin-bottom: var(--space-xs);
+}
+
+.notification-item-time {
+    font-size: 0.8rem;
+    color: var(--ink-light);
+}
+
+/* Settings Dropdown */
+.settings-dropdown {
+    width: 220px;
+}
+
+.settings-dropdown-content {
+    padding: var(--space-sm);
+}
+
+.settings-dropdown-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-sm) var(--space-md);
+}
+
+.settings-label {
+    font-size: 0.85rem;
+    color: var(--ink-secondary);
+}
+
+.settings-value {
+    font-weight: 500;
+}
+
+.settings-dropdown-divider {
+    height: 1px;
+    background: var(--border);
+    margin: var(--space-sm) 0;
+}
+
+.settings-dropdown-btn {
+    width: 100%;
+    padding: var(--space-sm) var(--space-md);
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    color: var(--ink);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+
+.settings-dropdown-btn:hover {
+    background: var(--ivory);
+    border-color: var(--forest);
+    color: var(--forest);
 }
 
 .dashboard-stats {
