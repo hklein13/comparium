@@ -166,23 +166,26 @@ Development follows a phased approach. See `DATA-MODEL.md` for complete specific
 ### Phase 2 Breakdown (Current)
 1. ✅ Cloud Functions foundation - `functions/` folder, test function deployed
 2. ✅ Notification UI - Bell icon + settings gear in dashboard header, dropdowns with empty states
-3. ⏳ `checkDueSchedules` function - Daily scheduled function to create notifications
-4. ⏳ Push notifications (FCM) - Browser push when maintenance due
+3. ✅ Click-through links - Dashboard items link to species/comparison details, XSS security fixes
+4. ⏳ `checkDueSchedules` function - **NEXT** - Daily scheduled function to create notifications
+5. ⏳ Push notifications (FCM) - Browser push when maintenance due
 
-**Session Note:** See `project-changes-tracking.md` for detailed progress and next steps.
+**Last Merged:** January 2026 - Batches 1-3 complete, merged to main, live on comparium.net
+
+See `project-changes-tracking.md` for detailed progress and next steps.
 
 ## Git Workflow
 
-### Staging Branch (IMPORTANT)
-**`claude/fix-species-links-Hv5Zn`** - The permanent staging branch
+### Current State (January 2026)
+**Branch `claude/fix-species-links-Hv5Zn` was merged to main** - All work is now live.
 
-- ALWAYS use this branch for all work across all sessions
-- DO NOT create new staging branches - reuse this one
-- User merges to `main` when ready to deploy
-- Merging to main = live site deployment
+For future work:
+1. Create a new staging branch from main: `git checkout -b claude/[feature-name]`
+2. Make changes, commit, push
+3. User merges to main when ready
 
 ### Deployment Flow
-1. Claude commits/pushes to staging branch
+1. Claude creates branch from main, commits/pushes changes
 2. User runs `git pull` to get changes
 3. User tests locally with `http-server`
 4. User merges to main via GitHub (deploys to live site)
@@ -213,7 +216,8 @@ Development follows a phased approach. See `DATA-MODEL.md` for complete specific
 - ✅ ESLint configured and passing (0 errors)
 - ✅ Prettier configured and all files formatted
 - ✅ Claude Code hooks set up in `.claude/settings.json`
-- ✅ All code committed to staging branch `claude/fix-species-links-Hv5Zn`
+- ✅ Playwright tests passing (7 passed, 4 skipped)
+- ✅ All code merged to main and deployed to comparium.net
 
 **Note:** The `.claude/` folder is gitignored (contains local settings and hooks). Hooks are already configured and working.
 

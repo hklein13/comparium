@@ -1,7 +1,7 @@
 # Comparium Data Model
 
 **Purpose:** Comprehensive Firestore database structure for all current and planned features.
-**Last Updated:** January 2, 2026
+**Last Updated:** January 5, 2026
 **Firebase Plan:** Blaze (Cloud Functions available)
 
 ---

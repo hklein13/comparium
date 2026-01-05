@@ -1,18 +1,18 @@
 # Project Changes Tracking
 
 _This document tracks pending changes and improvements for the Comparium project._
-_Last Updated: January 2026_
+_Last Updated: January 5, 2026_
 
 ---
 
-## COMPLETED (This Session - Not Yet Pushed)
+## RECENTLY COMPLETED (Merged to Main - January 2026)
 
 ### Batch 1: Quick Polish
 - [x] Remove "Data sourced from SeriouslyFish..." (removed entire origin note section)
 - [x] Change tagline to "The place for all things aquarium."
 - [x] "Species Encyclopedia" → "Encyclopedia" on glossary page
 - [x] Mobile photo collage alignment - centered horizontally
-- [x] Remove welcome message from header (now only shows Logout on non-dashboard pages)
+- [x] Remove welcome message from header
 - [x] Swap FAQ and Dashboard in header nav (Dashboard now rightmost)
 
 ### Batch 2: Notification UI Foundation (Phase 2A)
@@ -22,42 +22,54 @@ _Last Updated: January 2026_
 - [x] Create settings dropdown with account info and Log Out button
 - [x] Move Logout from header to settings dropdown (dashboard only)
 - [x] Click-outside handling to close dropdowns
-- [x] Only one dropdown open at a time (clicking one closes the other)
+- [x] Only one dropdown open at a time
 
-**Files Modified (uncommitted):**
-- `dashboard.html` - Bell icon, gear icon, dropdowns, JavaScript functions
-- `css/naturalist.css` - Icon button styles, dropdown styles, notification/settings UI
-- `js/auth-manager.js` - Hide header logout on dashboard page
-- `index.html`, `glossary.html`, `about.html`, `compare.html`, `faq.html`, `login.html`, `signup.html`, `species.html` - Nav order swap
+### Batch 3: Click-Through Links + Security Fixes
+- [x] Recent comparisons link to comparison results page
+- [x] Favorite species link to species detail page
+- [x] XSS security fixes (delegated event handlers instead of inline onclick)
+- [x] URL encoding for species keys with special characters
+- [x] Logout removed from header on ALL pages (only in dashboard settings)
 
----
+### Scalability Assessment
+- [x] Architecture review completed
+- [x] Verdict: Production-ready for current and realistic future scale
+- [x] No immediate changes needed - YAGNI principle applied
 
-## COMPLETED (Previously Pushed)
-
-- [x] Welcome message on dashboard ("Welcome back, [username]") - was already implemented
-
----
-
-## IN PROGRESS
-
-### Phase 2B: Firestore Notifications Read
-- [ ] Add `loadNotifications()` function to query Firestore `notifications` collection
-- [ ] Call from `loadDashboard()` after user authenticated
-- [ ] Wire up `renderNotifications()` function (already written, just needs data)
-
-**Note:** The notification UI is complete. It just needs the Cloud Function (`checkDueSchedules`) to create notifications in Firestore, then this read will populate the dropdown.
+**All Playwright tests passing:** 7 passed, 4 skipped
 
 ---
 
-## ACTIVE (Near-term)
+## NEXT UP: Phase 2B - Notifications Backend
+
+The notification UI is complete. Next step is making it functional:
+
+### `checkDueSchedules` Cloud Function
+- [ ] Create scheduled Cloud Function (runs daily)
+- [ ] Query `tankSchedules` where `nextDue <= today` and `enabled == true`
+- [ ] Create notification documents in `notifications` collection
+- [ ] Deploy to Firebase: `firebase deploy --only functions`
+- [ ] Test end-to-end flow
+
+### Dashboard Notifications Read
+- [ ] Add `loadNotifications()` function to query Firestore
+- [ ] Wire up to existing `renderNotifications()` function
+- [ ] Display notification count badge
+
+**Key Files:**
+- `functions/index.js` - Add checkDueSchedules function
+- `dashboard.html` - Add loadNotifications() call
+- `DATA-MODEL.md` - Reference for notifications collection schema
+
+---
+
+## ACTIVE (Near-term Improvements)
 
 ### HOME PAGE
 - [ ] Change photos - no clown loach, no cherry barb (awaiting user species selection)
 
 ### DASHBOARD PAGE
 - [ ] Make Dashboard nav link visually distinct (button style like Sign Up)
-- [ ] Make recent comparisons functional - show 3-5, link to comparison results
-- [ ] Make favorited species clickable → species detail page
 
 ### GLOSSARY PAGE
 - [ ] Add remaining photos
@@ -76,15 +88,6 @@ _Last Updated: January 2026_
 - [ ] Home page photo swap (user picking replacement species)
 - [ ] Breeding information (user providing data)
 - [ ] Gender differentiation info (user providing data)
-
----
-
-## PHASE 2 REMAINING (Notifications)
-
-- [ ] `checkDueSchedules` Cloud Function (daily scheduled function)
-- [ ] Query `tankSchedules` where `nextDue <= today`
-- [ ] Create notification documents in `notifications` collection
-- [ ] Deploy and test
 
 ---
 
@@ -120,17 +123,17 @@ _Last Updated: January 2026_
 
 ---
 
-## Current Branch Status
+## Current State
 
-**Branch:** `claude/fix-species-links-Hv5Zn`
-**Last Pushed Commit:** `6038497` - "UI polish: update text, nav order, and add tracking doc"
-**Uncommitted Changes:** Notification UI + Settings gear icon (Batch 2 work)
+**Main Branch:** Up to date with all changes, deployed to comparium.net
+**Live Site:** https://comparium.net
+**Playwright Tests:** All passing
 
-To commit current work:
+To start new work:
 ```bash
-git add dashboard.html css/naturalist.css js/auth-manager.js
-git commit -m "Add notification bell and settings gear to dashboard header"
-git push
+git checkout main
+git pull origin main
+git checkout -b claude/[feature-name]
 ```
 
 ---
@@ -142,24 +145,35 @@ git push
 tankSchedules (Firestore)
     ↓ [checkDueSchedules Cloud Function - runs daily]
 notifications (Firestore)
-    ↓ [dashboard.js loadNotifications()]
-Notification dropdown UI
+    ↓ [dashboard.html loadNotifications()]
+Notification dropdown UI (already built)
 ```
 
 ### Key Files for Notification Work
 - `dashboard.html` - UI and JavaScript (toggleNotifications, renderNotifications, updateNotificationBadge)
 - `css/naturalist.css` - Styles (.notification-*, .settings-*, .icon-btn, .header-dropdown)
 - `functions/index.js` - Cloud Functions (checkDueSchedules to be added)
-- `DATA-MODEL.md` - Firestore schema for notifications collection
+- `DATA-MODEL.md` - Firestore schema for notifications collection (Phase 2 section)
 
 ---
 
-## Notes
+## Quick Reference
 
-Reorganized January 2026 based on development roadmap analysis. Items categorized by:
-- **Completed**: Done, may need commit/push
-- **In Progress**: Partially done, clear next step
-- **Active**: Ready to implement now
+| What | Where |
+|------|-------|
+| Project instructions | `CLAUDE.md` |
+| Data model & roadmap | `DATA-MODEL.md` |
+| Testing guide | `TESTING.md` |
+| Cloud Functions | `functions/index.js` |
+| Dashboard UI | `dashboard.html` |
+| Main CSS | `css/naturalist.css` |
+
+---
+
+_Reorganized January 2026. Items categorized by:_
+- **Recently Completed**: Merged to main, live
+- **Next Up**: Clear next implementation step
+- **Active**: Ready to implement when prioritized
 - **Waiting on User**: Blocked on content/decisions
 - **Deferred**: Assigned to future phases per DATA-MODEL.md
 - **Needs Design**: Requires planning before implementation
