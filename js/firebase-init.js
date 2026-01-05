@@ -1,18 +1,24 @@
 // Firebase initialization (module)
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut,
+} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { getAnalytics } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js';
 
 // NOTE: Keep the same config that's currently in index.html
 const firebaseConfig = {
-  apiKey: "AIzaSyDExicgmY78u4NAWVJngqaZkhKdmAbebjM",
-  authDomain: "comparium-21b69.firebaseapp.com",
-  projectId: "comparium-21b69",
-  storageBucket: "comparium-21b69.firebasestorage.app",
-  messagingSenderId: "925744346774",
-  appId: "1:925744346774:web:77453c0374054d5b0d74b7",
-  measurementId: "G-WSR0CCKYEC"
+  apiKey: 'AIzaSyDExicgmY78u4NAWVJngqaZkhKdmAbebjM',
+  authDomain: 'comparium-21b69.firebaseapp.com',
+  projectId: 'comparium-21b69',
+  storageBucket: 'comparium-21b69.firebasestorage.app',
+  messagingSenderId: '925744346774',
+  appId: '1:925744346774:web:77453c0374054d5b0d74b7',
+  measurementId: 'G-WSR0CCKYEC',
 };
 
 const app = initializeApp(firebaseConfig);
@@ -33,12 +39,12 @@ const firestore = getFirestore(app);
 // PRODUCTION FIX: Promise that resolves when Firebase Auth completes initial state check
 // This prevents race conditions where we check auth before Firebase restores the session
 let resolveAuthReady;
-window.firebaseAuthReady = new Promise((resolve) => {
+window.firebaseAuthReady = new Promise(resolve => {
   resolveAuthReady = resolve;
 });
 
 // Auth state listener - fires when session is restored or user logs in/out
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, user => {
   if (resolveAuthReady) {
     resolveAuthReady(user); // Resolve promise with user object (or null if not logged in)
     resolveAuthReady = null; // Only resolve once for initial page load state
@@ -55,12 +61,28 @@ window.firebaseSignOut = signOut;
 window.firebaseAuthState = onAuthStateChanged;
 
 // Simple helper to get current user uid
-window.getFirebaseUid = () => auth.currentUser ? auth.currentUser.uid : null;
+window.getFirebaseUid = () => (auth.currentUser ? auth.currentUser.uid : null);
 
 // Firestore helper wrappers
-import { doc, getDoc, setDoc, updateDoc, arrayUnion, arrayRemove, collection, getDocs, query, where, deleteDoc, addDoc, orderBy, Timestamp, limit } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import {
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  arrayUnion,
+  arrayRemove,
+  collection,
+  getDocs,
+  query,
+  where,
+  deleteDoc,
+  addDoc,
+  orderBy,
+  Timestamp,
+  limit,
+} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
-window.firestoreGetProfile = async (uid) => {
+window.firestoreGetProfile = async uid => {
   if (!firestore) return null;
   try {
     const ref = doc(firestore, 'users', uid);
@@ -72,7 +94,7 @@ window.firestoreGetProfile = async (uid) => {
   }
 };
 
-window.firestoreGetProfileByEmail = async (email) => {
+window.firestoreGetProfileByEmail = async email => {
   if (!firestore) return null;
   try {
     const q = query(collection(firestore, 'users'), where('email', '==', email));
@@ -124,7 +146,7 @@ window.firestoreAddComparison = async (uid, comparison) => {
   }
 };
 
-window.firestoreGetComparisons = async (uid) => {
+window.firestoreGetComparisons = async uid => {
   try {
     const profile = await window.firestoreGetProfile(uid);
     return profile?.profile?.comparisonHistory || [];
@@ -156,7 +178,7 @@ window.firestoreRemoveFavorite = async (uid, speciesKey) => {
   }
 };
 
-window.firestoreGetFavorites = async (uid) => {
+window.firestoreGetFavorites = async uid => {
   try {
     const profile = await window.firestoreGetProfile(uid);
     return profile?.profile?.favoriteSpecies || [];
@@ -187,7 +209,7 @@ window.firestoreSaveTank = async (uid, tank) => {
   }
 };
 
-window.firestoreGetTanks = async (uid) => {
+window.firestoreGetTanks = async uid => {
   try {
     const profile = await window.firestoreGetProfile(uid);
     return profile?.profile?.tanks || [];
@@ -210,7 +232,7 @@ window.firestoreDeleteTank = async (uid, tankId) => {
   }
 };
 
-window.firestoreExportUserData = async (uid) => {
+window.firestoreExportUserData = async uid => {
   try {
     const profile = await window.firestoreGetProfile(uid);
     if (!profile) return null;
@@ -219,7 +241,7 @@ window.firestoreExportUserData = async (uid) => {
       email: profile.email,
       created: profile.created,
       profile: profile.profile,
-      exportDate: new Date().toISOString()
+      exportDate: new Date().toISOString(),
     };
   } catch (e) {
     console.error('firestoreExportUserData error:', e);
@@ -260,7 +282,7 @@ window.firestoreAddTankEvent = async (uid, eventData) => {
       date: eventData.date ? Timestamp.fromDate(new Date(eventData.date)) : Timestamp.now(),
       created: Timestamp.now(),
       notes: eventData.notes || '',
-      data: eventData.data || {}
+      data: eventData.data || {},
     };
     const ref = await addDoc(collection(firestore, 'tankEvents'), event);
     return { success: true, eventId: ref.id };
@@ -293,7 +315,7 @@ window.firestoreGetTankEvents = async (uid, tankId, maxResults = 50) => {
       ...d.data(),
       // Convert Timestamps to ISO strings for easier handling
       date: d.data().date?.toDate?.()?.toISOString() || d.data().date,
-      created: d.data().created?.toDate?.()?.toISOString() || d.data().created
+      created: d.data().created?.toDate?.()?.toISOString() || d.data().created,
     }));
   } catch (e) {
     console.error('firestoreGetTankEvents error:', e);
@@ -321,7 +343,7 @@ window.firestoreGetAllUserEvents = async (uid, maxResults = 100) => {
       id: d.id,
       ...d.data(),
       date: d.data().date?.toDate?.()?.toISOString() || d.data().date,
-      created: d.data().created?.toDate?.()?.toISOString() || d.data().created
+      created: d.data().created?.toDate?.()?.toISOString() || d.data().created,
     }));
   } catch (e) {
     console.error('firestoreGetAllUserEvents error:', e);
@@ -373,15 +395,21 @@ window.firestoreSaveTankSchedule = async (uid, scheduleData) => {
       customLabel: scheduleData.customLabel || '',
       intervalDays: scheduleData.intervalDays || 7,
       enabled: scheduleData.enabled !== false, // default true
-      created: scheduleData.created ? Timestamp.fromDate(new Date(scheduleData.created)) : Timestamp.now(),
-      lastCompleted: scheduleData.lastCompleted ? Timestamp.fromDate(new Date(scheduleData.lastCompleted)) : null,
+      created: scheduleData.created
+        ? Timestamp.fromDate(new Date(scheduleData.created))
+        : Timestamp.now(),
+      lastCompleted: scheduleData.lastCompleted
+        ? Timestamp.fromDate(new Date(scheduleData.lastCompleted))
+        : null,
       nextDue: null, // Will be set below
       reminder: {
         enabled: scheduleData.reminder?.enabled !== false,
         daysBefore: scheduleData.reminder?.daysBefore || 1,
-        lastSent: scheduleData.reminder?.lastSent ? Timestamp.fromDate(new Date(scheduleData.reminder.lastSent)) : null
+        lastSent: scheduleData.reminder?.lastSent
+          ? Timestamp.fromDate(new Date(scheduleData.reminder.lastSent))
+          : null,
       },
-      notes: scheduleData.notes || ''
+      notes: scheduleData.notes || '',
     };
 
     // Set nextDue: use provided value, or default to intervalDays from now
@@ -433,8 +461,8 @@ window.firestoreGetTankSchedules = async (uid, tankId) => {
         nextDue: data.nextDue?.toDate?.()?.toISOString() || null,
         reminder: {
           ...data.reminder,
-          lastSent: data.reminder?.lastSent?.toDate?.()?.toISOString() || null
-        }
+          lastSent: data.reminder?.lastSent?.toDate?.()?.toISOString() || null,
+        },
       };
     });
   } catch (e) {
@@ -478,8 +506,8 @@ window.firestoreGetAllUserSchedules = async (uid, enabledOnly = false) => {
         nextDue: data.nextDue?.toDate?.()?.toISOString() || null,
         reminder: {
           ...data.reminder,
-          lastSent: data.reminder?.lastSent?.toDate?.()?.toISOString() || null
-        }
+          lastSent: data.reminder?.lastSent?.toDate?.()?.toISOString() || null,
+        },
       };
     });
   } catch (e) {
@@ -515,7 +543,7 @@ window.firestoreCompleteSchedule = async (uid, scheduleId, completedDate = new D
     await updateDoc(scheduleRef, {
       lastCompleted: completedTimestamp,
       nextDue: Timestamp.fromDate(nextDate),
-      'reminder.lastSent': null // Reset reminder so it can fire again
+      'reminder.lastSent': null, // Reset reminder so it can fire again
     });
 
     return { success: true };
@@ -558,7 +586,7 @@ window.firestoreDeleteTankSchedule = async (uid, scheduleId) => {
  * @param {string} username - Username to check
  * @returns {Promise<{error: boolean, exists: boolean}>} - Object with error state and existence
  */
-window.firestoreUsernameExists = async (username) => {
+window.firestoreUsernameExists = async username => {
   if (!firestore) return { error: true, exists: false };
   try {
     const ref = doc(firestore, 'usernames', username);
@@ -584,7 +612,7 @@ window.firestoreCreateUsername = async (username, uid, email) => {
     await setDoc(ref, {
       uid: uid,
       email: email,
-      created: new Date().toISOString()
+      created: new Date().toISOString(),
     });
     return true;
   } catch (e) {
@@ -598,7 +626,7 @@ window.firestoreCreateUsername = async (username, uid, email) => {
  * @param {string} username - Username to lookup
  * @returns {Promise<{uid: string, email: string}|null>} - User data if found, null otherwise
  */
-window.firestoreGetUidByUsername = async (username) => {
+window.firestoreGetUidByUsername = async username => {
   if (!firestore) return null;
   try {
     const ref = doc(firestore, 'usernames', username);
@@ -619,7 +647,7 @@ window.firestoreGetUidByUsername = async (username) => {
  * @param {string} username - Username to delete
  * @returns {Promise<boolean>} - True if deleted successfully, false otherwise
  */
-window.firestoreDeleteUsername = async (username) => {
+window.firestoreDeleteUsername = async username => {
   if (!firestore) return false;
   try {
     const ref = doc(firestore, 'usernames', username);
