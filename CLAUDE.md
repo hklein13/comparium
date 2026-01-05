@@ -77,7 +77,7 @@ glossary-generator.js (transforms data)
 - `scripts/serviceAccountKey.json` - Firebase Admin credentials (gitignored, never commit)
 
 ### Page Structure
-- **index.html** - Landing page (hero, features, how-it-works, CTA sections)
+- **index.html** - Landing page (split hero with fish collage, demo CTA, species showcase, origin note)
 - **compare.html** - Fish comparison tool (the main app functionality)
 - **dashboard.html** - User hub with stats, comparisons, tank management, maintenance tracking, and favorites
 - **glossary.html** - Species database with search and filtering
@@ -124,6 +124,31 @@ functions/
 - `helloComparium` - Test function to verify deployment (HTTP trigger)
 
 **Deployment:** Functions deploy to Firebase separately from hosting. Always run `firebase deploy --only functions` after changing function code.
+
+## Design System
+
+### Naturalist Theme (Current)
+- **CSS:** `css/naturalist.css` - Single stylesheet for entire site
+- **Fonts:** Darker Grotesque (display/body), Libre Baskerville (serif accents), Source Sans 3 (fallback)
+- **No emojis** - Design uses typography and color for visual hierarchy
+- **Color palette:** Forest green (`#234a3a`), ivory/stone backgrounds, ink text hierarchy
+
+### Key CSS Classes
+- `.hero-split` - Landing page hero with two columns
+- `.fish-collage` - Asymmetric image arrangement
+- `.showcase-section` - Species grid display
+- `.demo-section` - Feature preview sections
+- `.btn-primary` / `.btn-ghost` - Button styles
+- `.header` / `.footer` - Site-wide navigation
+
+### CSS Variables
+```css
+--forest: #234a3a;        /* Primary brand color */
+--ink: #1a1a1a;           /* Primary text */
+--ink-secondary: #4a4a4a; /* Secondary text */
+--ivory: #faf9f6;         /* Light backgrounds */
+--border: #e5e3de;        /* Borders and dividers */
+```
 
 ## Project Roadmap
 
@@ -199,7 +224,7 @@ This is NOT optional. Before writing or modifying code that uses:
 
 You MUST call the Context7 MCP tools to fetch current documentation:
 1. Use `resolve-library-id` to find the library
-2. Use `get-library-docs` to fetch current docs
+2. Use `query-docs` to fetch current docs
 3. Then write the code using the fetched documentation
 
 This prevents outdated API usage and ensures correct, working code on the first attempt.
