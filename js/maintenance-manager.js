@@ -363,12 +363,13 @@ window.maintenanceManager = {
 
     // Add type-specific data
     switch (eventType) {
-      case 'waterChange':
+      case 'waterChange': {
         const percent = document.getElementById('water-percent')?.value;
         if (percent) eventData.data.percentChanged = parseInt(percent);
         break;
+      }
 
-      case 'parameterTest':
+      case 'parameterTest': {
         const ammonia = document.getElementById('param-ammonia')?.value;
         const nitrite = document.getElementById('param-nitrite')?.value;
         const nitrate = document.getElementById('param-nitrate')?.value;
@@ -378,9 +379,10 @@ window.maintenanceManager = {
         if (nitrate) eventData.data.nitrate = parseFloat(nitrate);
         if (ph) eventData.data.ph = parseFloat(ph);
         break;
+      }
 
       case 'fishAdded':
-      case 'fishRemoved':
+      case 'fishRemoved': {
         const species = document.getElementById('fish-species')?.value;
         const quantity = document.getElementById('fish-quantity')?.value;
         const reason = document.getElementById('fish-reason')?.value;
@@ -388,13 +390,15 @@ window.maintenanceManager = {
         if (quantity) eventData.data.quantity = parseInt(quantity);
         if (reason) eventData.data.reason = reason;
         break;
+      }
 
-      case 'medication':
+      case 'medication': {
         const medName = document.getElementById('med-name')?.value;
         const dosage = document.getElementById('med-dosage')?.value;
         if (medName) eventData.data.medicationName = medName;
         if (dosage) eventData.data.dosage = dosage;
         break;
+      }
     }
 
     try {

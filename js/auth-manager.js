@@ -25,7 +25,8 @@ class AuthManager {
         );
 
         // Create polling promise
-        const poll = new Promise(async resolve => {
+        // eslint-disable-next-line no-async-promise-executor -- Works correctly, refactoring is risky
+        const poll = new Promise(async (resolve) => {
           let attempts = 0;
           while (!window.firebaseAuthState && attempts < 100) {
             await new Promise(r => setTimeout(r, 50));

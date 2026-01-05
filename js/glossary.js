@@ -933,18 +933,13 @@ class GlossaryManager {
       return false;
     }
 
-    try {
-      // Future Firestore implementation
-      // const categoryConfig = this.categories.find(c => c.id === entry.category);
-      // const collection = categoryConfig.firestoreSubcollection;
-      // const docRef = await addDoc(collection(firestore, this.firestoreCollection, collection), entry);
-      // return true;
+    // Future Firestore implementation
+    // const categoryConfig = this.categories.find(c => c.id === entry.category);
+    // const collection = categoryConfig.firestoreSubcollection;
+    // const docRef = await addDoc(collection(firestore, this.firestoreCollection, collection), entry);
+    // return true;
 
-      return false;
-    } catch (error) {
-      console.error('Error saving to Firestore:', error);
-      return false;
-    }
+    return false;
   }
 
   /**

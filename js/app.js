@@ -782,6 +782,7 @@ async function saveComparisonToHistory(fishData, isCompatible) {
 
 // Enhanced compareSpecies to save history
 const originalCompareSpecies = compareSpecies;
+// eslint-disable-next-line no-func-assign -- Intentional wrapper to add history saving
 compareSpecies = function () {
   const result = originalCompareSpecies();
 
@@ -809,6 +810,7 @@ compareSpecies = function () {
 
 // Load favorites when panels are built
 const originalBuildPanels = buildPanels;
+// eslint-disable-next-line no-func-assign -- Intentional wrapper to add favorites loading
 buildPanels = function () {
   originalBuildPanels();
 
