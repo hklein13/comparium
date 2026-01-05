@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- SEO Meta Tags -->
-    <title>Comparium - The All-in-One Aquarium Platform</title>
+    <title>Comparium - Your Aquarium Information in One Place</title>
     <meta
       name="description"
-      content="Compare fish compatibility, track tank maintenance, and join a community of aquarists. Everything you need for a thriving aquarium with 143+ freshwater species."
+      content="Research species, check compatibility, and track maintenance. Hundreds of freshwater fish with detailed care guides."
     />
     <meta
       name="keywords"
@@ -19,29 +19,34 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://comparium.net/" />
-    <meta property="og:title" content="Comparium - The All-in-One Aquarium Platform" />
+    <meta property="og:title" content="Comparium - Your Aquarium Information in One Place" />
     <meta
       property="og:description"
-      content="Compare fish compatibility, track tank maintenance, and join a community of aquarists. 143+ freshwater species."
+      content="Research species, check compatibility, and track maintenance. Hundreds of freshwater fish with detailed care guides."
     />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content="https://comparium.net/" />
-    <meta property="twitter:title" content="Comparium - The All-in-One Aquarium Platform" />
+    <meta property="twitter:title" content="Comparium - Your Aquarium Information in One Place" />
     <meta
       property="twitter:description"
-      content="Compare fish compatibility, track tank maintenance, and join a community of aquarists. 143+ freshwater species."
+      content="Research species, check compatibility, and track maintenance. Hundreds of freshwater fish with detailed care guides."
     />
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
 
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Darker+Grotesque:wght@400;500;600;700;800&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="css/styles.css" />
-    <link rel="stylesheet" href="css/dark-mode.css" />
-    <link rel="stylesheet" href="css/enhanced-ui.css" />
-    <link rel="stylesheet" href="css/ocean-theme.css" />
+    <link rel="stylesheet" href="css/naturalist.css" />
 
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VNY458QF3"></script>
@@ -54,520 +59,156 @@
       gtag('config', 'G-8VNY458QF3');
     </script>
 
-    <style>
-      /* Landing Page Specific Styles */
-
-      /* Hero Section */
-      .hero {
-        background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0c4a6e 100%);
-        color: white;
-        padding: 4rem 2rem;
-        text-align: center;
-        position: relative;
-        overflow: hidden;
-      }
-
-      .hero::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='20' cy='80' r='2' fill='rgba(255,255,255,0.1)'/%3E%3Ccircle cx='80' cy='20' r='3' fill='rgba(255,255,255,0.08)'/%3E%3Ccircle cx='50' cy='50' r='1.5' fill='rgba(255,255,255,0.1)'/%3E%3Ccircle cx='70' cy='70' r='2' fill='rgba(255,255,255,0.06)'/%3E%3Ccircle cx='30' cy='30' r='1' fill='rgba(255,255,255,0.1)'/%3E%3C/svg%3E");
-        background-size: 200px 200px;
-        animation: float 20s ease-in-out infinite;
-        opacity: 0.5;
-      }
-
-      @keyframes float {
-        0%,
-        100% {
-          transform: translateY(0) translateX(0);
-        }
-        50% {
-          transform: translateY(-20px) translateX(10px);
-        }
-      }
-
-      .hero-content {
-        position: relative;
-        z-index: 1;
-        max-width: 800px;
-        margin: 0 auto;
-      }
-
-      .hero h1 {
-        font-size: 3.5rem;
-        margin-bottom: 1rem;
-        color: white;
-      }
-
-      .hero .tagline {
-        font-size: 1.5rem;
-        opacity: 0.9;
-        margin-bottom: 2rem;
-        color: #94a3b8;
-      }
-
-      .hero .subtitle {
-        font-size: 1.1rem;
-        max-width: 600px;
-        margin: 0 auto 2.5rem;
-        line-height: 1.7;
-        color: #cbd5e1;
-      }
-
-      .cta-buttons {
-        display: flex;
-        gap: 1rem;
-        justify-content: center;
-        flex-wrap: wrap;
-      }
-
-      .btn-primary {
-        background: linear-gradient(135deg, #14b8a6 0%, #0891b2 100%);
-        color: white;
-        padding: 1rem 2.5rem;
-        border-radius: 8px;
-        text-decoration: none;
-        font-weight: 600;
-        font-size: 1.1rem;
-        transition:
-          transform 0.2s,
-          box-shadow 0.2s;
-        border: none;
-        cursor: pointer;
-      }
-
-      .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 30px rgba(20, 184, 166, 0.3);
-      }
-
-      .btn-secondary {
-        background: transparent;
-        color: white;
-        padding: 1rem 2.5rem;
-        border-radius: 8px;
-        text-decoration: none;
-        font-weight: 600;
-        font-size: 1.1rem;
-        border: 2px solid rgba(255, 255, 255, 0.3);
-        transition: all 0.2s;
-      }
-
-      .btn-secondary:hover {
-        background: rgba(255, 255, 255, 0.1);
-        border-color: rgba(255, 255, 255, 0.5);
-      }
-
-      /* Stats Bar */
-      .hero .stats-bar {
-        display: flex;
-        justify-content: center;
-        gap: 3rem;
-        margin-top: 3rem;
-        padding-top: 2rem;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-      }
-
-      .stat {
-        text-align: center;
-      }
-
-      .stat-number {
-        font-size: 2rem;
-        font-weight: 700;
-        color: #5eead4;
-      }
-
-      .stat-label {
-        font-size: 0.9rem;
-        color: #94a3b8;
-        margin-top: 0.25rem;
-      }
-
-      /* Features Section */
-      .features {
-        padding: 5rem 2rem;
-        background: #f8fafc;
-      }
-
-      .section-header {
-        text-align: center;
-        margin-bottom: 3rem;
-      }
-
-      .section-header h2 {
-        font-size: 2.5rem;
-        color: #0f172a;
-        margin-bottom: 1rem;
-      }
-
-      .section-header p {
-        color: #64748b;
-        font-size: 1.2rem;
-        max-width: 600px;
-        margin: 0 auto;
-      }
-
-      .features-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 2rem;
-        max-width: 1200px;
-        margin: 0 auto;
-      }
-
-      .feature-card {
-        background: white;
-        border-radius: 16px;
-        padding: 2rem;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        transition:
-          transform 0.2s,
-          box-shadow 0.2s;
-      }
-
-      .feature-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-      }
-
-      .feature-card-link {
-        text-decoration: none;
-        color: inherit;
-        display: block;
-      }
-
-      .feature-card-link .feature-card {
-        cursor: pointer;
-      }
-
-      .feature-icon {
-        width: 60px;
-        height: 60px;
-        background: linear-gradient(135deg, #f0fdfa 0%, #e0f2fe 100%);
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.8rem;
-        margin-bottom: 1.5rem;
-      }
-
-      .feature-card h3 {
-        font-size: 1.3rem;
-        color: #0f172a;
-        margin-bottom: 0.75rem;
-      }
-
-      .feature-card p {
-        color: #64748b;
-        line-height: 1.6;
-      }
-
-      .feature-tag {
-        display: inline-block;
-        background: #f0fdfa;
-        color: #0d9488;
-        padding: 0.25rem 0.75rem;
-        border-radius: 20px;
-        font-size: 0.8rem;
-        font-weight: 600;
-        margin-top: 1rem;
-      }
-
-      .feature-tag.coming-soon {
-        background: #fef3c7;
-        color: #b45309;
-      }
-
-      /* How It Works Section */
-      .how-it-works {
-        padding: 5rem 2rem;
-        background: white;
-      }
-
-      .steps {
-        display: flex;
-        justify-content: center;
-        gap: 2rem;
-        max-width: 1000px;
-        margin: 0 auto;
-        flex-wrap: wrap;
-      }
-
-      .step {
-        flex: 1;
-        min-width: 250px;
-        text-align: center;
-        padding: 1.5rem;
-      }
-
-      .step-number {
-        width: 50px;
-        height: 50px;
-        background: linear-gradient(135deg, #14b8a6 0%, #0891b2 100%);
-        color: white;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.5rem;
-        font-weight: 700;
-        margin: 0 auto 1rem;
-      }
-
-      .step h3 {
-        color: #0f172a;
-        margin-bottom: 0.5rem;
-      }
-
-      .step p {
-        color: #64748b;
-      }
-
-      /* CTA Section */
-      .cta-section {
-        padding: 5rem 2rem;
-        background: #f8fafc;
-        text-align: center;
-      }
-
-      .cta-section h2 {
-        font-size: 2.5rem;
-        color: #0f172a;
-        margin-bottom: 1rem;
-      }
-
-      .cta-section p {
-        color: #64748b;
-        font-size: 1.2rem;
-        margin-bottom: 2rem;
-      }
-
-      /* Landing Footer */
-      .landing-footer {
-        background: #0f172a;
-        color: #94a3b8;
-        padding: 3rem 2rem;
-        text-align: center;
-      }
-
-      .landing-footer a {
-        color: #5eead4;
-        text-decoration: none;
-      }
-
-      .landing-footer a:hover {
-        text-decoration: underline;
-      }
-
-      /* Responsive */
-      @media (max-width: 768px) {
-        .hero h1 {
-          font-size: 2.5rem;
-        }
-
-        .hero .tagline {
-          font-size: 1.2rem;
-        }
-
-        .hero .stats-bar {
-          flex-direction: column;
-          gap: 1.5rem;
-        }
-
-        .cta-buttons {
-          flex-direction: column;
-          align-items: center;
-        }
-
-        .btn-primary,
-        .btn-secondary {
-          width: 100%;
-          max-width: 280px;
-        }
-      }
-    </style>
   </head>
   <body>
     <!-- Header -->
-    <div class="header">
-      <div class="header-content">
-        <div class="header-left">
-          <a href="index.html" class="home-link">
-            <h1><span class="logo-wave">Comparium</span></h1>
-            <p>The place for all things aquarium</p>
-          </a>
+    <header class="header">
+      <a href="index.html" class="logo">Comparium</a>
+      <nav class="nav">
+        <a href="index.html" class="active">Home</a>
+        <a href="compare.html">Compare</a>
+        <a href="glossary.html">Glossary</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="faq.html">FAQ</a>
+        <div id="auth-links">
+          <a href="login.html">Login</a>
+          <a href="signup.html" class="nav-cta">Sign Up</a>
         </div>
-        <div class="header-nav">
-          <a href="index.html">Home</a>
-          <a href="compare.html">Compare Fish</a>
-          <a href="dashboard.html">Dashboard</a>
-          <a href="glossary.html">Glossary</a>
-          <a href="faq.html">FAQ</a>
-          <div id="auth-links">
-            <a href="login.html">Login</a>
-            <a href="signup.html">Sign Up</a>
-          </div>
-        </div>
-      </div>
-    </div>
+      </nav>
+    </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
+    <!-- Hero Section (Split Layout) -->
+    <section class="hero-split">
       <div class="hero-content">
-        <h1><span class="logo-wave">Comparium</span></h1>
-        <p class="tagline">The place for all things aquarium</p>
-        <p class="subtitle">
-          Compare fish compatibility, track your tank maintenance, and join a community of
-          passionate aquarists. Everything you need for a thriving aquarium, in one place.
+        <h1>Your aquarium information in one place.</h1>
+        <p>Research species. Check compatibility. Track maintenance.<br>Hundreds of freshwater fish and growing.</p>
+        <a href="compare.html" class="btn btn-primary">Get Started</a>
+      </div>
+      <div class="fish-collage">
+        <div class="fish-collage-item">
+          <img
+            src="https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2Fangelfish.jpg?alt=media"
+            alt="Freshwater Angelfish"
+          />
+        </div>
+        <div class="fish-collage-item">
+          <img
+            src="https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FneonTetra.jpg?alt=media"
+            alt="Neon Tetra"
+          />
+        </div>
+        <div class="fish-collage-item">
+          <img
+            src="https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FgermanBlueRam.jpg?alt=media"
+            alt="German Blue Ram"
+          />
+        </div>
+        <div class="fish-collage-item">
+          <img
+            src="https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FbronzeCory.jpg?alt=media"
+            alt="Bronze Corydoras"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- Demo Preview Section -->
+    <section class="demo-section">
+      <div class="demo-container">
+        <h2>See how it works</h2>
+        <p class="lead">
+          Select species. Get compatibility results.<br />
+          Temperature, pH, tank size, temperament, and predation risk — checked automatically.
         </p>
-        <div class="cta-buttons">
-          <a href="compare.html" class="btn-primary">Compare Fish Now</a>
-          <a href="signup.html" class="btn-secondary">Create Free Account</a>
-        </div>
-
-        <div class="stats-bar">
-          <div class="stat">
-            <div class="stat-number">143+</div>
-            <div class="stat-label">Fish Species</div>
-          </div>
-          <div class="stat">
-            <div class="stat-number">25+</div>
-            <div class="stat-label">Care Guides</div>
-          </div>
-          <div class="stat">
-            <div class="stat-number">100%</div>
-            <div class="stat-label">Free to Use</div>
+        <div class="demo-preview">
+          <div class="demo-preview-placeholder">
+            [Screenshot of comparison tool will go here]<br />
+            <small>Neon Tetra + Corydoras + Guppy comparison</small>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Features Section -->
-    <section class="features">
-      <div class="section-header">
-        <h2>Everything You Need</h2>
-        <p>Tools and knowledge to keep your fish happy and healthy</p>
+    <!-- Species Showcase -->
+    <section class="showcase-section">
+      <h2>Browse the database</h2>
+      <div class="species-showcase">
+        <a href="species.html?fish=bettaFish" class="showcase-item">
+          <div class="showcase-image">
+            <img
+              src="https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FbettaFish.jpg?alt=media"
+              alt="Betta Fish"
+            />
+          </div>
+          <span class="showcase-name">Betta</span>
+        </a>
+        <a href="species.html?fish=clownLoach" class="showcase-item">
+          <div class="showcase-image">
+            <img
+              src="https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FclownLoach.jpg?alt=media"
+              alt="Clown Loach"
+            />
+          </div>
+          <span class="showcase-name">Clown Loach</span>
+        </a>
+        <a href="species.html?fish=pearlGourami" class="showcase-item">
+          <div class="showcase-image">
+            <img
+              src="https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FpearlGourami.jpg?alt=media"
+              alt="Pearl Gourami"
+            />
+          </div>
+          <span class="showcase-name">Pearl Gourami</span>
+        </a>
+        <a href="species.html?fish=cardinalTetra" class="showcase-item">
+          <div class="showcase-image">
+            <img
+              src="https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FcardinalTetra.jpg?alt=media"
+              alt="Cardinal Tetra"
+            />
+          </div>
+          <span class="showcase-name">Cardinal Tetra</span>
+        </a>
+        <a href="species.html?fish=cherryBarb" class="showcase-item">
+          <div class="showcase-image">
+            <img
+              src="https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FcherryBarb.jpg?alt=media"
+              alt="Cherry Barb"
+            />
+          </div>
+          <span class="showcase-name">Cherry Barb</span>
+        </a>
+        <a href="species.html?fish=pandaCory" class="showcase-item">
+          <div class="showcase-image">
+            <img
+              src="https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FpandaCory.jpg?alt=media"
+              alt="Panda Cory"
+            />
+          </div>
+          <span class="showcase-name">Panda Cory</span>
+        </a>
       </div>
-
-      <div class="features-grid">
-        <a href="compare.html" class="feature-card-link">
-          <div class="feature-card">
-            <div class="feature-icon">&#128032;</div>
-            <h3>Fish Compatibility Checker</h3>
-            <p>
-              Instantly see which fish can live together peacefully. Compare temperaments, water
-              parameters, and tank size requirements side by side.
-            </p>
-            <span class="feature-tag">Available Now</span>
-          </div>
-        </a>
-
-        <a href="dashboard.html#my-tanks-section" class="feature-card-link">
-          <div class="feature-card">
-            <div class="feature-icon">&#128203;</div>
-            <h3>Tank Management</h3>
-            <p>
-              Create virtual tanks, add species, and keep track of your aquarium setups. Perfect for
-              planning before you buy.
-            </p>
-            <span class="feature-tag">Available Now</span>
-          </div>
-        </a>
-
-        <a href="dashboard.html" class="feature-card-link">
-          <div class="feature-card">
-            <div class="feature-icon">&#128197;</div>
-            <h3>Maintenance Tracking</h3>
-            <p>
-              Log water changes, filter cleanings, and parameter tests. Set schedules and never miss
-              important tank maintenance.
-            </p>
-            <span class="feature-tag">Available Now</span>
-          </div>
-        </a>
-
-        <div class="feature-card">
-          <div class="feature-icon">&#128276;</div>
-          <h3>Smart Reminders</h3>
-          <p>
-            Get notified when maintenance is due. Push notifications to your phone so your tank
-            stays healthy even when life gets busy.
-          </p>
-          <span class="feature-tag coming-soon">Coming Soon</span>
-        </div>
-
-        <a href="glossary.html" class="feature-card-link">
-          <div class="feature-card">
-            <div class="feature-icon">&#128218;</div>
-            <h3>Comprehensive Glossary</h3>
-            <p>
-              Learn aquarium terminology, understand the nitrogen cycle, and find answers to common
-              questions in our extensive knowledge base.
-            </p>
-            <span class="feature-tag">Available Now</span>
-          </div>
-        </a>
-
-        <div class="feature-card">
-          <div class="feature-icon">&#129309;</div>
-          <h3>Community Features</h3>
-          <p>
-            Share your tanks, follow other aquarists, and get inspiration from the community.
-            Connect with fellow hobbyists.
-          </p>
-          <span class="feature-tag coming-soon">Coming Soon</span>
-        </div>
+      <div class="showcase-cta">
+        <a href="glossary.html">View all species &rarr;</a>
       </div>
     </section>
 
-    <!-- How It Works -->
-    <section class="how-it-works">
-      <div class="section-header">
-        <h2>Simple to Get Started</h2>
-        <p>From beginner to expert, Comparium grows with you</p>
-      </div>
-
-      <div class="steps">
-        <div class="step">
-          <div class="step-number">1</div>
-          <h3>Compare Species</h3>
-          <p>Select fish you're interested in and instantly see compatibility ratings</p>
-        </div>
-        <div class="step">
-          <div class="step-number">2</div>
-          <h3>Build Your Tank</h3>
-          <p>Create a virtual tank and add species to plan your perfect setup</p>
-        </div>
-        <div class="step">
-          <div class="step-number">3</div>
-          <h3>Track & Maintain</h3>
-          <p>Log maintenance events and get reminders to keep your tank thriving</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="cta-section">
-      <h2>Ready to Dive In?</h2>
-      <p>Join Comparium today and take the guesswork out of fishkeeping.</p>
-      <a href="compare.html" class="btn-primary">Start Comparing Fish</a>
+    <!-- Origin Note -->
+    <section class="origin-note">
+      <p>
+        Built as a personal project. Data sourced from SeriouslyFish, Aquarium Co-Op, and FishBase.
+      </p>
     </section>
 
     <!-- Footer -->
-    <footer class="landing-footer">
-      <p>
-        &copy; <span id="copyright-year"></span> Comparium. <a href="about.html">About</a> |
-        <a href="faq.html">FAQ</a> | <a href="glossary.html">Glossary</a>
-      </p>
-      <p style="margin-top: 0.5rem; font-size: 0.9rem">
-        The all-in-one platform for aquarium enthusiasts.
-      </p>
+    <footer class="footer">
+      <div class="footer-logo">Comparium</div>
+      <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="faq.html">FAQ</a>
+        <a href="glossary.html">Glossary</a>
+      </div>
+      <p class="footer-copy">&copy; <span id="copyright-year"></span> Comparium</p>
     </footer>
 
     <!-- Auto-update copyright year -->
@@ -575,10 +216,9 @@
       document.getElementById('copyright-year').textContent = new Date().getFullYear();
     </script>
 
-    <!-- Scripts: Firebase first, then storage, then auth, then theme -->
+    <!-- Scripts: Firebase first, then storage, then auth -->
     <script type="module" src="js/firebase-init.js"></script>
     <script src="js/storage-service.js"></script>
     <script src="js/auth-manager.js"></script>
-    <script src="js/theme-manager.js"></script>
   </body>
 </html>

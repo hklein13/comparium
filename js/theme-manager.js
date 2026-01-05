@@ -53,16 +53,17 @@ class ThemeManager {
 
   /**
    * Create floating toggle button
+   * NOTE: Hidden for Phase 1 (Naturalist design). Re-enable in Phase 2.
    */
   createToggleButton() {
-    const button = document.createElement('button');
-    button.className = 'theme-toggle';
-    button.setAttribute('aria-label', 'Toggle dark mode');
-    button.innerHTML = this.getIcon();
-    button.onclick = () => this.toggleTheme();
-
-    document.body.appendChild(button);
-    this.toggleButton = button;
+    // Temporarily disabled - dark mode deferred to Phase 2
+    // const button = document.createElement('button');
+    // button.className = 'theme-toggle';
+    // button.setAttribute('aria-label', 'Toggle dark mode');
+    // button.innerHTML = this.getIcon();
+    // button.onclick = () => this.toggleTheme();
+    // document.body.appendChild(button);
+    // this.toggleButton = button;
   }
 
   /**
@@ -79,9 +80,9 @@ class ThemeManager {
    */
   getIcon() {
     if (this.theme === 'dark') {
-      return '<span class="icon">☀️</span>'; // Sun for switching to light
+      return '<span class="icon">Light</span>'; // Switch to light mode
     } else {
-      return '<span class="icon">🌙</span>'; // Moon for switching to dark
+      return '<span class="icon">Dark</span>'; // Switch to dark mode
     }
   }
 }
