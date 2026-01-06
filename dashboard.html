@@ -358,6 +358,9 @@
 
             // Load favorites
             loadFavorites(favorites);
+
+            // Load notifications
+            await loadNotifications(user.uid);
           }
         } catch (error) {
           console.error('Error loading dashboard data:', error);
@@ -460,6 +463,30 @@
       }
 
       // ============================================
+      // Notification Functions
+      // ============================================
+
+      async function loadNotifications(uid) {
+        if (!window.firestoreGetNotifications) {
+          console.warn('firestoreGetNotifications not available');
+          return;
+        }
+        const notifications = await window.firestoreGetNotifications(uid);
+        renderNotifications(notifications);
+      }
+
+      async function handleNotificationClick(notificationId, actionUrl) {
+        // Mark as read
+        if (window.firestoreMarkNotificationRead) {
+          await window.firestoreMarkNotificationRead(notificationId);
+        }
+        // Navigate to action URL (only if non-empty)
+        if (actionUrl && actionUrl.trim() !== '') {
+          window.location.href = actionUrl;
+        }
+      }
+
+      // ============================================
       // Dropdown Functions (Notifications & Settings)
       // ============================================
 
@@ -516,6 +543,14 @@
         }
       }
 
+      // Escape HTML to prevent XSS (user content like tankName flows through notifications)
+      function escapeHTML(str) {
+        if (!str) return '';
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+      }
+
       // Render notifications list
       function renderNotifications(notifications) {
         const list = document.getElementById('notification-list');
@@ -537,14 +572,26 @@
         list.innerHTML = notifications
           .map(
             n => `
-          <div class="notification-item ${n.read ? '' : 'unread'}" data-id="${n.id}">
-            <div class="notification-item-title">${n.title}</div>
-            <div class="notification-item-body">${n.body}</div>
+          <div class="notification-item ${n.read ? '' : 'unread'}"
+               data-id="${escapeHTML(n.id)}"
+               data-action-url="${escapeHTML(n.action?.url || '')}"
+               style="cursor: pointer;">
+            <div class="notification-item-title">${escapeHTML(n.title)}</div>
+            <div class="notification-item-body">${escapeHTML(n.body)}</div>
             <div class="notification-item-time">${formatTimeAgo(n.created)}</div>
           </div>
         `
           )
           .join('');
+
+        // Add click handlers using event delegation
+        list.querySelectorAll('.notification-item[data-id]').forEach(item => {
+          item.addEventListener('click', () => {
+            const id = item.getAttribute('data-id');
+            const url = item.getAttribute('data-action-url');
+            handleNotificationClick(id, url);
+          });
+        });
       }
 
       function formatTimeAgo(timestamp) {
@@ -563,7 +610,7 @@
         return date.toLocaleDateString();
       }
 
-      // Initialize with empty state (Phase 2 will add Firestore loading)
+      // Badge starts hidden, updated when notifications load
       updateNotificationBadge(0);
     </script>
   </body>

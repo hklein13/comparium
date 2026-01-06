@@ -1,8 +1,28 @@
 # Comparium Data Model
 
 **Purpose:** Comprehensive Firestore database structure for all current and planned features.
-**Last Updated:** January 5, 2026
+**Last Updated:** January 6, 2026
 **Firebase Plan:** Blaze (Cloud Functions available)
+
+---
+
+## Implementation Status
+
+| Phase | Status | Notes |
+|-------|--------|-------|
+| **Phase 1** | ✅ Complete | Tank management, events, schedules |
+| **Phase 2** | 🔄 In Progress | Notifications: backend complete, FCM pending |
+| **Phase 3** | ⏳ Planned | Expanded glossary |
+| **Phase 4** | ⏳ Planned | Social features |
+| **Phase 5** | ⏳ Planned | Diagnostic tool |
+
+### Phase 2 Implementation Details
+- ✅ `notifications` collection created with security rules
+- ✅ `checkDueSchedules` Cloud Function deployed (runs daily 8 AM UTC)
+- ✅ Dashboard integration (read notifications, mark as read)
+- ✅ Composite index deployed (userId + created)
+- ⏳ `cleanupExpiredNotifications` function (planned)
+- ⏳ FCM push notifications (planned)
 
 ---
 
@@ -1125,12 +1145,12 @@ service cloud.firestore {
 | `calculateNextDue` | firestore.onWrite (tankSchedules) | Recalculate nextDue when schedule changes |
 
 ### Phase 2
-| Function | Trigger | Purpose |
-|----------|---------|---------|
-| `checkDueSchedules` | pubsub.schedule (daily) | Find due maintenance, create notifications |
-| `cleanupExpiredNotifications` | pubsub.schedule (weekly) | Delete old notifications |
-| `cleanupInvalidTokens` | pubsub.schedule (weekly) | Remove stale FCM tokens |
-| `sendPushNotification` | firestore.onCreate (notifications) | Send FCM push when notification created |
+| Function | Trigger | Purpose | Status |
+|----------|---------|---------|--------|
+| `checkDueSchedules` | pubsub.schedule (daily 8AM UTC) | Find due maintenance, create notifications | ✅ Deployed |
+| `cleanupExpiredNotifications` | pubsub.schedule (weekly) | Delete old notifications | ⏳ Planned |
+| `cleanupInvalidTokens` | pubsub.schedule (weekly) | Remove stale FCM tokens | ⏳ Planned |
+| `sendPushNotification` | firestore.onCreate (notifications) | Send FCM push when notification created | ⏳ Planned |
 
 ### Phase 3
 | Function | Trigger | Purpose |

@@ -1,6 +1,14 @@
 {
   "indexes": [
     {
+      "collectionGroup": "notifications",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "userId", "order": "ASCENDING" },
+        { "fieldPath": "created", "order": "DESCENDING" }
+      ]
+    },
+    {
       "collectionGroup": "tankEvents",
       "queryScope": "COLLECTION",
       "fields": [
@@ -39,6 +47,14 @@
       "queryScope": "COLLECTION",
       "fields": [
         { "fieldPath": "userId", "order": "ASCENDING" },
+        { "fieldPath": "nextDue", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "tankSchedules",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "enabled", "order": "ASCENDING" },
         { "fieldPath": "nextDue", "order": "ASCENDING" }
       ]
     }
