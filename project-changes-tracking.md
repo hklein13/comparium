@@ -1,7 +1,7 @@
 # Project Changes Tracking
 
 _This document tracks pending changes and improvements for the Comparium project._
-_Last Updated: January 5, 2026_
+_Last Updated: January 6, 2026_
 
 ---
 
@@ -40,26 +40,53 @@ _Last Updated: January 5, 2026_
 
 ---
 
-## NEXT UP: Phase 2B - Notifications Backend
+## READY FOR MERGE: Phase 2B - Notifications Backend
 
-The notification UI is complete. Next step is making it functional:
+**Branch:** `claude/phase2-notifications`
+**Status:** Tested locally, Cloud Function deployed, ready for user merge to main
 
-### `checkDueSchedules` Cloud Function
-- [ ] Create scheduled Cloud Function (runs daily)
-- [ ] Query `tankSchedules` where `nextDue <= today` and `enabled == true`
-- [ ] Create notification documents in `notifications` collection
-- [ ] Deploy to Firebase: `firebase deploy --only functions`
-- [ ] Test end-to-end flow
+### Completed Items
+- [x] `checkDueSchedules` Cloud Function (runs daily at 8 AM UTC)
+- [x] Firestore security rules for notifications collection
+- [x] Composite index for notifications queries
+- [x] Dashboard `loadNotifications()` function
+- [x] Notification click-through and mark-as-read
+- [x] XSS protection for user content in notifications
+- [x] Comprehensive test suite (5 new test scripts)
 
-### Dashboard Notifications Read
-- [ ] Add `loadNotifications()` function to query Firestore
-- [ ] Wire up to existing `renderNotifications()` function
-- [ ] Display notification count badge
+### Test Commands Added
+```bash
+npm run test:all        # Data + rules + Playwright
+npm run test:data       # Fish data validation
+npm run test:rules      # Security rules analysis
+npm run test:function   # Cloud Function simulation
+npm run notify:create   # Create test notification
+```
 
-**Key Files:**
-- `functions/index.js` - Add checkDueSchedules function
-- `dashboard.html` - Add loadNotifications() call
-- `DATA-MODEL.md` - Reference for notifications collection schema
+### How Notifications Work
+1. User creates tank with maintenance schedule
+2. When `nextDue` date passes, `checkDueSchedules` runs at 8 AM UTC
+3. Function creates notification document in Firestore
+4. User sees notification in bell icon dropdown on dashboard
+5. Clicking notification navigates to My Tanks and marks as read
+
+---
+
+## NEXT UP: Phase 2C - Push Notifications (FCM)
+
+Optional enhancement to send browser push notifications:
+
+### `sendPushNotification` Cloud Function
+- [ ] Set up Firebase Cloud Messaging (FCM)
+- [ ] Create function triggered on notification document create
+- [ ] Store FCM tokens in `fcmTokens` collection
+- [ ] Send push to user's registered devices
+- [ ] Add notification permission prompt to dashboard
+
+### `cleanupExpiredNotifications` Cloud Function
+- [ ] Create weekly scheduled function
+- [ ] Delete notifications where `expiresAt < now`
+- [ ] Currently notifications persist indefinitely (low priority)
 
 ---
 
@@ -125,11 +152,22 @@ The notification UI is complete. Next step is making it functional:
 
 ## Current State
 
-**Main Branch:** Up to date with all changes, deployed to comparium.net
+**Main Branch:** Up to date with Phase 2A (notification UI)
+**Staging Branch:** `claude/phase2-notifications` (Phase 2B - backend)
 **Live Site:** https://comparium.net
-**Playwright Tests:** All passing
+**Cloud Functions:** `checkDueSchedules` deployed and running daily
 
-To start new work:
+**Test Status:**
+- Playwright: 7 passed, 11 skipped
+- Data integrity: 143 species validated
+- Security rules: 25 checks passed
+
+To merge Phase 2B:
+1. Go to https://github.com/hklein13/comparium/pull/new/claude/phase2-notifications
+2. Create PR, review changes
+3. Merge to main
+
+To start new work after merge:
 ```bash
 git checkout main
 git pull origin main
@@ -140,20 +178,35 @@ git checkout -b claude/[feature-name]
 
 ## Architecture Notes
 
-### Notification System (Phase 2)
+### Notification System (Phase 2) - IMPLEMENTED
 ```
 tankSchedules (Firestore)
-    ↓ [checkDueSchedules Cloud Function - runs daily]
+    ↓ [checkDueSchedules Cloud Function - 8 AM UTC daily]
 notifications (Firestore)
     ↓ [dashboard.html loadNotifications()]
-Notification dropdown UI (already built)
+Notification dropdown UI
+    ↓ [Click → handleNotificationClick()]
+Mark as read + navigate to My Tanks
 ```
 
-### Key Files for Notification Work
-- `dashboard.html` - UI and JavaScript (toggleNotifications, renderNotifications, updateNotificationBadge)
-- `css/naturalist.css` - Styles (.notification-*, .settings-*, .icon-btn, .header-dropdown)
-- `functions/index.js` - Cloud Functions (checkDueSchedules to be added)
-- `DATA-MODEL.md` - Firestore schema for notifications collection (Phase 2 section)
+### Key Files
+| File | Purpose |
+|------|---------|
+| `functions/index.js` | Cloud Functions (checkDueSchedules) |
+| `dashboard.html` | Notification UI + JavaScript |
+| `js/firebase-init.js` | Firestore helpers (firestoreGetNotifications, firestoreMarkNotificationRead) |
+| `firestore.rules` | Security rules (notifications collection) |
+| `firestore.indexes.json` | Composite indexes |
+| `css/naturalist.css` | Styles (.notification-*, .header-dropdown) |
+
+### Test Scripts
+| Script | Purpose |
+|--------|---------|
+| `scripts/test-create-notification.js` | Create manual test notifications |
+| `scripts/test-cloud-function.js` | Simulate checkDueSchedules locally |
+| `scripts/test-data-integrity.js` | Validate fish-data.js structure |
+| `scripts/test-firestore-rules.js` | Analyze security rules |
+| `tests/notifications.spec.js` | Playwright E2E tests |
 
 ---
 

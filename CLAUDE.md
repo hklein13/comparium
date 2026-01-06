@@ -41,7 +41,17 @@ npm run images:upload            # Batch upload from preview selection (paste JS
 # Testing
 npm test                         # Run Playwright tests
 npm run test:headed              # Run tests with visible browser
+npm run test:all                 # Run data + rules + Playwright tests
+npm run test:data                # Validate fish-data.js structure
+npm run test:rules               # Analyze Firestore security rules
+npm run test:function            # Simulate Cloud Function (dry-run)
+npm run test:function:run        # Simulate Cloud Function (creates notifications)
+npm run test:notifications       # Run notification E2E tests
 npx playwright test tests/user-flow.spec.js  # Run single test file
+
+# Notification Testing
+npm run notify:create <userId>   # Create a test notification for a user
+npm run notify:list <userId>     # List notifications for a user
 
 # Code Quality
 npm run lint                     # Check JS files for errors
@@ -123,6 +133,7 @@ functions/
 
 **Current Functions:**
 - `helloComparium` - Test function to verify deployment (HTTP trigger)
+- `checkDueSchedules` - Daily scheduled function (8 AM UTC) that creates notifications for due maintenance
 
 **Deployment:** Functions deploy to Firebase separately from hosting. Always run `firebase deploy --only functions` after changing function code.
 
@@ -167,17 +178,25 @@ Development follows a phased approach. See `DATA-MODEL.md` for complete specific
 1. ✅ Cloud Functions foundation - `functions/` folder, test function deployed
 2. ✅ Notification UI - Bell icon + settings gear in dashboard header, dropdowns with empty states
 3. ✅ Click-through links - Dashboard items link to species/comparison details, XSS security fixes
-4. ⏳ `checkDueSchedules` function - **NEXT** - Daily scheduled function to create notifications
-5. ⏳ Push notifications (FCM) - Browser push when maintenance due
+4. ✅ `checkDueSchedules` function - Daily scheduled function creates notifications at 8 AM UTC
+5. ✅ Dashboard integration - Notifications load from Firestore, click-through, mark-as-read
+6. ⏳ Push notifications (FCM) - **NEXT** - Browser push when maintenance due
+7. ⏳ `cleanupExpiredNotifications` function - Weekly cleanup of 30+ day old notifications
 
-**Last Merged:** January 2026 - Batches 1-3 complete, merged to main, live on comparium.net
+**Last Merged:** January 2026 - Phase 2B (Notifications Backend) ready for merge
+**Staging Branch:** `claude/phase2-notifications`
 
 See `project-changes-tracking.md` for detailed progress and next steps.
 
 ## Git Workflow
 
 ### Current State (January 2026)
-**Branch `claude/fix-species-links-Hv5Zn` was merged to main** - All work is now live.
+**Branch `claude/phase2-notifications` ready for merge** - Contains Phase 2B notifications backend.
+
+Pending merge:
+- `checkDueSchedules` Cloud Function (already deployed to Firebase)
+- Dashboard notification integration (Firestore queries, mark-as-read)
+- Comprehensive test suite (5 new test scripts)
 
 For future work:
 1. Create a new staging branch from main: `git checkout -b claude/[feature-name]`
@@ -216,8 +235,11 @@ For future work:
 - ✅ ESLint configured and passing (0 errors)
 - ✅ Prettier configured and all files formatted
 - ✅ Claude Code hooks set up in `.claude/settings.json`
-- ✅ Playwright tests passing (7 passed, 4 skipped)
-- ✅ All code merged to main and deployed to comparium.net
+- ✅ Playwright tests passing (7 passed, 11 skipped)
+- ✅ Data integrity tests passing (143 species validated)
+- ✅ Security rules tests passing (25 checks)
+- ✅ Cloud Function tests available (dry-run simulation)
+- ⏳ Branch `claude/phase2-notifications` ready for merge
 
 **Note:** The `.claude/` folder is gitignored (contains local settings and hooks). Hooks are already configured and working.
 
@@ -272,6 +294,7 @@ allow write: if isAdmin();        // Admin-only writes
 - `usernames` - Username → UID mapping for login
 - `tankEvents` - Maintenance event logs (owner read/write)
 - `tankSchedules` - Recurring maintenance schedules (owner read/write)
+- `notifications` - Maintenance notifications (owner read, Cloud Functions create)
 
 ## Image System
 
