@@ -40,44 +40,27 @@ _Last Updated: January 6, 2026_
 
 ---
 
-## READY FOR MERGE: Phase 2B - Notifications Backend
+## READY FOR MERGE: Complete Phase 2 - Notifications + FCM Push
 
 **Branch:** `claude/phase2-notifications`
-**Status:** Tested locally, Cloud Function deployed, ready for user merge to main
+**Status:** All features complete and deployed. Ready for user to merge to main.
 
-### Completed Items
+### Phase 2A - Notification UI (Complete)
+- [x] Notification bell icon in dashboard header
+- [x] Settings gear icon with dropdown
+- [x] Notification dropdown with empty state
+- [x] Click-outside handling to close dropdowns
+- [x] Only one dropdown open at a time
+
+### Phase 2B - Notifications Backend (Complete)
 - [x] `checkDueSchedules` Cloud Function (runs daily at 8 AM UTC)
 - [x] Firestore security rules for notifications collection
 - [x] Composite index for notifications queries
 - [x] Dashboard `loadNotifications()` function
 - [x] Notification click-through and mark-as-read
 - [x] XSS protection for user content in notifications
-- [x] Comprehensive test suite (5 new test scripts)
 
-### Test Commands Added
-```bash
-npm run test:all        # Data + rules + Playwright
-npm run test:data       # Fish data validation
-npm run test:rules      # Security rules analysis
-npm run test:function   # Cloud Function simulation
-npm run notify:create   # Create test notification
-```
-
-### How Notifications Work
-1. User creates tank with maintenance schedule
-2. When `nextDue` date passes, `checkDueSchedules` runs at 8 AM UTC
-3. Function creates notification document in Firestore
-4. User sees notification in bell icon dropdown on dashboard
-5. Clicking notification navigates to My Tanks and marks as read
-
----
-
-## COMPLETED: Phase 2C - Push Notifications (FCM)
-
-**Branch:** `claude/phase2-notifications`
-**Status:** Fully implemented and tested
-
-### Completed Items
+### Phase 2C - Push Notifications (Complete)
 - [x] Firebase Cloud Messaging (FCM) setup with VAPID key
 - [x] `sendPushNotification` Cloud Function (triggered on notification create)
 - [x] `cleanupExpiredNotifications` Cloud Function (weekly cleanup)
@@ -90,10 +73,27 @@ npm run notify:create   # Create test notification
 ### Bug Fixes Applied (January 2026)
 - [x] Fixed `fcmIsEnabled()` to check Firestore tokens instead of browser permission
 - [x] Removed broken Export Data feature (unused)
-- [x] Implemented `markAllRead()` function (was stub)
-- [x] Added error handling to `removeFavorite()`
+- [x] Implemented `markAllRead()` function with Promise.all() (was stub)
+- [x] Added error handling to `removeFavorite()` with proper user param
 - [x] Added error handling to Cloud Function `checkDueSchedules`
 - [x] Added error handling to `editTank()` in tank-manager.js
+
+### Test Commands
+```bash
+npm run test:all        # Data + rules + Playwright
+npm run test:data       # Fish data validation
+npm run test:rules      # Security rules analysis
+npm run test:function   # Cloud Function simulation
+npm run notify:create   # Create test notification
+```
+
+### How Notifications Work
+1. User creates tank with maintenance schedule
+2. When `nextDue` date passes, `checkDueSchedules` runs at 8 AM UTC
+3. Function creates notification document in Firestore
+4. `sendPushNotification` triggers → sends FCM push to user's devices
+5. User sees notification in bell icon dropdown on dashboard
+6. Clicking notification navigates to My Tanks and marks as read
 
 ---
 
@@ -201,21 +201,25 @@ These issues were identified in code review but are low-risk. Address when time 
 ## Current State
 
 **Main Branch:** Up to date with Phase 2A (notification UI)
-**Staging Branch:** `claude/phase2-notifications` (Phase 2B - backend)
+**Staging Branch:** `claude/phase2-notifications` (Complete Phase 2 - ready for merge)
 **Live Site:** https://comparium.net
-**Cloud Functions:** `checkDueSchedules` deployed and running daily
+**Cloud Functions:** All 4 deployed and operational:
+- `helloComparium` - Test/health check (HTTP)
+- `checkDueSchedules` - Daily 8 AM UTC (scheduler)
+- `sendPushNotification` - On notification create (Firestore trigger)
+- `cleanupExpiredNotifications` - Weekly Sunday 2 AM UTC (scheduler)
 
 **Test Status:**
 - Playwright: 7 passed, 11 skipped
 - Data integrity: 143 species validated
 - Security rules: 25 checks passed
 
-To merge Phase 2B:
+**To merge Phase 2 to main:**
 1. Go to https://github.com/hklein13/comparium/pull/new/claude/phase2-notifications
 2. Create PR, review changes
-3. Merge to main
+3. Merge to main (auto-deploys hosting to live site)
 
-To start new work after merge:
+**To start new work after merge:**
 ```bash
 git checkout main
 git pull origin main
@@ -226,24 +230,30 @@ git checkout -b claude/[feature-name]
 
 ## Architecture Notes
 
-### Notification System (Phase 2) - IMPLEMENTED
+### Notification System (Phase 2) - COMPLETE
 ```
 tankSchedules (Firestore)
     ↓ [checkDueSchedules Cloud Function - 8 AM UTC daily]
 notifications (Firestore)
-    ↓ [dashboard.html loadNotifications()]
-Notification dropdown UI
-    ↓ [Click → handleNotificationClick()]
-Mark as read + navigate to My Tanks
+    ├─→ [sendPushNotification Cloud Function - on create]
+    │       ↓
+    │   fcmTokens (Firestore) → FCM → Browser push notification
+    │
+    └─→ [dashboard.html loadNotifications()]
+            ↓
+        Notification dropdown UI
+            ↓ [Click → handleNotificationClick()]
+        Mark as read + navigate to My Tanks
 ```
 
 ### Key Files
 | File | Purpose |
 |------|---------|
-| `functions/index.js` | Cloud Functions (checkDueSchedules) |
-| `dashboard.html` | Notification UI + JavaScript |
-| `js/firebase-init.js` | Firestore helpers (firestoreGetNotifications, firestoreMarkNotificationRead) |
-| `firestore.rules` | Security rules (notifications collection) |
+| `functions/index.js` | Cloud Functions (4 functions: hello, checkDue, sendPush, cleanup) |
+| `dashboard.html` | Notification UI + JavaScript + FCM toggle |
+| `js/firebase-init.js` | Firestore helpers + FCM functions (fcmRequestPermission, fcmSaveToken, fcmIsEnabled) |
+| `firebase-messaging-sw.js` | Service worker for background push notifications |
+| `firestore.rules` | Security rules (notifications + fcmTokens collections) |
 | `firestore.indexes.json` | Composite indexes |
 | `css/naturalist.css` | Styles (.notification-*, .header-dropdown) |
 

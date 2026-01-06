@@ -22,6 +22,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Current Stats:** 143 species in database, 94 with images from Wikimedia Commons
 
+**Current Phase:** Phase 2 Complete (Notifications + FCM Push) - Ready for Phase 3
+
 ## Commands
 
 ```bash
@@ -121,21 +123,46 @@ For glossary pages specifically:
 ### Cross-Page Communication
 - **Add to Tank flow:** species-detail.js sets `sessionStorage.addToTank`, dashboard's tankManager reads it
 
+### Notification System Flow
+```
+tankSchedules (Firestore) → checkDueSchedules (Cloud Function, 8AM UTC daily)
+    ↓
+notifications (Firestore) → sendPushNotification (Cloud Function, on create)
+    ↓                              ↓
+dashboard.html              Browser push notification
+loadNotifications()         (if FCM enabled)
+    ↓
+Bell icon dropdown → Click → markNotificationRead() + navigate
+```
+
+### FCM Push Notification Flow
+```
+User enables push → fcmRequestPermission() → getToken() → fcmSaveToken()
+    ↓
+fcmTokens (Firestore) ← sendPushNotification reads tokens
+    ↓
+firebase-messaging-sw.js handles background notifications
+```
+
 ### Cloud Functions (`functions/` folder)
 Separate Node.js project using CommonJS (not ES6 modules).
 
 ```
 functions/
-├── package.json     # Dependencies: firebase-admin, firebase-functions
-├── index.js         # All function definitions
+├── package.json     # Dependencies: firebase-admin, firebase-functions, firebase-messaging
+├── index.js         # All function definitions (4 functions)
 └── .gitignore       # Ignores node_modules, secrets
 ```
 
-**Current Functions:**
-- `helloComparium` - Test function to verify deployment (HTTP trigger)
-- `checkDueSchedules` - Daily scheduled function (8 AM UTC) that creates notifications for due maintenance
+**Current Functions (all deployed):**
+| Function | Trigger | Purpose |
+|----------|---------|---------|
+| `helloComparium` | HTTP | Test function to verify deployment |
+| `checkDueSchedules` | Schedule (8 AM UTC daily) | Creates notifications for due maintenance |
+| `sendPushNotification` | Firestore onCreate (notifications) | Sends FCM push to user's devices |
+| `cleanupExpiredNotifications` | Schedule (Sunday 2 AM UTC) | Deletes old notifications and invalid tokens |
 
-**Deployment:** Functions deploy to Firebase separately from hosting. Always run `firebase deploy --only functions` after changing function code.
+**Deployment:** `firebase deploy --only functions` (takes ~2 min)
 
 ## Design System
 
@@ -169,34 +196,40 @@ Development follows a phased approach. See `DATA-MODEL.md` for complete specific
 | Phase | Status | Description |
 |-------|--------|-------------|
 | **Phase 1** | ✅ Complete | Tank management, maintenance events, schedules |
-| **Phase 2** | 🔄 In Progress | Notifications system (Cloud Functions foundation deployed) |
+| **Phase 2** | ✅ Complete | Notifications system + FCM push notifications |
 | **Phase 3** | ⏳ Planned | Expanded glossary (equipment, plants, diseases) |
 | **Phase 4** | ⏳ Planned | Social features (follows, posts, comments) |
 | **Phase 5** | ⏳ Planned | Diagnostic tool (fish health decision tree) |
+| **Phase 6** | ⏳ Long-term | **Native mobile app (iOS + Android)** - Ultimate goal |
 
-### Phase 2 Breakdown (Current)
-1. ✅ Cloud Functions foundation - `functions/` folder, test function deployed
-2. ✅ Notification UI - Bell icon + settings gear in dashboard header, dropdowns with empty states
-3. ✅ Click-through links - Dashboard items link to species/comparison details, XSS security fixes
-4. ✅ `checkDueSchedules` function - Daily scheduled function creates notifications at 8 AM UTC
-5. ✅ Dashboard integration - Notifications load from Firestore, click-through, mark-as-read
-6. ⏳ Push notifications (FCM) - **NEXT** - Browser push when maintenance due
-7. ⏳ `cleanupExpiredNotifications` function - Weekly cleanup of 30+ day old notifications
+### Phase 2 Complete (January 2026)
+All Phase 2 features implemented and deployed:
+- ✅ Notification UI (bell icon, dropdowns, settings gear)
+- ✅ `checkDueSchedules` Cloud Function (runs daily 8 AM UTC)
+- ✅ `sendPushNotification` Cloud Function (FCM on notification create)
+- ✅ `cleanupExpiredNotifications` Cloud Function (weekly cleanup)
+- ✅ FCM token management (save, validate, cleanup)
+- ✅ Push notification toggle in dashboard settings
+- ✅ Service worker for background notifications
 
-**Last Merged:** January 2026 - Phase 2B (Notifications Backend) ready for merge
-**Staging Branch:** `claude/phase2-notifications`
-
-See `project-changes-tracking.md` for detailed progress and next steps.
+**Branch:** `claude/phase2-notifications` (ready for merge to main)
 
 ## Git Workflow
 
 ### Current State (January 2026)
-**Branch `claude/phase2-notifications` ready for merge** - Contains Phase 2B notifications backend.
+**Branch `claude/phase2-notifications` ready for merge** - Contains complete Phase 2 (notifications + FCM push).
 
-Pending merge:
-- `checkDueSchedules` Cloud Function (already deployed to Firebase)
-- Dashboard notification integration (Firestore queries, mark-as-read)
-- Comprehensive test suite (5 new test scripts)
+**What's in this branch:**
+- Notification UI (bell icon, settings gear, dropdowns)
+- 4 Cloud Functions (all deployed to Firebase)
+- FCM push notification support
+- Comprehensive test suite
+- Bug fixes (markAllRead, removeFavorite, error handling)
+
+**To merge:**
+1. Go to https://github.com/hklein13/comparium/pull/new/claude/phase2-notifications
+2. Create PR, review changes
+3. Merge to main (auto-deploys to live site)
 
 For future work:
 1. Create a new staging branch from main: `git checkout -b claude/[feature-name]`
@@ -239,22 +272,18 @@ For future work:
 - ✅ Data integrity tests passing (143 species validated)
 - ✅ Security rules tests passing (25 checks)
 - ✅ Cloud Function tests available (dry-run simulation)
-- ⏳ Branch `claude/phase2-notifications` ready for merge
+- ✅ All 4 Cloud Functions deployed and operational
+- ✅ Phase 2 complete - branch ready for merge to main
 
 **Note:** The `.claude/` folder is gitignored (contains local settings and hooks). Hooks are already configured and working.
 
-### Context7 Integration (MANDATORY)
-**ALWAYS use Context7 to fetch current documentation before writing code that uses external libraries.**
+### Context7 Integration (MANDATORY - READ THIS FIRST)
+**ALWAYS use Context7 MCP tools to fetch current documentation before writing code that uses external libraries.**
 
-This is NOT optional. Before writing or modifying code that uses:
-- Firebase SDK (Auth, Firestore, Storage, Functions)
-- Playwright testing APIs
-- Any npm package or external library
-
-You MUST call the Context7 MCP tools to fetch current documentation:
-1. Use `resolve-library-id` to find the library
-2. Use `query-docs` to fetch current docs
-3. Then write the code using the fetched documentation
+This is NOT optional. Before writing or modifying code that uses Firebase SDK, Playwright, or any npm package:
+1. Call `resolve-library-id` to find the library
+2. Call `query-docs` to fetch current docs
+3. Then write code using the fetched documentation
 
 This prevents outdated API usage and ensures correct, working code on the first attempt.
 
@@ -295,6 +324,7 @@ allow write: if isAdmin();        // Admin-only writes
 - `tankEvents` - Maintenance event logs (owner read/write)
 - `tankSchedules` - Recurring maintenance schedules (owner read/write)
 - `notifications` - Maintenance notifications (owner read, Cloud Functions create)
+- `fcmTokens` - FCM push notification tokens (owner read/write, Cloud Functions read)
 
 ## Image System
 

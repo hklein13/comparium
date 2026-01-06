@@ -11,18 +11,23 @@
 | Phase | Status | Notes |
 |-------|--------|-------|
 | **Phase 1** | ✅ Complete | Tank management, events, schedules |
-| **Phase 2** | 🔄 In Progress | Notifications: backend complete, FCM pending |
+| **Phase 2** | ✅ Complete | Notifications + FCM push (January 2026) |
 | **Phase 3** | ⏳ Planned | Expanded glossary |
 | **Phase 4** | ⏳ Planned | Social features |
 | **Phase 5** | ⏳ Planned | Diagnostic tool |
+| **Phase 6** | ⏳ Long-term | Native mobile app (iOS + Android) |
 
-### Phase 2 Implementation Details
+### Phase 2 Implementation Details (Complete)
 - ✅ `notifications` collection created with security rules
+- ✅ `fcmTokens` collection created with security rules
 - ✅ `checkDueSchedules` Cloud Function deployed (runs daily 8 AM UTC)
-- ✅ Dashboard integration (read notifications, mark as read)
-- ✅ Composite index deployed (userId + created)
-- ⏳ `cleanupExpiredNotifications` function (planned)
-- ⏳ FCM push notifications (planned)
+- ✅ `sendPushNotification` Cloud Function deployed (triggers on notification create)
+- ✅ `cleanupExpiredNotifications` Cloud Function deployed (runs weekly Sundays 2 AM UTC)
+- ✅ Dashboard integration (read notifications, mark as read, mark all read)
+- ✅ Composite indexes deployed (userId + created, enabled + nextDue)
+- ✅ FCM push notifications with browser permission flow
+- ✅ Service worker for background notifications (`firebase-messaging-sw.js`)
+- ✅ Push notification toggle in dashboard settings
 
 ---
 
@@ -1147,10 +1152,10 @@ service cloud.firestore {
 ### Phase 2
 | Function | Trigger | Purpose | Status |
 |----------|---------|---------|--------|
+| `helloComparium` | HTTP request | Test function to verify deployment | ✅ Deployed |
 | `checkDueSchedules` | pubsub.schedule (daily 8AM UTC) | Find due maintenance, create notifications | ✅ Deployed |
-| `cleanupExpiredNotifications` | pubsub.schedule (weekly) | Delete old notifications | ⏳ Planned |
-| `cleanupInvalidTokens` | pubsub.schedule (weekly) | Remove stale FCM tokens | ⏳ Planned |
-| `sendPushNotification` | firestore.onCreate (notifications) | Send FCM push when notification created | ⏳ Planned |
+| `sendPushNotification` | firestore.onCreate (notifications) | Send FCM push when notification created | ✅ Deployed |
+| `cleanupExpiredNotifications` | pubsub.schedule (weekly Sun 2AM UTC) | Delete old notifications + invalid FCM tokens | ✅ Deployed |
 
 ### Phase 3
 | Function | Trigger | Purpose |
@@ -1364,3 +1369,64 @@ This data model:
 3. Phase 3: Expanded glossary (content depth)
 4. Phase 4: Social features (community)
 5. Phase 5: Diagnostic tool (differentiation)
+6. Phase 6: Native mobile app (ultimate goal)
+
+---
+
+## Phase 6: Native Mobile App (Long-Term Vision)
+
+**This is the ultimate goal for Comparium.** Most users will access on mobile, and a native app provides the best experience.
+
+### Why Native App?
+
+| Feature | Web App | Native App |
+|---------|---------|------------|
+| iOS lock screen notifications | ⚠️ Limited (PWA only) | ✅ Full support |
+| Android notifications | ✅ Works via FCM | ✅ Full support |
+| Offline access | ⚠️ Limited | ✅ Full support |
+| App Store presence | ❌ No | ✅ Discoverability |
+| Home screen icon | ⚠️ Manual PWA install | ✅ Automatic |
+| Performance | Good | Better |
+
+### Technical Approach Options
+
+| Option | Pros | Cons |
+|--------|------|------|
+| **React Native** | Single codebase, large community, JS-based | Some native limitations |
+| **Flutter** | Single codebase, excellent performance | Dart language (new to learn) |
+| **Native (Swift + Kotlin)** | Best performance, full platform access | Two codebases to maintain |
+
+**Recommended:** React Native or Flutter for single-codebase efficiency.
+
+### What Carries Over from Web
+
+The existing Firebase backend works directly with mobile apps:
+- ✅ Firestore database (same collections)
+- ✅ Firebase Auth (same user accounts)
+- ✅ Firebase Storage (same images)
+- ✅ Cloud Functions (same backend logic)
+- ✅ FCM (native SDK even better than web)
+
+**No backend rebuild required** - the mobile app is a new frontend to the same Firebase services.
+
+### Requirements
+
+- Apple Developer Account ($99/year) - **Required for iOS**
+- Google Play Developer Account ($25 one-time)
+- App Store review process (Apple is stricter)
+- Ongoing maintenance for OS updates
+
+### Prerequisite Phases
+
+Complete Phases 1-5 first to:
+1. Stabilize all features on web
+2. Build user base to validate demand
+3. Refine UX patterns before porting to mobile
+4. Ensure data model is mature (mobile apps are harder to update)
+
+### Planning Notes
+
+- iOS is priority (user is iOS user, large US market share)
+- Consider hiring mobile developer or learning React Native
+- Web app remains available (not everyone installs apps)
+- Mobile app can start as "lite" version with core features only

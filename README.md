@@ -1,6 +1,8 @@
 # Comparium - Fish Species Compatibility Tool
 
-A web-based tool for comparing freshwater aquarium fish species and checking compatibility. Includes 143+ species with detailed care requirements, predation warnings, and compatibility analysis.
+A web-based platform for comparing freshwater aquarium fish species and managing your aquarium. Features 143 species with detailed care requirements, tank management, maintenance scheduling, and push notifications.
+
+**Current Status:** Phase 2 Complete (January 2026) - Notifications + FCM Push
 
 **Live Site:** https://comparium.net
 
@@ -85,8 +87,13 @@ git stash pop
 
 ### Branch Info
 
-- **Staging branch:** `claude/fix-species-links-Hv5Zn` (for development)
+- **Current staging branch:** `claude/phase2-notifications` (Phase 2 complete, ready for merge)
 - **Production branch:** `main` (merging to main deploys to live site)
+
+**To merge current work:**
+1. Go to https://github.com/hklein13/comparium/pull/new/claude/phase2-notifications
+2. Create PR, review changes
+3. Merge to main
 
 ---
 
@@ -250,16 +257,44 @@ background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 ## 📁 File Structure
 
 ```
-Comparium-website/
-├── index.html          # Main comparison page
-├── about.html          # Help and information page
+comparium-live/
+├── index.html              # Landing page
+├── compare.html            # Fish comparison tool (main feature)
+├── dashboard.html          # User hub (tanks, maintenance, notifications)
+├── glossary.html           # Species database with search
+├── faq.html                # Frequently asked questions
+├── species-detail.html     # Individual species pages
+│
 ├── css/
-│   └── styles.css      # All styling
+│   └── naturalist.css      # All styling (naturalist theme)
+│
 ├── js/
-│   ├── fish-data.js    # Database of 99 fish species
-│   └── app.js          # Application logic
-├── favicon.ico         # (You'll add this)
-└── README.md           # This file
+│   ├── fish-data.js        # Database of 143 fish species
+│   ├── firebase-init.js    # Firebase setup + FCM helpers
+│   ├── auth-manager.js     # Authentication handling
+│   ├── storage-service.js  # Firestore data operations
+│   ├── tank-manager.js     # Tank CRUD operations
+│   ├── maintenance-manager.js # Maintenance events & schedules
+│   └── ...                 # Additional modules
+│
+├── functions/              # Firebase Cloud Functions
+│   ├── index.js            # 4 deployed functions
+│   └── package.json        # Function dependencies
+│
+├── scripts/                # Development & migration scripts
+│   └── ...
+│
+├── tests/                  # Playwright E2E tests
+│   └── ...
+│
+├── firebase-messaging-sw.js # Push notification service worker
+├── firestore.rules         # Firestore security rules
+├── firestore.indexes.json  # Firestore indexes
+│
+├── CLAUDE.md               # AI assistant instructions
+├── DATA-MODEL.md           # Database structure & roadmap
+├── TESTING.md              # Testing guide
+└── README.md               # This file
 ```
 
 ---
@@ -322,14 +357,22 @@ newFishKey: {
 
 ---
 
-## 📈 Future Enhancements (Ideas for Later)
+## 📈 Current Features & Future Plans
 
-- Add fish images for visual identification
-- Create individual species profile pages
-- Add a "share this comparison" button with URL parameters
-- Build a full tank stocking calculator
-- Add user accounts to save favorite comparisons
-- Create a mobile app version
+**Implemented:**
+- ✅ 143 fish species with images from Wikimedia Commons
+- ✅ Individual species profile pages
+- ✅ User accounts with Firebase Auth
+- ✅ Tank management with species tracking
+- ✅ Maintenance scheduling and event logging
+- ✅ Push notifications for maintenance reminders
+- ✅ Favorites system
+
+**Coming Soon (Phase 3+):**
+- Expanded glossary (equipment, plants, diseases)
+- Social features (follows, posts)
+- Fish health diagnostic tool
+- Native mobile app (iOS + Android)
 
 ---
 
