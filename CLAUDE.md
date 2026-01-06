@@ -203,7 +203,7 @@ Development follows a phased approach. See `DATA-MODEL.md` for complete specific
 | **Phase 6** | ⏳ Long-term | **Native mobile app (iOS + Android)** - Ultimate goal |
 
 ### Phase 2 Complete (January 2026)
-All Phase 2 features implemented and deployed:
+All Phase 2 features implemented, deployed, and **merged to main**:
 - ✅ Notification UI (bell icon, dropdowns, settings gear)
 - ✅ `checkDueSchedules` Cloud Function (runs daily 8 AM UTC)
 - ✅ `sendPushNotification` Cloud Function (FCM on notification create)
@@ -212,35 +212,42 @@ All Phase 2 features implemented and deployed:
 - ✅ Push notification toggle in dashboard settings
 - ✅ Service worker for background notifications
 
-**Branch:** `claude/phase2-notifications` (ready for merge to main)
+### Phase 3: Next Up
+**Expanded Glossary** - Add three new reference databases:
+
+| Collection | Description | Key Fields |
+|------------|-------------|------------|
+| `equipment` | Filters, heaters, lights, test kits | specs, pros/cons, bestFor |
+| `plants` | Aquarium plants | careLevel, light, CO2, placement |
+| `diseases` | Fish diseases | symptoms, treatment, prevention |
+
+See `DATA-MODEL.md` for complete collection schemas.
 
 ## Git Workflow
 
+### CRITICAL RULE
+**NEVER push directly to main.** Always use a staging branch and let the user merge via PR.
+
 ### Current State (January 2026)
-**Branch `claude/phase2-notifications` ready for merge** - Contains complete Phase 2 (notifications + FCM push).
+- **Main branch:** Fully up to date with Phase 2 complete
+- **Phase 2 branch:** `claude/phase2-notifications` - merged and can be deleted
+- **Next work:** Create new branch for Phase 3
 
-**What's in this branch:**
-- Notification UI (bell icon, settings gear, dropdowns)
-- 4 Cloud Functions (all deployed to Firebase)
-- FCM push notification support
-- Comprehensive test suite
-- Bug fixes (markAllRead, removeFavorite, error handling)
-
-**To merge:**
-1. Go to https://github.com/hklein13/comparium/pull/new/claude/phase2-notifications
-2. Create PR, review changes
-3. Merge to main (auto-deploys to live site)
-
-For future work:
-1. Create a new staging branch from main: `git checkout -b claude/[feature-name]`
-2. Make changes, commit, push
-3. User merges to main when ready
+### Starting New Work
+```bash
+git checkout main
+git pull origin main
+git checkout -b claude/phase3-glossary
+# Make changes, commit, push
+git push -u origin claude/phase3-glossary
+```
 
 ### Deployment Flow
 1. Claude creates branch from main, commits/pushes changes
-2. User runs `git pull` to get changes
-3. User tests locally with `http-server`
-4. User merges to main via GitHub (deploys to live site)
+2. Claude tells user the branch is ready
+3. User creates PR on GitHub, reviews changes
+4. User merges to main (auto-deploys to live site)
+5. Claude runs `git checkout main && git pull` to sync
 
 ## Core Principles
 
@@ -273,7 +280,8 @@ For future work:
 - ✅ Security rules tests passing (25 checks)
 - ✅ Cloud Function tests available (dry-run simulation)
 - ✅ All 4 Cloud Functions deployed and operational
-- ✅ Phase 2 complete - branch ready for merge to main
+- ✅ **Phase 2 complete and merged to main**
+- ⏳ Phase 3 ready to start (expanded glossary)
 
 **Note:** The `.claude/` folder is gitignored (contains local settings and hooks). Hooks are already configured and working.
 
