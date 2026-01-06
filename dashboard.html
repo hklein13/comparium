@@ -127,6 +127,17 @@
                   <span class="settings-value" id="settings-username"></span>
                 </div>
                 <div class="settings-dropdown-divider"></div>
+                <div class="settings-dropdown-item" id="push-notification-setting">
+                  <span class="settings-label">Push Notifications</span>
+                  <button
+                    id="push-toggle-btn"
+                    class="settings-toggle-btn"
+                    onclick="togglePushNotifications()"
+                  >
+                    Enable
+                  </button>
+                </div>
+                <div class="settings-dropdown-divider"></div>
                 <button onclick="authManager.logout()" class="settings-dropdown-btn">
                   Log Out
                 </button>
@@ -236,13 +247,6 @@
             <p>No favorites yet. Click the star on species when comparing to save them!</p>
           </div>
         </div>
-      </div>
-
-      <!-- Export Data -->
-      <div class="dashboard-section">
-        <h2>Data Management</h2>
-        <p>Export your data to back it up or transfer to another device.</p>
-        <button onclick="exportData()" class="btn btn-ghost">Export My Data (JSON)</button>
       </div>
     </div>
 
@@ -361,6 +365,9 @@
 
             // Load notifications
             await loadNotifications(user.uid);
+
+            // Update push notification UI state
+            await updatePushNotificationUI();
           }
         } catch (error) {
           console.error('Error loading dashboard data:', error);
@@ -437,28 +444,13 @@
 
       async function removeFavorite(speciesKey) {
         const uid = authManager.getCurrentUid();
-        await storageService.removeFavorite(uid, speciesKey);
-        authManager.showMessage('Removed from favorites', 'success');
-        loadDashboard(); // Reload to update display
-      }
+        const result = await storageService.removeFavorite(uid, speciesKey);
 
-      async function exportData() {
-        const uid = authManager.getCurrentUid();
-        const data = await storageService.exportUserData(uid);
-
-        if (data) {
-          // Create download
-          const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = `Comparium-${username}-${new Date().toISOString().split('T')[0]}.json`;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          URL.revokeObjectURL(url);
-
-          authManager.showMessage('Data exported successfully', 'success');
+        if (result?.success) {
+          authManager.showMessage('Removed from favorites', 'success');
+          await loadDashboard({ uid }); // Reload to update display
+        } else {
+          authManager.showMessage('Failed to remove favorite', 'error');
         }
       }
 
@@ -508,11 +500,119 @@
         settingsDropdown.classList.toggle('open');
       }
 
-      function markAllRead() {
-        // Future: Update Firestore to mark all as read
-        // For now, just close the dropdown
-        const dropdown = document.getElementById('notification-dropdown');
-        dropdown.classList.remove('open');
+      async function markAllRead() {
+        const uid = window.getFirebaseUid?.();
+        if (!uid) return;
+
+        // Get all unread notifications and mark them read
+        const notifications = await window.firestoreGetNotifications?.(uid);
+        const unread = notifications?.filter(n => !n.read) || [];
+
+        if (unread.length === 0) {
+          // No unread notifications, just close dropdown
+          document.getElementById('notification-dropdown').classList.remove('open');
+          return;
+        }
+
+        // Mark all unread notifications as read in parallel
+        try {
+          await Promise.all(unread.map(n => window.firestoreMarkNotificationRead?.(n.id)));
+        } catch (error) {
+          console.error('Failed to mark some notifications as read:', error);
+          // Continue anyway - partial success is better than blocking UI
+        }
+
+        // Refresh the notification list
+        await loadNotifications(uid);
+
+        // Close dropdown
+        document.getElementById('notification-dropdown').classList.remove('open');
+      }
+
+      // ============================================
+      // Push Notification Functions
+      // ============================================
+
+      /**
+       * Toggle push notifications on/off
+       */
+      async function togglePushNotifications() {
+        const btn = document.getElementById('push-toggle-btn');
+        const uid = window.getFirebaseUid?.();
+
+        if (!uid) {
+          console.warn('User not logged in');
+          return;
+        }
+
+        // Check current state
+        const isEnabled = await window.fcmIsEnabled?.(uid);
+
+        if (isEnabled) {
+          // Disable notifications
+          btn.textContent = 'Disabling...';
+          btn.disabled = true;
+
+          const success = await window.fcmDisableNotifications?.(uid);
+          if (success) {
+            btn.textContent = 'Enable';
+            btn.classList.remove('active');
+          } else {
+            btn.textContent = 'Disable';
+            console.error('Failed to disable push notifications');
+          }
+          btn.disabled = false;
+        } else {
+          // Enable notifications
+          btn.textContent = 'Enabling...';
+          btn.disabled = true;
+
+          const result = await window.fcmRequestPermission?.(uid);
+          if (result?.success) {
+            btn.textContent = 'Disable';
+            btn.classList.add('active');
+            // Foreground handler is set up in updatePushNotificationUI
+          } else {
+            btn.textContent = 'Enable';
+            if (result?.error) {
+              alert(result.error);
+            }
+          }
+          btn.disabled = false;
+        }
+      }
+
+      /**
+       * Update push notification button state based on current permission
+       */
+      async function updatePushNotificationUI() {
+        const btn = document.getElementById('push-toggle-btn');
+        const setting = document.getElementById('push-notification-setting');
+        const uid = window.getFirebaseUid?.();
+
+        if (!btn || !setting) return;
+
+        // Check if FCM is supported or user not logged in
+        if (!window.fcmIsEnabled || !uid) {
+          // FCM not available or not logged in, hide the setting
+          setting.style.display = 'none';
+          return;
+        }
+
+        // Check current state
+        const isEnabled = await window.fcmIsEnabled(uid);
+        if (isEnabled) {
+          btn.textContent = 'Disable';
+          btn.classList.add('active');
+
+          // Set up foreground handler for enabled users
+          window.fcmSetupForegroundHandler?.(() => {
+            loadNotifications(uid);
+          });
+        } else {
+          btn.textContent = 'Enable';
+          btn.classList.remove('active');
+        }
       }
 
       // Close dropdowns when clicking outside

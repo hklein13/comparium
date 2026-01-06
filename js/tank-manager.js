@@ -402,9 +402,14 @@ window.tankManager = {
     const uid = authManager.getCurrentUid();
     if (!uid) return;
 
-    const tank = await storageService.getTank(uid, tankId);
+    try {
+      const tank = await storageService.getTank(uid, tankId);
 
-    if (tank) {
+      if (!tank) {
+        authManager.showMessage('Tank not found', 'error');
+        return;
+      }
+
       const formContainer = document.getElementById('tank-form-container');
       if (formContainer) {
         formContainer.style.display = 'block';
@@ -423,6 +428,9 @@ window.tankManager = {
       if (tankSection) {
         tankSection.scrollIntoView({ behavior: 'smooth' });
       }
+    } catch (error) {
+      console.error('Error loading tank:', error);
+      authManager.showMessage('Failed to load tank', 'error');
     }
   },
 

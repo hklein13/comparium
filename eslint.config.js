@@ -31,6 +31,9 @@ export default [
         FormData: 'readonly',
         FileReader: 'readonly',
         Image: 'readonly',
+        Notification: 'readonly',
+        crypto: 'readonly',
+        TextEncoder: 'readonly',
         // Firebase globals (loaded via CDN/modules)
         firebase: 'readonly',
 

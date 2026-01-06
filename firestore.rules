@@ -352,6 +352,45 @@ service cloud.firestore {
     }
 
     // ========================================================================
+    // FCM TOKENS COLLECTION (Phase 2 - Push Notifications)
+    // ========================================================================
+    // Structure: fcmTokens/{tokenHash}
+    //   - token: FCM registration token
+    //   - userId: Owner's Firebase Auth UID
+    //   - device: Device type (web, ios, android)
+    //   - browser: Browser name (chrome, firefox, etc.)
+    //   - created: Timestamp when token was created
+    //   - lastUsed: Timestamp when token was last used
+    //   - valid: Whether token is still valid
+    //
+    // Token hash is used as document ID to prevent duplicates
+    // ========================================================================
+
+    match /fcmTokens/{tokenId} {
+      // READ: Only owner can read their own tokens
+      allow read: if isAuthenticated()
+                     && resource.data.userId == request.auth.uid;
+
+      // CREATE: Must be authenticated and set userId to own UID
+      allow create: if isAuthenticated()
+                       && request.resource.data.userId == request.auth.uid
+                       && request.resource.data.token is string
+                       && request.resource.data.valid == true;
+
+      // UPDATE: Owner can update their own tokens (e.g., mark as invalid)
+      // Only allow updating 'valid' and 'lastUsed' fields
+      allow update: if isAuthenticated()
+                       && resource.data.userId == request.auth.uid
+                       && request.resource.data.diff(resource.data).affectedKeys()
+                            .hasOnly(['valid', 'lastUsed']);
+
+      // DELETE: Owner can delete their own tokens
+      // Cloud Functions can also delete via Admin SDK (bypasses rules)
+      allow delete: if isAuthenticated()
+                       && resource.data.userId == request.auth.uid;
+    }
+
+    // ========================================================================
     // DEFAULT: DENY ALL ACCESS
     // ========================================================================
     // Any collection not explicitly defined above is denied by default

@@ -57,6 +57,14 @@
         { "fieldPath": "enabled", "order": "ASCENDING" },
         { "fieldPath": "nextDue", "order": "ASCENDING" }
       ]
+    },
+    {
+      "collectionGroup": "fcmTokens",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "userId", "order": "ASCENDING" },
+        { "fieldPath": "valid", "order": "ASCENDING" }
+      ]
     }
   ],
   "fieldOverrides": []
