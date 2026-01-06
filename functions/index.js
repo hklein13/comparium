@@ -11,8 +11,9 @@
  */
 
 const { onRequest } = require('firebase-functions/v2/https');
+const { onSchedule } = require('firebase-functions/v2/scheduler');
 const { initializeApp } = require('firebase-admin/app');
-const { getFirestore } = require('firebase-admin/firestore');
+const { getFirestore, Timestamp } = require('firebase-admin/firestore');
 
 // Initialize Firebase Admin SDK
 // In Cloud Functions environment, this automatically uses project credentials
@@ -71,19 +72,123 @@ exports.helloComparium = onRequest(async (req, res) => {
 });
 
 // ============================================================
-// FUTURE FUNCTIONS (Phase 2+)
+// PHASE 2: NOTIFICATION FUNCTIONS
+// ============================================================
+
+/**
+ * Format schedule type for display
+ * Converts camelCase to readable text (e.g., "waterChange" -> "Water change")
+ */
+function formatScheduleType(type) {
+  const types = {
+    waterChange: 'Water change',
+    parameterTest: 'Water test',
+    filterMaintenance: 'Filter maintenance',
+    glassClean: 'Glass cleaning',
+  };
+  return types[type] || type;
+}
+
+/**
+ * checkDueSchedules
+ *
+ * Purpose: Find maintenance schedules that are due and create notifications
+ * Trigger: Runs daily at 8:00 AM UTC
+ *
+ * How it works:
+ * 1. Queries tankSchedules where enabled=true AND nextDue <= now
+ * 2. Creates a notification for each due schedule
+ * 3. Uses deterministic notification IDs to prevent duplicates
+ *
+ * Firestore Index Required:
+ * Collection: tankSchedules
+ * Fields: enabled ASC, nextDue ASC
+ */
+exports.checkDueSchedules = onSchedule(
+  {
+    schedule: '0 8 * * *', // 8:00 AM UTC daily
+    timeZone: 'UTC',
+    region: 'us-central1',
+  },
+  async () => {
+    const now = Timestamp.now();
+
+    // Query all enabled schedules that are due
+    const dueSchedulesSnap = await db
+      .collection('tankSchedules')
+      .where('enabled', '==', true)
+      .where('nextDue', '<=', now)
+      .get();
+
+    if (dueSchedulesSnap.empty) {
+      console.log('checkDueSchedules: No due schedules found');
+      return;
+    }
+
+    console.log(
+      `checkDueSchedules: Found ${dueSchedulesSnap.size} due schedules`
+    );
+
+    // Date string for deterministic notification IDs
+    const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+
+    // Expiration date (30 days from now)
+    const expiresDate = new Date();
+    expiresDate.setDate(expiresDate.getDate() + 30);
+    const expiresAt = Timestamp.fromDate(expiresDate);
+
+    let createdCount = 0;
+
+    for (const scheduleDoc of dueSchedulesSnap.docs) {
+      const schedule = scheduleDoc.data();
+
+      // Deterministic ID: one notification per schedule per day
+      const notificationId = `${scheduleDoc.id}_${today}`;
+
+      const typeLabel = formatScheduleType(schedule.type);
+      const tankName = schedule.tankName || 'Your tank';
+
+      await db
+        .collection('notifications')
+        .doc(notificationId)
+        .set({
+          userId: schedule.userId,
+          type: 'maintenance',
+          title: `${typeLabel} due`,
+          body: `${tankName}: ${typeLabel} is due`,
+          created: now,
+          read: false,
+          dismissed: false,
+          expiresAt: expiresAt,
+          action: {
+            type: 'navigate',
+            url: '/dashboard.html#my-tanks-section',
+            data: { tankId: schedule.tankId },
+          },
+          source: {
+            type: 'schedule',
+            scheduleId: scheduleDoc.id,
+            tankId: schedule.tankId,
+            tankName: tankName,
+          },
+        });
+
+      createdCount++;
+    }
+
+    console.log(`checkDueSchedules: Created ${createdCount} notifications`);
+  }
+);
+
+// ============================================================
+// FUTURE FUNCTIONS
 // ============================================================
 //
-// Phase 2A: checkDueSchedules
-// - Trigger: Scheduled daily at 8:00 AM UTC (cron: "0 8 * * *")
-// - Purpose: Query tankSchedules where nextDue is today, create notifications
-// - Requires: Composite Firestore index on tankSchedules
-//
-// Phase 2C: cleanupExpiredNotifications
+// cleanupExpiredNotifications
 // - Trigger: Scheduled weekly
-// - Purpose: Delete notifications older than 30 days
+// - Purpose: Delete notifications where expiresAt < now
 //
-// Phase 2D: sendPushNotification
+// sendPushNotification
 // - Trigger: Firestore onCreate on notifications collection
 // - Purpose: Send browser push notification via FCM
 //

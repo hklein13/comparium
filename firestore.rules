@@ -312,6 +312,46 @@ service cloud.firestore {
     }
 
     // ========================================================================
+    // NOTIFICATIONS COLLECTION (Phase 2 - Maintenance Notifications)
+    // ========================================================================
+    // Structure: notifications/{notificationId}
+    //   - userId: Recipient's Firebase Auth UID
+    //   - type: Notification type (maintenance, system, etc.)
+    //   - title: Short title
+    //   - body: Description text
+    //   - created: Timestamp when created
+    //   - read: Whether user has seen it
+    //   - dismissed: Whether user dismissed it
+    //   - expiresAt: Timestamp for auto-cleanup
+    //   - action: Click action (type, url, data)
+    //   - source: What triggered this (type, scheduleId, tankId, tankName)
+    //
+    // NOTE: Notifications are CREATED by Cloud Functions (Admin SDK),
+    // which bypasses these rules. Users can only read/update/delete.
+    // ========================================================================
+
+    match /notifications/{notificationId} {
+      // READ: Only owner can read their own notifications
+      allow read: if isAuthenticated()
+                     && resource.data.userId == request.auth.uid;
+
+      // CREATE: Blocked for clients - Cloud Functions create notifications
+      // (Admin SDK bypasses security rules)
+      allow create: if false;
+
+      // UPDATE: Owner can mark as read/dismissed only
+      allow update: if isAuthenticated()
+                       && resource.data.userId == request.auth.uid
+                       && request.resource.data.userId == request.auth.uid
+                       && request.resource.data.diff(resource.data).affectedKeys()
+                            .hasOnly(['read', 'dismissed']);
+
+      // DELETE: Owner can delete their own notifications
+      allow delete: if isAuthenticated()
+                       && resource.data.userId == request.auth.uid;
+    }
+
+    // ========================================================================
     // DEFAULT: DENY ALL ACCESS
     // ========================================================================
     // Any collection not explicitly defined above is denied by default

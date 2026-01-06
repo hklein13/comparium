@@ -659,4 +659,44 @@ window.firestoreDeleteUsername = async username => {
   }
 };
 
+// ============================================================
+// NOTIFICATIONS (Phase 2)
+// ============================================================
+
+/**
+ * Get notifications for a user
+ * Returns notifications ordered by created DESC
+ */
+window.firestoreGetNotifications = async (uid, maxResults = 20) => {
+  if (!firestore || !uid) return [];
+  try {
+    const q = query(
+      collection(firestore, 'notifications'),
+      where('userId', '==', uid),
+      orderBy('created', 'desc'),
+      limit(maxResults)
+    );
+    const snap = await getDocs(q);
+    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  } catch (e) {
+    console.error('firestoreGetNotifications error:', e);
+    return [];
+  }
+};
+
+/**
+ * Mark a notification as read
+ */
+window.firestoreMarkNotificationRead = async notificationId => {
+  if (!firestore || !notificationId) return false;
+  try {
+    const ref = doc(firestore, 'notifications', notificationId);
+    await updateDoc(ref, { read: true });
+    return true;
+  } catch (e) {
+    console.error('firestoreMarkNotificationRead error:', e);
+    return false;
+  }
+};
+
 export { app, auth, firestore };
