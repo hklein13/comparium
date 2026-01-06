@@ -1569,6 +1569,38 @@ p {
   color: var(--forest);
 }
 
+.settings-toggle-btn {
+  padding: var(--space-xs) var(--space-sm);
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--ink-secondary);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 70px;
+}
+
+.settings-toggle-btn:hover {
+  border-color: var(--forest);
+  color: var(--forest);
+}
+
+.settings-toggle-btn.active {
+  background: var(--forest);
+  border-color: var(--forest);
+  color: white;
+}
+
+.settings-toggle-btn.active:hover {
+  background: var(--forest-light, #2d5c4a);
+}
+
+.settings-toggle-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .dashboard-stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));

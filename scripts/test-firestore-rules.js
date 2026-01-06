@@ -114,7 +114,7 @@ async function analyzeSecurityRules() {
   if (hasNotifications) {
     checkRule(
       rules,
-      "// CREATE: Blocked for clients - Cloud Functions create notifications",
+      '// CREATE: Blocked for clients - Cloud Functions create notifications',
       'Notifications: create blocked for clients (comment present)'
     );
     checkRule(rules, 'allow create: if false', 'Notifications: create blocked');

@@ -32,9 +32,34 @@ const REQUIRED_FIELDS = [
 ];
 
 // Valid values for enum fields
-const VALID_AGGRESSIONS = ['Peaceful', 'Semi-aggressive', 'Aggressive', 'peaceful', 'semi-aggressive', 'aggressive'];
-const VALID_CARE_LEVELS = ['Easy', 'Moderate', 'Difficult', 'Expert', 'easy', 'moderate', 'difficult', 'expert'];
-const VALID_DIETS = ['Omnivore', 'Herbivore', 'Carnivore', 'Insectivore', 'omnivore', 'herbivore', 'carnivore', 'insectivore'];
+const VALID_AGGRESSIONS = [
+  'Peaceful',
+  'Semi-aggressive',
+  'Aggressive',
+  'peaceful',
+  'semi-aggressive',
+  'aggressive',
+];
+const VALID_CARE_LEVELS = [
+  'Easy',
+  'Moderate',
+  'Difficult',
+  'Expert',
+  'easy',
+  'moderate',
+  'difficult',
+  'expert',
+];
+const VALID_DIETS = [
+  'Omnivore',
+  'Herbivore',
+  'Carnivore',
+  'Insectivore',
+  'omnivore',
+  'herbivore',
+  'carnivore',
+  'insectivore',
+];
 
 // Test results
 let passed = 0;

@@ -176,14 +176,19 @@ test.describe('Notification Interactions', () => {
 
     if (count === 0) {
       console.log('⚠ No notifications to test - skipping click test');
-      console.log('  Create a test notification with: node scripts/test-create-notification.js <userId>');
+      console.log(
+        '  Create a test notification with: node scripts/test-create-notification.js <userId>'
+      );
       test.skip(true, 'No notifications available for testing');
       return;
     }
 
     // Get first notification
     const firstNotification = notificationItems.first();
-    const wasUnread = await firstNotification.locator('.unread').isVisible().catch(() => false);
+    const wasUnread = await firstNotification
+      .locator('.unread')
+      .isVisible()
+      .catch(() => false);
 
     // Click the notification
     await firstNotification.click();
