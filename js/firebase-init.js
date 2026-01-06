@@ -9,6 +9,12 @@ import {
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { getAnalytics } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js';
+import {
+  getMessaging,
+  getToken,
+  onMessage,
+  isSupported,
+} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging.js';
 
 // NOTE: Keep the same config that's currently in index.html
 const firebaseConfig = {
@@ -35,6 +41,47 @@ try {
 // Auth and Firestore
 const auth = getAuth(app);
 const firestore = getFirestore(app);
+
+// ============================================================================
+// FIREBASE CLOUD MESSAGING (FCM) - Push Notifications
+// ============================================================================
+
+let messaging = null;
+
+/**
+ * Initialize FCM if supported by the browser
+ * FCM requires service workers which aren't supported everywhere
+ */
+async function initializeMessaging() {
+  try {
+    const supported = await isSupported();
+    if (!supported) {
+      console.log('FCM not supported in this browser');
+      return false;
+    }
+
+    // CRITICAL: Register service worker before getting messaging
+    if ('serviceWorker' in navigator) {
+      try {
+        await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+        console.log('FCM service worker registered');
+      } catch (swError) {
+        console.warn('Service worker registration failed:', swError.message);
+        // Continue anyway - might already be registered
+      }
+    }
+
+    messaging = getMessaging(app);
+    console.log('FCM initialized successfully');
+    return true;
+  } catch (e) {
+    console.warn('FCM initialization failed:', e.message);
+    return false;
+  }
+}
+
+// Initialize messaging (don't await - let it happen in background)
+initializeMessaging();
 
 // PRODUCTION FIX: Promise that resolves when Firebase Auth completes initial state check
 // This prevents race conditions where we check auth before Firebase restores the session
@@ -699,4 +746,260 @@ window.firestoreMarkNotificationRead = async notificationId => {
   }
 };
 
-export { app, auth, firestore };
+// ============================================================================
+// FCM TOKEN MANAGEMENT (Phase 2 - Push Notifications)
+// ============================================================================
+
+/**
+ * VAPID Key for FCM Web Push
+ * This key is generated in Firebase Console > Project Settings > Cloud Messaging > Web Push certificates
+ * The user must generate this key and replace the placeholder below.
+ *
+ * To generate:
+ * 1. Go to Firebase Console: https://console.firebase.google.com/project/comparium-21b69/settings/cloudmessaging
+ * 2. Scroll to "Web Push certificates"
+ * 3. Click "Generate key pair"
+ * 4. Copy the key and paste it below
+ */
+const VAPID_KEY =
+  'BAb0vWcFTq_ZvVVWvKVTRnHm2pgmFhsa6Tf2KQYkxhDSDXkn7ibl669FSXfdLD0GoSjKK-vICY3ObfTVWpXuqAw';
+
+/**
+ * Request notification permission and get FCM token
+ * @param {string} uid - User's UID (required to save token)
+ * @returns {Promise<{success: boolean, token?: string, error?: string}>}
+ */
+window.fcmRequestPermission = async uid => {
+  if (!messaging) {
+    const supported = await initializeMessaging();
+    if (!supported) {
+      return { success: false, error: 'Push notifications not supported in this browser' };
+    }
+  }
+
+  if (!VAPID_KEY) {
+    console.warn('FCM VAPID key not configured');
+    return { success: false, error: 'Push notifications not configured' };
+  }
+
+  try {
+    // Request permission
+    const permission = await Notification.requestPermission();
+    if (permission !== 'granted') {
+      return { success: false, error: 'Notification permission denied' };
+    }
+
+    // Get the FCM token
+    const token = await getToken(messaging, { vapidKey: VAPID_KEY });
+    if (!token) {
+      return { success: false, error: 'Failed to get notification token' };
+    }
+
+    // Save token to Firestore
+    const saved = await window.fcmSaveToken(uid, token);
+    if (!saved) {
+      return { success: false, error: 'Failed to save notification token' };
+    }
+
+    console.log('FCM token obtained and saved');
+    return { success: true, token };
+  } catch (e) {
+    console.error('fcmRequestPermission error:', e);
+    return { success: false, error: e.message };
+  }
+};
+
+/**
+ * Save FCM token to Firestore
+ * Uses a hash of the token as document ID to prevent duplicates
+ * @param {string} uid - User's UID
+ * @param {string} token - FCM token
+ * @returns {Promise<boolean>}
+ */
+window.fcmSaveToken = async (uid, token) => {
+  if (!firestore || !uid || !token) {
+    console.error('fcmSaveToken: Missing required params', {
+      firestore: !!firestore,
+      uid: !!uid,
+      token: !!token,
+    });
+    return false;
+  }
+  try {
+    // Create a simple hash of the token for the document ID
+    // This prevents duplicate tokens for the same device
+    const tokenHash = await hashToken(token);
+    console.log('fcmSaveToken: Saving token with hash', tokenHash.substring(0, 20) + '...');
+
+    const tokenDoc = {
+      token: token,
+      userId: uid,
+      device: 'web',
+      browser: detectBrowser(),
+      created: Timestamp.now(),
+      lastUsed: Timestamp.now(),
+      valid: true,
+    };
+
+    await setDoc(doc(firestore, 'fcmTokens', tokenHash), tokenDoc);
+    console.log('fcmSaveToken: Token saved successfully');
+    return true;
+  } catch (e) {
+    console.error('fcmSaveToken error:', e.code, e.message);
+    return false;
+  }
+};
+
+/**
+ * Get user's FCM tokens from Firestore
+ * @param {string} uid - User's UID
+ * @returns {Promise<array>}
+ */
+window.fcmGetUserTokens = async uid => {
+  if (!firestore || !uid) return [];
+  try {
+    const q = query(
+      collection(firestore, 'fcmTokens'),
+      where('userId', '==', uid),
+      where('valid', '==', true)
+    );
+    const snap = await getDocs(q);
+    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  } catch (e) {
+    console.error('fcmGetUserTokens error:', e);
+    return [];
+  }
+};
+
+/**
+ * Disable push notifications for current device
+ * Marks the token as invalid in Firestore
+ * @param {string} uid - User's UID
+ * @returns {Promise<boolean>}
+ */
+window.fcmDisableNotifications = async uid => {
+  if (!firestore || !uid) return false;
+  try {
+    // Query for user's tokens and mark them invalid
+    const q = query(
+      collection(firestore, 'fcmTokens'),
+      where('userId', '==', uid),
+      where('valid', '==', true)
+    );
+    const snap = await getDocs(q);
+
+    if (snap.empty) {
+      console.log('No FCM tokens to disable');
+      return true; // Nothing to disable, consider it success
+    }
+
+    // Mark all tokens as invalid
+    for (const tokenDoc of snap.docs) {
+      await updateDoc(tokenDoc.ref, { valid: false });
+    }
+
+    console.log(`Push notifications disabled (${snap.size} token(s))`);
+    return true;
+  } catch (e) {
+    console.error('fcmDisableNotifications error:', e);
+    return false;
+  }
+};
+
+/**
+ * Check if push notifications are enabled for current user
+ * Source of truth is Firestore (do we have valid tokens?), not browser permission
+ * @param {string} uid - User's UID
+ * @returns {Promise<boolean>}
+ */
+window.fcmIsEnabled = async uid => {
+  if (!firestore || !uid) return false;
+  try {
+    const q = query(
+      collection(firestore, 'fcmTokens'),
+      where('userId', '==', uid),
+      where('valid', '==', true),
+      limit(1)
+    );
+    const snap = await getDocs(q);
+    return !snap.empty;
+  } catch (e) {
+    console.error('fcmIsEnabled error:', e);
+    return false;
+  }
+};
+
+/**
+ * Set up foreground message handler
+ * Shows a notification when a message arrives while the app is in focus
+ * @param {function} callback - Optional callback for custom handling
+ */
+window.fcmSetupForegroundHandler = callback => {
+  if (!messaging) return;
+
+  onMessage(messaging, payload => {
+    console.log('FCM foreground message received:', payload);
+
+    // Show browser notification
+    if (Notification.permission === 'granted') {
+      const title = payload.notification?.title || 'Comparium';
+      const body = payload.notification?.body || 'You have a new notification';
+
+      new Notification(title, {
+        body: body,
+        icon: '/favicon.ico',
+        tag: payload.data?.notificationId || 'comparium-notification',
+      });
+    }
+
+    // Call custom callback if provided
+    if (callback && typeof callback === 'function') {
+      callback(payload);
+    }
+  });
+};
+
+/**
+ * Create a simple hash of the token for use as document ID
+ * Uses SubtleCrypto if available, falls back to simple hash
+ * @param {string} token - FCM token
+ * @returns {Promise<string>}
+ */
+async function hashToken(token) {
+  try {
+    if (crypto && crypto.subtle) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(token);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+  } catch (e) {
+    // Fall through to simple hash
+  }
+
+  // Simple fallback hash
+  let hash = 0;
+  for (let i = 0; i < token.length; i++) {
+    const char = token.charCodeAt(i);
+    hash = (hash << 5) - hash + char;
+    hash = hash & hash;
+  }
+  return 'fcm_' + Math.abs(hash).toString(16);
+}
+
+/**
+ * Detect browser for token metadata
+ * Order matters: Edge contains "Chrome", so check Edge first
+ * @returns {string}
+ */
+function detectBrowser() {
+  const ua = navigator.userAgent;
+  if (ua.includes('Edg/') || ua.includes('Edge')) return 'edge';
+  if (ua.includes('Firefox')) return 'firefox';
+  if (ua.includes('Chrome')) return 'chrome';
+  if (ua.includes('Safari')) return 'safari';
+  return 'unknown';
+}
+
+export { app, auth, firestore, messaging };

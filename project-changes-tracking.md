@@ -72,21 +72,54 @@ npm run notify:create   # Create test notification
 
 ---
 
-## NEXT UP: Phase 2C - Push Notifications (FCM)
+## COMPLETED: Phase 2C - Push Notifications (FCM)
 
-Optional enhancement to send browser push notifications:
+**Branch:** `claude/phase2-notifications`
+**Status:** Fully implemented and tested
 
-### `sendPushNotification` Cloud Function
-- [ ] Set up Firebase Cloud Messaging (FCM)
-- [ ] Create function triggered on notification document create
-- [ ] Store FCM tokens in `fcmTokens` collection
-- [ ] Send push to user's registered devices
-- [ ] Add notification permission prompt to dashboard
+### Completed Items
+- [x] Firebase Cloud Messaging (FCM) setup with VAPID key
+- [x] `sendPushNotification` Cloud Function (triggered on notification create)
+- [x] `cleanupExpiredNotifications` Cloud Function (weekly cleanup)
+- [x] FCM token storage in `fcmTokens` collection
+- [x] Push notification toggle in dashboard settings
+- [x] Service worker for background notifications (`firebase-messaging-sw.js`)
+- [x] Foreground notification handling
+- [x] Firestore security rules for fcmTokens
 
-### `cleanupExpiredNotifications` Cloud Function
-- [ ] Create weekly scheduled function
-- [ ] Delete notifications where `expiresAt < now`
-- [ ] Currently notifications persist indefinitely (low priority)
+### Bug Fixes Applied (January 2026)
+- [x] Fixed `fcmIsEnabled()` to check Firestore tokens instead of browser permission
+- [x] Removed broken Export Data feature (unused)
+- [x] Implemented `markAllRead()` function (was stub)
+- [x] Added error handling to `removeFavorite()`
+- [x] Added error handling to Cloud Function `checkDueSchedules`
+- [x] Added error handling to `editTank()` in tank-manager.js
+
+---
+
+## FUTURE HARDENING PASS (Low Priority)
+
+These issues were identified in code review but are low-risk. Address when time permits:
+
+### Security Hardening
+| Issue | File | Description |
+|-------|------|-------------|
+| XSS in species detail | `js/species-detail.js:60-70` | Fish data inserted without HTML escaping. Low risk (admin-controlled data). |
+| Service worker URL validation | `firebase-messaging-sw.js:64-66` | Accepts any URL. Should validate starts with `/`. |
+| Tank name in onclick | `js/maintenance-manager.js:478` | Use data attributes instead of inline onclick. |
+
+### Robustness Improvements
+| Issue | File | Description |
+|-------|------|-------------|
+| FCM retry logic | `functions/index.js:260-267` | Only invalidate tokens on specific error codes, not transient failures. |
+| Batch limit handling | `functions/index.js:341-345` | Loop until all items processed (>500 scenario). |
+| Tank form validation | `js/tank-manager.js:240-247` | Add JS validation for 0-gallon/empty-name tanks. |
+
+### Nice-to-Have Polish
+| Issue | File | Description |
+|-------|------|-------------|
+| "View all events" incomplete | `js/maintenance-manager.js:531` | Link exists but doesn't show all events. |
+| Notification badge refresh | `dashboard.html:688-694` | Badge doesn't update immediately after click. |
 
 ---
 
@@ -129,6 +162,21 @@ Optional enhancement to send browser push notifications:
 ## DEFERRED TO PHASE 5 (Diagnostic Tool)
 
 - [ ] "Why did this happen?" diagnostic question tool
+
+---
+
+## PHASE 6: NATIVE MOBILE APP (Ultimate Goal)
+
+**This is the long-term vision for Comparium.** Most users will be on mobile; a native app provides the best experience (especially iOS lock screen notifications).
+
+- [ ] Choose framework (React Native vs Flutter)
+- [ ] Apple Developer Account ($99/year)
+- [ ] Google Play Developer Account ($25 one-time)
+- [ ] Build iOS app with core features
+- [ ] Build Android app
+- [ ] App Store submission and review
+
+**Prerequisites:** Complete Phases 1-5 first. See `DATA-MODEL.md` Phase 6 section for full technical details.
 
 ---
 

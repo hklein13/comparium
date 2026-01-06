@@ -12,8 +12,10 @@
 
 const { onRequest } = require('firebase-functions/v2/https');
 const { onSchedule } = require('firebase-functions/v2/scheduler');
+const { onDocumentCreated } = require('firebase-functions/v2/firestore');
 const { initializeApp } = require('firebase-admin/app');
 const { getFirestore, Timestamp } = require('firebase-admin/firestore');
+const { getMessaging } = require('firebase-admin/messaging');
 
 // Initialize Firebase Admin SDK
 // In Cloud Functions environment, this automatically uses project credentials
@@ -111,86 +113,304 @@ exports.checkDueSchedules = onSchedule(
     region: 'us-central1',
   },
   async () => {
-    const now = Timestamp.now();
+    try {
+      const now = Timestamp.now();
 
-    // Query all enabled schedules that are due
-    const dueSchedulesSnap = await db
-      .collection('tankSchedules')
-      .where('enabled', '==', true)
-      .where('nextDue', '<=', now)
-      .get();
+      // Query all enabled schedules that are due
+      const dueSchedulesSnap = await db
+        .collection('tankSchedules')
+        .where('enabled', '==', true)
+        .where('nextDue', '<=', now)
+        .get();
 
-    if (dueSchedulesSnap.empty) {
-      console.log('checkDueSchedules: No due schedules found');
+      if (dueSchedulesSnap.empty) {
+        console.log('checkDueSchedules: No due schedules found');
+        return;
+      }
+
+      console.log(`checkDueSchedules: Found ${dueSchedulesSnap.size} due schedules`);
+
+      // Date string for deterministic notification IDs
+      const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+
+      // Expiration date (30 days from now)
+      const expiresDate = new Date();
+      expiresDate.setDate(expiresDate.getDate() + 30);
+      const expiresAt = Timestamp.fromDate(expiresDate);
+
+      let createdCount = 0;
+
+      for (const scheduleDoc of dueSchedulesSnap.docs) {
+        const schedule = scheduleDoc.data();
+
+        // Deterministic ID: one notification per schedule per day
+        const notificationId = `${scheduleDoc.id}_${today}`;
+
+        const typeLabel = formatScheduleType(schedule.type);
+        const tankName = schedule.tankName || 'Your tank';
+
+        await db
+          .collection('notifications')
+          .doc(notificationId)
+          .set({
+            userId: schedule.userId,
+            type: 'maintenance',
+            title: `${typeLabel} due`,
+            body: `${tankName}: ${typeLabel} is due`,
+            created: now,
+            read: false,
+            dismissed: false,
+            expiresAt: expiresAt,
+            action: {
+              type: 'navigate',
+              url: '/dashboard.html#my-tanks-section',
+              data: { tankId: schedule.tankId },
+            },
+            source: {
+              type: 'schedule',
+              scheduleId: scheduleDoc.id,
+              tankId: schedule.tankId,
+              tankName: tankName,
+            },
+          });
+
+        createdCount++;
+      }
+
+      console.log(`checkDueSchedules: Created ${createdCount} notifications`);
+    } catch (error) {
+      console.error('checkDueSchedules failed:', error);
+      throw error; // Re-throw so Firebase logs the failure
+    }
+  }
+);
+
+// ============================================================
+// PUSH NOTIFICATION FUNCTION
+// ============================================================
+
+/**
+ * sendPushNotification
+ *
+ * Purpose: Send browser push notification when a notification document is created
+ * Trigger: Firestore onCreate on notifications collection
+ *
+ * How it works:
+ * 1. When a notification document is created, this function fires
+ * 2. Gets the user's FCM tokens from fcmTokens collection
+ * 3. Sends push notification to all valid tokens
+ * 4. Marks invalid tokens for cleanup
+ */
+exports.sendPushNotification = onDocumentCreated(
+  {
+    document: 'notifications/{notificationId}',
+    region: 'us-central1',
+  },
+  async event => {
+    const snapshot = event.data;
+    if (!snapshot) {
+      console.log('sendPushNotification: No data in event');
       return;
     }
 
-    console.log(
-      `checkDueSchedules: Found ${dueSchedulesSnap.size} due schedules`
-    );
+    const notification = snapshot.data();
+    const notificationId = event.params.notificationId;
+    const userId = notification.userId;
 
-    // Date string for deterministic notification IDs
-    const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
-
-    // Expiration date (30 days from now)
-    const expiresDate = new Date();
-    expiresDate.setDate(expiresDate.getDate() + 30);
-    const expiresAt = Timestamp.fromDate(expiresDate);
-
-    let createdCount = 0;
-
-    for (const scheduleDoc of dueSchedulesSnap.docs) {
-      const schedule = scheduleDoc.data();
-
-      // Deterministic ID: one notification per schedule per day
-      const notificationId = `${scheduleDoc.id}_${today}`;
-
-      const typeLabel = formatScheduleType(schedule.type);
-      const tankName = schedule.tankName || 'Your tank';
-
-      await db
-        .collection('notifications')
-        .doc(notificationId)
-        .set({
-          userId: schedule.userId,
-          type: 'maintenance',
-          title: `${typeLabel} due`,
-          body: `${tankName}: ${typeLabel} is due`,
-          created: now,
-          read: false,
-          dismissed: false,
-          expiresAt: expiresAt,
-          action: {
-            type: 'navigate',
-            url: '/dashboard.html#my-tanks-section',
-            data: { tankId: schedule.tankId },
-          },
-          source: {
-            type: 'schedule',
-            scheduleId: scheduleDoc.id,
-            tankId: schedule.tankId,
-            tankName: tankName,
-          },
-        });
-
-      createdCount++;
+    if (!userId) {
+      console.log('sendPushNotification: No userId in notification');
+      return;
     }
 
-    console.log(`checkDueSchedules: Created ${createdCount} notifications`);
+    // Get user's valid FCM tokens
+    const tokensSnap = await db
+      .collection('fcmTokens')
+      .where('userId', '==', userId)
+      .where('valid', '==', true)
+      .get();
+
+    if (tokensSnap.empty) {
+      console.log(`sendPushNotification: No FCM tokens for user ${userId}`);
+      return;
+    }
+
+    const tokens = tokensSnap.docs.map(doc => doc.data().token);
+    console.log(`sendPushNotification: Sending to ${tokens.length} device(s) for user ${userId}`);
+
+    // Prepare the message
+    const message = {
+      notification: {
+        title: notification.title || 'Comparium',
+        body: notification.body || 'You have a new notification',
+      },
+      data: {
+        notificationId: notificationId,
+        url: notification.action?.url || '/dashboard.html',
+        type: notification.type || 'general',
+      },
+      webpush: {
+        fcmOptions: {
+          link: notification.action?.url || '/dashboard.html',
+        },
+        notification: {
+          icon: '/favicon.ico',
+          badge: '/favicon.ico',
+        },
+      },
+    };
+
+    // Send to all tokens in parallel for better performance
+    const messaging = getMessaging();
+
+    const sendPromises = tokens.map(token =>
+      messaging
+        .send({ ...message, token })
+        .then(() => ({ token, success: true }))
+        .catch(error => ({ token, success: false, error }))
+    );
+
+    const results = await Promise.all(sendPromises);
+
+    // Process results
+    const invalidTokens = [];
+    let successCount = 0;
+
+    for (const result of results) {
+      const tokenDoc = tokensSnap.docs.find(d => d.data().token === result.token);
+
+      if (result.success) {
+        successCount++;
+        // Update lastUsed timestamp
+        if (tokenDoc) {
+          await tokenDoc.ref.update({ lastUsed: Timestamp.now() });
+        }
+      } else {
+        console.error(
+          `sendPushNotification: Failed for token ${result.token.substring(0, 20)}...`,
+          result.error?.code
+        );
+
+        // Mark token as invalid if it's a registration error
+        if (
+          result.error?.code === 'messaging/invalid-registration-token' ||
+          result.error?.code === 'messaging/registration-token-not-registered'
+        ) {
+          invalidTokens.push(result.token);
+        }
+      }
+    }
+
+    console.log(`sendPushNotification: ${successCount}/${tokens.length} sent successfully`);
+
+    // Mark invalid tokens
+    if (invalidTokens.length > 0) {
+      console.log(`sendPushNotification: Marking ${invalidTokens.length} invalid token(s)`);
+      const invalidUpdates = invalidTokens.map(token => {
+        const tokenDoc = tokensSnap.docs.find(d => d.data().token === token);
+        return tokenDoc ? tokenDoc.ref.update({ valid: false }) : Promise.resolve();
+      });
+      await Promise.all(invalidUpdates);
+    }
+
+    console.log('sendPushNotification: Complete');
+  }
+);
+
+// ============================================================
+// CLEANUP FUNCTION
+// ============================================================
+
+/**
+ * cleanupExpiredNotifications
+ *
+ * Purpose: Delete notifications that have expired
+ * Trigger: Runs weekly on Sunday at 2:00 AM UTC
+ *
+ * How it works:
+ * 1. Queries notifications where expiresAt < now
+ * 2. Deletes each expired notification
+ * 3. Also cleans up invalid FCM tokens older than 90 days
+ */
+exports.cleanupExpiredNotifications = onSchedule(
+  {
+    schedule: '0 2 * * 0', // 2:00 AM UTC every Sunday
+    timeZone: 'UTC',
+    region: 'us-central1',
+  },
+  async () => {
+    const now = Timestamp.now();
+
+    // ---- Cleanup expired notifications ----
+    console.log('cleanupExpiredNotifications: Starting notification cleanup');
+
+    const expiredSnap = await db
+      .collection('notifications')
+      .where('expiresAt', '<', now)
+      .limit(500) // Process in batches
+      .get();
+
+    if (expiredSnap.empty) {
+      console.log('cleanupExpiredNotifications: No expired notifications');
+    } else {
+      console.log(
+        `cleanupExpiredNotifications: Deleting ${expiredSnap.size} expired notifications`
+      );
+
+      const batch = db.batch();
+      expiredSnap.docs.forEach(doc => {
+        batch.delete(doc.ref);
+      });
+      await batch.commit();
+
+      console.log(`cleanupExpiredNotifications: Deleted ${expiredSnap.size} notifications`);
+    }
+
+    // ---- Cleanup invalid/old FCM tokens ----
+    console.log('cleanupExpiredNotifications: Starting token cleanup');
+
+    // Delete tokens marked invalid
+    const invalidTokensSnap = await db
+      .collection('fcmTokens')
+      .where('valid', '==', false)
+      .limit(500)
+      .get();
+
+    // Delete tokens not used in 90 days
+    const ninetyDaysAgo = new Date();
+    ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
+    const oldTimestamp = Timestamp.fromDate(ninetyDaysAgo);
+
+    const oldTokensSnap = await db
+      .collection('fcmTokens')
+      .where('lastUsed', '<', oldTimestamp)
+      .limit(500)
+      .get();
+
+    const tokenDocsToDelete = new Set();
+    invalidTokensSnap.docs.forEach(doc => tokenDocsToDelete.add(doc));
+    oldTokensSnap.docs.forEach(doc => tokenDocsToDelete.add(doc));
+
+    if (tokenDocsToDelete.size === 0) {
+      console.log('cleanupExpiredNotifications: No tokens to clean up');
+    } else {
+      console.log(`cleanupExpiredNotifications: Deleting ${tokenDocsToDelete.size} stale tokens`);
+
+      const batch = db.batch();
+      tokenDocsToDelete.forEach(doc => {
+        batch.delete(doc.ref);
+      });
+      await batch.commit();
+
+      console.log(`cleanupExpiredNotifications: Deleted ${tokenDocsToDelete.size} tokens`);
+    }
+
+    console.log('cleanupExpiredNotifications: Complete');
   }
 );
 
 // ============================================================
 // FUTURE FUNCTIONS
 // ============================================================
-//
-// cleanupExpiredNotifications
-// - Trigger: Scheduled weekly
-// - Purpose: Delete notifications where expiresAt < now
-//
-// sendPushNotification
-// - Trigger: Firestore onCreate on notifications collection
-// - Purpose: Send browser push notification via FCM
 //
 // onUserDelete
 // - Trigger: Auth onDelete
