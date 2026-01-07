@@ -1205,11 +1205,13 @@ class GlossaryManager {
       : '';
 
     // For species entries, make the title a clickable link to the species detail page
+    // Use entry.fishKey (camelCase) for fishDatabase lookup and URL, not entry.id (kebab-case)
+    const fishKey = entry.fishKey || entry.id;
     const isSpeciesWithDetailPage =
-      entry.category === 'species' && typeof fishDatabase !== 'undefined' && fishDatabase[entry.id];
+      entry.category === 'species' && typeof fishDatabase !== 'undefined' && fishDatabase[fishKey];
 
     const titleContent = isSpeciesWithDetailPage
-      ? `<a href="species.html?fish=${encodeURIComponent(entry.id)}" class="glossary-title-link">${entry.title}</a>`
+      ? `<a href="species.html?fish=${encodeURIComponent(fishKey)}" class="glossary-title-link">${entry.title}</a>`
       : entry.title;
 
     return `
