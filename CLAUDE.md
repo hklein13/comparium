@@ -12,6 +12,20 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - User works on Windows PC (path handling and command syntax differs from Mac/Linux)
 - User's local folder: `C:\Users\HarrisonKlein\Downloads\comparium-live`
 
+## Session Start Checklist
+
+**Before starting work, check these gitignored files for additional context:**
+
+```
+.claude/
+├── plans/              ← Active phase plans with step-by-step instructions
+│   └── *.md            ← Read any plan files for current work details
+├── user-context.md     ← Firebase credentials and account info
+└── settings.json       ← Hooks configuration (already auto-loaded)
+```
+
+If a phase is in progress (see "Current Phase" below), there should be a plan file in `.claude/plans/` with detailed sub-phase instructions, validation commands, and notes from previous sessions.
+
 ## Project Overview
 
 **Comparium** - Web-based platform for comparing aquarium species with Firebase backend.
@@ -22,7 +36,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Current Stats:** 143 species in database, 94 with images from Wikimedia Commons
 
-**Current Phase:** Phase 2 Complete (Notifications + FCM Push) - Ready for Phase 3
+**Current Phase:** Phase 3 In Progress (Content Expansion) - Sub-Phase 3A Complete
+
+**Active Branch:** `claude/phase3-content-expansion`
 
 ## Commands
 
@@ -81,7 +97,7 @@ glossary-generator.js (transforms data)
 ```
 
 ### Key Files
-- `js/fish-data.js` - Single source of truth for all species (143 entries with attributes)
+- `js/fish-data.js` - Single source of truth for all species (143 entries, 17 fields including `tankSizeRecommended`, `breedingNeeds`, `genderDifferentiation`)
 - `js/fish-descriptions.js` - Curated descriptions (63 species)
 - `js/glossary-generator.js` - Reusable logic for generating glossary entries
 - `js/tank-manager.js` - Tank CRUD operations (used by dashboard)
@@ -197,31 +213,32 @@ Development follows a phased approach. See `DATA-MODEL.md` for complete specific
 |-------|--------|-------------|
 | **Phase 1** | ✅ Complete | Tank management, maintenance events, schedules |
 | **Phase 2** | ✅ Complete | Notifications system + FCM push notifications |
-| **Phase 3** | ⏳ Planned | Expanded glossary (equipment, plants, diseases) |
+| **Phase 3** | 🔄 In Progress | Content expansion (species data, images, equipment) |
 | **Phase 4** | ⏳ Planned | Social features (follows, posts, comments) |
 | **Phase 5** | ⏳ Planned | Diagnostic tool (fish health decision tree) |
 | **Phase 6** | ⏳ Long-term | **Native mobile app (iOS + Android)** - Ultimate goal |
 
-### Phase 2 Complete (January 2026)
-All Phase 2 features implemented, deployed, and **merged to main**:
-- ✅ Notification UI (bell icon, dropdowns, settings gear)
-- ✅ `checkDueSchedules` Cloud Function (runs daily 8 AM UTC)
-- ✅ `sendPushNotification` Cloud Function (FCM on notification create)
-- ✅ `cleanupExpiredNotifications` Cloud Function (weekly cleanup)
-- ✅ FCM token management (save, validate, cleanup)
-- ✅ Push notification toggle in dashboard settings
-- ✅ Service worker for background notifications
+### Phase 3 In Progress (January 2026)
+**Branch:** `claude/phase3-content-expansion`
 
-### Phase 3: Next Up
-**Expanded Glossary** - Add three new reference databases:
+**Goal:** Transform Comparium into a comprehensive aquarium reference with real informational value.
 
-| Collection | Description | Key Fields |
-|------------|-------------|------------|
-| `equipment` | Filters, heaters, lights, test kits | specs, pros/cons, bestFor |
-| `plants` | Aquarium plants | careLevel, light, CO2, placement |
-| `diseases` | Fish diseases | symptoms, treatment, prevention |
+| Sub-Phase | Status | Description |
+|-----------|--------|-------------|
+| **3A** | ✅ Complete | Added 3 new fields to all 143 species (`tankSizeRecommended`, `breedingNeeds`, `genderDifferentiation`) |
+| **3B** | ⏳ Next | Add images for 49 existing species without photos |
+| **3C** | ⏳ Pending | Add 107 new species in batches |
+| **3D** | ⏳ Pending | Add images for 107 new species |
+| **3E** | ⏳ Pending | Add disease reference images |
+| **3F** | ⏳ Pending | Expand equipment entries (6 → 16) |
+| **3G** | ⏸️ Deferred | Plants section (waiting on user) |
 
-See `DATA-MODEL.md` for complete collection schemas.
+**Sub-Phase 3A Completion Notes:**
+- All 143 species now have 17 fields (was 14)
+- `species-detail.js` displays new Breeding and Gender Differentiation sections
+- Source data from `aquarium_fish_species_summaries.md` (local, not committed)
+- Many corrections made to source data for biological accuracy (e.g., rasboras incorrectly marked as bubble nesters)
+- Code-reviewed and validated with `npm run test:data`
 
 ## Git Workflow
 
@@ -229,17 +246,21 @@ See `DATA-MODEL.md` for complete collection schemas.
 **NEVER push directly to main.** Always use a staging branch and let the user merge via PR.
 
 ### Current State (January 2026)
-- **Main branch:** Fully up to date with Phase 2 complete
-- **Phase 2 branch:** `claude/phase2-notifications` - merged and can be deleted
-- **Next work:** Create new branch for Phase 3
+**Active branch:** `claude/phase3-content-expansion` (Phase 3 content expansion in progress)
 
-### Starting New Work
+**Main branch:** Fully up to date with Phase 2 complete (merged)
+
+### Workflow for Phase 3
 ```bash
-git checkout main
-git pull origin main
-git checkout -b claude/phase3-glossary
-# Make changes, commit, push
-git push -u origin claude/phase3-glossary
+# Already on feature branch
+git checkout claude/phase3-content-expansion
+
+# After each sub-phase: commit with descriptive message
+git add <files>
+git commit -m "Phase 3X: Description of changes"
+
+# When sub-phases complete, push for user to merge
+git push -u origin claude/phase3-content-expansion
 ```
 
 ### Deployment Flow

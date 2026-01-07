@@ -82,10 +82,14 @@ function loadSpeciesDetail() {
                             <td><strong>Minimum Tank Size:</strong></td>
                             <td>${fish.tankSizeMin}+ gallons</td>
                         </tr>
-                        <tr>
+                        ${
+                          fish.tankSizeRecommended
+                            ? `<tr>
                             <td><strong>Recommended Tank Size:</strong></td>
                             <td>${fish.tankSizeRecommended}+ gallons</td>
-                        </tr>
+                        </tr>`
+                            : ''
+                        }
                     </table>
                 </div>
 
@@ -102,7 +106,7 @@ function loadSpeciesDetail() {
                         </tr>
                         <tr>
                             <td><strong>Hardness:</strong></td>
-                            <td>${fish.hardness}</td>
+                            <td>${fish.waterHardness}</td>
                         </tr>
                     </table>
                 </div>
@@ -115,19 +119,45 @@ function loadSpeciesDetail() {
                             <td>${getAggressionBadge(fish.aggression)}</td>
                         </tr>
                         <tr>
-                            <td><strong>Tank Level:</strong></td>
-                            <td>${fish.tankLevel}</td>
-                        </tr>
-                        <tr>
                             <td><strong>Diet:</strong></td>
                             <td>${fish.diet}</td>
                         </tr>
                         <tr>
                             <td><strong>Social:</strong></td>
-                            <td>${fish.schooling ? 'Yes - keep in groups of 6+' : 'Can be kept individually'}</td>
+                            <td>${fish.schooling}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Care Level:</strong></td>
+                            <td>${fish.careLevel}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Lifespan:</strong></td>
+                            <td>${fish.lifespan}</td>
                         </tr>
                     </table>
                 </div>
+
+                ${
+                  fish.breedingNeeds
+                    ? `
+                <div class="info-card">
+                    <h3>Breeding</h3>
+                    <p>${fish.breedingNeeds}</p>
+                </div>
+                `
+                    : ''
+                }
+
+                ${
+                  fish.genderDifferentiation
+                    ? `
+                <div class="info-card">
+                    <h3>Gender Differentiation</h3>
+                    <p>${fish.genderDifferentiation}</p>
+                </div>
+                `
+                    : ''
+                }
 
                 ${
                   fish.specialCare
