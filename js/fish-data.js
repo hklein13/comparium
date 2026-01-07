@@ -10,6 +10,7 @@ var fishDatabase = {
     phMin: 6.5,
     phMax: 7.5,
     tankSizeMin: 30,
+    tankSizeRecommended: 40,
     tankSizeUnit: 'gallons',
     maxSize: 6,
     sizeUnit: 'inches',
@@ -19,6 +20,10 @@ var fishDatabase = {
     waterHardness: '5-13 dGH',
     lifespan: '8-10 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Egg scatterer; requires very soft, acidic water (pH 5-6); dim lighting; eggs hatch in 24 hours; light-sensitive',
+    genderDifferentiation:
+      'Females fuller-bodied with rounded belly; males slimmer with straight blue line',
   },
   pearlDanio: {
     commonName: 'Pearl Danio',
@@ -31,6 +36,7 @@ var fishDatabase = {
     phMin: 6.5,
     phMax: 7.5,
     tankSizeMin: 15,
+    tankSizeRecommended: 25,
     tankSizeUnit: 'gallons',
     maxSize: 2.5,
     sizeUnit: 'inches',
@@ -40,6 +46,10 @@ var fishDatabase = {
     waterHardness: '4-18 dGH',
     lifespan: '3-5 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Egg scatterer; spawns in open water near plants; eggs hatch in 24-36 hours',
+    genderDifferentiation:
+      'Males slimmer with more intense coloration; females fuller-bodied',
   },
   neonTetra: {
     commonName: 'Neon Tetra',
@@ -52,6 +62,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 7.0,
     tankSizeMin: 10,
+    tankSizeRecommended: 20,
     tankSizeUnit: 'gallons',
     maxSize: 1.5,
     sizeUnit: 'inches',
@@ -61,6 +72,10 @@ var fishDatabase = {
     waterHardness: '4-10 dGH',
     lifespan: '5-8 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Egg scatterer; requires soft, acidic water; low light; eggs hatch in 24 hours',
+    genderDifferentiation:
+      'Females fuller-bodied with curved blue stripe; males slimmer with straight stripe',
   },
   celestialPearlDanio: {
     commonName: 'Celestial Pearl Danio',
@@ -73,6 +88,7 @@ var fishDatabase = {
     phMin: 6.5,
     phMax: 7.5,
     tankSizeMin: 10,
+    tankSizeRecommended: 20,
     tankSizeUnit: 'gallons',
     maxSize: 1,
     sizeUnit: 'inches',
@@ -82,6 +98,10 @@ var fishDatabase = {
     waterHardness: '5-12 dGH',
     lifespan: '3-5 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Egg scatterer; spawns in moss or plants; continuous spawner; eggs hatch in 2-4 days',
+    genderDifferentiation:
+      'Males have bright red-orange fins; females have paler yellow-orange fins and rounder body',
   },
   corydoras: {
     commonName: 'Corydoras Catfish',
@@ -93,6 +113,7 @@ var fishDatabase = {
     phMin: 6.5,
     phMax: 7.5,
     tankSizeMin: 15,
+    tankSizeRecommended: 25,
     tankSizeUnit: 'gallons',
     maxSize: 2.5,
     sizeUnit: 'inches',
@@ -102,6 +123,10 @@ var fishDatabase = {
     waterHardness: '5-15 dGH',
     lifespan: '5-10 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Egg scatterer; T-position spawning; deposits eggs on glass/plants; eggs hatch in 3-5 days',
+    genderDifferentiation:
+      'Females larger and rounder when viewed from above; males slimmer',
   },
   bettaFish: {
     commonName: 'Betta Fish',
@@ -114,6 +139,7 @@ var fishDatabase = {
     phMin: 6.5,
     phMax: 7.5,
     tankSizeMin: 5,
+    tankSizeRecommended: 10,
     tankSizeUnit: 'gallons',
     maxSize: 3,
     sizeUnit: 'inches',
@@ -123,6 +149,10 @@ var fishDatabase = {
     waterHardness: '5-15 dGH',
     lifespan: '3-5 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Bubble nest builder; male guards eggs and fry; condition pair separately before spawning',
+    genderDifferentiation:
+      'Males have longer fins, brighter colors; females shorter fins, egg spot visible',
   },
   guppy: {
     commonName: 'Guppy',
@@ -135,6 +165,7 @@ var fishDatabase = {
     phMin: 6.8,
     phMax: 7.8,
     tankSizeMin: 10,
+    tankSizeRecommended: 20,
     tankSizeUnit: 'gallons',
     maxSize: 2,
     sizeUnit: 'inches',
@@ -144,6 +175,10 @@ var fishDatabase = {
     waterHardness: '8-12 dGH',
     lifespan: '2-3 years',
     careLevel: 'Very Easy',
+    breedingNeeds:
+      'Livebearer; gestation 21-30 days; extremely prolific; females store sperm for multiple batches',
+    genderDifferentiation:
+      'Males smaller with colorful finnage and gonopodium; females larger, plainer with gravid spot',
   },
   molly: {
     commonName: 'Molly',
@@ -156,6 +191,7 @@ var fishDatabase = {
     phMin: 7.0,
     phMax: 8.0,
     tankSizeMin: 15,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 4,
     sizeUnit: 'inches',
@@ -165,6 +201,10 @@ var fishDatabase = {
     waterHardness: '10-25 dGH',
     lifespan: '3-5 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Livebearer; gestation 4-6 weeks; females can store sperm for multiple batches',
+    genderDifferentiation:
+      'Males smaller with gonopodium; females larger with rounded anal fin and gravid spot',
   },
   platy: {
     commonName: 'Platy',
@@ -177,6 +217,7 @@ var fishDatabase = {
     phMin: 7.0,
     phMax: 8.2,
     tankSizeMin: 10,
+    tankSizeRecommended: 20,
     tankSizeUnit: 'gallons',
     maxSize: 2.5,
     sizeUnit: 'inches',
@@ -186,6 +227,10 @@ var fishDatabase = {
     waterHardness: '10-25 dGH',
     lifespan: '3 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Livebearer; gestation 24-30 days; females store sperm; 20-80 fry per batch; prolific',
+    genderDifferentiation:
+      'Males smaller with pointed anal fin (gonopodium); females larger with fan-shaped anal fin',
   },
   swordtail: {
     commonName: 'Swordtail',
@@ -198,6 +243,7 @@ var fishDatabase = {
     phMin: 7.0,
     phMax: 8.0,
     tankSizeMin: 20,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 5.5,
     sizeUnit: 'inches',
@@ -207,6 +253,10 @@ var fishDatabase = {
     waterHardness: '12-18 dGH',
     lifespan: '4 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Livebearer; gestation 24-30 days; females store sperm; 20-100 fry per batch; prolific',
+    genderDifferentiation:
+      'Males have sword extension on lower caudal fin and gonopodium; females larger, no sword, fan-shaped anal fin',
   },
   endlersLivebearer: {
     commonName: "Endler's Livebearer",
@@ -219,6 +269,7 @@ var fishDatabase = {
     phMin: 7.0,
     phMax: 8.5,
     tankSizeMin: 10,
+    tankSizeRecommended: 20,
     tankSizeUnit: 'gallons',
     maxSize: 1.8,
     sizeUnit: 'inches',
@@ -228,6 +279,10 @@ var fishDatabase = {
     waterHardness: '12-30 dGH',
     lifespan: '2-3 years',
     careLevel: 'Very Easy',
+    breedingNeeds:
+      'Livebearer; gestation 23-24 days; extremely prolific; females store sperm for multiple batches; very easy to breed',
+    genderDifferentiation:
+      'Males smaller with vibrant metallic colors and gonopodium; females larger with plain coloration and gravid spot',
   },
   whiteCloudMinnow: {
     commonName: 'White Cloud Mountain Minnow',
@@ -240,6 +295,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 8.0,
     tankSizeMin: 10,
+    tankSizeRecommended: 20,
     tankSizeUnit: 'gallons',
     maxSize: 1.5,
     sizeUnit: 'inches',
@@ -249,6 +305,10 @@ var fishDatabase = {
     waterHardness: '5-20 dGH',
     lifespan: '4 years',
     careLevel: 'Very Easy',
+    breedingNeeds:
+      'Egg scatterer; spawns in plants; eggs hatch in 36-48 hours; tolerates cool water for breeding',
+    genderDifferentiation:
+      'Males slimmer with brighter colors; females fuller-bodied, especially when gravid',
   },
   cardinalTetra: {
     commonName: 'Cardinal Tetra',
@@ -261,6 +321,7 @@ var fishDatabase = {
     phMin: 4.0,
     phMax: 7.5,
     tankSizeMin: 15,
+    tankSizeRecommended: 20,
     tankSizeUnit: 'gallons',
     maxSize: 1.75,
     sizeUnit: 'inches',
@@ -270,6 +331,10 @@ var fishDatabase = {
     waterHardness: '1-12 dGH',
     lifespan: '5 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Egg scatterer; requires very soft, acidic water (pH 5-6); challenging to breed; eggs light-sensitive',
+    genderDifferentiation:
+      'Females fuller-bodied, especially when gravid; males slightly slimmer',
   },
   rummyNoseTetra: {
     commonName: 'Rummy Nose Tetra',
@@ -282,6 +347,7 @@ var fishDatabase = {
     phMin: 5.5,
     phMax: 7.0,
     tankSizeMin: 20,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 2.5,
     sizeUnit: 'inches',
@@ -291,6 +357,10 @@ var fishDatabase = {
     waterHardness: '1-8 dGH',
     lifespan: '6 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Egg scatterer; requires soft, acidic water; spawns over fine-leaved plants; eggs hatch in 24-36 hours',
+    genderDifferentiation:
+      'Males larger with more pointed dorsal fin; females smaller with rounded dorsal fin',
   },
   emberTetra: {
     commonName: 'Ember Tetra',
@@ -303,6 +373,7 @@ var fishDatabase = {
     phMin: 5.5,
     phMax: 7.5,
     tankSizeMin: 10,
+    tankSizeRecommended: 20,
     tankSizeUnit: 'gallons',
     maxSize: 0.8,
     sizeUnit: 'inches',
@@ -312,6 +383,10 @@ var fishDatabase = {
     waterHardness: '2-10 dGH',
     lifespan: '3 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Egg scatterer; spawns in fine-leaved plants; eggs hatch in 24-36 hours; requires soft water',
+    genderDifferentiation:
+      'Females rounder when gravid; males slightly slimmer and more intensely colored',
   },
   glowlightTetra: {
     commonName: 'Glowlight Tetra',
@@ -324,6 +399,7 @@ var fishDatabase = {
     phMin: 5.5,
     phMax: 7.5,
     tankSizeMin: 10,
+    tankSizeRecommended: 20,
     tankSizeUnit: 'gallons',
     maxSize: 1.6,
     sizeUnit: 'inches',
@@ -333,6 +409,10 @@ var fishDatabase = {
     waterHardness: '2-15 dGH',
     lifespan: '4 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Egg scatterer; spawns over plants/mops; eggs hatch in 7-12 days; requires soft, acidic water',
+    genderDifferentiation:
+      'Males more colorful with extended fins; females duller, shorter fins and rounder body',
   },
   blackSkirtTetra: {
     commonName: 'Black Skirt Tetra',
@@ -345,6 +425,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 8.0,
     tankSizeMin: 20,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 2.4,
     sizeUnit: 'inches',
@@ -354,6 +435,10 @@ var fishDatabase = {
     waterHardness: '5-19 dGH',
     lifespan: '5 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Egg scatterer; spawns among plants; eggs hatch in 24-36 hours; prolific breeder',
+    genderDifferentiation:
+      'Males slimmer with pointed dorsal fin; females rounder with broader dorsal fin',
   },
   cherryBarb: {
     commonName: 'Cherry Barb',
@@ -366,6 +451,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 8.0,
     tankSizeMin: 15,
+    tankSizeRecommended: 20,
     tankSizeUnit: 'gallons',
     maxSize: 2.0,
     sizeUnit: 'inches',
@@ -375,6 +461,10 @@ var fishDatabase = {
     waterHardness: '2-20 dGH',
     lifespan: '5 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Egg scatterer; spawns among plants; eggs hatch in 24-48 hours; remove adults after spawning',
+    genderDifferentiation:
+      'Males slimmer with intense red coloration during breeding; females fuller-bodied, pale orange-brown',
   },
   tigerBarb: {
     commonName: 'Tiger Barb',
@@ -387,6 +477,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 7.5,
     tankSizeMin: 20,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 3.0,
     sizeUnit: 'inches',
@@ -396,6 +487,10 @@ var fishDatabase = {
     waterHardness: '5-20 dGH',
     lifespan: '6 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Egg scatterer; spawns in groups over substrate; prolific; eggs hatch in 48-72 hours; easy to breed',
+    genderDifferentiation:
+      'Females fuller-bodied, especially when gravid; males slimmer with more golden coloration',
   },
   zebraDanio: {
     commonName: 'Zebra Danio',
@@ -408,6 +503,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 8.0,
     tankSizeMin: 10,
+    tankSizeRecommended: 20,
     tankSizeUnit: 'gallons',
     maxSize: 2.0,
     sizeUnit: 'inches',
@@ -417,6 +513,10 @@ var fishDatabase = {
     waterHardness: '5-20 dGH',
     lifespan: '4 years',
     careLevel: 'Very Easy',
+    breedingNeeds:
+      'Egg scatterer; prolific breeder; spawns at dawn; eggs hatch in 48-72 hours; easy to breed',
+    genderDifferentiation:
+      'Males slimmer with gold tint; females rounder with silver-white belly when gravid',
   },
   harlequinRasbora: {
     commonName: 'Harlequin Rasbora',
@@ -429,6 +529,7 @@ var fishDatabase = {
     phMin: 5.0,
     phMax: 7.5,
     tankSizeMin: 10,
+    tankSizeRecommended: 20,
     tankSizeUnit: 'gallons',
     maxSize: 2.0,
     sizeUnit: 'inches',
@@ -438,6 +539,10 @@ var fishDatabase = {
     waterHardness: '1-12 dGH',
     lifespan: '6 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Egg depositor; attaches eggs to underside of broad leaves; requires soft, acidic water; challenging',
+    genderDifferentiation:
+      'Males slimmer with straight black wedge; females rounder with rounded wedge extending lower',
   },
   chiliRasbora: {
     commonName: 'Chili Rasbora',
@@ -450,6 +555,7 @@ var fishDatabase = {
     phMin: 4.0,
     phMax: 7.0,
     tankSizeMin: 5,
+    tankSizeRecommended: 10,
     tankSizeUnit: 'gallons',
     maxSize: 0.8,
     sizeUnit: 'inches',
@@ -459,6 +565,10 @@ var fishDatabase = {
     waterHardness: '1-10 dGH',
     lifespan: '6 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Egg scatterer; spawns in dense plants/moss; requires soft, acidic water; fry very small',
+    genderDifferentiation:
+      'Males more intensely colored with brighter red; females paler and rounder when gravid',
   },
   dwarfGourami: {
     commonName: 'Dwarf Gourami',
@@ -471,6 +581,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 7.5,
     tankSizeMin: 10,
+    tankSizeRecommended: 20,
     tankSizeUnit: 'gallons',
     maxSize: 3.5,
     sizeUnit: 'inches',
@@ -480,6 +591,10 @@ var fishDatabase = {
     waterHardness: '2-18 dGH',
     lifespan: '4 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Bubble nest builder; male builds nest at surface; guards eggs 24-36 hours until hatch',
+    genderDifferentiation:
+      'Males brilliantly colored (blue/red stripes); females silver-gray with less coloration',
   },
   honeyGourami: {
     commonName: 'Honey Gourami',
@@ -492,6 +607,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 7.5,
     tankSizeMin: 10,
+    tankSizeRecommended: 20,
     tankSizeUnit: 'gallons',
     maxSize: 2.2,
     sizeUnit: 'inches',
@@ -501,6 +617,10 @@ var fishDatabase = {
     waterHardness: '4-15 dGH',
     lifespan: '5 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Bubble nest builder; male builds nest among floating plants; guards eggs until hatching',
+    genderDifferentiation:
+      'Males honey-gold turning orange during breeding; females duller yellow-beige',
   },
   pearlGourami: {
     commonName: 'Pearl Gourami',
@@ -513,6 +633,7 @@ var fishDatabase = {
     phMin: 5.5,
     phMax: 8.0,
     tankSizeMin: 30,
+    tankSizeRecommended: 40,
     tankSizeUnit: 'gallons',
     maxSize: 4.8,
     sizeUnit: 'inches',
@@ -522,6 +643,10 @@ var fishDatabase = {
     waterHardness: '2-30 dGH',
     lifespan: '6 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Bubble nest builder; male builds large nest; guards eggs 3-6 days until hatching',
+    genderDifferentiation:
+      'Males have orange-red throat/chest during breeding; females rounder with shorter fins',
   },
   sparklingGourami: {
     commonName: 'Sparkling Gourami',
@@ -534,6 +659,7 @@ var fishDatabase = {
     phMin: 5.0,
     phMax: 7.5,
     tankSizeMin: 10,
+    tankSizeRecommended: 15,
     tankSizeUnit: 'gallons',
     maxSize: 1.6,
     sizeUnit: 'inches',
@@ -543,6 +669,10 @@ var fishDatabase = {
     waterHardness: '1-12 dGH',
     lifespan: '4 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Bubble nest builder; male builds small nest under leaves; guards eggs until hatching',
+    genderDifferentiation:
+      'Males more colorful with pointed dorsal/anal fins; females rounder with shorter fins',
   },
   germanBlueRam: {
     commonName: 'German Blue Ram',
@@ -555,6 +685,7 @@ var fishDatabase = {
     phMin: 5.0,
     phMax: 7.0,
     tankSizeMin: 20,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 2.5,
     sizeUnit: 'inches',
@@ -564,6 +695,10 @@ var fishDatabase = {
     waterHardness: '1-10 dGH',
     lifespan: '3 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Substrate spawner; lays eggs on flat surface; both parents guard; eggs hatch in 40-60 hours',
+    genderDifferentiation:
+      'Males larger with extended dorsal fin rays; females have pink belly and shorter fins',
   },
   pandaCory: {
     commonName: 'Panda Cory',
@@ -576,6 +711,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 7.4,
     tankSizeMin: 15,
+    tankSizeRecommended: 20,
     tankSizeUnit: 'gallons',
     maxSize: 2.0,
     sizeUnit: 'inches',
@@ -585,6 +721,10 @@ var fishDatabase = {
     waterHardness: '1-12 dGH',
     lifespan: '10 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Egg scatterer; T-position spawning; deposits eggs on glass/plants; eggs hatch in 3-5 days',
+    genderDifferentiation:
+      'Females larger and rounder when viewed from above; males slimmer',
   },
   bronzeCory: {
     commonName: 'Bronze Cory',
@@ -597,6 +737,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 8.0,
     tankSizeMin: 20,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 2.75,
     sizeUnit: 'inches',
@@ -606,6 +747,10 @@ var fishDatabase = {
     waterHardness: '2-15 dGH',
     lifespan: '10 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Egg scatterer; T-position spawning; prolific breeder; eggs hatch in 3-5 days',
+    genderDifferentiation:
+      'Females larger and fuller; males slimmer with more pointed fins',
   },
   pygmyCory: {
     commonName: 'Pygmy Cory',
@@ -618,6 +763,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 7.5,
     tankSizeMin: 10,
+    tankSizeRecommended: 15,
     tankSizeUnit: 'gallons',
     maxSize: 1.0,
     sizeUnit: 'inches',
@@ -627,6 +773,10 @@ var fishDatabase = {
     waterHardness: '2-10 dGH',
     lifespan: '3 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Egg scatterer; spawns in small groups; eggs deposited on plants; eggs hatch in 3-4 days',
+    genderDifferentiation:
+      'Females larger and rounder; males slimmer and slightly smaller',
   },
   kuhliLoach: {
     commonName: 'Kuhli Loach',
@@ -639,6 +789,7 @@ var fishDatabase = {
     phMin: 5.5,
     phMax: 7.0,
     tankSizeMin: 20,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 4.0,
     sizeUnit: 'inches',
@@ -648,6 +799,10 @@ var fishDatabase = {
     waterHardness: '0-8 dGH',
     lifespan: '10 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Egg scatterer; rarely bred in captivity; requires soft, acidic water and floating plants',
+    genderDifferentiation:
+      'Females fuller when gravid with visible green eggs; males slimmer',
   },
   otocinclus: {
     commonName: 'Otocinclus Catfish',
@@ -659,6 +814,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 7.5,
     tankSizeMin: 20,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 2.0,
     sizeUnit: 'inches',
@@ -668,6 +824,10 @@ var fishDatabase = {
     waterHardness: '2-15 dGH',
     lifespan: '5 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Egg depositor; deposits eggs on plant leaves/glass; rarely bred in home aquarium',
+    genderDifferentiation:
+      'Females larger and rounder when viewed from above; males slimmer',
   },
   bristlenosePleco: {
     commonName: 'Bristlenose Pleco',
@@ -679,6 +839,7 @@ var fishDatabase = {
     phMin: 6.5,
     phMax: 7.5,
     tankSizeMin: 20,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 5.0,
     sizeUnit: 'inches',
@@ -688,6 +849,10 @@ var fishDatabase = {
     waterHardness: '2-20 dGH',
     lifespan: '8 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Cave spawner; male guards eggs in cave for 4-10 days until hatching; provide caves or PVC pipes',
+    genderDifferentiation:
+      'Males have prominent bristles on head; females have minimal or no bristles',
   },
   clownPleco: {
     commonName: 'Clown Pleco',
@@ -700,6 +865,7 @@ var fishDatabase = {
     phMin: 6.8,
     phMax: 7.6,
     tankSizeMin: 20,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 4.0,
     sizeUnit: 'inches',
@@ -709,6 +875,10 @@ var fishDatabase = {
     waterHardness: '3-10 dGH',
     lifespan: '10 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Cave spawner; male guards eggs; requires established tank with driftwood caves',
+    genderDifferentiation:
+      'Males have more prominent odontodes (small spines) on head; females rounder',
   },
   rainbowShark: {
     commonName: 'Rainbow Shark',
@@ -721,6 +891,7 @@ var fishDatabase = {
     phMin: 6.5,
     phMax: 7.5,
     tankSizeMin: 55,
+    tankSizeRecommended: 75,
     tankSizeUnit: 'gallons',
     maxSize: 6.0,
     sizeUnit: 'inches',
@@ -730,6 +901,10 @@ var fishDatabase = {
     waterHardness: '5-15 dGH',
     lifespan: '6 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Egg scatterer; not commonly bred in home aquarium; requires hormones in commercial settings',
+    genderDifferentiation:
+      'Males slimmer with brighter colors; females rounder and less colorful',
   },
   cherryShrimp: {
     commonName: 'Cherry Shrimp',
@@ -742,6 +917,7 @@ var fishDatabase = {
     phMin: 6.5,
     phMax: 8.0,
     tankSizeMin: 5,
+    tankSizeRecommended: 10,
     tankSizeUnit: 'gallons',
     maxSize: 1.5,
     sizeUnit: 'inches',
@@ -751,6 +927,10 @@ var fishDatabase = {
     waterHardness: '6-14 dGH',
     lifespan: '1-2 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Egg carrier; female carries eggs under tail for 30 days; fully freshwater breeding',
+    genderDifferentiation:
+      'Females larger with deeper red color and curved underside; males smaller, straighter, paler',
   },
   amanoShrimp: {
     commonName: 'Amano Shrimp',
@@ -763,6 +943,7 @@ var fishDatabase = {
     phMin: 6.5,
     phMax: 7.5,
     tankSizeMin: 10,
+    tankSizeRecommended: 20,
     tankSizeUnit: 'gallons',
     maxSize: 2.0,
     sizeUnit: 'inches',
@@ -772,6 +953,10 @@ var fishDatabase = {
     waterHardness: '5-15 dGH',
     lifespan: '2-3 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Requires brackish water for larvae; extremely difficult in home aquarium',
+    genderDifferentiation:
+      'Females larger with longer pleopods and rounder underside; males smaller',
   },
   ghostShrimp: {
     commonName: 'Ghost Shrimp',
@@ -784,6 +969,7 @@ var fishDatabase = {
     phMin: 6.5,
     phMax: 8.0,
     tankSizeMin: 5,
+    tankSizeRecommended: 10,
     tankSizeUnit: 'gallons',
     maxSize: 2.0,
     sizeUnit: 'inches',
@@ -793,6 +979,10 @@ var fishDatabase = {
     waterHardness: '3-15 dGH',
     lifespan: '1-2 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Egg carrier; female carries eggs for 2-3 weeks; larvae need brackish water or will not survive',
+    genderDifferentiation:
+      'Females larger with green saddle on back; males smaller and more translucent',
   },
   mysterySnail: {
     commonName: 'Mystery Snail',
@@ -805,6 +995,7 @@ var fishDatabase = {
     phMin: 7.0,
     phMax: 8.4,
     tankSizeMin: 5,
+    tankSizeRecommended: 10,
     tankSizeUnit: 'gallons',
     maxSize: 2.5,
     sizeUnit: 'inches',
@@ -814,6 +1005,10 @@ var fishDatabase = {
     waterHardness: '8-18 dGH',
     lifespan: '1-2 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Lays eggs above waterline in clutches; eggs hatch in 2-4 weeks; requires humidity',
+    genderDifferentiation:
+      'Males have closed shell opening; females have open shell opening; difficult to determine',
   },
   neriteSnail: {
     commonName: 'Nerite Snail',
@@ -825,6 +1020,7 @@ var fishDatabase = {
     phMin: 7.0,
     phMax: 8.5,
     tankSizeMin: 5,
+    tankSizeRecommended: 10,
     tankSizeUnit: 'gallons',
     maxSize: 1.0,
     sizeUnit: 'inches',
@@ -834,6 +1030,10 @@ var fishDatabase = {
     waterHardness: '7-15 dGH',
     lifespan: '2 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Requires brackish/saltwater for larvae; eggs laid in freshwater but will not hatch',
+    genderDifferentiation:
+      'Very difficult to distinguish; no reliable external differences',
   },
 
   // Additional Tetras
@@ -848,6 +1048,7 @@ var fishDatabase = {
     phMin: 5.5,
     phMax: 7.5,
     tankSizeMin: 20,
+    tankSizeRecommended: 20,
     tankSizeUnit: 'gallons',
     maxSize: 1.6,
     sizeUnit: 'inches',
@@ -857,6 +1058,10 @@ var fishDatabase = {
     waterHardness: '4-8 dGH',
     lifespan: '3-5 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Egg scatterer; requires very soft, acidic water and low lighting; eggs hatch in 24 hours',
+    genderDifferentiation:
+      'Females fuller-bodied; males slimmer',
   },
   buenosAiresTetra: {
     commonName: 'Buenos Aires Tetra',
@@ -869,6 +1074,7 @@ var fishDatabase = {
     phMin: 5.5,
     phMax: 8.5,
     tankSizeMin: 30,
+    tankSizeRecommended: 40,
     tankSizeUnit: 'gallons',
     maxSize: 3.0,
     sizeUnit: 'inches',
@@ -878,6 +1084,10 @@ var fishDatabase = {
     waterHardness: '5-20 dGH',
     lifespan: '5-6 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Egg scatterer; spawns among plants; eggs hatch in 24-36 hours; prolific breeder',
+    genderDifferentiation:
+      'Females rounder and larger; males slimmer with more intense coloration',
   },
   bloodfinTetra: {
     commonName: 'Bloodfin Tetra',
@@ -890,6 +1100,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 8.0,
     tankSizeMin: 20,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 2.0,
     sizeUnit: 'inches',
@@ -899,6 +1110,10 @@ var fishDatabase = {
     waterHardness: '2-30 dGH',
     lifespan: '5-10 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Egg scatterer; spawns among plants; eggs hatch in 24-30 hours; tolerates cooler water',
+    genderDifferentiation:
+      'Females rounder with less vivid fin coloration; males slimmer with brighter red fins',
   },
   congoTetra: {
     commonName: 'Congo Tetra',
@@ -911,6 +1126,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 7.5,
     tankSizeMin: 30,
+    tankSizeRecommended: 40,
     tankSizeUnit: 'gallons',
     maxSize: 3.5,
     sizeUnit: 'inches',
@@ -920,6 +1136,10 @@ var fishDatabase = {
     waterHardness: '3-18 dGH',
     lifespan: '3-5 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Egg scatterer; spawns in dense vegetation; eggs hatch in 5-7 days; challenging',
+    genderDifferentiation:
+      'Males larger with elongated fins and brighter iridescent colors; females smaller, less colorful',
   },
   lemonTetra: {
     commonName: 'Lemon Tetra',
@@ -932,6 +1152,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 7.5,
     tankSizeMin: 10,
+    tankSizeRecommended: 20,
     tankSizeUnit: 'gallons',
     maxSize: 2.0,
     sizeUnit: 'inches',
@@ -941,6 +1162,10 @@ var fishDatabase = {
     waterHardness: '2-10 dGH',
     lifespan: '6-8 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Egg scatterer; spawns among plants; eggs hatch in 24-36 hours; requires soft, acidic water',
+    genderDifferentiation:
+      'Males have more intense yellow coloration; females rounder with less color intensity',
   },
   serpaeTetra: {
     commonName: 'Serpae Tetra',
@@ -953,6 +1178,7 @@ var fishDatabase = {
     phMin: 5.0,
     phMax: 7.8,
     tankSizeMin: 20,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 1.75,
     sizeUnit: 'inches',
@@ -962,6 +1188,10 @@ var fishDatabase = {
     waterHardness: '2-15 dGH',
     lifespan: '5-7 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Egg scatterer; spawns among fine-leaved plants; eggs hatch in 24-36 hours; prolific',
+    genderDifferentiation:
+      'Males slimmer with more intense red coloration; females rounder with paler color',
   },
   diamondTetra: {
     commonName: 'Diamond Tetra',
@@ -974,6 +1204,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 7.5,
     tankSizeMin: 20,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 2.5,
     sizeUnit: 'inches',
@@ -983,6 +1214,10 @@ var fishDatabase = {
     waterHardness: '2-15 dGH',
     lifespan: '3-6 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Egg scatterer; spawns in vegetation; eggs hatch in 24-36 hours; requires soft water',
+    genderDifferentiation:
+      'Males have longer dorsal fin with more sparkle; females rounder',
   },
   xRayTetra: {
     commonName: 'X-Ray Tetra',
@@ -995,6 +1230,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 7.5,
     tankSizeMin: 15,
+    tankSizeRecommended: 20,
     tankSizeUnit: 'gallons',
     maxSize: 2.0,
     sizeUnit: 'inches',
@@ -1004,6 +1240,10 @@ var fishDatabase = {
     waterHardness: '2-15 dGH',
     lifespan: '4-5 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Egg scatterer; spawns in dense vegetation; eggs hatch in 24-36 hours; tolerates varied conditions',
+    genderDifferentiation:
+      'Females rounder with deeper body; males slimmer with pointed swim bladder visible',
   },
   penguinTetra: {
     commonName: 'Penguin Tetra',
@@ -1016,6 +1256,7 @@ var fishDatabase = {
     phMin: 5.5,
     phMax: 8.0,
     tankSizeMin: 20,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 3.0,
     sizeUnit: 'inches',
@@ -1025,6 +1266,10 @@ var fishDatabase = {
     waterHardness: '5-19 dGH',
     lifespan: '5-8 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Egg scatterer; spawns among fine-leaved plants; eggs hatch in 24-36 hours',
+    genderDifferentiation:
+      'Females rounder especially when gravid; males slimmer with more intense black stripe',
   },
   silverDollar: {
     commonName: 'Silver Dollar',
@@ -1037,6 +1282,7 @@ var fishDatabase = {
     phMin: 5.0,
     phMax: 7.0,
     tankSizeMin: 55,
+    tankSizeRecommended: 75,
     tankSizeUnit: 'gallons',
     maxSize: 6.0,
     sizeUnit: 'inches',
@@ -1046,6 +1292,10 @@ var fishDatabase = {
     waterHardness: '4-15 dGH',
     lifespan: '10+ years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Egg scatterer; spawns in open water; requires large tank and soft water; challenging',
+    genderDifferentiation:
+      'Males have red tinge on anal fin; females rounder with no red coloration',
   },
   greenNeonTetra: {
     commonName: 'Green Neon Tetra',
@@ -1058,6 +1308,7 @@ var fishDatabase = {
     phMin: 5.0,
     phMax: 7.0,
     tankSizeMin: 10,
+    tankSizeRecommended: 15,
     tankSizeUnit: 'gallons',
     maxSize: 1.0,
     sizeUnit: 'inches',
@@ -1067,6 +1318,10 @@ var fishDatabase = {
     waterHardness: '0-4 dGH',
     lifespan: '3-5 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Egg scatterer; requires very soft, acidic water; rarely bred in captivity; challenging',
+    genderDifferentiation:
+      'Females slightly rounder when gravid; males slimmer with straighter blue stripe',
   },
 
   // Additional Barbs
@@ -1080,6 +1335,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 8.0,
     tankSizeMin: 30,
+    tankSizeRecommended: 40,
     tankSizeUnit: 'gallons',
     maxSize: 4.0,
     sizeUnit: 'inches',
@@ -1089,6 +1345,10 @@ var fishDatabase = {
     waterHardness: '5-20 dGH',
     lifespan: '5 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Egg scatterer; spawns among plants; eggs hatch in 24-30 hours; easy to breed; remove adults',
+    genderDifferentiation:
+      'Males smaller with rosy-red coloration especially during breeding; females larger, fuller-bodied, paler',
   },
   goldBarb: {
     commonName: 'Gold Barb',
@@ -1100,6 +1360,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 8.0,
     tankSizeMin: 20,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 3.0,
     sizeUnit: 'inches',
@@ -1109,6 +1370,10 @@ var fishDatabase = {
     waterHardness: '2-20 dGH',
     lifespan: '4-6 years',
     careLevel: 'Very Easy',
+    breedingNeeds:
+      'Egg scatterer; spawns among plants; eggs hatch in 24-36 hours; easy to breed',
+    genderDifferentiation:
+      'Females slightly fuller-bodied; males more slender with brighter coloration',
   },
   odessaBarb: {
     commonName: 'Odessa Barb',
@@ -1120,6 +1385,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 7.0,
     tankSizeMin: 20,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 3.0,
     sizeUnit: 'inches',
@@ -1129,6 +1395,10 @@ var fishDatabase = {
     waterHardness: '2-10 dGH',
     lifespan: '3-5 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Egg scatterer; spawns among plants; eggs hatch in 24-48 hours; easy to breed; remove adults',
+    genderDifferentiation:
+      'Males slimmer with brilliant red-orange band; females fuller-bodied, paler',
   },
   denisonBarb: {
     commonName: 'Denison Barb',
@@ -1140,6 +1410,7 @@ var fishDatabase = {
     phMin: 6.5,
     phMax: 7.8,
     tankSizeMin: 55,
+    tankSizeRecommended: 65,
     tankSizeUnit: 'gallons',
     maxSize: 6.0,
     sizeUnit: 'inches',
@@ -1149,6 +1420,10 @@ var fishDatabase = {
     waterHardness: '5-15 dGH',
     lifespan: '5-8 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Egg scatterer; rarely bred in home aquarium; requires hormonal injection commercially; challenging',
+    genderDifferentiation:
+      'Difficult to distinguish; females may be slightly fuller-bodied when mature',
   },
   fiveBandedBarb: {
     commonName: 'Five-Banded Barb',
@@ -1161,6 +1436,7 @@ var fishDatabase = {
     phMin: 4.0,
     phMax: 7.0,
     tankSizeMin: 20,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 2.0,
     sizeUnit: 'inches',
@@ -1170,6 +1446,10 @@ var fishDatabase = {
     waterHardness: '1-5 dGH',
     lifespan: '5-8 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Egg scatterer; spawns among fine plants; eggs hatch in 24-36 hours; challenging',
+    genderDifferentiation:
+      'Males develop extended dorsal/anal fins and brilliant iridescence; females shorter fins',
   },
 
   // Rainbowfish (new category)
@@ -1184,6 +1464,7 @@ var fishDatabase = {
     phMin: 7.0,
     phMax: 8.0,
     tankSizeMin: 30,
+    tankSizeRecommended: 40,
     tankSizeUnit: 'gallons',
     maxSize: 4.5,
     sizeUnit: 'inches',
@@ -1193,6 +1474,10 @@ var fishDatabase = {
     waterHardness: '10-20 dGH',
     lifespan: '5-8 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Egg scatterer; spawns over plants/spawning mops; eggs hatch in 7-12 days',
+    genderDifferentiation:
+      'Males display brilliant bicolor pattern (blue front, orange rear); females silvery-gray',
   },
   dwarfNeonRainbowfish: {
     commonName: 'Dwarf Neon Rainbowfish',
@@ -1205,6 +1490,7 @@ var fishDatabase = {
     phMin: 6.8,
     phMax: 7.5,
     tankSizeMin: 20,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 3.2,
     sizeUnit: 'inches',
@@ -1214,6 +1500,10 @@ var fishDatabase = {
     waterHardness: '5-15 dGH',
     lifespan: '5-8 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Egg scatterer; spawns over plants; eggs hatch in 5-8 days; relatively easy',
+    genderDifferentiation:
+      'Males more colorful with red-orange fins; females duller with yellowish fins',
   },
   turquoiseRainbowfish: {
     commonName: 'Turquoise Rainbowfish',
@@ -1226,6 +1516,7 @@ var fishDatabase = {
     phMin: 7.0,
     phMax: 9.0,
     tankSizeMin: 30,
+    tankSizeRecommended: 40,
     tankSizeUnit: 'gallons',
     maxSize: 4.8,
     sizeUnit: 'inches',
@@ -1235,6 +1526,10 @@ var fishDatabase = {
     waterHardness: '10-20 dGH',
     lifespan: '5-8 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Egg scatterer; spawns in groups among plants; eggs hatch in 2-3 days; challenging',
+    genderDifferentiation:
+      'Males develop red-edged anal fin; females lack red edge and are fuller-bodied',
   },
   redRainbowfish: {
     commonName: 'Red Rainbowfish',
@@ -1247,6 +1542,7 @@ var fishDatabase = {
     phMin: 7.0,
     phMax: 8.0,
     tankSizeMin: 40,
+    tankSizeRecommended: 50,
     tankSizeUnit: 'gallons',
     maxSize: 6.0,
     sizeUnit: 'inches',
@@ -1256,6 +1552,10 @@ var fishDatabase = {
     waterHardness: '10-20 dGH',
     lifespan: '5-8 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Egg scatterer; spawns among plants; eggs hatch in 7-12 days; moderately difficult',
+    genderDifferentiation:
+      'Males develop intense cherry-red coloration; females remain silver-olive',
   },
   threadfinRainbowfish: {
     commonName: 'Threadfin Rainbowfish',
@@ -1267,6 +1567,7 @@ var fishDatabase = {
     phMin: 5.0,
     phMax: 8.0,
     tankSizeMin: 15,
+    tankSizeRecommended: 25,
     tankSizeUnit: 'gallons',
     maxSize: 1.6,
     sizeUnit: 'inches',
@@ -1276,6 +1577,10 @@ var fishDatabase = {
     waterHardness: '1-12 dGH',
     lifespan: '3-4 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Egg scatterer; spawns on glass/plants; eggs hatch in 3-4 days; fry very tiny',
+    genderDifferentiation:
+      'Males develop elongated threadlike fin extensions; females have normal fins and are rounder',
   },
 
   // Additional Rasboras
@@ -1290,6 +1595,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 7.0,
     tankSizeMin: 10,
+    tankSizeRecommended: 20,
     tankSizeUnit: 'gallons',
     maxSize: 0.6,
     sizeUnit: 'inches',
@@ -1299,6 +1605,10 @@ var fishDatabase = {
     waterHardness: '8-12 dGH',
     lifespan: '4-8 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Egg scatterer; rarely bred in aquarium; requires very soft, acidic water; difficult',
+    genderDifferentiation:
+      'Males slimmer with more intense colors; females fuller-bodied',
   },
   microrasbora: {
     commonName: 'Green Kubotai Rasbora',
@@ -1311,6 +1621,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 7.0,
     tankSizeMin: 10,
+    tankSizeRecommended: 20,
     tankSizeUnit: 'gallons',
     maxSize: 0.75,
     sizeUnit: 'inches',
@@ -1320,6 +1631,10 @@ var fishDatabase = {
     waterHardness: '1-10 dGH',
     lifespan: '3-5 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Egg scatterer; spawns among fine-leaved plants; eggs hatch in 24-36 hours; challenging',
+    genderDifferentiation:
+      'Males slimmer with brighter green coloration; females fuller-bodied',
   },
 
   // Additional Livebearers
@@ -1333,6 +1648,7 @@ var fishDatabase = {
     phMin: 7.0,
     phMax: 8.5,
     tankSizeMin: 20,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 3.0,
     sizeUnit: 'inches',
@@ -1342,6 +1658,10 @@ var fishDatabase = {
     waterHardness: '15-30 dGH',
     lifespan: '1-2 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Livebearer; females give birth every 4-6 weeks; fry require hiding spots; prolific',
+    genderDifferentiation:
+      'Males smaller with pointed anal fin (gonopodium); females larger, rounder with fan-shaped anal fin',
   },
   variatusPlaty: {
     commonName: 'Variatus Platy',
@@ -1353,6 +1673,7 @@ var fishDatabase = {
     phMin: 7.0,
     phMax: 8.2,
     tankSizeMin: 10,
+    tankSizeRecommended: 20,
     tankSizeUnit: 'gallons',
     maxSize: 2.8,
     sizeUnit: 'inches',
@@ -1362,6 +1683,10 @@ var fishDatabase = {
     waterHardness: '14-30 dGH',
     lifespan: '3-5 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Livebearer; gestation 4-6 weeks; females store sperm; prolific breeders',
+    genderDifferentiation:
+      'Males smaller with gonopodium; females larger with fan-shaped anal fin and gravid spot',
   },
   blackMolly: {
     commonName: 'Black Molly',
@@ -1373,6 +1698,7 @@ var fishDatabase = {
     phMin: 7.0,
     phMax: 8.5,
     tankSizeMin: 30,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 4.8,
     sizeUnit: 'inches',
@@ -1382,6 +1708,10 @@ var fishDatabase = {
     waterHardness: '15-30 dGH',
     lifespan: '3-5 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Livebearer; gestation 4-6 weeks; females can store sperm for multiple batches',
+    genderDifferentiation:
+      'Males smaller with gonopodium; females larger with rounded anal fin and gravid spot',
   },
   leastKillifish: {
     commonName: 'Least Killifish',
@@ -1394,6 +1724,7 @@ var fishDatabase = {
     phMin: 7.0,
     phMax: 8.0,
     tankSizeMin: 5,
+    tankSizeRecommended: 15,
     tankSizeUnit: 'gallons',
     maxSize: 1.4,
     sizeUnit: 'inches',
@@ -1403,6 +1734,10 @@ var fishDatabase = {
     waterHardness: '5-20 dGH',
     lifespan: '3-5 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Livebearer; superfetation allows continuous small broods (1-3 fry at a time); very prolific',
+    genderDifferentiation:
+      'Males tiny with gonopodium; females significantly larger (about twice the size)',
   },
 
   // Additional Gouramis
@@ -1416,6 +1751,7 @@ var fishDatabase = {
     phMin: 5.5,
     phMax: 8.5,
     tankSizeMin: 35,
+    tankSizeRecommended: 45,
     tankSizeUnit: 'gallons',
     maxSize: 6.0,
     sizeUnit: 'inches',
@@ -1425,6 +1761,10 @@ var fishDatabase = {
     waterHardness: '3-35 dGH',
     lifespan: '4-6 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Bubble nest builder; male builds nest at surface; guards eggs and fry; relatively easy',
+    genderDifferentiation:
+      'Males have longer, pointed dorsal fin; females have shorter, rounded dorsal fin',
   },
   chocolateGourami: {
     commonName: 'Chocolate Gourami',
@@ -1436,6 +1776,7 @@ var fishDatabase = {
     phMin: 4.0,
     phMax: 6.5,
     tankSizeMin: 15,
+    tankSizeRecommended: 25,
     tankSizeUnit: 'gallons',
     maxSize: 2.0,
     sizeUnit: 'inches',
@@ -1445,6 +1786,10 @@ var fishDatabase = {
     waterHardness: '0-3 dGH',
     lifespan: '4-5 years',
     careLevel: 'Difficult',
+    breedingNeeds:
+      'Mouthbrooder; female holds eggs in mouth for 14 days; very difficult in aquarium',
+    genderDifferentiation:
+      'Males have straight throat line; females have rounded throat and develop brood pouch',
   },
   paradiseFish: {
     commonName: 'Paradise Fish',
@@ -1456,6 +1801,7 @@ var fishDatabase = {
     phMin: 5.8,
     phMax: 8.0,
     tankSizeMin: 20,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 4.0,
     sizeUnit: 'inches',
@@ -1465,6 +1811,10 @@ var fishDatabase = {
     waterHardness: '4-18 dGH',
     lifespan: '5-9 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Bubble nest builder; male builds large nest and guards eggs; eggs hatch in 24-48 hours; easy',
+    genderDifferentiation:
+      'Males more colorful with longer fins and pointed tail rays; females duller with rounded fins',
   },
   bettaImbellis: {
     commonName: 'Peaceful Betta',
@@ -1476,6 +1826,7 @@ var fishDatabase = {
     phMin: 5.0,
     phMax: 7.5,
     tankSizeMin: 10,
+    tankSizeRecommended: 20,
     tankSizeUnit: 'gallons',
     maxSize: 2.5,
     sizeUnit: 'inches',
@@ -1485,6 +1836,10 @@ var fishDatabase = {
     waterHardness: '1-10 dGH',
     lifespan: '3-5 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Bubble nest builder; male builds nest and guards eggs; eggs hatch in 24-48 hours; moderate',
+    genderDifferentiation:
+      'Males more colorful with longer fins and iridescent blue markings; females duller',
   },
 
   // Additional Cichlids
@@ -1498,6 +1853,7 @@ var fishDatabase = {
     phMin: 5.0,
     phMax: 7.5,
     tankSizeMin: 20,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 4.0,
     sizeUnit: 'inches',
@@ -1507,6 +1863,10 @@ var fishDatabase = {
     waterHardness: '0-12 dGH',
     lifespan: '5-8 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Cave spawner; pair guards eggs and fry; eggs hatch in 2-3 days; easy to breed',
+    genderDifferentiation:
+      'Females smaller with cherry-red belly and rounded fins; males larger with pointed dorsal fin',
   },
   bolivianRam: {
     commonName: 'Bolivian Ram',
@@ -1518,6 +1878,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 7.5,
     tankSizeMin: 20,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 3.5,
     sizeUnit: 'inches',
@@ -1527,6 +1888,10 @@ var fishDatabase = {
     waterHardness: '1-10 dGH',
     lifespan: '4-6 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Substrate spawner; pair cleans flat rock; both parents guard eggs and fry; moderate difficulty',
+    genderDifferentiation:
+      'Males larger with extended dorsal fin rays; females smaller with rounder belly',
   },
   cockatooDwarfCichlid: {
     commonName: 'Cockatoo Dwarf Cichlid',
@@ -1538,6 +1903,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 7.0,
     tankSizeMin: 20,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 3.5,
     sizeUnit: 'inches',
@@ -1547,6 +1913,10 @@ var fishDatabase = {
     waterHardness: '2-15 dGH',
     lifespan: '3-5 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Cave spawner; female guards eggs in cave; eggs hatch in 3-4 days; moderate difficulty',
+    genderDifferentiation:
+      'Males larger with elongated dorsal rays (crest) and brighter colors; females smaller, yellow when breeding',
   },
   electricBlueAcara: {
     commonName: 'Electric Blue Acara',
@@ -1559,6 +1929,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 7.5,
     tankSizeMin: 30,
+    tankSizeRecommended: 40,
     tankSizeUnit: 'gallons',
     maxSize: 7.0,
     sizeUnit: 'inches',
@@ -1568,6 +1939,10 @@ var fishDatabase = {
     waterHardness: '4-20 dGH',
     lifespan: '8-10 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Substrate spawner; pair cleans flat surface; both parents guard eggs; eggs hatch in 48-72 hours',
+    genderDifferentiation:
+      'Males slightly larger with more pointed fins; females may have rounder belly when breeding',
   },
   firemouthCichlid: {
     commonName: 'Firemouth Cichlid',
@@ -1579,6 +1954,7 @@ var fishDatabase = {
     phMin: 6.5,
     phMax: 8.0,
     tankSizeMin: 30,
+    tankSizeRecommended: 40,
     tankSizeUnit: 'gallons',
     maxSize: 6.0,
     sizeUnit: 'inches',
@@ -1588,6 +1964,10 @@ var fishDatabase = {
     waterHardness: '5-25 dGH',
     lifespan: '10-15 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Substrate spawner; pair cleans rocks or digs pit; both parents guard eggs and fry; easy',
+    genderDifferentiation:
+      'Males larger with brighter red throat and more pointed dorsal/anal fins; females smaller, duller',
   },
   convictCichlid: {
     commonName: 'Convict Cichlid',
@@ -1599,6 +1979,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 8.0,
     tankSizeMin: 20,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 5.0,
     sizeUnit: 'inches',
@@ -1608,6 +1989,10 @@ var fishDatabase = {
     waterHardness: '5-25 dGH',
     lifespan: '8-10 years',
     careLevel: 'Very Easy',
+    breedingNeeds:
+      'Substrate/cave spawner; extremely prolific; both parents aggressively guard eggs and fry; very easy',
+    genderDifferentiation:
+      'Males larger and lack orange belly spots; females smaller with bright orange belly patches',
   },
   africanButterflyCichlid: {
     commonName: 'African Butterfly Cichlid',
@@ -1620,6 +2005,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 7.5,
     tankSizeMin: 20,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 4.0,
     sizeUnit: 'inches',
@@ -1629,6 +2015,10 @@ var fishDatabase = {
     waterHardness: '0-12 dGH',
     lifespan: '3-5 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Cave spawner; pair guards eggs in caves; eggs hatch in 2-3 days; challenging in aquarium',
+    genderDifferentiation:
+      'Males slightly larger with more pointed fins; difficult to distinguish',
   },
   discus: {
     commonName: 'Discus',
@@ -1640,6 +2030,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 7.5,
     tankSizeMin: 55,
+    tankSizeRecommended: 75,
     tankSizeUnit: 'gallons',
     maxSize: 8.0,
     sizeUnit: 'inches',
@@ -1649,6 +2040,10 @@ var fishDatabase = {
     waterHardness: '0-12 dGH',
     lifespan: '6-10 years',
     careLevel: 'Difficult',
+    breedingNeeds:
+      'Substrate spawner; pair cleans vertical surface; both parents produce skin secretion fry eat; challenging',
+    genderDifferentiation:
+      'Difficult to distinguish; breeding pairs form naturally from groups; males may be slightly larger',
   },
 
   // Additional Loaches
@@ -1662,6 +2057,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 7.5,
     tankSizeMin: 40,
+    tankSizeRecommended: 50,
     tankSizeUnit: 'gallons',
     maxSize: 6.0,
     sizeUnit: 'inches',
@@ -1671,6 +2067,10 @@ var fishDatabase = {
     waterHardness: '2-12 dGH',
     lifespan: '10-15 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Rarely bred in aquarium; requires seasonal water changes and hormone stimulation commercially',
+    genderDifferentiation:
+      'Females slightly rounder when mature; males slimmer; difficult to distinguish',
   },
   dwarfChainLoach: {
     commonName: 'Dwarf Chain Loach',
@@ -1683,6 +2083,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 7.5,
     tankSizeMin: 30,
+    tankSizeRecommended: 40,
     tankSizeUnit: 'gallons',
     maxSize: 2.5,
     sizeUnit: 'inches',
@@ -1692,6 +2093,10 @@ var fishDatabase = {
     waterHardness: '2-10 dGH',
     lifespan: '8-12 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Rarely bred in aquarium; requires specific conditions; commercially bred with hormone stimulation',
+    genderDifferentiation:
+      'Females slightly fuller-bodied when mature; difficult to distinguish',
   },
   zebraLoach: {
     commonName: 'Zebra Loach',
@@ -1704,6 +2109,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 7.5,
     tankSizeMin: 30,
+    tankSizeRecommended: 40,
     tankSizeUnit: 'gallons',
     maxSize: 3.5,
     sizeUnit: 'inches',
@@ -1713,6 +2119,10 @@ var fishDatabase = {
     waterHardness: '1-10 dGH',
     lifespan: '10-15 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Rarely bred in aquarium; egg scatterer; requires seasonal conditions; very difficult',
+    genderDifferentiation:
+      'Females fuller-bodied when mature; males slimmer; subtle differences',
   },
   clownLoach: {
     commonName: 'Clown Loach',
@@ -1725,6 +2135,7 @@ var fishDatabase = {
     phMin: 5.0,
     phMax: 7.0,
     tankSizeMin: 125,
+    tankSizeRecommended: 135,
     tankSizeUnit: 'gallons',
     maxSize: 12.0,
     sizeUnit: 'inches',
@@ -1734,6 +2145,10 @@ var fishDatabase = {
     waterHardness: '1-12 dGH',
     lifespan: '20+ years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Rarely bred in aquarium; commercially bred with hormone injection; requires seasonal simulation; very difficult',
+    genderDifferentiation:
+      'Females slightly rounder when mature; males have slightly curved tail tips; difficult to distinguish',
   },
   hillstreamLoach: {
     commonName: 'Hillstream Loach',
@@ -1745,6 +2160,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 7.5,
     tankSizeMin: 20,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 2.5,
     sizeUnit: 'inches',
@@ -1754,6 +2170,10 @@ var fishDatabase = {
     waterHardness: '1-10 dGH',
     lifespan: '8-12 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Has been bred in aquarium; requires high oxygen, strong flow, and cool temperatures; moderately difficult',
+    genderDifferentiation:
+      'Males have square/rough snout edge (fences); females have rounded snout edge',
   },
 
   // Additional Corydoras
@@ -1767,6 +2187,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 7.5,
     tankSizeMin: 20,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 2.8,
     sizeUnit: 'inches',
@@ -1776,6 +2197,10 @@ var fishDatabase = {
     waterHardness: '3-12 dGH',
     lifespan: '10-20 years',
     careLevel: 'Very Easy',
+    breedingNeeds:
+      'Egg layer; T-position spawning; female carries eggs to chosen surface; eggs hatch in 3-6 days; easy',
+    genderDifferentiation:
+      'Females larger and fuller-bodied when viewed from above; males slimmer',
   },
   sterbaiCory: {
     commonName: 'Sterbai Cory',
@@ -1787,6 +2212,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 7.6,
     tankSizeMin: 20,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 2.6,
     sizeUnit: 'inches',
@@ -1796,6 +2222,10 @@ var fishDatabase = {
     waterHardness: '2-15 dGH',
     lifespan: '15-20 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Egg layer; T-position spawning; female carries eggs to chosen surface; eggs hatch in 3-6 days; moderate',
+    genderDifferentiation:
+      'Females larger and fuller-bodied when viewed from above; males slimmer with more pointed pelvic fins',
   },
   juliiCory: {
     commonName: 'Julii Cory',
@@ -1807,6 +2237,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 7.8,
     tankSizeMin: 20,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 2.0,
     sizeUnit: 'inches',
@@ -1816,6 +2247,10 @@ var fishDatabase = {
     waterHardness: '2-25 dGH',
     lifespan: '10-15 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Egg layer; T-position spawning; female carries eggs to chosen surface; eggs hatch in 3-6 days; moderate',
+    genderDifferentiation:
+      'Females larger and fuller-bodied when viewed from above; males slimmer',
   },
   albinoCory: {
     commonName: 'Albino Cory',
@@ -1827,6 +2262,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 7.5,
     tankSizeMin: 20,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 2.8,
     sizeUnit: 'inches',
@@ -1836,6 +2272,10 @@ var fishDatabase = {
     waterHardness: '3-10 dGH',
     lifespan: '5-10 years',
     careLevel: 'Very Easy',
+    breedingNeeds:
+      'Egg layer; T-position spawning; female carries eggs to chosen surface; eggs hatch in 3-6 days; easy',
+    genderDifferentiation:
+      'Females larger and fuller-bodied when viewed from above; males slimmer',
   },
   saltAndPepperCory: {
     commonName: 'Salt and Pepper Cory',
@@ -1848,6 +2288,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 8.0,
     tankSizeMin: 10,
+    tankSizeRecommended: 20,
     tankSizeUnit: 'gallons',
     maxSize: 1.4,
     sizeUnit: 'inches',
@@ -1857,6 +2298,10 @@ var fishDatabase = {
     waterHardness: '2-25 dGH',
     lifespan: '2-5 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Egg layer; T-position spawning; female carries eggs to chosen surface; eggs hatch in 3-6 days; moderate',
+    genderDifferentiation:
+      'Females larger and fuller-bodied when viewed from above; males slimmer',
   },
 
   // Other Catfish
@@ -1871,6 +2316,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 8.0,
     tankSizeMin: 55,
+    tankSizeRecommended: 75,
     tankSizeUnit: 'gallons',
     maxSize: 11.0,
     sizeUnit: 'inches',
@@ -1880,6 +2326,10 @@ var fishDatabase = {
     waterHardness: '4-18 dGH',
     lifespan: '10-15 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Rarely bred in aquarium; requires hormone injection commercially; not bred in home aquariums',
+    genderDifferentiation:
+      'Males develop tubercles on snout when mature; females fuller-bodied; difficult to distinguish',
   },
   stripedRaphaelCatfish: {
     commonName: 'Striped Raphael Catfish',
@@ -1891,6 +2341,7 @@ var fishDatabase = {
     phMin: 5.5,
     phMax: 7.5,
     tankSizeMin: 30,
+    tankSizeRecommended: 50,
     tankSizeUnit: 'gallons',
     maxSize: 9.4,
     sizeUnit: 'inches',
@@ -1900,6 +2351,10 @@ var fishDatabase = {
     waterHardness: '2-20 dGH',
     lifespan: '10-15 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Rarely bred in aquarium; bubble nest builder in wild; requires specific conditions; very difficult',
+    genderDifferentiation:
+      'Females fuller-bodied when mature; difficult to distinguish externally',
   },
   glassCatfish: {
     commonName: 'Glass Catfish',
@@ -1911,6 +2366,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 7.5,
     tankSizeMin: 30,
+    tankSizeRecommended: 40,
     tankSizeUnit: 'gallons',
     maxSize: 3.0,
     sizeUnit: 'inches',
@@ -1920,6 +2376,10 @@ var fishDatabase = {
     waterHardness: '4-12 dGH',
     lifespan: '6-8 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Rarely bred in aquarium; spawning behavior observed but successful breeding uncommon',
+    genderDifferentiation:
+      'Difficult to distinguish externally; females may be slightly fuller when mature',
   },
   upsideDownCatfish: {
     commonName: 'Upside-Down Catfish',
@@ -1932,6 +2392,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 7.5,
     tankSizeMin: 30,
+    tankSizeRecommended: 40,
     tankSizeUnit: 'gallons',
     maxSize: 4.0,
     sizeUnit: 'inches',
@@ -1941,6 +2402,10 @@ var fishDatabase = {
     waterHardness: '5-20 dGH',
     lifespan: '15+ years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Rarely bred in aquarium; cave spawner in wild; requires specific conditions; very difficult',
+    genderDifferentiation:
+      'Females larger and rounder when mature; males slimmer',
   },
   commonPleco: {
     commonName: 'Common Pleco',
@@ -1953,6 +2418,7 @@ var fishDatabase = {
     phMin: 6.5,
     phMax: 7.8,
     tankSizeMin: 75,
+    tankSizeRecommended: 125,
     tankSizeUnit: 'gallons',
     maxSize: 24.0,
     sizeUnit: 'inches',
@@ -1962,6 +2428,10 @@ var fishDatabase = {
     waterHardness: '2-12 dGH',
     lifespan: '10-15 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Rarely bred in aquarium; cave spawner in wild; requires massive tanks and specific conditions; very difficult',
+    genderDifferentiation:
+      'Males have broader heads and more pronounced odontodes on pectoral fins; females fuller-bodied',
   },
   rubberLipPleco: {
     commonName: 'Rubber Lip Pleco',
@@ -1974,6 +2444,7 @@ var fishDatabase = {
     phMin: 6.5,
     phMax: 8.0,
     tankSizeMin: 25,
+    tankSizeRecommended: 35,
     tankSizeUnit: 'gallons',
     maxSize: 7.0,
     sizeUnit: 'inches',
@@ -1983,6 +2454,10 @@ var fishDatabase = {
     waterHardness: '8-12 dGH',
     lifespan: '10-15 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Rarely bred in aquarium; cave spawner in wild; requires high oxygen and specific conditions; very difficult',
+    genderDifferentiation:
+      'Males have broader head and more prominent odontodes on pectoral fins; females slightly rounder',
   },
 
   // Additional Shrimp
@@ -1996,6 +2471,7 @@ var fishDatabase = {
     phMin: 6.5,
     phMax: 7.8,
     tankSizeMin: 20,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 3.0,
     sizeUnit: 'inches',
@@ -2005,6 +2481,10 @@ var fishDatabase = {
     waterHardness: '6-18 dGH',
     lifespan: '1-2 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Not bred in freshwater aquarium; larvae require brackish water; cannot complete lifecycle in home tank',
+    genderDifferentiation:
+      'Males have larger front claws; females have smaller, more even-sized claws',
   },
   singaporeShrimp: {
     commonName: 'Singapore Shrimp',
@@ -2016,6 +2496,7 @@ var fishDatabase = {
     phMin: 6.5,
     phMax: 7.5,
     tankSizeMin: 15,
+    tankSizeRecommended: 25,
     tankSizeUnit: 'gallons',
     maxSize: 4.0,
     sizeUnit: 'inches',
@@ -2025,6 +2506,10 @@ var fishDatabase = {
     waterHardness: '5-15 dGH',
     lifespan: '2-3 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Can breed in freshwater; female carries eggs until hatching; larvae go through planktonic stage; difficult',
+    genderDifferentiation:
+      'Males have much larger front claws; females smaller with even-sized claws and eggs visible when berried',
   },
 
   // Additional Snails
@@ -2038,6 +2523,7 @@ var fishDatabase = {
     phMin: 7.0,
     phMax: 8.0,
     tankSizeMin: 5,
+    tankSizeRecommended: 10,
     tankSizeUnit: 'gallons',
     maxSize: 1.5,
     sizeUnit: 'inches',
@@ -2047,6 +2533,10 @@ var fishDatabase = {
     waterHardness: '8-15 dGH',
     lifespan: '1-3 years',
     careLevel: 'Very Easy',
+    breedingNeeds:
+      'Extremely prolific; hermaphrodite laying egg clutches; reproduces without partner; population can explode',
+    genderDifferentiation:
+      'Hermaphrodite - each snail has both male and female reproductive organs',
   },
 
   // Amphibians
@@ -2061,6 +2551,7 @@ var fishDatabase = {
     phMin: 6.5,
     phMax: 7.8,
     tankSizeMin: 10,
+    tankSizeRecommended: 20,
     tankSizeUnit: 'gallons',
     maxSize: 2.5,
     sizeUnit: 'inches',
@@ -2070,6 +2561,10 @@ var fishDatabase = {
     waterHardness: '5-12 dGH',
     lifespan: '5-10 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Male clasps female from behind (amplexus); eggs float or attach to plants; tadpoles emerge in few days; moderate',
+    genderDifferentiation:
+      'Males smaller with post-axillary gland behind front legs; females larger and rounder when gravid',
   },
 
   // ================================================================
@@ -2087,6 +2582,7 @@ var fishDatabase = {
     phMin: 5.0,
     phMax: 7.8,
     tankSizeMin: 20,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 2,
     sizeUnit: 'inches',
@@ -2096,6 +2592,10 @@ var fishDatabase = {
     waterHardness: '3-8 dGH',
     lifespan: '4-6 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Egg scatterer; spawns among plants in dim light; eggs hatch in 24-48 hours; remove adults after spawning',
+    genderDifferentiation:
+      'Males have extended dorsal and caudal fin rays; females fuller-bodied with shorter fins',
   },
 
   flameTetra: {
@@ -2109,6 +2609,7 @@ var fishDatabase = {
     phMin: 5.5,
     phMax: 7.5,
     tankSizeMin: 15,
+    tankSizeRecommended: 25,
     tankSizeUnit: 'gallons',
     maxSize: 1.5,
     sizeUnit: 'inches',
@@ -2118,6 +2619,10 @@ var fishDatabase = {
     waterHardness: '3-15 dGH',
     lifespan: '3-5 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Egg scatterer; spawns among plants; eggs hatch in 24-36 hours; moderately easy to breed',
+    genderDifferentiation:
+      'Males have elongated anal fin with black edge; females fuller-bodied with rounded fins',
   },
 
   pristellaTetra: {
@@ -2131,6 +2636,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 8.0,
     tankSizeMin: 15,
+    tankSizeRecommended: 25,
     tankSizeUnit: 'gallons',
     maxSize: 2,
     sizeUnit: 'inches',
@@ -2140,6 +2646,10 @@ var fishDatabase = {
     waterHardness: '2-20 dGH',
     lifespan: '3-5 years',
     careLevel: 'Very Easy',
+    breedingNeeds:
+      'Egg scatterer; spawns among plants; eggs hatch in 24-36 hours; easy to breed; tolerates brackish water',
+    genderDifferentiation:
+      'Males slimmer with more intense fin coloration; females fuller-bodied especially when gravid',
   },
 
   blackPhantomTetra: {
@@ -2153,6 +2663,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 7.5,
     tankSizeMin: 15,
+    tankSizeRecommended: 25,
     tankSizeUnit: 'gallons',
     maxSize: 1.75,
     sizeUnit: 'inches',
@@ -2162,6 +2673,10 @@ var fishDatabase = {
     waterHardness: '3-15 dGH',
     lifespan: '3-5 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Egg scatterer; spawns among plants; eggs hatch in 24-36 hours; condition with live foods; remove adults',
+    genderDifferentiation:
+      'Males have dark charcoal body with large dorsal fin; females pinkish-red with smaller dorsal fin',
   },
 
   redPhantomTetra: {
@@ -2174,6 +2689,7 @@ var fishDatabase = {
     phMin: 5.0,
     phMax: 6.5,
     tankSizeMin: 20,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 1.5,
     sizeUnit: 'inches',
@@ -2183,6 +2699,10 @@ var fishDatabase = {
     waterHardness: '2-6 dGH',
     lifespan: '3-5 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Egg scatterer; spawns over plants/substrate; eggs hatch in 24-36 hours; requires soft acidic water',
+    genderDifferentiation:
+      'Males slimmer with more intense red coloration; females fuller-bodied especially when gravid',
   },
 
   // Additional Barbs
@@ -2197,6 +2717,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 7.5,
     tankSizeMin: 20,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 2.5,
     sizeUnit: 'inches',
@@ -2206,6 +2727,10 @@ var fishDatabase = {
     waterHardness: '5-12 dGH',
     lifespan: '4-6 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Egg scatterer; spawns among plants; eggs hatch in 24-36 hours; cooler temperatures trigger breeding',
+    genderDifferentiation:
+      'Males develop intense ruby-red and black coloration when breeding; females larger, paler with yellowish tinge',
   },
 
   tictoBarb: {
@@ -2219,6 +2744,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 8.0,
     tankSizeMin: 20,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 4,
     sizeUnit: 'inches',
@@ -2228,6 +2754,10 @@ var fishDatabase = {
     waterHardness: '5-19 dGH',
     lifespan: '5-7 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Egg scatterer; spawns among plants; eggs hatch in 24-36 hours; easy to breed in well-planted tank',
+    genderDifferentiation:
+      'Males slimmer with more intense coloration; females fuller-bodied, especially when gravid',
   },
 
   checkerBarb: {
@@ -2241,6 +2771,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 7.5,
     tankSizeMin: 20,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 2,
     sizeUnit: 'inches',
@@ -2250,6 +2781,10 @@ var fishDatabase = {
     waterHardness: '5-12 dGH',
     lifespan: '3-5 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Egg scatterer; spawns among plants; eggs hatch in 24-36 hours; easy to breed in soft acidic water',
+    genderDifferentiation:
+      'Males slimmer with red-orange fin edges; females fuller-bodied with less intense fin coloration',
   },
 
   pentazonaBarb: {
@@ -2263,6 +2798,7 @@ var fishDatabase = {
     phMin: 5.0,
     phMax: 6.5,
     tankSizeMin: 20,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 2,
     sizeUnit: 'inches',
@@ -2272,6 +2808,10 @@ var fishDatabase = {
     waterHardness: '1-5 dGH',
     lifespan: '3-5 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Egg scatterer; spawns among plants; eggs hatch in 24-36 hours; requires very soft acidic water',
+    genderDifferentiation:
+      'Males slimmer with brighter coloration; females fuller-bodied, especially when gravid',
   },
 
   // Additional Rasboras & Small Cyprinids
@@ -2286,6 +2826,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 7.5,
     tankSizeMin: 30,
+    tankSizeRecommended: 40,
     tankSizeUnit: 'gallons',
     maxSize: 6,
     sizeUnit: 'inches',
@@ -2295,6 +2836,10 @@ var fishDatabase = {
     waterHardness: '2-15 dGH',
     lifespan: '5-10 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Egg scatterer; spawns among fine plants/moss; eggs hatch in 24-36 hours; tiny fry need infusoria',
+    genderDifferentiation:
+      'Males slimmer with more intense red fin coloration; females fuller-bodied especially when gravid',
   },
 
   lambchopRasbora: {
@@ -2308,6 +2853,7 @@ var fishDatabase = {
     phMin: 5.0,
     phMax: 7.0,
     tankSizeMin: 10,
+    tankSizeRecommended: 20,
     tankSizeUnit: 'gallons',
     maxSize: 1.5,
     sizeUnit: 'inches',
@@ -2317,6 +2863,10 @@ var fishDatabase = {
     waterHardness: '1-12 dGH',
     lifespan: '3-5 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Egg depositor; adheres eggs to underside of broad leaves; eggs hatch in 24-48 hours; similar to harlequin rasbora',
+    genderDifferentiation:
+      'Males slimmer with brighter golden/orange coloration; females fuller-bodied with rounder bellies',
   },
 
   brilliantRasbora: {
@@ -2329,6 +2879,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 7.0,
     tankSizeMin: 20,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 3.5,
     sizeUnit: 'inches',
@@ -2338,6 +2889,10 @@ var fishDatabase = {
     waterHardness: '2-12 dGH',
     lifespan: '5-8 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Egg scatterer; spawns among plants in early morning; eggs hatch in 24-36 hours; requires soft acidic water',
+    genderDifferentiation:
+      'Males slimmer with more brilliant iridescent sheen; females rounder, deeper-bodied especially when gravid',
   },
 
   phoenixRasbora: {
@@ -2350,6 +2905,7 @@ var fishDatabase = {
     phMin: 5.0,
     phMax: 7.0,
     tankSizeMin: 5,
+    tankSizeRecommended: 15,
     tankSizeUnit: 'gallons',
     maxSize: 0.75,
     sizeUnit: 'inches',
@@ -2359,6 +2915,10 @@ var fishDatabase = {
     waterHardness: '1-8 dGH',
     lifespan: '2-4 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Egg scatterer; spawns among fine-leaved plants; eggs hatch in 24-48 hours; tiny fry need infusoria or paramecium',
+    genderDifferentiation:
+      'Males slimmer with more intense red-orange coloration; females fuller-bodied with paler coloration',
   },
 
   strawberryRasbora: {
@@ -2371,6 +2931,7 @@ var fishDatabase = {
     phMin: 5.0,
     phMax: 7.0,
     tankSizeMin: 5,
+    tankSizeRecommended: 15,
     tankSizeUnit: 'gallons',
     maxSize: 0.75,
     sizeUnit: 'inches',
@@ -2380,6 +2941,10 @@ var fishDatabase = {
     waterHardness: '1-6 dGH',
     lifespan: '2-4 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Egg scatterer; spawns among fine-leaved plants; eggs hatch in 24-48 hours; tiny fry need infusoria',
+    genderDifferentiation:
+      'Males slimmer with deeper pinkish-red coloration; females fuller-bodied with more rounded bellies',
   },
 
   emeraldDwarfRasbora: {
@@ -2393,6 +2958,7 @@ var fishDatabase = {
     phMin: 7.0,
     phMax: 7.8,
     tankSizeMin: 10,
+    tankSizeRecommended: 20,
     tankSizeUnit: 'gallons',
     maxSize: 1,
     sizeUnit: 'inches',
@@ -2402,6 +2968,10 @@ var fishDatabase = {
     waterHardness: '8-12 dGH',
     lifespan: '3-5 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Egg scatterer; spawns among fine plants/moss; eggs hatch in 72 hours; tiny fry need paramecium or infusoria',
+    genderDifferentiation:
+      'Males more intensely colored with deeper bands; females fuller-bodied with less vibrant coloration',
   },
 
   goldWhiteCloud: {
@@ -2414,6 +2984,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 8.0,
     tankSizeMin: 10,
+    tankSizeRecommended: 20,
     tankSizeUnit: 'gallons',
     maxSize: 1.5,
     sizeUnit: 'inches',
@@ -2423,6 +2994,10 @@ var fishDatabase = {
     waterHardness: '5-19 dGH',
     lifespan: '5-7 years',
     careLevel: 'Very Easy',
+    breedingNeeds:
+      'Egg scatterer; spawns continuously in planted tanks; eggs hatch in 48-60 hours; very easy to breed',
+    genderDifferentiation:
+      'Males slimmer with brighter golden coloration and white fin edges; females fuller-bodied especially when gravid',
   },
 
   // Additional Livebearers
@@ -2436,6 +3011,7 @@ var fishDatabase = {
     phMin: 7.0,
     phMax: 8.5,
     tankSizeMin: 30,
+    tankSizeRecommended: 50,
     tankSizeUnit: 'gallons',
     maxSize: 6,
     sizeUnit: 'inches',
@@ -2445,6 +3021,10 @@ var fishDatabase = {
     waterHardness: '15-30 dGH',
     lifespan: '3-5 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Livebearer; gestation 28-35 days; 20-100 fry per brood; prefers brackish water for best results',
+    genderDifferentiation:
+      'Males smaller with massive sail-like dorsal fin and gonopodium; females larger with fan-shaped anal fin',
   },
 
   dalmatianMolly: {
@@ -2457,6 +3037,7 @@ var fishDatabase = {
     phMin: 7.0,
     phMax: 8.5,
     tankSizeMin: 30,
+    tankSizeRecommended: 40,
     tankSizeUnit: 'gallons',
     maxSize: 4.5,
     sizeUnit: 'inches',
@@ -2466,6 +3047,10 @@ var fishDatabase = {
     waterHardness: '15-30 dGH',
     lifespan: '3-5 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Livebearer; gestation 28-45 days; 20-60 fry per brood; prolific breeder; may eat fry',
+    genderDifferentiation:
+      'Males smaller with gonopodium; females larger with fan-shaped anal fin and rounded belly',
   },
 
   mosquitofish: {
@@ -2479,6 +3064,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 8.0,
     tankSizeMin: 20,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 2.5,
     sizeUnit: 'inches',
@@ -2488,6 +3074,10 @@ var fishDatabase = {
     waterHardness: '5-30 dGH',
     lifespan: '2-3 years',
     careLevel: 'Very Easy',
+    breedingNeeds:
+      'Livebearer; gestation 21-28 days; 10-100 fry per brood; extremely prolific; considered invasive species',
+    genderDifferentiation:
+      'Males much smaller with gonopodium; females larger (up to 2.5"), fuller-bodied with gravid spot',
   },
 
   // Additional Cichlids
@@ -2502,6 +3092,7 @@ var fishDatabase = {
     phMin: 5.0,
     phMax: 7.0,
     tankSizeMin: 20,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 3.5,
     sizeUnit: 'inches',
@@ -2511,6 +3102,10 @@ var fishDatabase = {
     waterHardness: '2-10 dGH',
     lifespan: '3-5 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Cave spawner; female guards eggs in cave/crevice; eggs hatch in 3-4 days; female cares for fry',
+    genderDifferentiation:
+      'Males larger with elongated fins (especially caudal) and brighter colors; females smaller, yellower when breeding',
   },
 
   blueAcara: {
@@ -2524,6 +3119,7 @@ var fishDatabase = {
     phMin: 6.5,
     phMax: 8.0,
     tankSizeMin: 30,
+    tankSizeRecommended: 50,
     tankSizeUnit: 'gallons',
     maxSize: 6,
     sizeUnit: 'inches',
@@ -2533,6 +3129,10 @@ var fishDatabase = {
     waterHardness: '6-20 dGH',
     lifespan: '8-10 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Substrate spawner; pair cleans flat rock; both parents guard eggs and fry; eggs hatch in 3-4 days',
+    genderDifferentiation:
+      'Males larger with more pointed dorsal and anal fins; females smaller, rounder when gravid',
   },
 
   severum: {
@@ -2546,6 +3146,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 7.5,
     tankSizeMin: 55,
+    tankSizeRecommended: 75,
     tankSizeUnit: 'gallons',
     maxSize: 8,
     sizeUnit: 'inches',
@@ -2555,6 +3156,10 @@ var fishDatabase = {
     waterHardness: '6-20 dGH',
     lifespan: '10-15 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Substrate spawner; pair cleans flat surface; both parents guard eggs; eggs hatch in 3-5 days',
+    genderDifferentiation:
+      'Males develop pointed dorsal/anal fins and facial markings; females rounder fins, fuller body when gravid',
   },
 
   oscar: {
@@ -2567,6 +3172,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 8.0,
     tankSizeMin: 75,
+    tankSizeRecommended: 125,
     tankSizeUnit: 'gallons',
     maxSize: 12,
     sizeUnit: 'inches',
@@ -2576,6 +3182,10 @@ var fishDatabase = {
     waterHardness: '5-20 dGH',
     lifespan: '10-20 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Substrate spawner; pair cleans flat rock; both parents guard eggs; 1000-2000 eggs per spawn; eggs hatch in 3-4 days',
+    genderDifferentiation:
+      'Difficult to sex; males may develop slight nuchal hump; vent sexing most reliable method',
   },
 
   jackDempsey: {
@@ -2589,6 +3199,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 8.0,
     tankSizeMin: 55,
+    tankSizeRecommended: 75,
     tankSizeUnit: 'gallons',
     maxSize: 10,
     sizeUnit: 'inches',
@@ -2598,6 +3209,10 @@ var fishDatabase = {
     waterHardness: '9-20 dGH',
     lifespan: '10-15 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Substrate spawner; pair cleans flat surface; both parents guard aggressively; eggs hatch in 3-6 days',
+    genderDifferentiation:
+      'Males larger with more iridescent spots, pointed dorsal/anal fins; females smaller with less prominent markings',
   },
 
   jewelCichlid: {
@@ -2611,6 +3226,7 @@ var fishDatabase = {
     phMin: 6.5,
     phMax: 7.5,
     tankSizeMin: 30,
+    tankSizeRecommended: 40,
     tankSizeUnit: 'gallons',
     maxSize: 6,
     sizeUnit: 'inches',
@@ -2620,6 +3236,10 @@ var fishDatabase = {
     waterHardness: '8-15 dGH',
     lifespan: '5-8 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Substrate spawner; pair cleans flat surface; both parents extremely protective; eggs hatch in 2-4 days',
+    genderDifferentiation:
+      'Difficult to sex; males may have more pointed fins; both develop intense red when breeding',
   },
 
   peacockCichlid: {
@@ -2633,6 +3253,7 @@ var fishDatabase = {
     phMin: 7.5,
     phMax: 8.5,
     tankSizeMin: 55,
+    tankSizeRecommended: 75,
     tankSizeUnit: 'gallons',
     maxSize: 6,
     sizeUnit: 'inches',
@@ -2642,6 +3263,10 @@ var fishDatabase = {
     waterHardness: '10-25 dGH',
     lifespan: '6-8 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Maternal mouthbrooder; female holds eggs in mouth for 3-4 weeks; 15-60 fry per brood; male courts with color display',
+    genderDifferentiation:
+      'Males brilliantly colored with blue, yellow, orange; females drab silver-brown; males develop egg spots on anal fin',
   },
 
   yellowLabCichlid: {
@@ -2654,6 +3279,7 @@ var fishDatabase = {
     phMin: 7.8,
     phMax: 8.9,
     tankSizeMin: 30,
+    tankSizeRecommended: 50,
     tankSizeUnit: 'gallons',
     maxSize: 5,
     sizeUnit: 'inches',
@@ -2663,6 +3289,10 @@ var fishDatabase = {
     waterHardness: '10-25 dGH',
     lifespan: '6-10 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Maternal mouthbrooder; female holds eggs in mouth for 3-4 weeks; 10-30 fry per brood; relatively peaceful mbuna',
+    genderDifferentiation:
+      'Males have stronger black dorsal fin edging; females paler with less black markings; males develop egg spots',
   },
 
   keyholeCichlid: {
@@ -2676,6 +3306,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 7.5,
     tankSizeMin: 20,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 5,
     sizeUnit: 'inches',
@@ -2685,6 +3316,10 @@ var fishDatabase = {
     waterHardness: '3-10 dGH',
     lifespan: '8-10 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Substrate spawner; pair cleans flat surface; both parents guard; eggs hatch in 3-4 days; peaceful even when breeding',
+    genderDifferentiation:
+      'Difficult to sex; males may have slightly longer fin extensions; females fuller-bodied when gravid',
   },
 
   // Additional Catfish & Bottom Dwellers
@@ -2698,6 +3333,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 7.5,
     tankSizeMin: 20,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 2,
     sizeUnit: 'inches',
@@ -2707,6 +3343,10 @@ var fishDatabase = {
     waterHardness: '2-15 dGH',
     lifespan: '5-8 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'T-position spawning; female holds eggs in pelvic fins and places on surfaces; cool water change triggers spawning',
+    genderDifferentiation:
+      'Females larger and fuller-bodied when viewed from above; males slimmer with more pointed pelvic fins',
   },
 
   pictusCatfish: {
@@ -2719,6 +3359,7 @@ var fishDatabase = {
     phMin: 7.0,
     phMax: 7.5,
     tankSizeMin: 55,
+    tankSizeRecommended: 75,
     tankSizeUnit: 'gallons',
     maxSize: 5,
     sizeUnit: 'inches',
@@ -2728,6 +3369,10 @@ var fishDatabase = {
     waterHardness: '5-19 dGH',
     lifespan: '8-10 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Not bred in home aquarium; requires specific conditions including large space and hormonal injection commercially',
+    genderDifferentiation:
+      'Very difficult to sex; mature females may appear slightly fuller-bodied',
   },
 
   siameseAlgaeEater: {
@@ -2741,6 +3386,7 @@ var fishDatabase = {
     phMin: 6.5,
     phMax: 8.0,
     tankSizeMin: 30,
+    tankSizeRecommended: 50,
     tankSizeUnit: 'gallons',
     maxSize: 6,
     sizeUnit: 'inches',
@@ -2750,6 +3396,10 @@ var fishDatabase = {
     waterHardness: '5-20 dGH',
     lifespan: '10+ years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Not bred in home aquarium; requires hormonal injection commercially; wild breeding conditions unknown',
+    genderDifferentiation:
+      'Very difficult to sex; mature females may appear slightly fuller-bodied when gravid',
   },
 
   twigCatfish: {
@@ -2763,6 +3413,7 @@ var fishDatabase = {
     phMin: 6.5,
     phMax: 7.5,
     tankSizeMin: 35,
+    tankSizeRecommended: 50,
     tankSizeUnit: 'gallons',
     maxSize: 8,
     sizeUnit: 'inches',
@@ -2772,6 +3423,10 @@ var fishDatabase = {
     waterHardness: '6-12 dGH',
     lifespan: '8-10 years',
     careLevel: 'Difficult',
+    breedingNeeds:
+      'Male guards eggs on flat surface; eggs hatch in 7-10 days; requires pristine water and heavy oxygen; challenging',
+    genderDifferentiation:
+      'Males have wider rostrum (snout) with small odontodes; females have narrower, smoother rostrum',
   },
 
   dwarfPetricola: {
@@ -2785,6 +3440,7 @@ var fishDatabase = {
     phMin: 7.5,
     phMax: 9.0,
     tankSizeMin: 20,
+    tankSizeRecommended: 30,
     tankSizeUnit: 'gallons',
     maxSize: 4,
     sizeUnit: 'inches',
@@ -2794,6 +3450,10 @@ var fishDatabase = {
     waterHardness: '10-25 dGH',
     lifespan: '8-15 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Cuckoo breeder in wild (uses mouthbrooding cichlids); rarely bred in aquarium; requires specific Lake Tanganyika conditions',
+    genderDifferentiation:
+      'Difficult to sex; females may be slightly larger and fuller-bodied when gravid',
   },
 
   // Additional Loaches
@@ -2808,6 +3468,7 @@ var fishDatabase = {
     phMin: 6.5,
     phMax: 8.0,
     tankSizeMin: 55,
+    tankSizeRecommended: 75,
     tankSizeUnit: 'gallons',
     maxSize: 12,
     sizeUnit: 'inches',
@@ -2817,6 +3478,10 @@ var fishDatabase = {
     waterHardness: '5-12 dGH',
     lifespan: '7-10 years',
     careLevel: 'Very Easy',
+    breedingNeeds:
+      'Rarely bred in aquarium; requires seasonal cold period; eggs scattered among plants; challenging',
+    genderDifferentiation:
+      'Males develop enlarged pectoral fins; females fuller-bodied especially when gravid',
   },
 
   // Additional Gouramis
@@ -2830,6 +3495,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 8.8,
     tankSizeMin: 30,
+    tankSizeRecommended: 40,
     tankSizeUnit: 'gallons',
     maxSize: 6,
     sizeUnit: 'inches',
@@ -2839,6 +3505,10 @@ var fishDatabase = {
     waterHardness: '5-35 dGH',
     lifespan: '4-6 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Bubble nest builder; male builds nest at surface and guards eggs; eggs hatch in 24-48 hours; fry need infusoria',
+    genderDifferentiation:
+      'Males have longer, pointed dorsal fin; females have shorter, rounded dorsal fin; males more colorful',
   },
 
   goldGourami: {
@@ -2851,6 +3521,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 8.8,
     tankSizeMin: 30,
+    tankSizeRecommended: 40,
     tankSizeUnit: 'gallons',
     maxSize: 6,
     sizeUnit: 'inches',
@@ -2860,6 +3531,10 @@ var fishDatabase = {
     waterHardness: '5-35 dGH',
     lifespan: '4-6 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Bubble nest builder; male builds nest at surface and guards eggs; eggs hatch in 24-48 hours; fry need infusoria',
+    genderDifferentiation:
+      'Males have longer, pointed dorsal fin; females have shorter, rounded dorsal fin; males more intensely golden',
   },
 
   blueGourami: {
@@ -2872,6 +3547,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 8.8,
     tankSizeMin: 30,
+    tankSizeRecommended: 40,
     tankSizeUnit: 'gallons',
     maxSize: 6,
     sizeUnit: 'inches',
@@ -2881,6 +3557,10 @@ var fishDatabase = {
     waterHardness: '5-35 dGH',
     lifespan: '4-6 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Bubble nest builder; male builds nest at surface and guards eggs; eggs hatch in 24-48 hours; fry need infusoria',
+    genderDifferentiation:
+      'Males have longer, pointed dorsal fin; females have shorter, rounded dorsal fin; males more intensely blue',
   },
 
   kissingGourami: {
@@ -2894,6 +3574,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 8.0,
     tankSizeMin: 50,
+    tankSizeRecommended: 75,
     tankSizeUnit: 'gallons',
     maxSize: 12,
     sizeUnit: 'inches',
@@ -2903,6 +3584,10 @@ var fishDatabase = {
     waterHardness: '5-20 dGH',
     lifespan: '5-7 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Egg scatterer (unusual for gouramis); floating eggs among vegetation; eggs hatch in 24 hours; rarely bred in aquarium',
+    genderDifferentiation:
+      'Very difficult to sex; females may appear fuller-bodied when gravid; no reliable external differences',
   },
 
   moonlightGourami: {
@@ -2916,6 +3601,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 7.5,
     tankSizeMin: 30,
+    tankSizeRecommended: 40,
     tankSizeUnit: 'gallons',
     maxSize: 6,
     sizeUnit: 'inches',
@@ -2925,6 +3611,10 @@ var fishDatabase = {
     waterHardness: '2-25 dGH',
     lifespan: '4-6 years',
     careLevel: 'Easy',
+    breedingNeeds:
+      'Bubble nest builder; male builds nest under floating plants; eggs hatch in 24-48 hours; male guards fry',
+    genderDifferentiation:
+      'Males have red-orange pelvic fins; females have yellow pelvic fins; males more concave forehead profile',
   },
 
   // Oddball/Specialty Fish
@@ -2939,6 +3629,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 7.0,
     tankSizeMin: 30,
+    tankSizeRecommended: 40,
     tankSizeUnit: 'gallons',
     maxSize: 5,
     sizeUnit: 'inches',
@@ -2948,6 +3639,10 @@ var fishDatabase = {
     waterHardness: '1-10 dGH',
     lifespan: '6+ years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Surface spawner; floating eggs among plants; eggs hatch in 3-5 days; rarely bred in aquarium; needs very soft acidic water',
+    genderDifferentiation:
+      'Males have convex anal fin edge; females have straight anal fin edge; difficult to distinguish otherwise',
   },
 
   senegalBichir: {
@@ -2961,6 +3656,7 @@ var fishDatabase = {
     phMin: 6.5,
     phMax: 7.5,
     tankSizeMin: 90,
+    tankSizeRecommended: 125,
     tankSizeUnit: 'gallons',
     maxSize: 12,
     sizeUnit: 'inches',
@@ -2970,6 +3666,10 @@ var fishDatabase = {
     waterHardness: '5-20 dGH',
     lifespan: '10-15 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Male clasps eggs with cupped anal fin; eggs scattered among plants; eggs hatch in 3-4 days; challenging in aquarium',
+    genderDifferentiation:
+      'Males have thicker, wider anal fin; females have thinner anal fin and fuller body when gravid',
   },
 
   peaPuffer: {
@@ -2982,6 +3682,7 @@ var fishDatabase = {
     phMin: 7.0,
     phMax: 8.0,
     tankSizeMin: 5,
+    tankSizeRecommended: 10,
     tankSizeUnit: 'gallons',
     maxSize: 1,
     sizeUnit: 'inches',
@@ -2991,6 +3692,10 @@ var fishDatabase = {
     waterHardness: '5-15 dGH',
     lifespan: '4-5 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Egg depositor; deposits eggs among plants; male guards eggs; eggs hatch in 5 days; challenging; requires pristine conditions',
+    genderDifferentiation:
+      'Males have dark belly stripe and iridescent eye wrinkle; females rounder, lacking belly stripe; males more colorful',
   },
 
   elephantNoseFish: {
@@ -3004,6 +3709,7 @@ var fishDatabase = {
     phMin: 6.0,
     phMax: 7.5,
     tankSizeMin: 50,
+    tankSizeRecommended: 75,
     tankSizeUnit: 'gallons',
     maxSize: 9,
     sizeUnit: 'inches',
@@ -3013,6 +3719,10 @@ var fishDatabase = {
     waterHardness: '5-15 dGH',
     lifespan: '8-10 years',
     careLevel: 'Difficult',
+    breedingNeeds:
+      'Not bred in home aquarium; requires specific conditions replicating seasonal flooding; uses electrical signals during courtship',
+    genderDifferentiation:
+      'Very difficult to sex; males may have slightly different anal fin shape; electrical signal analysis used in research',
   },
 
   ropeFish: {
@@ -3026,6 +3736,7 @@ var fishDatabase = {
     phMin: 6.5,
     phMax: 7.5,
     tankSizeMin: 50,
+    tankSizeRecommended: 75,
     tankSizeUnit: 'gallons',
     maxSize: 15,
     sizeUnit: 'inches',
@@ -3035,5 +3746,9 @@ var fishDatabase = {
     waterHardness: '8-12 dGH',
     lifespan: '10-15 years',
     careLevel: 'Moderate',
+    breedingNeeds:
+      'Not bred in home aquarium; wild breeding during rainy season; eggs deposited among plants; requires seasonal simulation',
+    genderDifferentiation:
+      'Males have 12-14 dorsal finlets; females have 9-12 dorsal finlets; males may have thicker anal fin',
   },
 };
