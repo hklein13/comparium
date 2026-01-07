@@ -12,6 +12,20 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - User works on Windows PC (path handling and command syntax differs from Mac/Linux)
 - User's local folder: `C:\Users\HarrisonKlein\Downloads\comparium-live`
 
+## Session Start Checklist
+
+**Before starting work, check these gitignored files for additional context:**
+
+```
+.claude/
+├── plans/              ← Active phase plans with step-by-step instructions
+│   └── *.md            ← Read any plan files for current work details
+├── user-context.md     ← Firebase credentials and account info
+└── settings.json       ← Hooks configuration (already auto-loaded)
+```
+
+If a phase is in progress (see "Current Phase" below), there should be a plan file in `.claude/plans/` with detailed sub-phase instructions, validation commands, and notes from previous sessions.
+
 ## Project Overview
 
 **Comparium** - Web-based platform for comparing aquarium species with Firebase backend.
@@ -225,8 +239,6 @@ Development follows a phased approach. See `DATA-MODEL.md` for complete specific
 - Source data from `aquarium_fish_species_summaries.md` (local, not committed)
 - Many corrections made to source data for biological accuracy (e.g., rasboras incorrectly marked as bubble nesters)
 - Code-reviewed and validated with `npm run test:data`
-
-**Detailed plan file:** `.claude/plans/linked-dazzling-island.md`
 
 ## Git Workflow
 
