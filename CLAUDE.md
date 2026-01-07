@@ -242,13 +242,13 @@ Development follows a phased approach. See `DATA-MODEL.md` for complete specific
 
 ## Git Workflow
 
+### CRITICAL RULE
+**NEVER push directly to main.** Always use a staging branch and let the user merge via PR.
+
 ### Current State (January 2026)
 **Active branch:** `claude/phase3-content-expansion` (Phase 3 content expansion in progress)
 
 **Main branch:** Fully up to date with Phase 2 complete (merged)
-
-### CRITICAL RULE
-**NEVER push directly to main.** Always use a staging branch and let the user merge via PR.
 
 ### Workflow for Phase 3
 ```bash
@@ -265,9 +265,10 @@ git push -u origin claude/phase3-content-expansion
 
 ### Deployment Flow
 1. Claude creates branch from main, commits/pushes changes
-2. User runs `git pull` to get changes
-3. User tests locally with `http-server`
-4. User merges to main via GitHub (deploys to live site)
+2. Claude tells user the branch is ready
+3. User creates PR on GitHub, reviews changes
+4. User merges to main (auto-deploys to live site)
+5. Claude runs `git checkout main && git pull` to sync
 
 ## Core Principles
 
@@ -300,7 +301,8 @@ git push -u origin claude/phase3-content-expansion
 - ✅ Security rules tests passing (25 checks)
 - ✅ Cloud Function tests available (dry-run simulation)
 - ✅ All 4 Cloud Functions deployed and operational
-- ✅ Phase 2 complete - branch ready for merge to main
+- ✅ **Phase 2 complete and merged to main**
+- ⏳ Phase 3 ready to start (expanded glossary)
 
 **Note:** The `.claude/` folder is gitignored (contains local settings and hooks). Hooks are already configured and working.
 

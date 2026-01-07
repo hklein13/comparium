@@ -40,10 +40,10 @@ _Last Updated: January 6, 2026_
 
 ---
 
-## READY FOR MERGE: Complete Phase 2 - Notifications + FCM Push
+## COMPLETED: Phase 2 - Notifications + FCM Push (MERGED)
 
-**Branch:** `claude/phase2-notifications`
-**Status:** All features complete and deployed. Ready for user to merge to main.
+**Status:** ✅ All features merged to main (January 6, 2026)
+**Branch:** `claude/phase2-notifications` - can be deleted
 
 ### Phase 2A - Notification UI (Complete)
 - [x] Notification bell icon in dashboard header
@@ -198,12 +198,13 @@ These issues were identified in code review but are low-risk. Address when time 
 
 ---
 
-## Current State
+## Current State (January 6, 2026)
 
-**Main Branch:** Up to date with Phase 2A (notification UI)
-**Staging Branch:** `claude/phase2-notifications` (Complete Phase 2 - ready for merge)
-**Live Site:** https://comparium.net
-**Cloud Functions:** All 4 deployed and operational:
+**Main Branch:** ✅ Fully up to date - Phase 2 complete and merged
+**Staging Branch:** None active (create `claude/phase3-glossary` for next work)
+**Live Site:** https://comparium.net (auto-deploys from main)
+
+**Cloud Functions (all deployed):**
 - `helloComparium` - Test/health check (HTTP)
 - `checkDueSchedules` - Daily 8 AM UTC (scheduler)
 - `sendPushNotification` - On notification create (Firestore trigger)
@@ -214,17 +215,45 @@ These issues were identified in code review but are low-risk. Address when time 
 - Data integrity: 143 species validated
 - Security rules: 25 checks passed
 
-**To merge Phase 2 to main:**
-1. Go to https://github.com/hklein13/comparium/pull/new/claude/phase2-notifications
-2. Create PR, review changes
-3. Merge to main (auto-deploys hosting to live site)
+**Local uncommitted files (intentionally kept local):**
+- `aquarium_fish_species_summaries.md` - Fish summaries reference
+- `Tracking changes sheet.xlsx` - Excel tracking
+- `landing-preview.html` - Preview page
+- `scripts/temp-images/` - Temp folder
 
-**To start new work after merge:**
+---
+
+## Next Session: Start Phase 3
+
+**Phase 3: Expanded Glossary** - Add equipment, plants, and diseases databases.
+
+### To Start
 ```bash
 git checkout main
 git pull origin main
-git checkout -b claude/[feature-name]
+git checkout -b claude/phase3-glossary
 ```
+
+### What to Build
+See `DATA-MODEL.md` Phase 3 section for complete schemas:
+1. `equipment` collection - Filters, heaters, lights with specs
+2. `plants` collection - Aquarium plants with care info
+3. `diseases` collection - Fish diseases with symptoms/treatment
+
+### Key Files to Create/Modify
+- `js/equipment-data.js` - Equipment source data (like fish-data.js)
+- `js/plants-data.js` - Plants source data
+- `js/diseases-data.js` - Diseases source data
+- `scripts/migrate-equipment-to-firestore.js` - Migration script
+- `glossary.html` - Add tabs/sections for new content types
+- `firestore.rules` - Add rules for new collections
+
+### CRITICAL: Git Workflow
+**NEVER push directly to main.** Always:
+1. Work on staging branch (`claude/phase3-glossary`)
+2. Push to staging branch
+3. Tell user branch is ready
+4. User creates PR and merges to main
 
 ---
 
