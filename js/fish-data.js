@@ -1328,7 +1328,7 @@ var fishDatabase = {
   rosyBarb: {
     commonName: 'Rosy Barb',
     scientificName: 'Pethia conchonius',
-    imageUrl: null,
+    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FrosyBarb.jpg?alt=media",
     tempMin: 61,
     tempMax: 75,
     tempUnit: '°F',
@@ -1353,7 +1353,7 @@ var fishDatabase = {
   goldBarb: {
     commonName: 'Gold Barb',
     scientificName: 'Barbodes semifasciolatus',
-    imageUrl: null,
+    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FgoldBarb.jpg?alt=media",
     tempMin: 61,
     tempMax: 75,
     tempUnit: '°F',
@@ -1378,7 +1378,7 @@ var fishDatabase = {
   odessaBarb: {
     commonName: 'Odessa Barb',
     scientificName: 'Pethia padamya',
-    imageUrl: null,
+    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FodessaBarb.jpg?alt=media",
     tempMin: 70,
     tempMax: 79,
     tempUnit: '°F',
@@ -1403,7 +1403,7 @@ var fishDatabase = {
   denisonBarb: {
     commonName: 'Denison Barb',
     scientificName: 'Sahyadria denisonii',
-    imageUrl: null,
+    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FdenisonBarb.jpg?alt=media",
     tempMin: 59,
     tempMax: 77,
     tempUnit: '°F',
@@ -1560,7 +1560,7 @@ var fishDatabase = {
   threadfinRainbowfish: {
     commonName: 'Threadfin Rainbowfish',
     scientificName: 'Iriatherina werneri',
-    imageUrl: null,
+    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FthreadfinRainbowfish.jpg?alt=media",
     tempMin: 72,
     tempMax: 86,
     tempUnit: '°F',
@@ -1666,7 +1666,7 @@ var fishDatabase = {
   variatusPlaty: {
     commonName: 'Variatus Platy',
     scientificName: 'Xiphophorus variatus',
-    imageUrl: null,
+    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FvariatusPlaty.jpg?alt=media",
     tempMin: 68,
     tempMax: 79,
     tempUnit: '°F',
@@ -1744,7 +1744,7 @@ var fishDatabase = {
   threeSpotGourami: {
     commonName: 'Three Spot Gourami',
     scientificName: 'Trichopodus trichopterus',
-    imageUrl: null,
+    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FthreeSpotGourami.jpg?alt=media",
     tempMin: 75,
     tempMax: 86,
     tempUnit: '°F',
@@ -1769,7 +1769,7 @@ var fishDatabase = {
   chocolateGourami: {
     commonName: 'Chocolate Gourami',
     scientificName: 'Sphaerichthys osphromenoides',
-    imageUrl: null,
+    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FchocolateGourami.jpg?alt=media",
     tempMin: 79,
     tempMax: 88,
     tempUnit: '°F',
@@ -1794,7 +1794,7 @@ var fishDatabase = {
   paradiseFish: {
     commonName: 'Paradise Fish',
     scientificName: 'Macropodus opercularis',
-    imageUrl: null,
+    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FparadiseFish.jpg?alt=media",
     tempMin: 61,
     tempMax: 79,
     tempUnit: '°F',
@@ -1819,7 +1819,7 @@ var fishDatabase = {
   bettaImbellis: {
     commonName: 'Peaceful Betta',
     scientificName: 'Betta imbellis',
-    imageUrl: null,
+    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FbettaImbellis.jpg?alt=media",
     tempMin: 68,
     tempMax: 82,
     tempUnit: '°F',
@@ -1846,7 +1846,7 @@ var fishDatabase = {
   kribensis: {
     commonName: 'Kribensis',
     scientificName: 'Pelvicachromis pulcher',
-    imageUrl: null,
+    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2Fkribensis.jpg?alt=media",
     tempMin: 75,
     tempMax: 81,
     tempUnit: '°F',
@@ -1871,7 +1871,7 @@ var fishDatabase = {
   bolivianRam: {
     commonName: 'Bolivian Ram',
     scientificName: 'Mikrogeophagus altispinosus',
-    imageUrl: null,
+    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FbolivianRam.jpg?alt=media",
     tempMin: 75,
     tempMax: 82,
     tempUnit: '°F',
@@ -1896,7 +1896,7 @@ var fishDatabase = {
   cockatooDwarfCichlid: {
     commonName: 'Cockatoo Dwarf Cichlid',
     scientificName: 'Apistogramma cacatuoides',
-    imageUrl: null,
+    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FcockatooDwarfCichlid.jpg?alt=media",
     tempMin: 75,
     tempMax: 84,
     tempUnit: '°F',
@@ -1947,7 +1947,7 @@ var fishDatabase = {
   firemouthCichlid: {
     commonName: 'Firemouth Cichlid',
     scientificName: 'Thorichthys meeki',
-    imageUrl: null,
+    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FfiremouthCichlid.jpg?alt=media",
     tempMin: 76,
     tempMax: 82,
     tempUnit: '°F',
@@ -1972,7 +1972,7 @@ var fishDatabase = {
   convictCichlid: {
     commonName: 'Convict Cichlid',
     scientificName: 'Amatitlania nigrofasciata',
-    imageUrl: null,
+    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FconvictCichlid.jpg?alt=media",
     tempMin: 75,
     tempMax: 82,
     tempUnit: '°F',
@@ -2023,7 +2023,7 @@ var fishDatabase = {
   discus: {
     commonName: 'Discus',
     scientificName: 'Symphysodon aequifasciatus',
-    imageUrl: null,
+    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2Fdiscus.jpg?alt=media",
     tempMin: 82,
     tempMax: 86,
     tempUnit: '°F',
@@ -2050,7 +2050,7 @@ var fishDatabase = {
   yoyoLoach: {
     commonName: 'Yoyo Loach',
     scientificName: 'Botia almorhae',
-    imageUrl: null,
+    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FyoyoLoach.jpg?alt=media",
     tempMin: 66,
     tempMax: 82,
     tempUnit: '°F',
@@ -2153,7 +2153,7 @@ var fishDatabase = {
   hillstreamLoach: {
     commonName: 'Hillstream Loach',
     scientificName: 'Sewellia lineolata',
-    imageUrl: null,
+    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FhillstreamLoach.jpg?alt=media",
     tempMin: 65,
     tempMax: 75,
     tempUnit: '°F',
@@ -2230,7 +2230,7 @@ var fishDatabase = {
   juliiCory: {
     commonName: 'Julii Cory',
     scientificName: 'Corydoras julii',
-    imageUrl: null,
+    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FjuliiCory.jpg?alt=media",
     tempMin: 73,
     tempMax: 79,
     tempUnit: '°F',
@@ -2359,7 +2359,7 @@ var fishDatabase = {
   glassCatfish: {
     commonName: 'Glass Catfish',
     scientificName: 'Kryptopterus vitreolus',
-    imageUrl: null,
+    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FglassCatfish.jpg?alt=media",
     tempMin: 75,
     tempMax: 80,
     tempUnit: '°F',
@@ -2682,7 +2682,7 @@ var fishDatabase = {
   redPhantomTetra: {
     commonName: 'Red Phantom Tetra',
     scientificName: 'Hyphessobrycon sweglesi',
-    imageUrl: null,
+    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FredPhantomTetra.jpg?alt=media",
     tempMin: 72,
     tempMax: 82,
     tempUnit: '°F',
@@ -2872,7 +2872,7 @@ var fishDatabase = {
   brilliantRasbora: {
     commonName: 'Brilliant Rasbora',
     scientificName: 'Rasbora einthovenii',
-    imageUrl: null,
+    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FbrilliantRasbora.jpg?alt=media",
     tempMin: 72,
     tempMax: 77,
     tempUnit: '°F',
@@ -2924,7 +2924,7 @@ var fishDatabase = {
   strawberryRasbora: {
     commonName: 'Strawberry Rasbora',
     scientificName: 'Boraras naevus',
-    imageUrl: null,
+    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FstrawberryRasbora.jpg?alt=media",
     tempMin: 76,
     tempMax: 82,
     tempUnit: '°F',
@@ -3352,7 +3352,7 @@ var fishDatabase = {
   pictusCatfish: {
     commonName: 'Pictus Catfish',
     scientificName: 'Pimelodus pictus',
-    imageUrl: null,
+    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FpictusCatfish.jpg?alt=media",
     tempMin: 75,
     tempMax: 81,
     tempUnit: '°F',
@@ -3488,7 +3488,7 @@ var fishDatabase = {
   opalineGourami: {
     commonName: 'Opaline Gourami',
     scientificName: 'Trichopodus trichopterus',
-    imageUrl: null,
+    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FopalineGourami.jpg?alt=media",
     tempMin: 73,
     tempMax: 82,
     tempUnit: '°F',
@@ -3540,7 +3540,7 @@ var fishDatabase = {
   blueGourami: {
     commonName: 'Blue Gourami',
     scientificName: 'Trichopodus trichopterus',
-    imageUrl: null,
+    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FblueGourami.jpg?alt=media",
     tempMin: 73,
     tempMax: 82,
     tempUnit: '°F',
