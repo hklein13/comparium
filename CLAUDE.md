@@ -124,6 +124,21 @@ glossary-generator.js (transforms data)
 - `js/faq.js` - FAQ accordion toggle and search functionality
 - `scripts/serviceAccountKey.json` - Firebase Admin credentials (gitignored, never commit)
 
+### ⚠️ Critical: Glossary Entry Structure Sync
+The migration script (`scripts/migrate-glossary-to-firestore.js`) has a **duplicated copy** of `generateGlossaryEntry()` (lines 180-196) that must stay in sync with `js/glossary-generator.js`.
+
+**Why duplication exists:** The migration runs in Node.js and can't easily import browser-side JS.
+
+**When modifying glossary entry structure:**
+1. Update `js/glossary-generator.js` (browser-side)
+2. Update `scripts/migrate-glossary-to-firestore.js` (Node-side, lines 180-196)
+3. Run `npm run migrate:glossary` to update Firestore
+
+**Key fields that must match:**
+- `id` - kebab-case for Firestore document ID
+- `fishKey` - original camelCase key for `fishDatabase` lookups and species.html links
+- All other entry properties (title, tags, category, etc.)
+
 ### Page Structure
 - **index.html** - Landing page (split hero with fish collage, demo CTA, species showcase, origin note)
 - **compare.html** - Fish comparison tool (the main app functionality)
@@ -455,7 +470,7 @@ Wikimedia Commons returns HTML error pages instead of images when rate limited.
 - **Glossary links broken after migration?** Check that `fishKey` field exists in both:
   - `js/glossary-generator.js` (generateGlossaryEntry function)
   - `scripts/migrate-glossary-to-firestore.js` (generateGlossaryEntry function, lines 180-196)
-  - These are duplicates that must stay in sync (see Architecture section)
+  - These are duplicates that must stay in sync (see "Critical: Glossary Entry Structure Sync" above)
 
 ### Image Upload Issues
 - **Images not showing after merge?** The upload workflow may have been interrupted
