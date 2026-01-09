@@ -2180,7 +2180,7 @@ var fishDatabase = {
   pepperedCory: {
     commonName: 'Peppered Cory',
     scientificName: 'Corydoras paleatus',
-    imageUrl: null,
+    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FpepperedCory.jpg?alt=media",
     tempMin: 60,
     tempMax: 78,
     tempUnit: '°F',
@@ -2205,7 +2205,7 @@ var fishDatabase = {
   sterbaiCory: {
     commonName: 'Sterbai Cory',
     scientificName: 'Corydoras sterbai',
-    imageUrl: null,
+    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FsterbaiCory.jpg?alt=media",
     tempMin: 73,
     tempMax: 82,
     tempUnit: '°F',
@@ -2255,7 +2255,7 @@ var fishDatabase = {
   albinoCory: {
     commonName: 'Albino Cory',
     scientificName: 'Corydoras aeneus (albino)',
-    imageUrl: null,
+    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FalbinoCory.jpg?alt=media",
     tempMin: 72,
     tempMax: 80,
     tempUnit: '°F',
@@ -2334,7 +2334,7 @@ var fishDatabase = {
   stripedRaphaelCatfish: {
     commonName: 'Striped Raphael Catfish',
     scientificName: 'Platydoras armatulus',
-    imageUrl: null,
+    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FstripedRaphaelCatfish.jpg?alt=media",
     tempMin: 75,
     tempMax: 82,
     tempUnit: '°F',
@@ -2464,7 +2464,7 @@ var fishDatabase = {
   bambooShrimp: {
     commonName: 'Bamboo Shrimp',
     scientificName: 'Atyopsis moluccensis',
-    imageUrl: null,
+    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FbambooShrimp.jpg?alt=media",
     tempMin: 70,
     tempMax: 78,
     tempUnit: '°F',
@@ -2489,7 +2489,7 @@ var fishDatabase = {
   singaporeShrimp: {
     commonName: 'Singapore Shrimp',
     scientificName: 'Macrobrachium lanchesteri',
-    imageUrl: null,
+    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FsingaporeShrimp.jpg?alt=media",
     tempMin: 70,
     tempMax: 82,
     tempUnit: '°F',
@@ -2516,7 +2516,7 @@ var fishDatabase = {
   ramshornSnail: {
     commonName: 'Ramshorn Snail',
     scientificName: 'Planorbidae family',
-    imageUrl: null,
+    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FramshornSnail.jpg?alt=media",
     tempMin: 60,
     tempMax: 80,
     tempUnit: '°F',
@@ -2575,7 +2575,7 @@ var fishDatabase = {
   emperorTetra: {
     commonName: 'Emperor Tetra',
     scientificName: 'Nematobrycon palmeri',
-    imageUrl: null,
+    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FemperorTetra.jpg?alt=media",
     tempMin: 73,
     tempMax: 81,
     tempUnit: '°F',
@@ -2898,7 +2898,7 @@ var fishDatabase = {
   phoenixRasbora: {
     commonName: 'Phoenix Rasbora',
     scientificName: 'Boraras merah',
-    imageUrl: null,
+    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FphoenixRasbora.jpg?alt=media",
     tempMin: 72,
     tempMax: 82,
     tempUnit: '°F',
@@ -3165,7 +3165,7 @@ var fishDatabase = {
   oscar: {
     commonName: 'Oscar',
     scientificName: 'Astronotus ocellatus',
-    imageUrl: null,
+    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2Foscar.jpg?alt=media",
     tempMin: 72,
     tempMax: 80,
     tempUnit: '°F',
