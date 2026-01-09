@@ -12,6 +12,25 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - User works on Windows PC (path handling and command syntax differs from Mac/Linux)
 - User's local folder: `C:\Users\HarrisonKlein\Downloads\comparium-live`
 
+## ASK QUESTIONS - IMPORTANT
+
+**ALWAYS ask questions when uncertain.** The user explicitly wants collaborative decision-making.
+
+### When to Ask:
+- Before making assumptions about data format or content
+- When choosing between multiple valid approaches
+- Before condensing, summarizing, or modifying source content
+- When something seems wrong or inconsistent
+- Before any significant change to existing functionality
+- When Wikimedia/external services fail - ask if user wants to retry or use alternatives
+
+### How to Ask:
+- Be specific about what you're uncertain about
+- Present options with pros/cons when applicable
+- Don't assume - verify with the user first
+
+**This helps ensure we think through everything in tandem.**
+
 ## Session Start Checklist
 
 **Before starting work, check these gitignored files for additional context:**
@@ -34,9 +53,9 @@ If a phase is in progress (see "Current Phase" below), there should be a plan fi
 - **Repository:** https://github.com/hklein13/comparium
 - **Firebase Project:** `comparium-21b69`
 
-**Current Stats:** 143 species in database, 94 with images from Wikimedia Commons
+**Current Stats:** 246 species in database, 131 with images (115 still need images)
 
-**Current Phase:** Phase 3 In Progress (Content Expansion) - Sub-Phase 3A Complete
+**Current Phase:** Phase 3 In Progress (Content Expansion) - Sub-Phases 3A, 3B (partial), 3C complete
 
 **Active Branch:** `claude/phase3-content-expansion`
 
@@ -97,8 +116,8 @@ glossary-generator.js (transforms data)
 ```
 
 ### Key Files
-- `js/fish-data.js` - Single source of truth for all species (143 entries, 17 fields including `tankSizeRecommended`, `breedingNeeds`, `genderDifferentiation`)
-- `js/fish-descriptions.js` - Curated descriptions (63 species)
+- `js/fish-data.js` - Single source of truth for all species (246 entries, 17 fields including `tankSizeRecommended`, `breedingNeeds`, `genderDifferentiation`)
+- `js/fish-descriptions.js` - Curated descriptions for ALL 246 species (full descriptions from source document)
 - `js/glossary-generator.js` - Reusable logic for generating glossary entries
 - `js/tank-manager.js` - Tank CRUD operations (used by dashboard)
 - `js/maintenance-manager.js` - Event logging and schedule management for tanks
@@ -225,20 +244,25 @@ Development follows a phased approach. See `DATA-MODEL.md` for complete specific
 
 | Sub-Phase | Status | Description |
 |-----------|--------|-------------|
-| **3A** | ✅ Complete | Added 3 new fields to all 143 species (`tankSizeRecommended`, `breedingNeeds`, `genderDifferentiation`) |
-| **3B** | ⏳ Next | Add images for 49 existing species without photos |
-| **3C** | ⏳ Pending | Add 107 new species in batches |
-| **3D** | ⏳ Pending | Add images for 107 new species |
+| **3A** | ✅ Complete | Added 3 new fields to all species (`tankSizeRecommended`, `breedingNeeds`, `genderDifferentiation`) |
+| **3B** | 🔄 Partial | 131/246 species have images; 4 failed due to Wikimedia rate limits |
+| **3C** | ✅ Complete | Added 103 new species (143 → 246) + updated ALL 246 descriptions to full versions |
+| **3D** | ⏳ Pending | Add images for remaining 115 species |
 | **3E** | ⏳ Pending | Add disease reference images |
 | **3F** | ⏳ Pending | Expand equipment entries (6 → 16) |
 | **3G** | ⏸️ Deferred | Plants section (waiting on user) |
 
-**Sub-Phase 3A Completion Notes:**
-- All 143 species now have 17 fields (was 14)
-- `species-detail.js` displays new Breeding and Gender Differentiation sections
-- Source data from `aquarium_fish_species_summaries.md` (local, not committed)
-- Many corrections made to source data for biological accuracy (e.g., rasboras incorrectly marked as bubble nesters)
-- Code-reviewed and validated with `npm run test:data`
+**Sub-Phase 3C Completion Notes (January 8, 2026):**
+- Added 103 new species to fish-data.js (now 246 total)
+- Updated ALL 246 descriptions to full versions from source document
+- **Lesson learned:** Don't condense/summarize source content without asking - user preferred the full descriptions
+- All descriptions now include: size, native habitat, water conditions, behavior, and care requirements
+- Code-reviewed and validated with `npm run test:data` and `npm run lint`
+
+**Sub-Phase 3B Status (January 8, 2026):**
+- 131 species have images, 115 still need images
+- 4 species failed upload due to Wikimedia rate limiting: sailfinMolly, yellowLabCichlid, banditCory, peaPuffer
+- Retry these later or find alternative Wikimedia URLs
 
 ## Git Workflow
 
@@ -297,12 +321,12 @@ git push -u origin claude/phase3-content-expansion
 - ✅ Prettier configured and all files formatted
 - ✅ Claude Code hooks set up in `.claude/settings.json`
 - ✅ Playwright tests passing (7 passed, 11 skipped)
-- ✅ Data integrity tests passing (143 species validated)
+- ✅ Data integrity tests passing (246 species validated)
 - ✅ Security rules tests passing (25 checks)
 - ✅ Cloud Function tests available (dry-run simulation)
 - ✅ All 4 Cloud Functions deployed and operational
 - ✅ **Phase 2 complete and merged to main**
-- ⏳ Phase 3 ready to start (expanded glossary)
+- 🔄 **Phase 3 in progress** (3A complete, 3B partial, 3C complete)
 
 **Note:** The `.claude/` folder is gitignored (contains local settings and hooks). Hooks are already configured and working.
 
@@ -362,8 +386,12 @@ Images are stored in Firebase Storage at `images/species/{fishKey}.jpg`
 ### Adding Images Workflow
 1. `npm run images:preview` - Generates `image-preview.html` showing species without images
 2. Open preview in browser, select quality images, click "Export Selected"
-3. `npm run images:upload` - Paste the JSON, uploads to Firebase, updates fish-data.js
-4. `npm run migrate:glossary` - Sync to Firestore
+3. Save JSON to `scripts/temp-selection.json` (for backup/retry)
+4. `npm run images:upload` - Paste the JSON, uploads to Firebase, updates fish-data.js
+5. `npm run migrate:glossary` - Sync to Firestore
+6. Commit changes: `git add js/fish-data.js && git commit -m "Add images" && git push`
+
+**CRITICAL:** Steps 4-6 must ALL be completed. If interrupted, images won't appear on live site.
 
 ### Image URLs in fish-data.js
 ```javascript
@@ -373,6 +401,21 @@ fishKey: {
     // ... other attributes
 }
 ```
+
+### Wikimedia Rate Limiting Issues
+Wikimedia Commons returns HTML error pages instead of images when rate limited.
+
+**Symptoms:**
+- Upload script reports: `FAILED: Invalid response: expected image, got text/html`
+- `scripts/temp-images/` contains small HTML files instead of JPG images
+
+**Solutions:**
+1. Wait 1 hour and retry
+2. Process images in smaller batches (10-15 at a time)
+3. Find alternative Wikimedia URLs for the same species
+4. The upload script has built-in retry logic (3 attempts with delays)
+
+**Currently failed (need retry):** sailfinMolly, yellowLabCichlid, banditCory, peaPuffer
 
 ## Decision-Making
 
@@ -409,6 +452,35 @@ fishKey: {
 ### Migration Issues
 - Service account key must be at `scripts/serviceAccountKey.json`
 - Run from project root, not scripts folder
+- **Glossary links broken after migration?** Check that `fishKey` field exists in both:
+  - `js/glossary-generator.js` (generateGlossaryEntry function)
+  - `scripts/migrate-glossary-to-firestore.js` (generateGlossaryEntry function, lines 180-196)
+  - These are duplicates that must stay in sync (see Architecture section)
+
+### Image Upload Issues
+- **Images not showing after merge?** The upload workflow may have been interrupted
+- Check if `fish-data.js` has actual URLs (not `null`) for the species
+- Ensure `npm run migrate:glossary` was run after updating fish-data.js
+- Ensure changes were committed and pushed
+
+## Lessons Learned (Phase 3)
+
+### What Worked Well
+- Code-reviewer agent catches issues before merge
+- Validation scripts (`npm run test:data`, `npm run lint`) catch problems early
+- Saving selections to `temp-selection.json` allows retry after failures
+
+### What Went Wrong & Fixes
+| Issue | What Happened | Fix |
+|-------|---------------|-----|
+| **Descriptions condensed** | Claude summarized source content without asking | Always use FULL source content unless user explicitly asks to condense |
+| **Images not showing** | Upload workflow interrupted - temp-selection.json created but upload never run | Complete ALL steps: upload → migrate → commit → push |
+| **Wikimedia rate limits** | Too many image downloads in quick succession | Process 10-15 images at a time, wait 1 hour between batches |
+
+### Key Takeaways
+1. **Don't modify source content without asking** - preserving original text is usually better
+2. **Verify each step completed** - especially multi-step workflows like image upload
+3. **Ask questions when uncertain** - collaborative decision-making prevents rework
 
 ## Related Documentation
 
