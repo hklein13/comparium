@@ -9,6 +9,229 @@ window.tankManager = {
   editingTankId: null,
   isInitialized: false,
 
+  // ============================================
+  // HELPER FUNCTIONS
+  // ============================================
+
+  /**
+   * Check if an array has items (non-empty)
+   */
+  hasItems(arr) {
+    return Array.isArray(arr) && arr.length > 0;
+  },
+
+  // ============================================
+  // CACHED ELEMENT GETTERS
+  // ============================================
+
+  /**
+   * Get the tank form container element
+   */
+  getFormContainer() {
+    return document.getElementById('tank-form-container');
+  },
+
+  /**
+   * Get the species selector dropdown element
+   */
+  getSpeciesSelector() {
+    return document.getElementById('species-selector');
+  },
+
+  /**
+   * Get the species list element in the form
+   */
+  getSpeciesList() {
+    return document.getElementById('species-list');
+  },
+
+  /**
+   * Get the tanks container element
+   */
+  getTanksContainer() {
+    return document.getElementById('tanks-container');
+  },
+
+  /**
+   * Get the tank section element
+   */
+  getTankSection() {
+    return document.getElementById('my-tanks-section');
+  },
+
+  // ============================================
+  // HTML TEMPLATE HELPERS
+  // ============================================
+
+  /**
+   * Create an empty state element with a message
+   */
+  createEmptyState(message, isError = false) {
+    const div = document.createElement('div');
+    div.className = 'empty-state-small';
+    if (isError) {
+      div.classList.add('empty-state-error');
+    }
+    const p = document.createElement('p');
+    p.textContent = message;
+    div.appendChild(p);
+    return div;
+  },
+
+  /**
+   * Create an error state element with refresh link
+   */
+  createErrorState(errorMessage, helpMessage) {
+    const div = document.createElement('div');
+    div.className = 'empty-state-small empty-state-error';
+
+    const errorP = document.createElement('p');
+    errorP.className = 'error-text';
+    errorP.textContent = errorMessage;
+    div.appendChild(errorP);
+
+    const helpP = document.createElement('p');
+    const link = document.createElement('a');
+    link.href = 'javascript:location.reload()';
+    link.textContent = 'refresh the page';
+    helpP.textContent = 'Please ';
+    helpP.appendChild(link);
+    helpP.appendChild(document.createTextNode('.'));
+    div.appendChild(helpP);
+
+    return div;
+  },
+
+  /**
+   * Create an empty species list item
+   */
+  createEmptySpeciesItem() {
+    const li = document.createElement('li');
+    li.className = 'species-list-empty';
+    li.textContent = 'No species added yet';
+    return li;
+  },
+
+  // ============================================
+  // TANK CARD COMPONENT HELPERS
+  // ============================================
+
+  /**
+   * Create the base tank card element with name and meta
+   */
+  createCardElement(tank, speciesCount) {
+    const card = document.createElement('div');
+    card.className = 'tank-card';
+
+    // Tank name
+    const h3 = document.createElement('h3');
+    h3.textContent = tank.name || 'Untitled Tank';
+    card.appendChild(h3);
+
+    // Meta info
+    const meta = document.createElement('div');
+    meta.className = 'tank-card-meta';
+    meta.textContent = `${tank.size} gallons | ${speciesCount} species`;
+    card.appendChild(meta);
+
+    return card;
+  },
+
+  /**
+   * Add notes section to a tank card (if notes exist)
+   */
+  addNotesSection(card, tank) {
+    if (!tank.notes || !tank.notes.trim()) {
+      return;
+    }
+
+    const notesContainer = document.createElement('div');
+    notesContainer.className = 'tank-notes-container';
+
+    const notes = document.createElement('div');
+    notes.className = 'tank-notes';
+    notes.textContent = tank.notes;
+    notesContainer.appendChild(notes);
+
+    // Add toggle if notes are long
+    if (tank.notes.length > 100) {
+      const toggle = document.createElement('button');
+      toggle.type = 'button';
+      toggle.className = 'tank-notes-toggle';
+      toggle.textContent = 'Show more';
+      toggle.onclick = e => {
+        e.stopPropagation();
+        notes.classList.toggle('expanded');
+        toggle.textContent = notes.classList.contains('expanded') ? 'Show less' : 'Show more';
+      };
+      notesContainer.appendChild(toggle);
+    }
+
+    card.appendChild(notesContainer);
+  },
+
+  /**
+   * Add species preview badges to a tank card
+   */
+  addSpeciesPreview(card, tank, speciesCount) {
+    const speciesPreview = document.createElement('div');
+    speciesPreview.className = 'tank-species-preview';
+
+    if (this.hasItems(tank.species)) {
+      tank.species.slice(0, 5).forEach(key => {
+        const fish = fishDatabase[key];
+        if (!fish) return;
+        const span = document.createElement('span');
+        span.className = 'species-badge';
+        span.textContent = fish.commonName;
+        speciesPreview.appendChild(span);
+      });
+      if (speciesCount > 5) {
+        const more = document.createElement('span');
+        more.className = 'species-badge';
+        more.textContent = `+${speciesCount - 5} more`;
+        speciesPreview.appendChild(more);
+      }
+    }
+
+    card.appendChild(speciesPreview);
+  },
+
+  /**
+   * Add action buttons (Edit, Delete) to a tank card
+   */
+  addActionButtons(card, tankId) {
+    const actions = document.createElement('div');
+    actions.className = 'tank-card-actions';
+
+    const editBtn = document.createElement('button');
+    editBtn.className = 'btn-small';
+    editBtn.textContent = 'Edit';
+    editBtn.onclick = () => this.editTank(tankId);
+
+    const delBtn = document.createElement('button');
+    delBtn.className = 'btn-small btn-danger';
+    delBtn.textContent = 'Delete';
+    delBtn.onclick = () => this.deleteTank(tankId);
+
+    actions.appendChild(editBtn);
+    actions.appendChild(delBtn);
+    card.appendChild(actions);
+  },
+
+  /**
+   * Add maintenance section to a tank card (Phase 1)
+   */
+  addMaintenanceSection(card, tank) {
+    if (window.maintenanceManager) {
+      window.maintenanceManager.renderTankMaintenance(card, tank);
+    }
+  },
+
+  // ============================================
+  // INITIALIZATION
+  // ============================================
+
   /**
    * Initialize tank manager
    * Call this after auth is confirmed and DOM is ready
@@ -58,7 +281,7 @@ window.tankManager = {
    * Populate the species selector dropdown
    */
   populateSpeciesSelector() {
-    const selector = document.getElementById('species-selector');
+    const selector = this.getSpeciesSelector();
     if (!selector) return;
 
     selector.innerHTML = '';
@@ -91,7 +314,7 @@ window.tankManager = {
    * Filter species selector based on search input
    */
   filterSpeciesSelector(searchTerm) {
-    const selector = document.getElementById('species-selector');
+    const selector = this.getSpeciesSelector();
     if (!selector) return;
 
     const term = (searchTerm || '').toLowerCase().trim();
@@ -117,7 +340,7 @@ window.tankManager = {
    * Show the new tank form
    */
   showNewTankForm() {
-    const formContainer = document.getElementById('tank-form-container');
+    const formContainer = this.getFormContainer();
     if (!formContainer) return;
 
     formContainer.style.display = 'block';
@@ -136,7 +359,7 @@ window.tankManager = {
     }
 
     // Scroll to tank section
-    const tankSection = document.getElementById('my-tanks-section');
+    const tankSection = this.getTankSection();
     if (tankSection) {
       tankSection.scrollIntoView({ behavior: 'smooth' });
     }
@@ -146,7 +369,7 @@ window.tankManager = {
    * Cancel/hide the tank form
    */
   cancelForm() {
-    const formContainer = document.getElementById('tank-form-container');
+    const formContainer = this.getFormContainer();
     if (formContainer) {
       formContainer.style.display = 'none';
     }
@@ -158,7 +381,7 @@ window.tankManager = {
    * Add species from dropdown to current tank
    */
   addSpeciesToTank() {
-    const selector = document.getElementById('species-selector');
+    const selector = this.getSpeciesSelector();
     const speciesKey = selector?.value;
 
     if (!speciesKey) return;
@@ -171,17 +394,13 @@ window.tankManager = {
    * Update the species list display in the form
    */
   updateSpeciesList() {
-    const list = document.getElementById('species-list');
+    const list = this.getSpeciesList();
     if (!list) return;
 
     list.innerHTML = '';
 
-    if (this.currentTankSpecies.length === 0) {
-      const li = document.createElement('li');
-      li.style.color = '#6c757d';
-      li.style.padding = '1rem';
-      li.textContent = 'No species added yet';
-      list.appendChild(li);
+    if (!this.hasItems(this.currentTankSpecies)) {
+      list.appendChild(this.createEmptySpeciesItem());
       return;
     }
 
@@ -262,28 +481,24 @@ window.tankManager = {
    * Load and display all tanks
    */
   async loadTanks() {
-    const container = document.getElementById('tanks-container');
+    const container = this.getTanksContainer();
     if (!container) return;
 
     try {
       const uid = authManager.getCurrentUid();
       if (!uid) {
-        container.innerHTML = `
-                    <div class="empty-state-small">
-                        <p>Please log in to view your tanks.</p>
-                    </div>
-                `;
+        container.innerHTML = '';
+        container.appendChild(this.createEmptyState('Please log in to view your tanks.'));
         return;
       }
 
       const tanks = await storageService.getTanks(uid);
 
-      if (!Array.isArray(tanks) || tanks.length === 0) {
-        container.innerHTML = `
-                    <div class="empty-state-small">
-                        <p>No tanks yet. Click "Create New Tank" to get started!</p>
-                    </div>
-                `;
+      if (!this.hasItems(tanks)) {
+        container.innerHTML = '';
+        container.appendChild(
+          this.createEmptyState('No tanks yet. Click "Create New Tank" to get started!')
+        );
         return;
       }
 
@@ -291,12 +506,8 @@ window.tankManager = {
       tanks.forEach(tank => this.renderTankCard(container, tank));
     } catch (error) {
       console.error('Error loading tanks:', error);
-      container.innerHTML = `
-                <div class="empty-state-small" style="text-align: center; padding: 2rem;">
-                    <p style="color: #dc3545; font-weight: bold;">Error loading tanks</p>
-                    <p>Please <a href="javascript:location.reload()">refresh the page</a>.</p>
-                </div>
-            `;
+      container.innerHTML = '';
+      container.appendChild(this.createErrorState('Error loading tanks', 'refresh the page'));
     }
   },
 
@@ -306,93 +517,23 @@ window.tankManager = {
   renderTankCard(container, tank) {
     const speciesCount = tank.species ? tank.species.length : 0;
 
-    const card = document.createElement('div');
-    card.className = 'tank-card';
+    // Create base card with name and meta
+    const card = this.createCardElement(tank, speciesCount);
 
-    // Tank name
-    const h3 = document.createElement('h3');
-    h3.textContent = tank.name || 'Untitled Tank';
-    card.appendChild(h3);
+    // Add notes section (if present)
+    this.addNotesSection(card, tank);
 
-    // Meta info
-    const meta = document.createElement('div');
-    meta.className = 'tank-card-meta';
-    meta.textContent = `${tank.size} gallons | ${speciesCount} species`;
-    card.appendChild(meta);
+    // Add species preview badges
+    this.addSpeciesPreview(card, tank, speciesCount);
 
-    // Notes (if present)
-    if (tank.notes && tank.notes.trim()) {
-      const notesContainer = document.createElement('div');
-      notesContainer.className = 'tank-notes-container';
+    // Add action buttons
+    this.addActionButtons(card, tank.id);
 
-      const notes = document.createElement('div');
-      notes.className = 'tank-notes';
-      notes.textContent = tank.notes;
-      notesContainer.appendChild(notes);
-
-      // Add toggle if notes are long
-      if (tank.notes.length > 100) {
-        const toggle = document.createElement('button');
-        toggle.type = 'button';
-        toggle.className = 'tank-notes-toggle';
-        toggle.textContent = 'Show more';
-        toggle.onclick = e => {
-          e.stopPropagation();
-          notes.classList.toggle('expanded');
-          toggle.textContent = notes.classList.contains('expanded') ? 'Show less' : 'Show more';
-        };
-        notesContainer.appendChild(toggle);
-      }
-
-      card.appendChild(notesContainer);
-    }
-
-    // Species preview
-    const speciesPreview = document.createElement('div');
-    speciesPreview.className = 'tank-species-preview';
-
-    if (Array.isArray(tank.species) && tank.species.length > 0) {
-      tank.species.slice(0, 5).forEach(key => {
-        const fish = fishDatabase[key];
-        if (!fish) return;
-        const span = document.createElement('span');
-        span.className = 'species-badge';
-        span.textContent = fish.commonName;
-        speciesPreview.appendChild(span);
-      });
-      if (speciesCount > 5) {
-        const more = document.createElement('span');
-        more.className = 'species-badge';
-        more.textContent = `+${speciesCount - 5} more`;
-        speciesPreview.appendChild(more);
-      }
-    }
-    card.appendChild(speciesPreview);
-
-    // Action buttons
-    const actions = document.createElement('div');
-    actions.className = 'tank-card-actions';
-
-    const editBtn = document.createElement('button');
-    editBtn.className = 'btn-small';
-    editBtn.textContent = 'Edit';
-    editBtn.onclick = () => this.editTank(tank.id);
-
-    const delBtn = document.createElement('button');
-    delBtn.className = 'btn-small btn-danger';
-    delBtn.textContent = 'Delete';
-    delBtn.onclick = () => this.deleteTank(tank.id);
-
-    actions.appendChild(editBtn);
-    actions.appendChild(delBtn);
-    card.appendChild(actions);
-
+    // Append card to container
     container.appendChild(card);
 
     // Add maintenance section (Phase 1)
-    if (window.maintenanceManager) {
-      window.maintenanceManager.renderTankMaintenance(card, tank);
-    }
+    this.addMaintenanceSection(card, tank);
   },
 
   /**
@@ -410,7 +551,7 @@ window.tankManager = {
         return;
       }
 
-      const formContainer = document.getElementById('tank-form-container');
+      const formContainer = this.getFormContainer();
       if (formContainer) {
         formContainer.style.display = 'block';
       }
@@ -424,7 +565,7 @@ window.tankManager = {
       this.updateSpeciesList();
 
       // Scroll to form
-      const tankSection = document.getElementById('my-tanks-section');
+      const tankSection = this.getTankSection();
       if (tankSection) {
         tankSection.scrollIntoView({ behavior: 'smooth' });
       }
