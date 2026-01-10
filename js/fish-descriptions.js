@@ -51,6 +51,9 @@ const fishDescriptions = {
   pristellaTetra:
     'A small, transparent tetra reaching 2 inches with silver translucent body revealing internal skeleton and distinctive black-and-yellow marked dorsal and anal fins. Native to South American coastal waters including Amazon and Orinoco basins, they tolerate both fresh and brackish conditions. Peaceful, hardy, and extremely adaptable, these active schoolers thrive in groups of 6+ and display unique transparency when viewed from the side.',
 
+  xRayTetra:
+    'A small, transparent tetra reaching 2 inches with silver translucent body revealing internal skeleton and distinctive black-and-yellow marked dorsal and anal fins. Native to South American coastal waters including Amazon and Orinoco basins, they tolerate both fresh and brackish conditions. Peaceful, hardy, and extremely adaptable, these active schoolers thrive in groups of 6+ and display unique transparency when viewed from the side.',
+
   blackPhantomTetra:
     'A peaceful tetra reaching 1.75 inches with males displaying dark charcoal body and prominent black shoulder spot with white-edged fins. Native to Brazilian river tributaries in Guapore and Paraguay basins, they inhabit soft, acidic waters. Peaceful, hardy, and displaying sexual dimorphism with colorful males and pinkish females, these attractive schoolers thrive in groups of 6+ in planted tanks with subdued lighting.',
 
@@ -132,9 +135,6 @@ const fishDescriptions = {
   rubyTetra:
     'A tiny jewel-like nano tetra reaching 0.75 inches with vibrant ruby-red body coloration. Native to slow-moving streams and tributaries of Colombia and Venezuela, they prefer calm environments with minimal flow. Peaceful, slow-moving, and colorful schooling fish that pair well with other small peaceful species like Pygmy Corydoras, thriving in groups of 6+ in heavily planted tanks with subdued lighting where their intense red coloration displays brilliantly.',
 
-  silverTetra:
-    'A larger active tetra reaching 3 inches with silvery-gray rhomboid body shape. Native to South American rivers, they are hardy omnivorous fish adaptable to various water conditions including hard alkaline water. Too large and active for typical community tanks with gentle species but excellent for robust setups with cichlids, barbs, and catfish that can handle their energetic schooling behavior, requiring groups of 6+ with ample swimming space.',
-
   glassBloodfin:
     'A transparent elongated tetra reaching 2.5 inches with red-tipped fins. Native to South American rivers and streams, they prefer well-oxygenated flowing water. Active, hardy schooling fish that swim energetically in mid-water levels, thriving in groups of 6+ in larger community tanks with current and open swimming space where their transparent bodies and colorful fin tips create elegant displays.',
 
@@ -150,7 +150,7 @@ const fishDescriptions = {
   cherryBarb:
     'A peaceful, colorful cyprinid reaching 2 inches and endemic to Sri Lanka\'s Kelani and Nilwala river basins. Males display stunning cherry-red coloration during spawning while females are more subdued golden-brown; they inhabit heavily shaded, shallow streams with dense vegetation and leaf litter. Hardy and beginner-friendly, these active schooling fish thrive in groups of 6+ in planted community tanks and are notably less aggressive than other barb species.',
 
-  roysyBarb:
+  rosyBarb:
     'A peaceful, hardy barb reaching 6 inches with males displaying rosy-red coloration especially during breeding. Native to northern Indian streams and rivers, they tolerate cooler temperatures and adapt to diverse conditions. Peaceful for barbs and suitable for community tanks, these active schoolers thrive in groups of 6+ and appreciate well-oxygenated water with moderate current, making excellent beginner fish.',
 
   goldBarb:
@@ -197,6 +197,12 @@ const fishDescriptions = {
   // ============================================
   zebraDanio:
     'A small, active schooling fish reaching 2 inches with distinctive horizontal blue and gold stripes running the length of the body. Native to streams and rivers in India and Bangladesh, they inhabit both fast-flowing and slow-moving waters. Extremely hardy, peaceful, and energetic, these beginner-friendly fish thrive in groups of 6+ and tolerate a wide range of temperatures and water conditions, making them ideal for unheated tanks.',
+
+  whiteCloudMinnow:
+    'A small, hardy minnow reaching 1.5 inches with tan body, red-tipped fins, and neon stripe running horizontally. Native to Chinese mountain streams in the White Cloud Mountain region, they naturally inhabit cooler waters. Extremely peaceful, cold-tolerant, and beginner-friendly, these active schoolers thrive in unheated tanks or cool water setups and display brilliant colors at lower temperatures, making them ideal for temperate aquariums.',
+
+  goldWhiteCloud:
+    'A color variant of white cloud mountain minnow reaching 1.5 inches with golden body and red-tipped fins. Selectively bred from wild-type, not naturally occurring. Peaceful, cold-tolerant, and beginner-friendly, these attractive schoolers thrive in unheated tanks or cool water setups and display brilliant golden coloration at lower temperatures, making them ideal for temperate aquariums.',
 
   celestialPearlDanio:
     'A tiny, stunning nano fish reaching only 1 inch with dark blue body covered in pearl-white spots and brilliant orange-red fins with black striping. Native to shallow vegetated ponds in Myanmar\'s Shan Plateau, they were discovered in 2006 and rapidly became popular. Peaceful, somewhat shy, and moderately easy to care for, these miniature schooling fish thrive in groups of 6+ in densely planted tanks with soft, slightly acidic water and subdued lighting.',
@@ -264,13 +270,10 @@ const fishDescriptions = {
   emeraldDwarfRasbora:
     'A tiny nano fish reaching 0.75 inches with emerald-green iridescence and orange-red fins with black markings. Native to Myanmar mountain streams, they inhabit cool, clear, well-oxygenated waters. Peaceful, active, and displaying brilliant colors despite tiny size, these miniature schoolers thrive in groups of 10+ in well-planted nano tanks with cooler temperatures than most tropical fish.',
 
-  greenKubotaiRasbora:
-    'A small, peaceful fish with green-bronze coloring and active schooling behavior. Native to densely planted tanks with soft substrate, they prefer heavily vegetated areas. Hardy nano fish perfect for planted community tanks, thriving in groups with other small peaceful species.',
-
   // ============================================
   // RAINBOWFISH
   // ============================================
-  boesmansRainbowfish:
+  boesemansRainbowfish:
     'A spectacular rainbowfish reaching 4.5 inches with males displaying blue-gray front half and orange-red rear half. Native to Vogelkop Peninsula lakes in West Papua, Indonesia, they are endemic to limited regions. Active, peaceful, and displaying stunning bicolor pattern when mature, these impressive schoolers thrive in groups of 6+ in spacious tanks with moderate current and slightly hard, alkaline water.',
 
   turquoiseRainbowfish:
@@ -284,9 +287,6 @@ const fishDescriptions = {
 
   dwarfNeonRainbowfish:
     'A tiny rainbowfish reaching only 2.5 inches with brilliant neon-blue stripe and red-orange fins. Native to New Guinea streams, they inhabit clear, well-vegetated waters. Peaceful, active, and perfect for smaller tanks unlike larger rainbowfish, these vibrant schoolers thrive in groups of 6+ with hard, alkaline water and display stunning coloration despite small size.',
-
-  celebesRainbowfish:
-    'A small, elegant rainbowfish reaching 3 inches with translucent yellow-green body and distinctive sail-like dorsal fin. Native to Sulawesi (Celebes) island streams in Indonesia, they inhabit clear, alkaline waters. Peaceful, active, and slightly delicate, these beautiful schoolers thrive in groups of 6+ with slightly hard, alkaline water and appreciate planted tanks with open swimming areas and moderate current.',
 
   bandedRainbowfish:
     'A colorful medium rainbowfish reaching 5 inches with distinctive vertical bands and iridescent blue-green body. Native to streams and rivers of Papua New Guinea, they prefer well-oxygenated flowing water with vegetation. Active, peaceful schooling fish that display stunning colors when mature males compete, thriving in groups of 6+ with 2:1 female to male ratio in spacious tanks with good water movement and plenty of swimming room.',
@@ -345,7 +345,7 @@ const fishDescriptions = {
   bettaFish:
     'The iconic Siamese fighting fish, reaching 2.5-3 inches and native to Southeast Asia\'s shallow, slow-moving waters. Renowned for vibrant coloration and elaborate finnage developed through centuries of selective breeding, males display extreme territorial aggression toward one another. Hardy and adaptable thanks to their labyrinth organ allowing surface air breathing, they thrive in heated, filtered tanks with gentle water flow, making them popular beginner fish despite their solitary housing requirements.',
 
-  betaImbellis:
+  bettaImbellis:
     'A peaceful wild betta reaching 2 inches with iridescent green-blue body and red-orange fins. Native to southern Thailand and Malaysian peat swamps, they inhabit shallow, acidic waters with dense vegetation. Peaceful unlike splendens bettas and suitable for community tanks, these beautiful labyrinth fish can be kept in pairs or groups in well-planted tanks with gentle tankmates, displaying elaborate courtship without excessive aggression.',
 
   dwarfGourami:
@@ -423,7 +423,7 @@ const fishDescriptions = {
   apistogrammaAgassizii:
     'A small, colorful dwarf cichlid reaching 2-3 inches with males displaying vibrant yellows and a distinctive horizontal belly stripe. Native to slow-moving blackwater streams throughout the Amazon basin, they are curious bottom-dwellers with territorial but generally peaceful temperaments. Thrive in planted community tanks with sandy substrate and caves, making them an excellent "first Apistogramma" for aquarists.',
 
-  cockatooCichlid:
+  cockatooDwarfCichlid:
     'A distinctive dwarf cichlid reaching 3 inches with elongated dorsal fin rays resembling a cockatoo\'s crest. Native to Amazon and Orinoco river basins in Peru, Colombia, and Brazil, they inhabit soft, acidic waters with leaf litter. Peaceful, shy, and harem-breeding with males maintaining territories with multiple females, these attractive cichlids thrive in well-planted tanks with caves and soft water conditions.',
 
   electricBlueAcara:
@@ -438,7 +438,7 @@ const fishDescriptions = {
   convictCichlid:
     'A small, hardy cichlid reaching 4-5 inches with bold black and white vertical stripes. Native to Central American rivers in Guatemala, they inhabit rocky substrates with caves. Aggressive, territorial, and extremely prolific breeders with intense parental care, these tough cichlids thrive in species-specific or Central American cichlid tanks and will breed in almost any conditions, defending offspring vigorously.',
 
-  keyholdCichlid:
+  keyholeCichlid:
     'A peaceful cichlid reaching 4-5 inches with distinctive keyhole-shaped black marking on sides. Native to South American rivers in Guyana and northern tributaries, they inhabit soft, acidic waters with wood and leaf litter. Peaceful, shy, and suitable for community tanks unlike most cichlids, these timid fish thrive in well-planted tanks with driftwood and peaceful tankmates, forming pairs without excessive aggression.',
 
   jewelCichlid:
@@ -482,9 +482,6 @@ const fishDescriptions = {
 
   chocolateCichlid:
     'A large robust cichlid reaching 12 inches with dark chocolate-brown coloration and subtle patterns. Native to rivers and lakes of South America. Hardy, moderately aggressive, imposing fish, these substrate spawners form pairs and require very large tanks with strong filtration, compatible with similarly-sized robust species and displaying characteristic eartheater-type behavior of sifting substrate.',
-
-  pearlCichlid:
-    'An unusual cichlid reaching 10 inches that constantly sifts sand through its gills searching for food. Native to rivers of Brazil and Guyana in sandy bottoms. Peaceful, fascinating, specialized fish with unique feeding behavior, these biparental mouthbrooders require large tanks with very fine sand substrate they can sift, thriving with other peaceful large fish and providing endless entertainment with their substrate-sifting activities.',
 
   // ============================================
   // CICHLIDS - AFRICAN
@@ -555,7 +552,7 @@ const fishDescriptions = {
   pandaCory:
     'A small, distinctive catfish reaching 2 inches with white body and bold black markings on eyes, dorsal fin, and caudal peduncle resembling a panda. Native to Peruvian Amazon tributaries with cool, oxygen-rich waters, they inhabit sandy substrates. Peaceful, social, and slightly more sensitive than other corydoras, these active bottom-dwellers thrive in groups of 6+ with fine sand substrate and cooler temperatures than typical tropical species.',
 
-  peppereddCory:
+  pepperedCory:
     'A classic, hardy catfish reaching 2.5 inches with pale body covered in dark pepper-like spots and mottled pattern. Native to South American rivers in Uruguay and Brazil, they inhabit sandy and muddy substrates. Peaceful, extremely hardy, and beginner-friendly, these social bottom-dwellers thrive in groups of 6+ with sandy substrate and are among the most popular and adaptable corydoras species, tolerating cooler temperatures than most tropical fish.',
 
   sterbaiCory:
@@ -579,19 +576,19 @@ const fishDescriptions = {
   duplicareusCorydoras:
     'A small, peaceful catfish reaching 2.5 inches with distinctive orange head patch and broader dark horizontal stripe compared to similar C. adolfoi. Native to upper Rio Negro tributaries in Brazil, they inhabit pristine blackwater with rapid flow and dark tannin-stained water. Hardy and easier to breed than C. adolfoi, these attractive schooling catfish thrive in groups of 6+ in soft acidic water with fine sand substrate, making them excellent additions to planted community tanks though less commonly available than their close relative.',
 
-  schwartzsCory:
+  schwartziCorydoras:
     'A pearl-colored medium catfish reaching 2.5-3 inches with intricate pattern of spots, dashes, and twin bars creating an attractive reticulated appearance. Native to Rio Purus tributaries in Brazil\'s Amazon basin, they inhabit slow-moving waters with sandy substrates and dense vegetation. Hardy and peaceful but somewhat prone to barbel infections, these active schoolers require pristine water quality and groups of 5+ with fine sand substrate, making them suitable for experienced aquarists who can maintain their exacting water quality standards.',
 
-  melanistiusCory:
+  melanistiusCorydoras:
     'A striking small catfish reaching 2-2.5 inches with pearly-white body decorated with dark blue-black spots and distinctive black "sail" dorsal fin. Native to coastal rivers of Guyana, French Guiana, and Suriname in South America, they inhabit clear to slightly tannin-stained slow-moving waters with sandy substrates. Peaceful, nocturnal, and beautiful but more sensitive to water quality than many corydoras, these active schoolers require groups of 5-6+ and pristine conditions with mature filtration, making them better suited for experienced aquarists despite their hardy appearance.',
 
   agassiziCorydoras:
     'A spotted medium catfish reaching 2-2.5 inches with complex pattern of dark spots covering cream-tan body creating an attractive mottled appearance. Native to Amazon River basin in Brazil and Peru, they inhabit slow-moving tributaries with soft substrates and tannin-rich water. Hardy, peaceful, and adaptable with easier care requirements than many specialty cories, these active bottom-dwellers thrive in groups of 6+ and tolerate a wider range of water parameters, making them excellent community fish for aquarists of various experience levels.',
 
-  threeStripeCory:
+  threeStripeCorydoras:
     'A beautiful small catfish reaching 2.5 inches with pale beige-silver body adorned with intricate reticulated pattern and three distinctive dark horizontal stripes. Native to central and Peruvian Amazon River basin including Colombia, Brazil, and coastal Suriname rivers, they inhabit slow-moving waters with sandy substrates and dense vegetation. Hardy, peaceful, and often misidentified as Corydoras julii, these active schoolers are among the easiest Corydoras to breed and thrive in groups of 5+ with fine sand substrate, making them excellent community fish for beginners and experienced aquarists alike.',
 
-  venezuelaCory:
+  venezuelaCorydoras:
     'A distinctive medium catfish reaching 2.5 inches with brownish-bronze body, large oval green-black shoulder patch, and bright copper-orange head patch that intensifies with age. Native exclusively to Rio Cabriales and closed drainage systems of Rio Tuy and Lake Valencia in northern Venezuela, they inhabit crystal-clear cooler waters with moderate flow. Hardy, adaptable, and active despite their restricted distribution, these energetic schoolers prefer cooler temperatures (66-77F) and thrive in groups of 6+ with varied diet, making them attractive community fish though largely captive-bred due to limited wild collection.',
 
   // ============================================
@@ -699,7 +696,7 @@ const fishDescriptions = {
   banjoCatfish:
     'A cryptic bottom-dwelling catfish reaching 5-6 inches with extremely flattened guitar/banjo-shaped body and mottled brown coloration for camouflage. Native to rivers and slow-moving waters throughout much of South America, they inhabit soft muddy or sandy bottoms where they bury themselves. Peaceful, sedentary, and masters of camouflage that barely move except to feed, these unusual catfish spend most time buried with only eyes visible and require soft fine substrate, making them fascinating specialized additions for aquarists seeking unusual cryptic species though they provide little activity or visual interest.',
 
-  featherffinSqueaker:
+  featherfinSqueaker:
     'A peaceful African catfish reaching 6-8 inches with dark body, white spots, and dramatically elongated feather-like dorsal fin. Native to rivers and lakes throughout Central Africa including Congo basin, they inhabit rocky areas and submerged wood. Peaceful, nocturnal, and capable of vocalizing by grinding pectoral spines producing squeaking sounds, these attractive catfish are hardy and adaptable with striking appearance when fully grown, making them interesting African alternatives to South American catfish for aquarists seeking unusual vocalizing species though most active after lights out.',
 
   // ============================================
@@ -708,7 +705,7 @@ const fishDescriptions = {
   elephantNoseFish:
     'An unusual fish reaching 9 inches with elongated chin extension used for electroreception to navigate and find food. Native to West and Central African rivers including Congo basin, they inhabit murky waters. Peaceful, intelligent, and extremely sensitive requiring pristine water and low lighting, these nocturnal fish use weak electrical fields to communicate and navigate, thriving only with experienced keepers in species-specific setups.',
 
-  africaButterflyFish:
+  africanButterflyFish:
     'A predatory surface-dwelling species reaching 5 inches with large, wing-like pectoral fins resembling a butterfly. Native to West and Central African slow-moving rivers and lakes, they lurk motionless at the surface hunting prey. Peaceful toward similarly-sized fish but highly predatory toward anything small enough to swallow, these unique ambush predators require species-specific care with tight-fitting lids to prevent escape jumps.',
 
   ropeFish:
@@ -716,9 +713,6 @@ const fishDescriptions = {
 
   senegalBichir:
     'A primitive, prehistoric fish reaching 12-14 inches with elongated body, armored ganoid scales, and primitive lungs for breathing air. Native to West African rivers and floodplains including Senegal, Gambia, and Niger systems, they are nocturnal bottom-dwelling predators. Peaceful with similarly-sized fish but will eat anything small enough to swallow, these ancient survivors require secure lids as they can escape, tolerating poor water quality and low oxygen conditions.',
-
-  hatchetfish:
-    'A uniquely shaped surface-dwelling fish reaching 2.5 inches with deep, hatchet-like body and wing-like pectoral fins. Native to South American Amazon basin tributaries, they inhabit calm surface waters beneath overhanging vegetation. Peaceful, timid, and exceptional jumpers requiring tight-fitting lids, these specialized insect-eaters thrive in groups of 6+ and spend nearly all their time at the surface, occasionally launching themselves to catch flying insects.',
 
   rainbowShark:
     'A semi-aggressive freshwater shark reaching 6 inches with dark body and bright orange-red fins. Native to Southeast Asian rivers in Thailand, they inhabit fast-flowing, rocky streams. Territorial and aggressive toward similar-shaped fish especially other rainbow sharks, these active algae grazers require caves and territories with only one per tank recommended, displaying bold personalities and constant patrolling behavior.',
@@ -729,7 +723,7 @@ const fishDescriptions = {
   blackShark:
     'A territorial bottom-dwelling cyprinid reaching 6 inches with velvety black body and vibrant orange-red tail and fins creating striking contrast. Native to streams and rivers in Thailand, they inhabit rocky fast-flowing waters with high oxygen. Highly territorial, aggressive toward similar species, requiring large individual territories, these stunning fish make beautiful centerpieces when kept as sole bottom-dweller with fast-swimming upper-level tankmates, making them suitable for experienced aquarists who can provide large tanks (55+ gallons) with only one Black Shark and understand their aggressive nature toward similar fish.',
 
-  iridescemtShark:
+  iridescentShark:
     'A massive catfish reaching 3-4 feet with silvery-iridescent body that loses shimmer with age and shark-like appearance. Native to Mekong and Chao Phraya river basins in Southeast Asia, they inhabit large rivers. Peaceful, nervous, fast-swimming giants that panic easily and require enormous aquariums or ponds, these migratory catfish are commonly sold as cute juveniles but grow to enormous proportions requiring 300+ gallon aquariums minimum, making them unsuitable for home aquariums and appropriate only for public aquariums or massive pond setups, though frequently missold to unsuspecting beginners.',
 
   ornateBichir:
@@ -746,6 +740,9 @@ const fishDescriptions = {
 
   leafFish:
     'A master of camouflage reaching 3-4 inches with leaf-shaped flattened body mimicking dead leaves including stem-like lower jaw extension. Native to rivers and streams throughout Amazon basin in South America, they inhabit slow-moving waters with abundant leaf litter. Sedentary ambush predators requiring live foods and species-only or very careful community selection, these fascinating mimics float motionless resembling dead leaves until prey approaches, making them captivating specialized additions for experienced aquarists seeking unusual predatory species who can provide consistent live food and appreciate their incredible camouflage rather than active swimming behavior.',
+
+  peaPuffer:
+    'A tiny, fully freshwater puffer reaching only 1 inch with round body, large eyes, and ability to puff when threatened. Native to southwestern Indian rivers and streams in Kerala, they inhabit heavily vegetated slow-moving waters. Aggressive despite small size with territorial behavior and fin-nipping tendencies, these intelligent hunters require species-specific tanks or very careful tankmate selection, feeding exclusively on live/frozen meaty foods including snails for beak maintenance.',
 
   // ============================================
   // KILLIFISH
