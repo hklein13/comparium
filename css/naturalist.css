@@ -725,11 +725,7 @@ p {
   color: var(--forest);
 }
 
-.tag-soon {
-  background: var(--warning-bg);
-  color: var(--gold);
-}
-
+.tag-soon,
 .tag-warning {
   background: var(--warning-bg);
   color: var(--gold);
@@ -1516,7 +1512,7 @@ p {
 
 .notification-item-time {
   font-size: 0.8rem;
-  color: var(--ink-light);
+  color: var(--ink-tertiary);
 }
 
 /* Settings Dropdown */
@@ -1653,11 +1649,17 @@ p {
   border-radius: var(--radius-xl);
   padding: var(--space-lg);
   margin-bottom: var(--space-md);
-  transition: border-color var(--transition-base);
+  transition: all var(--transition-base);
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.15),
+    0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .tank-card:hover {
   border-color: var(--forest);
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.25),
+    0 8px 24px rgba(0, 0, 0, 0.08);
 }
 
 .tank-card h3 {
@@ -2364,11 +2366,6 @@ p {
 }
 
 /* Empty state with error styling */
-.empty-state-small.empty-state-error {
-  text-align: center;
-  padding: var(--space-xl);
-}
-
 .empty-state-small.empty-state-error .error-text {
   color: var(--danger);
   font-weight: bold;
@@ -2420,32 +2417,6 @@ p {
 .glossary-search .search-box {
   max-width: 600px;
   margin: 0 auto;
-  position: relative;
-}
-
-.glossary-search .search-box input {
-  width: 100%;
-  padding: 1rem;
-  font-size: 1rem;
-  border: 2px solid var(--border);
-  border-radius: var(--radius-lg);
-  background: var(--white);
-  transition: all var(--transition-base);
-}
-
-.glossary-search .search-box input:focus {
-  outline: none;
-  border-color: var(--forest);
-  box-shadow: 0 0 0 3px rgba(35, 74, 58, 0.1);
-}
-
-.glossary-search .search-icon {
-  position: absolute;
-  left: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--ink-tertiary);
-  font-size: 1.1rem;
 }
 
 .glossary-categories {
@@ -2506,12 +2477,17 @@ p {
   transition: all var(--transition-base);
   text-decoration: none;
   display: block;
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.15),
+    0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .glossary-card:hover {
   border-color: var(--forest);
   transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.25),
+    0 8px 24px rgba(0, 0, 0, 0.08);
 }
 
 .glossary-card-image {
@@ -3140,6 +3116,39 @@ p {
   border: 0;
 }
 
+/* Skip to content link (accessibility) */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--forest);
+  color: var(--white);
+  padding: var(--space-sm);
+  z-index: 100;
+  transition: top var(--transition-base);
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* Loading spinner animation */
+.loading-spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid var(--border);
+  border-radius: 50%;
+  border-top-color: var(--forest);
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* ============================================
    MOBILE RESPONSIVE
    ============================================ */
@@ -3166,6 +3175,19 @@ p {
 
   .tagline {
     display: none;
+  }
+
+  /* Video Hero (Mobile) */
+  .hero-video {
+    min-height: 70vh;
+  }
+
+  .hero-video__content {
+    padding: var(--space-xl) var(--space-lg);
+  }
+
+  .hero-video__content p {
+    font-size: 1rem;
   }
 
   /* Hero */
@@ -3260,10 +3282,6 @@ p {
   }
 
   .glossary-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .features-list {
     grid-template-columns: 1fr;
   }
 
@@ -3492,3 +3510,80 @@ p {
     box-shadow: none;
   }
 }
+
+/* ============================================
+   AQUATIC ACCENTS
+   Subtle underwater ambiance elements
+   ============================================ */
+
+/* -----------------------------------------
+   Video Hero (Homepage only)
+   ----------------------------------------- */
+.hero-video {
+  position: relative;
+  min-height: 80vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.hero-video__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+
+.hero-video__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(35, 74, 58, 0.4) 0%,
+    rgba(35, 74, 58, 0.85) 100%
+  );
+  z-index: 0;
+}
+
+.hero-video__content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--space-2xl);
+  text-align: center;
+}
+
+.hero-video__content h1 {
+  color: var(--white);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  margin-bottom: var(--space-lg);
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+}
+
+.hero-video__content p {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.25rem;
+  max-width: 600px;
+  margin: 0 auto var(--space-xl);
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
+}
+
+.hero-video__content .btn {
+  background: var(--white);
+  color: var(--forest);
+  border: none;
+  padding: var(--space-md) var(--space-xl);
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.hero-video__content .btn:hover {
+  background: var(--ivory);
+  transform: translateY(-2px);
+}
+
+/* Glass Edge Highlights integrated into .glossary-card and .tank-card definitions above */
