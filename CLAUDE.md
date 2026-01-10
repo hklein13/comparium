@@ -53,9 +53,9 @@ If a phase is in progress (see "Current Phase" below), there should be a plan fi
 - **Repository:** https://github.com/hklein13/comparium
 - **Firebase Project:** `comparium-21b69`
 
-**Current Stats:** 246 species in database, 131 with images (115 still need images)
+**Current Stats:** 246 species in database, 130 with images (116 still need images)
 
-**Current Phase:** Phase 3 In Progress (Content Expansion) - Sub-Phases 3A, 3B (partial), 3C complete
+**Current Phase:** Phase 3 In Progress (Content Expansion) - Sub-Phases 3A, 3B (partial), 3C complete + hotfix
 
 **Active Branch:** `claude/phase3-content-expansion`
 
@@ -138,6 +138,32 @@ The migration script (`scripts/migrate-glossary-to-firestore.js`) has a **duplic
 - `id` - kebab-case for Firestore document ID
 - `fishKey` - original camelCase key for `fishDatabase` lookups and species.html links
 - All other entry properties (title, tags, category, etc.)
+
+### ⚠️ Critical: fish-data.js ↔ fish-descriptions.js Key Sync
+The keys in `fish-descriptions.js` **MUST exactly match** the keys in `fish-data.js`. The site looks up descriptions by key - any mismatch means the description won't display.
+
+**After adding/modifying species:**
+1. Verify keys match exactly (case-sensitive, same spelling)
+2. Run this validation command:
+```bash
+node -e "
+const fs = require('fs');
+const dataContent = fs.readFileSync('js/fish-data.js', 'utf8');
+const descContent = fs.readFileSync('js/fish-descriptions.js', 'utf8');
+const dataKeys = [...dataContent.matchAll(/^\\s{2}(\\w+):\\s*\\{/gm)].map(m => m[1]);
+const descKeys = [...descContent.matchAll(/^\\s{2}(\\w+):/gm)].map(m => m[1]);
+const missing = dataKeys.filter(k => !descKeys.includes(k));
+const orphaned = descKeys.filter(k => !dataKeys.includes(k));
+if (missing.length) console.log('MISSING descriptions:', missing);
+if (orphaned.length) console.log('ORPHANED descriptions:', orphaned);
+if (!missing.length && !orphaned.length) console.log('SUCCESS: All keys match!');
+"
+```
+
+**Common typo patterns to watch for:**
+- Double letters: `peppereddCory` vs `pepperedCory`
+- Missing letters: `betaImbellis` vs `bettaImbellis`
+- Wrong suffixes: `schwartzsCory` vs `schwartziCorydoras`
 
 ### Page Structure
 - **index.html** - Landing page (split hero with fish collage, demo CTA, species showcase, origin note)
@@ -274,8 +300,15 @@ Development follows a phased approach. See `DATA-MODEL.md` for complete specific
 - All descriptions now include: size, native habitat, water conditions, behavior, and care requirements
 - Code-reviewed and validated with `npm run test:data` and `npm run lint`
 
+**Sub-Phase 3C Hotfix (January 9, 2026):**
+- **Problem discovered:** 13 typos in fish-descriptions.js keys caused descriptions not to display
+- **Root cause:** When adding 103 new species, description keys had typos that didn't match fish-data.js keys
+- **Fixed:** 13 typos corrected, 5 orphaned descriptions removed, 4 missing descriptions added
+- **Validation:** All 246 species now have matching descriptions (verified with key sync check)
+- **Lesson learned:** ALWAYS validate key sync after bulk additions (see "Critical: fish-data.js ↔ fish-descriptions.js Key Sync" above)
+
 **Sub-Phase 3B Status (January 8, 2026):**
-- 131 species have images, 115 still need images
+- 130 species have images, 116 still need images
 - 4 species failed upload due to Wikimedia rate limiting: sailfinMolly, yellowLabCichlid, banditCory, peaPuffer
 - Retry these later or find alternative Wikimedia URLs
 
@@ -484,6 +517,7 @@ Wikimedia Commons returns HTML error pages instead of images when rate limited.
 - Code-reviewer agent catches issues before merge
 - Validation scripts (`npm run test:data`, `npm run lint`) catch problems early
 - Saving selections to `temp-selection.json` allows retry after failures
+- Key sync validation script catches description/data mismatches immediately
 
 ### What Went Wrong & Fixes
 | Issue | What Happened | Fix |
@@ -491,11 +525,13 @@ Wikimedia Commons returns HTML error pages instead of images when rate limited.
 | **Descriptions condensed** | Claude summarized source content without asking | Always use FULL source content unless user explicitly asks to condense |
 | **Images not showing** | Upload workflow interrupted - temp-selection.json created but upload never run | Complete ALL steps: upload → migrate → commit → push |
 | **Wikimedia rate limits** | Too many image downloads in quick succession | Process 10-15 images at a time, wait 1 hour between batches |
+| **Description key typos** | 13 typos in fish-descriptions.js keys caused descriptions not to display (e.g., `betaImbellis` vs `bettaImbellis`) | ALWAYS run key sync validation after bulk additions to fish-descriptions.js |
 
 ### Key Takeaways
 1. **Don't modify source content without asking** - preserving original text is usually better
 2. **Verify each step completed** - especially multi-step workflows like image upload
 3. **Ask questions when uncertain** - collaborative decision-making prevents rework
+4. **Validate key sync after bulk additions** - typos in description keys silently break the site
 
 ## Related Documentation
 
