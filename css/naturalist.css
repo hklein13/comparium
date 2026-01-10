@@ -2363,6 +2363,25 @@ p {
   color: var(--ink-tertiary);
 }
 
+/* Empty state with error styling */
+.empty-state-small.empty-state-error {
+  text-align: center;
+  padding: var(--space-xl);
+}
+
+.empty-state-small.empty-state-error .error-text {
+  color: var(--danger);
+  font-weight: bold;
+  margin-bottom: var(--space-sm);
+}
+
+/* Empty species list item in tank form */
+.species-list-empty {
+  color: var(--ink-tertiary);
+  padding: var(--space-md);
+  font-style: italic;
+}
+
 /* ============================================
    GLOSSARY PAGE
    ============================================ */

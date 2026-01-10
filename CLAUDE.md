@@ -119,10 +119,33 @@ glossary-generator.js (transforms data)
 - `js/fish-data.js` - Single source of truth for all species (246 entries, 17 fields including `tankSizeRecommended`, `breedingNeeds`, `genderDifferentiation`)
 - `js/fish-descriptions.js` - Curated descriptions for ALL 246 species (full descriptions from source document)
 - `js/glossary-generator.js` - Reusable logic for generating glossary entries
-- `js/tank-manager.js` - Tank CRUD operations (used by dashboard)
+- `js/tank-manager.js` - Tank CRUD operations (used by dashboard) - **refactored January 2026**
 - `js/maintenance-manager.js` - Event logging and schedule management for tanks
 - `js/faq.js` - FAQ accordion toggle and search functionality
 - `scripts/serviceAccountKey.json` - Firebase Admin credentials (gitignored, never commit)
+
+### tank-manager.js Architecture (Refactored January 2026)
+The tank manager was refactored for maintainability. Key patterns:
+
+**Helper Methods:**
+- `hasItems(arr)` - Consistent array empty check used throughout
+- `getFormContainer()`, `getSpeciesSelector()`, etc. - Cached element getters
+- `createEmptyState()`, `createErrorState()` - Centralized HTML templates
+
+**Modular Card Rendering:**
+```javascript
+renderTankCard(container, tank) {
+  const card = this.createCardElement(tank, speciesCount);
+  this.addNotesSection(card, tank);
+  this.addSpeciesPreview(card, tank, speciesCount);
+  this.addActionButtons(card, tank.id);
+  this.addMaintenanceSection(card, tank);
+}
+```
+
+**CSS Classes (in naturalist.css):**
+- `.empty-state-error` - Error state styling for empty states
+- `.species-list-empty` - Empty species list item styling
 
 ### ⚠️ Critical: Glossary Entry Structure Sync
 The migration script (`scripts/migrate-glossary-to-firestore.js`) has a **duplicated copy** of `generateGlossaryEntry()` (lines 180-196) that must stay in sync with `js/glossary-generator.js`.
@@ -375,6 +398,17 @@ git push -u origin claude/phase3-content-expansion
 - ✅ All 4 Cloud Functions deployed and operational
 - ✅ **Phase 2 complete and merged to main**
 - 🔄 **Phase 3 in progress** (3A complete, 3B partial, 3C complete)
+- ✅ **Code cleanup complete** - tank-manager.js refactored for maintainability
+
+### Claude Code Plugins (MCP Servers)
+The following plugins enhance development workflow:
+
+| Plugin | Purpose | When to Use |
+|--------|---------|-------------|
+| **sequential-thinking** | Step-by-step problem solving | Complex debugging, multi-step reasoning |
+| **sentry** | Error tracking integration | Monitor live site errors (requires Sentry account) |
+| **code-simplifier** | Refactor code for clarity | After completing features, before major UI changes |
+| **feature-dev** | Guided feature development | Planning new features with architecture focus |
 
 **Note:** The `.claude/` folder is gitignored (contains local settings and hooks). Hooks are already configured and working.
 
@@ -518,6 +552,7 @@ Wikimedia Commons returns HTML error pages instead of images when rate limited.
 - Validation scripts (`npm run test:data`, `npm run lint`) catch problems early
 - Saving selections to `temp-selection.json` allows retry after failures
 - Key sync validation script catches description/data mismatches immediately
+- **Code-simplifier plugin** makes refactoring safe - run before UI changes to make edits easier
 
 ### What Went Wrong & Fixes
 | Issue | What Happened | Fix |
