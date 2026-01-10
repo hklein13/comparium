@@ -1,6 +1,0 @@
-/* Tailwind v4 - utilities only (no preflight/base resets) */
-@import "tailwindcss/utilities";
-
-/* Source files for class scanning */
-@source "../*.html";
-@source "../js/**/*.js";

@@ -725,17 +725,6 @@ p {
   color: var(--forest);
 }
 
-.tag-soon,
-.tag-warning {
-  background: var(--warning-bg);
-  color: var(--gold);
-}
-
-.tag-danger {
-  background: var(--danger-bg);
-  color: var(--danger);
-}
-
 .badge {
   display: inline-block;
   padding: 0.25rem 0.75rem;

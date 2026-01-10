@@ -1,76 +1,18 @@
 // Comparium - Application Logic
 
 // ============================================================================
-// FISH DATA LOADING - Firestore Integration
+// FISH DATA
 // ============================================================================
-// fishDatabase will be populated either from:
-// 1. Firestore (preferred) - loaded async on page load
-// 2. fish-data.js (fallback) - if Firestore is unavailable
+// fishDatabase is loaded from fish-data.js (single source of truth)
+// Species data is synced to Firestore via migration script for glossary reads
 // ============================================================================
-
-// fishDatabase is declared in fish-data.js and will be reassigned from Firestore if available
 
 /**
- * Load fish species data from Firestore
- * @returns {Promise<Object>} Fish database object
+ * Initialize the app - build UI with fish data from fish-data.js
  */
-async function loadFishFromFirestore() {
+function initializeApp() {
   try {
-    // Wait for Firebase to initialize with timeout
-    const firebaseTimeout = new Promise((_, reject) =>
-      setTimeout(() => reject(new Error('Firebase initialization timeout')), 10000)
-    );
-
-    // Wait for firebaseAuthReady to be defined
-    let attempts = 0;
-    while (!window.firebaseAuthReady && attempts < 200) {
-      await new Promise(resolve => setTimeout(resolve, 50));
-      attempts++;
-    }
-
-    if (!window.firebaseAuthReady) {return fishDatabase; // Fallback to fish-data.js
-    }
-
-    // Wait for Firebase initialization to complete or timeout
-    await Promise.race([window.firebaseAuthReady, firebaseTimeout]);
-
-    // Import Firestore functions
-    const { getFirestore, collection, getDocs } =
-      await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
-    const db = getFirestore();
-
-    // Fetch all species from Firestore
-    const speciesCollection = collection(db, 'species');
-    const snapshot = await getDocs(speciesCollection);
-
-    if (snapshot.empty) {return fishDatabase;
-    }
-
-    // Convert Firestore documents to fishDatabase format
-    const firestoreData = {};
-    snapshot.docs.forEach(doc => {
-      firestoreData[doc.id] = doc.data();
-    });return firestoreData;
-  } catch (error) {return fishDatabase;
-  }
-}
-
-/**
- * Initialize the app - load data and build UI
- */
-async function initializeApp() {
-  try {
-    // Show loading state
-    const panels = document.querySelectorAll('.species-panel');
-    panels.forEach(panel => {
-      panel.innerHTML =
-        '<div style="padding: 1rem; text-align: center; color: #999;">Loading species...</div>';
-    });
-
-    // Load fish data
-    fishDatabase = await loadFishFromFirestore();
-
-    // Verify we have data
+    // Verify we have data (loaded from fish-data.js)
     if (!fishDatabase || Object.keys(fishDatabase).length === 0) {
       throw new Error('No fish species data available');
     }
@@ -80,8 +22,8 @@ async function initializeApp() {
 
     // Check for URL parameters to auto-load a comparison
     loadComparisonFromUrl();
-
-  } catch (error) {showAppErrorState(
+  } catch (error) {
+    showAppErrorState(
       'Unable to load fish species data. Please <a href="javascript:location.reload()">refresh the page</a> or try again later.'
     );
   }
@@ -99,7 +41,7 @@ function loadComparisonFromUrl() {
 
   const speciesKeys = speciesParam.split(',').filter(key => fishDatabase[key]);
 
-  if (speciesKeys.length < 2) {return;
+  if (speciesKeys.length < 2) {return;
   }
 
   // Auto-select the species (max 3)
@@ -152,11 +94,11 @@ function showAppErrorState(message) {
 // Auto-initialize when DOM is ready with error handling
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
-    initializeApp().catch(error => {showAppErrorState('Critical error loading application. Please refresh the page.');
+    initializeApp().catch(error => {showAppErrorState('Critical error loading application. Please refresh the page.');
     });
   });
 } else {
-  initializeApp().catch(error => {showAppErrorState('Critical error loading application. Please refresh the page.');
+  initializeApp().catch(error => {showAppErrorState('Critical error loading application. Please refresh the page.');
   });
 }
 
