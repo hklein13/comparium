@@ -725,11 +725,7 @@ p {
   color: var(--forest);
 }
 
-.tag-soon {
-  background: var(--warning-bg);
-  color: var(--gold);
-}
-
+.tag-soon,
 .tag-warning {
   background: var(--warning-bg);
   color: var(--gold);
@@ -1516,7 +1512,7 @@ p {
 
 .notification-item-time {
   font-size: 0.8rem;
-  color: var(--ink-light);
+  color: var(--ink-tertiary);
 }
 
 /* Settings Dropdown */
@@ -2364,11 +2360,6 @@ p {
 }
 
 /* Empty state with error styling */
-.empty-state-small.empty-state-error {
-  text-align: center;
-  padding: var(--space-xl);
-}
-
 .empty-state-small.empty-state-error .error-text {
   color: var(--danger);
   font-weight: bold;
@@ -2420,32 +2411,6 @@ p {
 .glossary-search .search-box {
   max-width: 600px;
   margin: 0 auto;
-  position: relative;
-}
-
-.glossary-search .search-box input {
-  width: 100%;
-  padding: 1rem;
-  font-size: 1rem;
-  border: 2px solid var(--border);
-  border-radius: var(--radius-lg);
-  background: var(--white);
-  transition: all var(--transition-base);
-}
-
-.glossary-search .search-box input:focus {
-  outline: none;
-  border-color: var(--forest);
-  box-shadow: 0 0 0 3px rgba(35, 74, 58, 0.1);
-}
-
-.glossary-search .search-icon {
-  position: absolute;
-  left: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--ink-tertiary);
-  font-size: 1.1rem;
 }
 
 .glossary-categories {
@@ -3140,6 +3105,39 @@ p {
   border: 0;
 }
 
+/* Skip to content link (accessibility) */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--forest);
+  color: var(--white);
+  padding: var(--space-sm);
+  z-index: 100;
+  transition: top var(--transition-base);
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* Loading spinner animation */
+.loading-spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid var(--border);
+  border-radius: 50%;
+  border-top-color: var(--forest);
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* ============================================
    MOBILE RESPONSIVE
    ============================================ */
@@ -3260,10 +3258,6 @@ p {
   }
 
   .glossary-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .features-list {
     grid-template-columns: 1fr;
   }
 
