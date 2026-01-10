@@ -2,11 +2,9 @@
   "name": "comparium",
   "version": "1.0.0",
   "type": "module",
-  "description": "A web-based tool for comparing freshwater aquarium fish species and checking compatibility. Includes 99 species with detailed care requirements, predation warnings, and compatibility analysis.",
+  "description": "A web-based tool for comparing freshwater aquarium fish species and checking compatibility. Includes 246 species with detailed care requirements, predation warnings, and compatibility analysis.",
   "main": "index.js",
   "scripts": {
-    "css:build": "tailwindcss -i ./css/tailwind-input.css -o ./css/tailwind.css",
-    "css:watch": "tailwindcss -i ./css/tailwind-input.css -o ./css/tailwind.css --watch",
     "test": "playwright test",
     "test:headed": "playwright test --headed",
     "test:debug": "playwright test --debug",
@@ -43,10 +41,8 @@
   "devDependencies": {
     "@eslint/js": "^9.39.2",
     "@playwright/test": "^1.57.0",
-    "@tailwindcss/cli": "^4.1.18",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
-    "prettier": "^3.7.4",
-    "tailwindcss": "^4.1.18"
+    "prettier": "^3.7.4"
   }
 }

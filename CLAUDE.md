@@ -96,10 +96,6 @@ npm run lint:fix                 # Auto-fix linting issues
 npm run format                   # Format all code with Prettier
 npm run format:check             # Check formatting without changing files
 
-# Tailwind CSS (utilities only - no preflight resets)
-npm run css:build                # Build Tailwind CSS output
-npm run css:watch                # Watch mode for development
-
 # Cloud Functions
 cd functions && npm install      # Install function dependencies (first time only)
 firebase deploy --only functions # Deploy Cloud Functions to Firebase
@@ -128,8 +124,6 @@ glossary-generator.js (transforms data)
 - `js/faq.js` - FAQ accordion toggle and search functionality
 - `scripts/serviceAccountKey.json` - Firebase Admin credentials (gitignored, never commit)
 - `assets/hero-tank.mp4` - Homepage video background (bright planted aquarium, ~13MB)
-- `css/tailwind-input.css` - Tailwind v4 configuration (utilities only)
-- `css/tailwind.css` - Generated Tailwind output (rebuild with `npm run css:build`)
 
 ### tank-manager.js Architecture (Refactored January 2026)
 The tank manager was refactored for maintainability. Key patterns:
@@ -274,7 +268,6 @@ functions/
 
 ### Naturalist Theme (Current)
 - **CSS:** `css/naturalist.css` - Single stylesheet for entire site (includes tank/maintenance/modal styles)
-- **Tailwind:** `css/tailwind.css` - Utilities only (no preflight/base resets), built from `css/tailwind-input.css`
 - **Fonts:** Darker Grotesque (display/body), Libre Baskerville (serif accents), Source Sans 3 (fallback)
 - **No emojis** - Design uses typography and color for visual hierarchy
 - **Color palette:** Forest green (`#234a3a`), ivory/stone backgrounds, ink text hierarchy
@@ -330,24 +323,6 @@ box-shadow:
 --ivory: #faf9f6;         /* Light backgrounds */
 --border: #e5e3de;        /* Borders and dividers */
 ```
-
-### Tailwind CSS v4 Setup
-Tailwind is configured for utilities-only (no preflight resets to avoid conflicts with naturalist.css):
-
-**Configuration (`css/tailwind-input.css`):**
-```css
-@import "tailwindcss/utilities";
-@source "../*.html";
-@source "../js/**/*.js";
-```
-
-**Build commands:**
-```bash
-npm run css:build   # One-time build
-npm run css:watch   # Watch mode for development
-```
-
-**Note:** Tailwind output (`css/tailwind.css`) must be linked in HTML after `naturalist.css`.
 
 ## Project Roadmap
 

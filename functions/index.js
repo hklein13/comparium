@@ -84,9 +84,13 @@ exports.helloComparium = onRequest(async (req, res) => {
 function formatScheduleType(type) {
   const types = {
     waterChange: 'Water change',
-    parameterTest: 'Water test',
+    parameterTest: 'Parameter test',
     filterMaintenance: 'Filter maintenance',
+    feeding: 'Special feeding',
     glassClean: 'Glass cleaning',
+    gravel: 'Gravel vacuum',
+    plantTrim: 'Plant trimming',
+    custom: 'Custom task',
   };
   return types[type] || type;
 }

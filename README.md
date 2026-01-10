@@ -1,8 +1,8 @@
 # Comparium - Fish Species Compatibility Tool
 
-A web-based platform for comparing freshwater aquarium fish species and managing your aquarium. Features 143 species with detailed care requirements, tank management, maintenance scheduling, and push notifications.
+A web-based platform for comparing freshwater aquarium fish species and managing your aquarium. Features 246 species with detailed care requirements, tank management, maintenance scheduling, and push notifications.
 
-**Current Status:** Phase 2 Complete (January 2026) - Notifications + FCM Push
+**Current Status:** Phase 3 In Progress (January 2026) - Content Expansion
 
 **Live Site:** https://comparium.net
 
