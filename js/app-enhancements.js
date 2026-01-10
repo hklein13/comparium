@@ -45,14 +45,10 @@ return;
     const endsWithWordChar = /\w$/.test(fish.commonName);
     const fishNameRegex = new RegExp(`\\b${escapedName}${endsWithWordChar ? '\\b' : ''}`, 'g');
 
-    const beforeHTML = resultsDiv.innerHTML;
     resultsDiv.innerHTML = resultsDiv.innerHTML.replace(
       fishNameRegex,
       `<a href="species.html?fish=${fishKey}" class="fish-name-link">${fish.commonName}</a>`
     );
-    const afterHTML = resultsDiv.innerHTML;
-
-    // beforeHTML/afterHTML comparison removed (was for debugging)
   });
 
   // Favorite stars are now added directly in displayComparison() in app.js
