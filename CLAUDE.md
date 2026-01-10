@@ -286,7 +286,7 @@ Development follows a phased approach. See `DATA-MODEL.md` for complete specific
 | Sub-Phase | Status | Description |
 |-----------|--------|-------------|
 | **3A** | ✅ Complete | Added 3 new fields to all species (`tankSizeRecommended`, `breedingNeeds`, `genderDifferentiation`) |
-| **3B** | 🔄 Partial | 131/246 species have images; 4 failed due to Wikimedia rate limits |
+| **3B** | 🔄 Partial | 130/246 species have images; 4 failed due to Wikimedia rate limits |
 | **3C** | ✅ Complete | Added 103 new species (143 → 246) + updated ALL 246 descriptions to full versions |
 | **3D** | ⏳ Pending | Add images for remaining 115 species |
 | **3E** | ⏳ Pending | Add disease reference images |
@@ -320,7 +320,7 @@ Development follows a phased approach. See `DATA-MODEL.md` for complete specific
 ### Current State (January 2026)
 **Active branch:** `claude/phase3-content-expansion` (Phase 3 content expansion in progress)
 
-**Main branch:** Fully up to date with Phase 2 complete (merged)
+**Main branch:** Up to date with Phase 2 + security audit merged (January 9, 2026)
 
 ### Workflow for Phase 3
 ```bash
