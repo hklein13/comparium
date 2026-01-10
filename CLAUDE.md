@@ -96,6 +96,10 @@ npm run lint:fix                 # Auto-fix linting issues
 npm run format                   # Format all code with Prettier
 npm run format:check             # Check formatting without changing files
 
+# Tailwind CSS (utilities only - no preflight resets)
+npm run css:build                # Build Tailwind CSS output
+npm run css:watch                # Watch mode for development
+
 # Cloud Functions
 cd functions && npm install      # Install function dependencies (first time only)
 firebase deploy --only functions # Deploy Cloud Functions to Firebase
@@ -123,6 +127,9 @@ glossary-generator.js (transforms data)
 - `js/maintenance-manager.js` - Event logging and schedule management for tanks
 - `js/faq.js` - FAQ accordion toggle and search functionality
 - `scripts/serviceAccountKey.json` - Firebase Admin credentials (gitignored, never commit)
+- `assets/hero-tank.mp4` - Homepage video background (bright planted aquarium, ~13MB)
+- `css/tailwind-input.css` - Tailwind v4 configuration (utilities only)
+- `css/tailwind.css` - Generated Tailwind output (rebuild with `npm run css:build`)
 
 ### tank-manager.js Architecture (Refactored January 2026)
 The tank manager was refactored for maintainability. Key patterns:
@@ -189,7 +196,7 @@ if (!missing.length && !orphaned.length) console.log('SUCCESS: All keys match!')
 - Wrong suffixes: `schwartzsCory` vs `schwartziCorydoras`
 
 ### Page Structure
-- **index.html** - Landing page (split hero with fish collage, demo CTA, species showcase, origin note)
+- **index.html** - Landing page (video hero with looping aquarium background, demo CTA, species showcase, origin note)
 - **compare.html** - Fish comparison tool (the main app functionality)
 - **dashboard.html** - User hub with stats, comparisons, tank management, maintenance tracking, and favorites
 - **glossary.html** - Species database with search and filtering
@@ -267,17 +274,53 @@ functions/
 
 ### Naturalist Theme (Current)
 - **CSS:** `css/naturalist.css` - Single stylesheet for entire site (includes tank/maintenance/modal styles)
+- **Tailwind:** `css/tailwind.css` - Utilities only (no preflight/base resets), built from `css/tailwind-input.css`
 - **Fonts:** Darker Grotesque (display/body), Libre Baskerville (serif accents), Source Sans 3 (fallback)
 - **No emojis** - Design uses typography and color for visual hierarchy
 - **Color palette:** Forest green (`#234a3a`), ivory/stone backgrounds, ink text hierarchy
 
 ### Key CSS Classes
-- `.hero-split` - Landing page hero with two columns
-- `.fish-collage` - Asymmetric image arrangement
+- `.hero-video` - Landing page video hero (looping aquarium background)
+- `.hero-video__bg` - Video element with `object-fit: cover`
+- `.hero-video__overlay` - Forest green gradient for text readability
+- `.hero-video__content` - Centered text content container
 - `.showcase-section` - Species grid display
 - `.demo-section` - Feature preview sections
 - `.btn-primary` / `.btn-ghost` - Button styles
 - `.header` / `.footer` - Site-wide navigation
+
+### Video Hero (index.html)
+The homepage uses a looping video background with:
+- **Video file:** `assets/hero-tank.mp4` (~13MB, bright planted aquarium)
+- **Overlay:** Forest green gradient (40% top → 85% bottom) for text contrast
+- **Mobile:** Reduced height (70vh) and smaller text (1rem paragraphs)
+- **Attributes:** `autoplay muted loop playsinline preload="metadata"`
+
+```html
+<section class="hero-video">
+  <video autoplay muted loop playsinline preload="metadata" class="hero-video__bg">
+    <source src="assets/hero-tank.mp4" type="video/mp4" />
+  </video>
+  <div class="hero-video__overlay"></div>
+  <div class="hero-video__content">
+    <h1>The place for all things aquarium.</h1>
+    <p>Research species. Check compatibility. Track maintenance.</p>
+    <a href="compare.html" class="btn btn-primary">Get Started</a>
+  </div>
+</section>
+```
+
+### Glass Edge Highlights
+Cards have subtle glass edge highlights mimicking aquarium glass:
+- **Effect:** Inset white shadow on top-left edge
+- **Applied to:** `.glossary-card`, `.tank-card`
+- **Implementation:** Integrated into original card definitions (not separate rules)
+
+```css
+box-shadow:
+  inset 1px 1px 0 rgba(255, 255, 255, 0.15),
+  0 2px 8px rgba(0, 0, 0, 0.04);
+```
 
 ### CSS Variables
 ```css
@@ -287,6 +330,24 @@ functions/
 --ivory: #faf9f6;         /* Light backgrounds */
 --border: #e5e3de;        /* Borders and dividers */
 ```
+
+### Tailwind CSS v4 Setup
+Tailwind is configured for utilities-only (no preflight resets to avoid conflicts with naturalist.css):
+
+**Configuration (`css/tailwind-input.css`):**
+```css
+@import "tailwindcss/utilities";
+@source "../*.html";
+@source "../js/**/*.js";
+```
+
+**Build commands:**
+```bash
+npm run css:build   # One-time build
+npm run css:watch   # Watch mode for development
+```
+
+**Note:** Tailwind output (`css/tailwind.css`) must be linked in HTML after `naturalist.css`.
 
 ## Project Roadmap
 
