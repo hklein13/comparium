@@ -533,6 +533,44 @@ Wikimedia Commons returns HTML error pages instead of images when rate limited.
 3. **Ask questions when uncertain** - collaborative decision-making prevents rework
 4. **Validate key sync after bulk additions** - typos in description keys silently break the site
 
+## Security Notes
+
+### Current Security Status (January 2026)
+- **Overall posture:** GOOD (7/10)
+- **Firestore rules:** Comprehensive with ownership checks
+- **Service account key:** Properly gitignored
+- **Cloud Functions:** Secure (scheduled triggers, proper scoping)
+- **Console logging:** Removed from production code
+
+### Storage Rules - TEMPORARY STATE
+**File:** `scripts/storage.rules`
+
+Current rule allows **all authenticated users** to write to images folder:
+```javascript
+allow write: if request.auth != null;
+```
+
+**TODO after Phase 3:** Change to admin-only pattern to match Firestore:
+```javascript
+allow write: if request.auth != null &&
+  get(/databases/$(database)/documents/users/$(request.auth.uid)).data.admin == true;
+```
+
+### Phase 4 Security Hardening Checklist
+| Item | Status | Notes |
+|------|--------|-------|
+| Storage rules to admin-only | Pending | Do after Phase 3 completes |
+| Strengthen password requirements | Pending | Phase 5 (8+ chars, mixed case) |
+| Add DOMPurify for dynamic content | Pending | XSS prevention |
+| Implement email verification | Pending | Multi-user admin setup |
+| Add rate limiting to Cloud Functions | Pending | Prevent abuse |
+
+### Security Best Practices
+1. **Never commit secrets** - `serviceAccountKey.json` must stay gitignored
+2. **Rotate keys periodically** - VAPID key, service account key via Firebase Console
+3. **No console logging in production** - Removed all debug statements
+4. **Migrations use Admin SDK** - Service account bypasses rules, no permissive rules needed
+
 ## Related Documentation
 
 - `DATA-MODEL.md` - **Firestore structure and Phase 2-5 roadmap** (comprehensive)

@@ -28,9 +28,7 @@ async function loadFishFromFirestore() {
       attempts++;
     }
 
-    if (!window.firebaseAuthReady) {
-      console.warn('Firebase not initialized, using fallback fish data');
-      return fishDatabase; // Fallback to fish-data.js
+    if (!window.firebaseAuthReady) {return fishDatabase; // Fallback to fish-data.js
     }
 
     // Wait for Firebase initialization to complete or timeout
@@ -45,22 +43,15 @@ async function loadFishFromFirestore() {
     const speciesCollection = collection(db, 'species');
     const snapshot = await getDocs(speciesCollection);
 
-    if (snapshot.empty) {
-      console.warn('No species found in Firestore, using fallback data');
-      return fishDatabase;
+    if (snapshot.empty) {return fishDatabase;
     }
 
     // Convert Firestore documents to fishDatabase format
     const firestoreData = {};
     snapshot.docs.forEach(doc => {
       firestoreData[doc.id] = doc.data();
-    });
-
-    console.log(`Loaded ${snapshot.size} species from Firestore`);
-    return firestoreData;
-  } catch (error) {
-    console.error('Error loading from Firestore, using fallback data:', error);
-    return fishDatabase;
+    });return firestoreData;
+  } catch (error) {return fishDatabase;
   }
 }
 
@@ -90,10 +81,7 @@ async function initializeApp() {
     // Check for URL parameters to auto-load a comparison
     loadComparisonFromUrl();
 
-    console.log('App initialized with', Object.keys(fishDatabase).length, 'species');
-  } catch (error) {
-    console.error('Error initializing app:', error);
-    showAppErrorState(
+  } catch (error) {showAppErrorState(
       'Unable to load fish species data. Please <a href="javascript:location.reload()">refresh the page</a> or try again later.'
     );
   }
@@ -111,9 +99,7 @@ function loadComparisonFromUrl() {
 
   const speciesKeys = speciesParam.split(',').filter(key => fishDatabase[key]);
 
-  if (speciesKeys.length < 2) {
-    console.warn('URL species param needs at least 2 valid species keys');
-    return;
+  if (speciesKeys.length < 2) {return;
   }
 
   // Auto-select the species (max 3)
@@ -166,15 +152,11 @@ function showAppErrorState(message) {
 // Auto-initialize when DOM is ready with error handling
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
-    initializeApp().catch(error => {
-      console.error('Fatal initialization error:', error);
-      showAppErrorState('Critical error loading application. Please refresh the page.');
+    initializeApp().catch(error => {showAppErrorState('Critical error loading application. Please refresh the page.');
     });
   });
 } else {
-  initializeApp().catch(error => {
-    console.error('Fatal initialization error:', error);
-    showAppErrorState('Critical error loading application. Please refresh the page.');
+  initializeApp().catch(error => {showAppErrorState('Critical error loading application. Please refresh the page.');
   });
 }
 

@@ -34,9 +34,7 @@ try {
   const analytics = getAnalytics(app);
   window.firebaseAnalytics = analytics;
 } catch (e) {
-  // Analytics may error in local file:// contexts; ignore
-  console.warn('Analytics not available:', e.message);
-}
+  // Analytics may error in local file:// contexts; ignore}
 
 // Auth and Firestore
 const auth = getAuth(app);
@@ -55,28 +53,18 @@ let messaging = null;
 async function initializeMessaging() {
   try {
     const supported = await isSupported();
-    if (!supported) {
-      console.log('FCM not supported in this browser');
-      return false;
+    if (!supported) {return false;
     }
 
     // CRITICAL: Register service worker before getting messaging
     if ('serviceWorker' in navigator) {
       try {
-        await navigator.serviceWorker.register('/firebase-messaging-sw.js');
-        console.log('FCM service worker registered');
-      } catch (swError) {
-        console.warn('Service worker registration failed:', swError.message);
-        // Continue anyway - might already be registered
+        await navigator.serviceWorker.register('/firebase-messaging-sw.js');} catch (swError) {// Continue anyway - might already be registered
       }
     }
 
-    messaging = getMessaging(app);
-    console.log('FCM initialized successfully');
-    return true;
-  } catch (e) {
-    console.warn('FCM initialization failed:', e.message);
-    return false;
+    messaging = getMessaging(app);return true;
+  } catch (e) {return false;
   }
 }
 
@@ -135,9 +123,7 @@ window.firestoreGetProfile = async uid => {
     const ref = doc(firestore, 'users', uid);
     const snap = await getDoc(ref);
     return snap.exists() ? snap.data() : null;
-  } catch (e) {
-    console.error('firestoreGetProfile error:', e);
-    return null;
+  } catch (e) {return null;
   }
 };
 
@@ -151,9 +137,7 @@ window.firestoreGetProfileByEmail = async email => {
       return docSnap.data();
     }
     return null;
-  } catch (e) {
-    console.error('firestoreGetProfileByEmail error:', e);
-    return null;
+  } catch (e) {return null;
   }
 };
 
@@ -163,9 +147,7 @@ window.firestoreSetProfile = async (uid, data) => {
     const ref = doc(firestore, 'users', uid);
     await setDoc(ref, data, { merge: true });
     return true;
-  } catch (e) {
-    console.error('firestoreSetProfile error:', e);
-    return false;
+  } catch (e) {return false;
   }
 };
 
@@ -175,9 +157,7 @@ window.firestoreUpdateProfile = async (uid, updates) => {
     const ref = doc(firestore, 'users', uid);
     await updateDoc(ref, updates);
     return true;
-  } catch (e) {
-    console.error('firestoreUpdateProfile error:', e);
-    return false;
+  } catch (e) {return false;
   }
 };
 
@@ -187,9 +167,7 @@ window.firestoreAddComparison = async (uid, comparison) => {
   try {
     await updateDoc(ref, { 'profile.comparisonHistory': arrayUnion(record) });
     return { success: true, id: record.id };
-  } catch (e) {
-    console.error('firestoreAddComparison error:', e);
-    return { success: false };
+  } catch (e) {return { success: false };
   }
 };
 
@@ -197,9 +175,7 @@ window.firestoreGetComparisons = async uid => {
   try {
     const profile = await window.firestoreGetProfile(uid);
     return profile?.profile?.comparisonHistory || [];
-  } catch (e) {
-    console.error('firestoreGetComparisons error:', e);
-    return [];
+  } catch (e) {return [];
   }
 };
 
@@ -208,9 +184,7 @@ window.firestoreAddFavorite = async (uid, speciesKey) => {
   try {
     await updateDoc(ref, { 'profile.favoriteSpecies': arrayUnion(speciesKey) });
     return { success: true };
-  } catch (e) {
-    console.error('firestoreAddFavorite error:', e);
-    return { success: false };
+  } catch (e) {return { success: false };
   }
 };
 
@@ -219,9 +193,7 @@ window.firestoreRemoveFavorite = async (uid, speciesKey) => {
   try {
     await updateDoc(ref, { 'profile.favoriteSpecies': arrayRemove(speciesKey) });
     return { success: true };
-  } catch (e) {
-    console.error('firestoreRemoveFavorite error:', e);
-    return { success: false };
+  } catch (e) {return { success: false };
   }
 };
 
@@ -229,9 +201,7 @@ window.firestoreGetFavorites = async uid => {
   try {
     const profile = await window.firestoreGetProfile(uid);
     return profile?.profile?.favoriteSpecies || [];
-  } catch (e) {
-    console.error('firestoreGetFavorites error:', e);
-    return [];
+  } catch (e) {return [];
   }
 };
 
@@ -250,9 +220,7 @@ window.firestoreSaveTank = async (uid, tank) => {
     }
     await setDoc(ref, profile, { merge: true });
     return { success: true, tankId: tank.id };
-  } catch (e) {
-    console.error('firestoreSaveTank error:', e);
-    return { success: false };
+  } catch (e) {return { success: false };
   }
 };
 
@@ -260,9 +228,7 @@ window.firestoreGetTanks = async uid => {
   try {
     const profile = await window.firestoreGetProfile(uid);
     return profile?.profile?.tanks || [];
-  } catch (e) {
-    console.error('firestoreGetTanks error:', e);
-    return [];
+  } catch (e) {return [];
   }
 };
 
@@ -273,9 +239,7 @@ window.firestoreDeleteTank = async (uid, tankId) => {
     profile.profile.tanks = (profile.profile.tanks || []).filter(t => t.id !== tankId);
     await setDoc(ref, profile, { merge: true });
     return { success: true };
-  } catch (e) {
-    console.error('firestoreDeleteTank error:', e);
-    return { success: false };
+  } catch (e) {return { success: false };
   }
 };
 
@@ -290,9 +254,7 @@ window.firestoreExportUserData = async uid => {
       profile: profile.profile,
       exportDate: new Date().toISOString(),
     };
-  } catch (e) {
-    console.error('firestoreExportUserData error:', e);
-    return null;
+  } catch (e) {return null;
   }
 };
 
@@ -303,9 +265,7 @@ window.firestoreImportUserData = async (uid, importData) => {
     base.profile = { ...base.profile, ...(importData.profile || {}) };
     await setDoc(ref, base, { merge: true });
     return { success: true };
-  } catch (e) {
-    console.error('firestoreImportUserData error:', e);
-    return { success: false };
+  } catch (e) {return { success: false };
   }
 };
 
@@ -333,9 +293,7 @@ window.firestoreAddTankEvent = async (uid, eventData) => {
     };
     const ref = await addDoc(collection(firestore, 'tankEvents'), event);
     return { success: true, eventId: ref.id };
-  } catch (e) {
-    console.error('firestoreAddTankEvent error:', e);
-    return { success: false };
+  } catch (e) {return { success: false };
   }
 };
 
@@ -364,9 +322,7 @@ window.firestoreGetTankEvents = async (uid, tankId, maxResults = 50) => {
       date: d.data().date?.toDate?.()?.toISOString() || d.data().date,
       created: d.data().created?.toDate?.()?.toISOString() || d.data().created,
     }));
-  } catch (e) {
-    console.error('firestoreGetTankEvents error:', e);
-    return [];
+  } catch (e) {return [];
   }
 };
 
@@ -392,9 +348,7 @@ window.firestoreGetAllUserEvents = async (uid, maxResults = 100) => {
       date: d.data().date?.toDate?.()?.toISOString() || d.data().date,
       created: d.data().created?.toDate?.()?.toISOString() || d.data().created,
     }));
-  } catch (e) {
-    console.error('firestoreGetAllUserEvents error:', e);
-    return [];
+  } catch (e) {return [];
   }
 };
 
@@ -415,9 +369,7 @@ window.firestoreDeleteTankEvent = async (uid, eventId) => {
     }
     await deleteDoc(eventRef);
     return { success: true };
-  } catch (e) {
-    console.error('firestoreDeleteTankEvent error:', e);
-    return { success: false };
+  } catch (e) {return { success: false };
   }
 };
 
@@ -477,9 +429,7 @@ window.firestoreSaveTankSchedule = async (uid, scheduleData) => {
       const ref = await addDoc(collection(firestore, 'tankSchedules'), schedule);
       return { success: true, scheduleId: ref.id };
     }
-  } catch (e) {
-    console.error('firestoreSaveTankSchedule error:', e);
-    return { success: false };
+  } catch (e) {return { success: false };
   }
 };
 
@@ -512,9 +462,7 @@ window.firestoreGetTankSchedules = async (uid, tankId) => {
         },
       };
     });
-  } catch (e) {
-    console.error('firestoreGetTankSchedules error:', e);
-    return [];
+  } catch (e) {return [];
   }
 };
 
@@ -557,9 +505,7 @@ window.firestoreGetAllUserSchedules = async (uid, enabledOnly = false) => {
         },
       };
     });
-  } catch (e) {
-    console.error('firestoreGetAllUserSchedules error:', e);
-    return [];
+  } catch (e) {return [];
   }
 };
 
@@ -594,9 +540,7 @@ window.firestoreCompleteSchedule = async (uid, scheduleId, completedDate = new D
     });
 
     return { success: true };
-  } catch (e) {
-    console.error('firestoreCompleteSchedule error:', e);
-    return { success: false };
+  } catch (e) {return { success: false };
   }
 };
 
@@ -618,9 +562,7 @@ window.firestoreDeleteTankSchedule = async (uid, scheduleId) => {
 
     await deleteDoc(scheduleRef);
     return { success: true };
-  } catch (e) {
-    console.error('firestoreDeleteTankSchedule error:', e);
-    return { success: false };
+  } catch (e) {return { success: false };
   }
 };
 
@@ -639,9 +581,7 @@ window.firestoreUsernameExists = async username => {
     const ref = doc(firestore, 'usernames', username);
     const snap = await getDoc(ref);
     return { error: false, exists: snap.exists() };
-  } catch (e) {
-    console.error('firestoreUsernameExists error:', e);
-    return { error: true, exists: false };
+  } catch (e) {return { error: true, exists: false };
   }
 };
 
@@ -662,9 +602,7 @@ window.firestoreCreateUsername = async (username, uid, email) => {
       created: new Date().toISOString(),
     });
     return true;
-  } catch (e) {
-    console.error('firestoreCreateUsername error:', e);
-    return false;
+  } catch (e) {return false;
   }
 };
 
@@ -683,9 +621,7 @@ window.firestoreGetUidByUsername = async username => {
       return { uid: data.uid, email: data.email };
     }
     return null;
-  } catch (e) {
-    console.error('firestoreGetUidByUsername error:', e);
-    return null;
+  } catch (e) {return null;
   }
 };
 
@@ -700,9 +636,7 @@ window.firestoreDeleteUsername = async username => {
     const ref = doc(firestore, 'usernames', username);
     await deleteDoc(ref);
     return true;
-  } catch (e) {
-    console.error('firestoreDeleteUsername error:', e);
-    return false;
+  } catch (e) {return false;
   }
 };
 
@@ -725,9 +659,7 @@ window.firestoreGetNotifications = async (uid, maxResults = 20) => {
     );
     const snap = await getDocs(q);
     return snap.docs.map(d => ({ id: d.id, ...d.data() }));
-  } catch (e) {
-    console.error('firestoreGetNotifications error:', e);
-    return [];
+  } catch (e) {return [];
   }
 };
 
@@ -740,9 +672,7 @@ window.firestoreMarkNotificationRead = async notificationId => {
     const ref = doc(firestore, 'notifications', notificationId);
     await updateDoc(ref, { read: true });
     return true;
-  } catch (e) {
-    console.error('firestoreMarkNotificationRead error:', e);
-    return false;
+  } catch (e) {return false;
   }
 };
 
@@ -777,9 +707,7 @@ window.fcmRequestPermission = async uid => {
     }
   }
 
-  if (!VAPID_KEY) {
-    console.warn('FCM VAPID key not configured');
-    return { success: false, error: 'Push notifications not configured' };
+  if (!VAPID_KEY) {return { success: false, error: 'Push notifications not configured' };
   }
 
   try {
@@ -799,13 +727,8 @@ window.fcmRequestPermission = async uid => {
     const saved = await window.fcmSaveToken(uid, token);
     if (!saved) {
       return { success: false, error: 'Failed to save notification token' };
-    }
-
-    console.log('FCM token obtained and saved');
-    return { success: true, token };
-  } catch (e) {
-    console.error('fcmRequestPermission error:', e);
-    return { success: false, error: e.message };
+    }return { success: true, token };
+  } catch (e) {return { success: false, error: e.message };
   }
 };
 
@@ -817,19 +740,12 @@ window.fcmRequestPermission = async uid => {
  * @returns {Promise<boolean>}
  */
 window.fcmSaveToken = async (uid, token) => {
-  if (!firestore || !uid || !token) {
-    console.error('fcmSaveToken: Missing required params', {
-      firestore: !!firestore,
-      uid: !!uid,
-      token: !!token,
-    });
-    return false;
+  if (!firestore || !uid || !token) {return false;
   }
   try {
     // Create a simple hash of the token for the document ID
     // This prevents duplicate tokens for the same device
     const tokenHash = await hashToken(token);
-    console.log('fcmSaveToken: Saving token with hash', tokenHash.substring(0, 20) + '...');
 
     const tokenDoc = {
       token: token,
@@ -841,12 +757,8 @@ window.fcmSaveToken = async (uid, token) => {
       valid: true,
     };
 
-    await setDoc(doc(firestore, 'fcmTokens', tokenHash), tokenDoc);
-    console.log('fcmSaveToken: Token saved successfully');
-    return true;
-  } catch (e) {
-    console.error('fcmSaveToken error:', e.code, e.message);
-    return false;
+    await setDoc(doc(firestore, 'fcmTokens', tokenHash), tokenDoc);return true;
+  } catch (e) {return false;
   }
 };
 
@@ -865,9 +777,7 @@ window.fcmGetUserTokens = async uid => {
     );
     const snap = await getDocs(q);
     return snap.docs.map(d => ({ id: d.id, ...d.data() }));
-  } catch (e) {
-    console.error('fcmGetUserTokens error:', e);
-    return [];
+  } catch (e) {return [];
   }
 };
 
@@ -888,9 +798,7 @@ window.fcmDisableNotifications = async uid => {
     );
     const snap = await getDocs(q);
 
-    if (snap.empty) {
-      console.log('No FCM tokens to disable');
-      return true; // Nothing to disable, consider it success
+    if (snap.empty) {return true; // Nothing to disable, consider it success
     }
 
     // Mark all tokens as invalid
@@ -898,11 +806,8 @@ window.fcmDisableNotifications = async uid => {
       await updateDoc(tokenDoc.ref, { valid: false });
     }
 
-    console.log(`Push notifications disabled (${snap.size} token(s))`);
     return true;
-  } catch (e) {
-    console.error('fcmDisableNotifications error:', e);
-    return false;
+  } catch (e) {return false;
   }
 };
 
@@ -923,9 +828,7 @@ window.fcmIsEnabled = async uid => {
     );
     const snap = await getDocs(q);
     return !snap.empty;
-  } catch (e) {
-    console.error('fcmIsEnabled error:', e);
-    return false;
+  } catch (e) {return false;
   }
 };
 
@@ -937,10 +840,7 @@ window.fcmIsEnabled = async uid => {
 window.fcmSetupForegroundHandler = callback => {
   if (!messaging) return;
 
-  onMessage(messaging, payload => {
-    console.log('FCM foreground message received:', payload);
-
-    // Show browser notification
+  onMessage(messaging, payload => {// Show browser notification
     if (Notification.permission === 'granted') {
       const title = payload.notification?.title || 'Comparium';
       const body = payload.notification?.body || 'You have a new notification';

@@ -17,66 +17,42 @@ function escapeRegex(string) {
  * Call this after displaying results
  */
 function makeSpeciesNamesClickable() {
-  console.log('makeSpeciesNamesClickable started');
-
-  // Find the comparison grid (not .results!)
+// Find the comparison grid (not .results!)
   const resultsDiv = document.getElementById('comparisonGrid');
   if (!resultsDiv) {
-    console.log('No comparisonGrid found');
-    return;
+return;
   }
-  console.log('Found comparisonGrid');
-
-  // Safety check: ensure selectedSpecies exists
+// Safety check: ensure selectedSpecies exists
   if (typeof selectedSpecies === 'undefined') {
-    console.log('selectedSpecies is undefined');
-    return;
+return;
   }
-  console.log('selectedSpecies exists:', selectedSpecies);
-
-  // Get all the fish data from selected panels
+// Get all the fish data from selected panels
   const fish1Key = selectedSpecies.panel1;
   const fish2Key = selectedSpecies.panel2;
   const fish3Key = selectedSpecies.panel3;
 
   const selectedFish = [fish1Key, fish2Key, fish3Key].filter(Boolean);
-  console.log('Selected fish:', selectedFish);
-
-  // Replace each fish name with clickable link
+// Replace each fish name with clickable link
   selectedFish.forEach(fishKey => {
     const fish = fishDatabase[fishKey];
     if (!fish) {
-      console.log('Fish not found in database:', fishKey);
-      return;
+return;
     }
-
-    console.log('Processing:', fish.commonName, 'key:', fishKey);
-
-    // Find all instances of this fish name in results
+// Find all instances of this fish name in results
     // Escape special regex characters (fixes species with parentheses like "Bichir (Senegal)")
     const escapedName = escapeRegex(fish.commonName);
     // Only use trailing word boundary if name ends with a word character (fixes parentheses issue)
     const endsWithWordChar = /\w$/.test(fish.commonName);
     const fishNameRegex = new RegExp(`\\b${escapedName}${endsWithWordChar ? '\\b' : ''}`, 'g');
 
-    const beforeHTML = resultsDiv.innerHTML;
     resultsDiv.innerHTML = resultsDiv.innerHTML.replace(
       fishNameRegex,
       `<a href="species.html?fish=${fishKey}" class="fish-name-link">${fish.commonName}</a>`
     );
-    const afterHTML = resultsDiv.innerHTML;
-
-    if (beforeHTML !== afterHTML) {
-      console.log('Replaced text for:', fish.commonName);
-    } else {
-      console.log('No replacement occurred for:', fish.commonName);
-    }
   });
 
   // Favorite stars are now added directly in displayComparison() in app.js
   // No need to add them here - prevents duplicate stars
-
-  console.log('makeSpeciesNamesClickable completed');
 }
 
 /**
@@ -146,28 +122,18 @@ async function loadFavoriteStatesInResults() {
  * Enhanced compare function that adds clickable names
  * This wraps the existing compareSpecies function
  */
-console.log('app-enhancements.js loaded');
-console.log('compareSpecies exists?', typeof compareSpecies);
-
 if (typeof compareSpecies !== 'undefined') {
-  console.log('Wrapping compareSpecies function');
-  const originalCompareSpecies = compareSpecies;
+const originalCompareSpecies = compareSpecies;
   compareSpecies = function () {
-    console.log('Enhanced compareSpecies called!');
-    // Call original function
+// Call original function
     const result = originalCompareSpecies();
-
-    console.log('Scheduling makeSpeciesNamesClickable...');
-    // Add enhancements after a brief delay to ensure DOM is updated
+// Add enhancements after a brief delay to ensure DOM is updated
     setTimeout(() => {
-      console.log('Calling makeSpeciesNamesClickable now');
-      makeSpeciesNamesClickable();
+makeSpeciesNamesClickable();
     }, 100);
 
     return result;
   };
-} else {
-  console.log('compareSpecies NOT FOUND - cannot wrap');
 }
 
 /**
