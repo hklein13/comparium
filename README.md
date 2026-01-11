@@ -360,7 +360,7 @@ newFishKey: {
 ## 📈 Current Features & Future Plans
 
 **Implemented:**
-- ✅ 143 fish species with images from Wikimedia Commons
+- ✅ 246 fish species (213 with images from Wikimedia Commons)
 - ✅ Individual species profile pages
 - ✅ User accounts with Firebase Auth
 - ✅ Tank management with species tracking
