@@ -9,8 +9,18 @@ class GlossaryManager {
   constructor() {
     this.currentCategory = null;
     this.searchTerm = '';
+    this.currentOriginFilter = null; // Filter by continent/origin
     this.glossaryData = this.initializeGlossaryData();
     this.categories = this.initializeCategories();
+
+    // Origin filter configuration
+    this.originOptions = [
+      { key: 'southAmerica', label: 'South America' },
+      { key: 'africa', label: 'Africa' },
+      { key: 'asia', label: 'Asia' },
+      { key: 'northCentralAmerica', label: 'N. & C. America' },
+      { key: 'australiaOceania', label: 'Oceania' },
+    ];
 
     // Pagination configuration
     this.currentPage = 1;
@@ -947,7 +957,18 @@ class GlossaryManager {
    */
   async init() {
     try {
+      // Check for URL parameters (e.g., ?origin=southAmerica)
+      const urlParams = new URLSearchParams(window.location.search);
+      const originParam = urlParams.get('origin');
+
+      // If origin parameter provided, auto-select species category and origin filter
+      if (originParam && this.originOptions.some(opt => opt.key === originParam)) {
+        this.currentCategory = 'species';
+        this.currentOriginFilter = originParam;
+      }
+
       this.renderCategories();
+      this.renderOriginFilters();
       await this.renderContent();
     } catch (error) {
       console.error('Error initializing glossary:', error);
@@ -1012,10 +1033,76 @@ class GlossaryManager {
   async selectCategory(categoryId) {
     this.currentCategory = categoryId;
     this.searchTerm = '';
+    this.currentOriginFilter = null; // Reset origin filter when changing category
     this.currentPage = 1; // Reset to first page
     document.getElementById('glossarySearch').value = '';
 
     this.renderCategories();
+    this.renderOriginFilters();
+    await this.renderContent();
+  }
+
+  /**
+   * Render origin filter chips (only visible for species category)
+   */
+  renderOriginFilters() {
+    const container = document.getElementById('originFilters');
+    if (!container) return;
+
+    // Only show for species category
+    if (this.currentCategory !== 'species') {
+      container.classList.remove('visible');
+      container.innerHTML = '';
+      return;
+    }
+
+    // Count species per origin
+    const speciesEntries = this.glossaryData.species || [];
+    const originCounts = {};
+    this.originOptions.forEach(opt => (originCounts[opt.key] = 0));
+    speciesEntries.forEach(entry => {
+      if (entry.origin && originCounts[entry.origin] !== undefined) {
+        originCounts[entry.origin]++;
+      }
+    });
+
+    // Build chips HTML
+    const chipsHtml = this.originOptions
+      .map(opt => {
+        const count = originCounts[opt.key] || 0;
+        const activeClass = this.currentOriginFilter === opt.key ? 'active' : '';
+        return `
+          <button class="origin-chip ${activeClass}" data-origin="${opt.key}" onclick="glossaryManager.selectOriginFilter('${opt.key}')">
+            <span class="chip-dot"></span>
+            <span class="chip-label">${opt.label}</span>
+            <span class="chip-count">(${count})</span>
+          </button>
+        `;
+      })
+      .join('');
+
+    // Add "All" chip at the beginning
+    const allActive = !this.currentOriginFilter ? 'active' : '';
+    const totalSpecies = speciesEntries.length;
+    container.innerHTML = `
+      <button class="origin-chip ${allActive}" onclick="glossaryManager.selectOriginFilter(null)">
+        All Origins
+        <span class="chip-count">(${totalSpecies})</span>
+      </button>
+      ${chipsHtml}
+    `;
+
+    container.classList.add('visible');
+  }
+
+  /**
+   * Select an origin filter
+   * @param {string|null} originKey - Origin to filter by, or null for all
+   */
+  async selectOriginFilter(originKey) {
+    this.currentOriginFilter = originKey;
+    this.currentPage = 1; // Reset to first page
+    this.renderOriginFilters();
     await this.renderContent();
   }
 
@@ -1058,7 +1145,15 @@ class GlossaryManager {
 
     // Get category info
     const category = this.categories.find(c => c.id === this.currentCategory);
-    const categoryTitle = category ? category.title : 'Search Results';
+    let categoryTitle = category ? category.title : 'Search Results';
+
+    // If filtering by origin, update the title
+    if (this.currentOriginFilter && this.currentCategory === 'species') {
+      const originOption = this.originOptions.find(opt => opt.key === this.currentOriginFilter);
+      if (originOption) {
+        categoryTitle = `Species from ${originOption.label}`;
+      }
+    }
 
     // Pagination: only apply when NOT searching
     const usePagination = !this.searchTerm && this.currentCategory;
@@ -1100,6 +1195,64 @@ class GlossaryManager {
             </div>
             ${usePagination && totalPages > 1 ? this.renderPagination(totalPages) : ''}
         `;
+  }
+
+  /**
+   * Render species grouped by origin with section headers
+   * @param {Array} entries - Species entries to render
+   * @returns {string} HTML string
+   */
+  renderGroupedByOrigin(entries) {
+    // Group entries by origin
+    const grouped = {};
+    this.originOptions.forEach(opt => (grouped[opt.key] = []));
+    grouped.unknown = []; // For entries without origin
+
+    entries.forEach(entry => {
+      if (entry.origin && grouped[entry.origin]) {
+        grouped[entry.origin].push(entry);
+      } else {
+        grouped.unknown.push(entry);
+      }
+    });
+
+    // Build HTML for each group
+    let html = '<h2 class="section-title">Species</h2>';
+
+    this.originOptions.forEach(opt => {
+      const groupEntries = grouped[opt.key];
+      if (groupEntries.length === 0) return;
+
+      html += `
+        <div class="origin-section" data-origin="${opt.key}">
+          <div class="origin-section-header">
+            <span class="origin-section-dot"></span>
+            <h3 class="origin-section-title">${opt.label}</h3>
+            <span class="origin-section-count">${groupEntries.length} species</span>
+          </div>
+          <div class="glossary-items">
+            ${groupEntries.map(entry => this.renderEntry(entry)).join('')}
+          </div>
+        </div>
+      `;
+    });
+
+    // Add unknown origin entries at the end if any
+    if (grouped.unknown.length > 0) {
+      html += `
+        <div class="origin-section" data-origin="unknown">
+          <div class="origin-section-header">
+            <h3 class="origin-section-title">Other</h3>
+            <span class="origin-section-count">${grouped.unknown.length} species</span>
+          </div>
+          <div class="glossary-items">
+            ${grouped.unknown.map(entry => this.renderEntry(entry)).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    return html;
   }
 
   /**
@@ -1200,7 +1353,14 @@ class GlossaryManager {
                </div>`
         : '';
 
-    const image = entry.imageUrl
+    // Build origin badge for species entries (shown below scientific name)
+    const originBadge =
+      entry.category === 'species' && entry.origin && entry.originDisplayName
+        ? `<span class="origin-badge origin-badge-inline" data-origin="${entry.origin}">${entry.originDisplayName}</span>`
+        : '';
+
+    // Build image (no badge overlay)
+    const imageHtml = entry.imageUrl
       ? `<img src="${entry.imageUrl}" alt="${entry.title}" class="glossary-item-image" loading="lazy">`
       : '';
 
@@ -1216,8 +1376,9 @@ class GlossaryManager {
 
     return `
             <div class="glossary-item ${entry.imageUrl ? 'has-image' : ''}">
-                ${image}
+                ${imageHtml}
                 <div class="glossary-item-content">
+                    ${originBadge ? `<div class="glossary-item-origin-corner">${originBadge}</div>` : ''}
                     <div class="glossary-item-title">
                         ${titleContent}
                         ${verifiedBadge}
@@ -1236,17 +1397,27 @@ class GlossaryManager {
    * @returns {Array}
    */
   filterEntries(entries) {
-    if (!this.searchTerm) return entries;
+    let filtered = entries;
 
-    const term = this.searchTerm.toLowerCase();
-    return entries.filter(entry => {
-      return (
-        entry.title.toLowerCase().includes(term) ||
-        entry.description.toLowerCase().includes(term) ||
-        (entry.scientificName && entry.scientificName.toLowerCase().includes(term)) ||
-        (entry.tags && entry.tags.some(tag => tag.toLowerCase().includes(term)))
-      );
-    });
+    // Filter by origin if set
+    if (this.currentOriginFilter) {
+      filtered = filtered.filter(entry => entry.origin === this.currentOriginFilter);
+    }
+
+    // Filter by search term if set
+    if (this.searchTerm) {
+      const term = this.searchTerm.toLowerCase();
+      filtered = filtered.filter(entry => {
+        return (
+          entry.title.toLowerCase().includes(term) ||
+          entry.description.toLowerCase().includes(term) ||
+          (entry.scientificName && entry.scientificName.toLowerCase().includes(term)) ||
+          (entry.tags && entry.tags.some(tag => tag.toLowerCase().includes(term)))
+        );
+      });
+    }
+
+    return filtered;
   }
 
   /**
@@ -1256,9 +1427,11 @@ class GlossaryManager {
   async search(term) {
     this.searchTerm = term.trim();
     this.currentPage = 1; // Reset to first page when searching
+    this.currentOriginFilter = null; // Reset origin filter when searching
 
     if (!this.searchTerm) {
       // Reset to current category view
+      this.renderOriginFilters();
       await this.renderContent();
       return;
     }
@@ -1266,6 +1439,7 @@ class GlossaryManager {
     // Search across all categories
     this.currentCategory = null;
     this.renderCategories();
+    this.renderOriginFilters(); // Hide origin filters during search
 
     const container = document.getElementById('glossaryContent');
     if (!container) return;

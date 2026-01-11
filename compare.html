@@ -76,45 +76,118 @@
       </nav>
     </header>
 
-    <div class="container" style="padding-top: 2rem; padding-bottom: 2rem">
+    <!-- Compare Hero with Overlapping Fish Cards -->
+    <section class="compare-hero">
+      <h1>Compare Species</h1>
+      <p class="compare-hero-subtitle">Check compatibility at a glance</p>
+
+      <div class="hero-fish-stack">
+        <div class="hero-fish-card">
+          <img
+            src="https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FcardinalTetra.jpg?alt=media"
+            alt="Cardinal Tetra"
+          />
+          <span class="hero-fish-label">Cardinal Tetra</span>
+        </div>
+        <div class="hero-fish-card">
+          <img
+            src="https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FafricanButterflyCichlid.jpg?alt=media"
+            alt="African Butterfly Cichlid"
+          />
+          <span class="hero-fish-label">African Butterfly Cichlid</span>
+        </div>
+        <div class="hero-fish-card">
+          <img
+            src="https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FcelestialPearlDanio.jpg?alt=media"
+            alt="Celestial Pearl Danio"
+          />
+          <span class="hero-fish-label">Celestial Pearl Danio</span>
+        </div>
+      </div>
+
+      <p class="hero-cta-text">Select your species below</p>
+    </section>
+
+    <div class="container compare-container">
       <div class="selection-section">
-        <h2>Select Fish Species to Compare</h2>
-        <div class="fish-selector">
-          <div class="selector-box">
-            <label for="fish1">Fish Species 1</label>
+        <div class="selector-grid">
+          <!-- Selector Card 1 -->
+          <div class="selector-card" id="selector1">
+            <div class="selector-card-header">
+              <span class="selector-label">Species 1</span>
+              <button class="selector-clear" onclick="clearSelection(1)" style="display: none">
+                Clear
+              </button>
+            </div>
+            <div class="selector-preview" id="preview1">
+              <div class="selector-preview-placeholder">
+                <span>Search below to select</span>
+              </div>
+            </div>
             <input
               type="text"
               class="search-input"
               id="search1"
-              placeholder="Search species..."
+              placeholder="Search 246 species..."
               oninput="filterSpecies('panel1', 'search1')"
             />
             <div class="species-panel" id="panel1"></div>
           </div>
-          <div class="selector-box">
-            <label for="fish2">Fish Species 2</label>
+
+          <!-- Selector Card 2 -->
+          <div class="selector-card" id="selector2">
+            <div class="selector-card-header">
+              <span class="selector-label">Species 2</span>
+              <button class="selector-clear" onclick="clearSelection(2)" style="display: none">
+                Clear
+              </button>
+            </div>
+            <div class="selector-preview" id="preview2">
+              <div class="selector-preview-placeholder">
+                <span>Search below to select</span>
+              </div>
+            </div>
             <input
               type="text"
               class="search-input"
               id="search2"
-              placeholder="Search species..."
+              placeholder="Search 246 species..."
               oninput="filterSpecies('panel2', 'search2')"
             />
             <div class="species-panel" id="panel2"></div>
           </div>
-          <div class="selector-box">
-            <label for="fish3">Fish Species 3 (Optional)</label>
+
+          <!-- Selector Card 3 (Optional) -->
+          <div class="selector-card" id="selector3">
+            <div class="selector-card-header">
+              <span class="selector-label">Species 3</span>
+              <span class="selector-optional">(optional)</span>
+              <button class="selector-clear" onclick="clearSelection(3)" style="display: none">
+                Clear
+              </button>
+            </div>
+            <div class="selector-preview" id="preview3">
+              <div class="selector-preview-placeholder">
+                <span>Search below to select</span>
+              </div>
+            </div>
             <input
               type="text"
               class="search-input"
               id="search3"
-              placeholder="Search species..."
+              placeholder="Search 246 species..."
               oninput="filterSpecies('panel3', 'search3')"
             />
             <div class="species-panel" id="panel3"></div>
           </div>
         </div>
-        <button class="compare-button" onclick="compareSpecies()">Compare Species</button>
+
+        <div class="compare-button-wrapper">
+          <p class="selection-status" id="selectionStatus">Select at least 2 species to compare</p>
+          <button class="compare-button" id="compareBtn" onclick="compareSpecies()" disabled>
+            Compare Species
+          </button>
+        </div>
       </div>
 
       <div class="comparison-grid" id="comparisonGrid">
@@ -153,5 +226,6 @@
     <script src="js/app.js"></script>
     <script src="js/species-detail.js"></script>
     <script src="js/app-enhancements.js"></script>
+    <script src="js/scroll-animations.js"></script>
   </body>
 </html>

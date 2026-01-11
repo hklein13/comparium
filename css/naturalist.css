@@ -30,6 +30,18 @@
   --danger: #8b3a3a;
   --danger-bg: rgba(139, 58, 58, 0.1);
 
+  /* Continent/Origin colors - for habitat badges and filters */
+  --origin-south-america: #3d5a3d;
+  --origin-south-america-bg: rgba(61, 90, 61, 0.12);
+  --origin-africa: #2d4a6d;
+  --origin-africa-bg: rgba(45, 74, 109, 0.12);
+  --origin-asia: #4a6b5a;
+  --origin-asia-bg: rgba(74, 107, 90, 0.12);
+  --origin-north-central-america: #9a7b4f;
+  --origin-north-central-america-bg: rgba(154, 123, 79, 0.12);
+  --origin-australia-oceania: #3d6a6a;
+  --origin-australia-oceania-bg: rgba(61, 106, 106, 0.12);
+
   /* Typography */
   --font-serif: 'Libre Baskerville', Georgia, serif;
   --font-sans: 'Source Sans 3', system-ui, sans-serif;
@@ -56,6 +68,752 @@
   --transition-fast: 0.15s ease;
   --transition-base: 0.2s ease;
   --transition-slow: 0.3s ease;
+}
+
+/* ============================================
+   SCROLL ANIMATIONS
+   ============================================ */
+
+/* Elements waiting to animate have initial hidden state */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* Animated state */
+.animate-on-scroll.animate-in {
+  animation: fadeSlideIn 0.5s ease forwards;
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Respect reduced motion preference */
+.reduce-motion .animate-on-scroll,
+@media (prefers-reduced-motion: reduce) {
+  .animate-on-scroll {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+}
+
+/* ============================================
+   ORIGIN BADGES
+   ============================================ */
+
+.origin-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-full);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: white;
+}
+
+/* Badge on card image - positioned top-right */
+.glossary-card-image .origin-badge,
+.glossary-item-image-container .origin-badge {
+  position: absolute;
+  top: var(--space-sm);
+  right: var(--space-sm);
+  z-index: 1;
+}
+
+.glossary-card-image,
+.glossary-item-image-container {
+  position: relative;
+}
+
+/* Inline badge - used in glossary items */
+.origin-badge-inline {
+  font-size: 0.65rem;
+}
+
+/* Corner positioned badge - top right of glossary item content */
+.glossary-item-content {
+  position: relative;
+}
+
+.glossary-item-origin-corner {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+/* Continent-specific badge colors */
+.origin-badge[data-origin='southAmerica'] {
+  background: var(--origin-south-america);
+}
+
+.origin-badge[data-origin='africa'] {
+  background: var(--origin-africa);
+}
+
+.origin-badge[data-origin='asia'] {
+  background: var(--origin-asia);
+}
+
+.origin-badge[data-origin='northCentralAmerica'] {
+  background: var(--origin-north-central-america);
+}
+
+.origin-badge[data-origin='australiaOceania'] {
+  background: var(--origin-australia-oceania);
+}
+
+/* ============================================
+   ORIGIN FILTER CHIPS (Glossary)
+   ============================================ */
+
+.origin-filters {
+  display: none; /* Hidden until Species category is selected */
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  padding: 0 var(--space-lg);
+  margin-bottom: var(--space-lg);
+}
+
+.origin-filters.visible {
+  display: flex;
+}
+
+.origin-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: var(--white);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--ink-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.origin-chip:hover {
+  background: var(--ivory);
+  border-color: var(--ink-tertiary);
+}
+
+.origin-chip.active {
+  background: var(--forest);
+  border-color: var(--forest);
+  color: white;
+}
+
+.origin-chip .chip-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.origin-chip .chip-count {
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+/* Continent-specific dot colors */
+.origin-chip[data-origin='southAmerica'] .chip-dot {
+  background: var(--origin-south-america);
+}
+.origin-chip[data-origin='africa'] .chip-dot {
+  background: var(--origin-africa);
+}
+.origin-chip[data-origin='asia'] .chip-dot {
+  background: var(--origin-asia);
+}
+.origin-chip[data-origin='northCentralAmerica'] .chip-dot {
+  background: var(--origin-north-central-america);
+}
+.origin-chip[data-origin='australiaOceania'] .chip-dot {
+  background: var(--origin-australia-oceania);
+}
+
+/* Active chip changes dot to white */
+.origin-chip.active .chip-dot {
+  background: white;
+}
+
+/* ============================================
+   ORIGIN SECTION HEADERS (Grouped View)
+   ============================================ */
+
+.origin-section {
+  margin-bottom: var(--space-xl);
+}
+
+.origin-section-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg);
+  margin-bottom: var(--space-md);
+  background: linear-gradient(135deg, var(--ivory) 0%, var(--stone) 100%);
+  border-radius: var(--radius-lg);
+  border-left: 4px solid var(--forest);
+}
+
+.origin-section-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.origin-section-title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0;
+  flex-grow: 1;
+}
+
+.origin-section-count {
+  font-size: 0.875rem;
+  color: var(--ink-secondary);
+  font-weight: 500;
+}
+
+/* Continent-specific section header colors */
+.origin-section[data-origin='southAmerica'] .origin-section-header {
+  border-left-color: var(--origin-south-america);
+}
+.origin-section[data-origin='southAmerica'] .origin-section-dot {
+  background: var(--origin-south-america);
+}
+
+.origin-section[data-origin='africa'] .origin-section-header {
+  border-left-color: var(--origin-africa);
+}
+.origin-section[data-origin='africa'] .origin-section-dot {
+  background: var(--origin-africa);
+}
+
+.origin-section[data-origin='asia'] .origin-section-header {
+  border-left-color: var(--origin-asia);
+}
+.origin-section[data-origin='asia'] .origin-section-dot {
+  background: var(--origin-asia);
+}
+
+.origin-section[data-origin='northCentralAmerica'] .origin-section-header {
+  border-left-color: var(--origin-north-central-america);
+}
+.origin-section[data-origin='northCentralAmerica'] .origin-section-dot {
+  background: var(--origin-north-central-america);
+}
+
+.origin-section[data-origin='australiaOceania'] .origin-section-header {
+  border-left-color: var(--origin-australia-oceania);
+}
+.origin-section[data-origin='australiaOceania'] .origin-section-dot {
+  background: var(--origin-australia-oceania);
+}
+
+/* ============================================
+   ORIGIN EXPLORE SECTION (Homepage)
+   ============================================ */
+
+.origin-explore-section {
+  padding: var(--space-2xl) var(--space-lg);
+  background: var(--ivory);
+  text-align: center;
+}
+
+.origin-explore-section h2 {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  color: var(--ink);
+  margin-bottom: var(--space-sm);
+}
+
+.origin-explore-subtitle {
+  color: var(--ink-secondary);
+  font-size: 1.1rem;
+  margin-bottom: var(--space-xl);
+}
+
+.origin-tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-md);
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.origin-tile {
+  display: block;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-lg);
+  text-decoration: none;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.origin-tile::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--forest);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.origin-tile:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  border-color: var(--ink-tertiary);
+}
+
+.origin-tile:hover::before {
+  opacity: 1;
+}
+
+.origin-tile-content {
+  text-align: left;
+}
+
+.origin-tile-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-bottom: var(--space-sm);
+}
+
+.origin-tile h3 {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0 0 var(--space-xs) 0;
+}
+
+.origin-tile p {
+  font-size: 0.85rem;
+  color: var(--ink-secondary);
+  margin: 0 0 var(--space-sm) 0;
+  line-height: 1.4;
+}
+
+.origin-tile-count {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--forest);
+  background: var(--origin-south-america-bg);
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-full);
+}
+
+/* Continent-specific tile colors */
+.origin-tile[data-origin='southAmerica'] .origin-tile-dot {
+  background: var(--origin-south-america);
+}
+.origin-tile[data-origin='southAmerica']::before {
+  background: var(--origin-south-america);
+}
+.origin-tile[data-origin='southAmerica'] .origin-tile-count {
+  background: var(--origin-south-america-bg);
+}
+
+.origin-tile[data-origin='africa'] .origin-tile-dot {
+  background: var(--origin-africa);
+}
+.origin-tile[data-origin='africa']::before {
+  background: var(--origin-africa);
+}
+.origin-tile[data-origin='africa'] .origin-tile-count {
+  background: var(--origin-africa-bg);
+}
+
+.origin-tile[data-origin='asia'] .origin-tile-dot {
+  background: var(--origin-asia);
+}
+.origin-tile[data-origin='asia']::before {
+  background: var(--origin-asia);
+}
+.origin-tile[data-origin='asia'] .origin-tile-count {
+  background: var(--origin-asia-bg);
+}
+
+.origin-tile[data-origin='northCentralAmerica'] .origin-tile-dot {
+  background: var(--origin-north-central-america);
+}
+.origin-tile[data-origin='northCentralAmerica']::before {
+  background: var(--origin-north-central-america);
+}
+.origin-tile[data-origin='northCentralAmerica'] .origin-tile-count {
+  background: var(--origin-north-central-america-bg);
+}
+
+.origin-tile[data-origin='australiaOceania'] .origin-tile-dot {
+  background: var(--origin-australia-oceania);
+}
+.origin-tile[data-origin='australiaOceania']::before {
+  background: var(--origin-australia-oceania);
+}
+.origin-tile[data-origin='australiaOceania'] .origin-tile-count {
+  background: var(--origin-australia-oceania-bg);
+}
+
+/* ============================================
+   CATEGORY CARDS (Homepage - Browse Database)
+   ============================================ */
+
+.category-showcase {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-lg);
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+}
+
+.category-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xl) var(--space-lg);
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  min-width: 160px;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.category-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  border-color: var(--forest);
+}
+
+.category-name {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--ink);
+  text-align: center;
+}
+
+.category-count {
+  font-size: 0.85rem;
+  color: var(--ink-secondary);
+  margin-top: 4px;
+  text-align: center;
+}
+
+/* ============================================
+   ORIGIN CARDS (Homepage - Explore by Origin)
+   ============================================ */
+
+.origin-cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-md);
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+}
+
+.origin-card {
+  position: relative;
+  display: block;
+  width: 180px;
+  height: 140px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  text-decoration: none;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.origin-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.origin-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.origin-card:hover img {
+  transform: scale(1.08);
+}
+
+.origin-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.1) 60%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: var(--space-md);
+}
+
+.origin-card-name {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--white);
+}
+
+.origin-card-count {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.85);
+  margin-top: 2px;
+}
+
+/* Mobile adjustments */
+@media (max-width: 600px) {
+  .category-showcase {
+    gap: var(--space-md);
+  }
+  .category-card {
+    padding: var(--space-lg) var(--space-md);
+    min-width: 140px;
+  }
+  .category-name {
+    font-size: 1rem;
+  }
+  .origin-card {
+    width: 150px;
+    height: 120px;
+  }
+  .origin-card-name {
+    font-size: 0.9rem;
+  }
+}
+
+/* ============================================
+   SPECIES DETAIL PAGE - ORIGIN CONTEXT
+   ============================================ */
+
+/* Origin badge in species title area */
+.species-origin-badge {
+  display: inline-flex;
+  margin-top: var(--space-xs);
+  text-decoration: none;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.species-origin-badge:hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Related species section */
+.related-species-section {
+  margin-top: var(--space-xl);
+  padding-top: var(--space-xl);
+  border-top: 1px solid var(--border);
+}
+
+.related-species-section h3 {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  color: var(--ink);
+  margin-bottom: var(--space-xs);
+}
+
+.related-species-subtitle {
+  color: var(--ink-secondary);
+  font-size: 0.95rem;
+  margin-bottom: var(--space-lg);
+}
+
+.related-species-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.related-species-card {
+  display: block;
+  text-decoration: none;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--white);
+  border: 1px solid var(--border);
+  transition: all 0.25s ease;
+}
+
+.related-species-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  border-color: var(--ink-tertiary);
+}
+
+.related-species-image {
+  aspect-ratio: 4/3;
+  overflow: hidden;
+}
+
+.related-species-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.related-species-card:hover .related-species-image img {
+  transform: scale(1.08);
+}
+
+.related-species-name {
+  display: block;
+  padding: var(--space-sm);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--ink);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.related-species-link {
+  display: inline-block;
+  color: var(--forest);
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.related-species-link:hover {
+  color: var(--ink);
+  text-decoration: underline;
+}
+
+/* ============================================
+   SKELETON LOADING STATES
+   ============================================ */
+
+.skeleton {
+  background: linear-gradient(90deg, var(--ivory) 25%, var(--stone) 50%, var(--ivory) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite ease-in-out;
+  border-radius: var(--radius-md);
+}
+
+.skeleton-text {
+  height: 1em;
+  margin-bottom: 0.5em;
+}
+
+.skeleton-text:last-child {
+  width: 70%;
+}
+
+.skeleton-image {
+  aspect-ratio: 16/10;
+  border-radius: var(--radius-lg);
+}
+
+.skeleton-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+}
+
+.skeleton-card .skeleton-image {
+  border-radius: 0;
+}
+
+.skeleton-card-content {
+  padding: var(--space-lg);
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* ============================================
+   BUTTON & FORM MICRO-ANIMATIONS
+   ============================================ */
+
+/* Button hover/active effects */
+.btn-primary {
+  transition:
+    transform var(--transition-fast),
+    background-color var(--transition-base),
+    box-shadow var(--transition-base);
+}
+
+.btn-primary:hover {
+  transform: scale(1.02);
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+.btn-ghost:hover {
+  transform: scale(1.02);
+}
+
+.btn-ghost:active {
+  transform: scale(0.98);
+}
+
+/* Form input focus states */
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--forest);
+  box-shadow: 0 0 0 3px rgba(35, 74, 58, 0.15);
+}
+
+input,
+select,
+textarea {
+  transition:
+    border-color var(--transition-base),
+    box-shadow var(--transition-base);
 }
 
 /* ============================================
@@ -564,7 +1322,8 @@ p {
 
 .showcase-item:hover .showcase-image {
   border-color: var(--forest);
-  transform: translateY(-4px);
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
 }
 
 .showcase-image {
@@ -574,13 +1333,22 @@ p {
   overflow: hidden;
   border: 2px solid var(--border);
   margin-bottom: 0.75rem;
-  transition: all 0.2s ease;
+  transition:
+    transform 0.25s ease,
+    border-color var(--transition-base),
+    box-shadow 0.25s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .showcase-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform var(--transition-slow);
+}
+
+.showcase-item:hover .showcase-image img {
+  transform: scale(1.05);
 }
 
 .showcase-name {
@@ -1076,30 +1844,163 @@ p {
    ============================================ */
 
 .selection-section {
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-xl);
-  padding: var(--space-xl);
   margin-bottom: var(--space-xl);
 }
 
-.selection-section h2 {
-  color: var(--forest);
-  margin-bottom: var(--space-lg);
-}
-
-.fish-selector {
+/* Selector Grid - Three Premium Cards */
+.selector-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: var(--space-md);
-  margin-bottom: var(--space-md);
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
 }
 
-.selector-box label {
-  display: block;
-  margin-bottom: var(--space-sm);
+@media (max-width: 900px) {
+  .selector-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .selector-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Selector Card */
+.selector-card {
+  background: var(--white);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.15),
+    0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.selector-card:hover {
+  border-color: var(--ink-tertiary);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.selector-card.has-selection {
+  border-color: var(--forest);
+  box-shadow: 0 4px 20px rgba(35, 74, 58, 0.15);
+}
+
+/* Card Header */
+.selector-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.selector-label {
+  font-size: 0.9rem;
   font-weight: 600;
-  color: var(--ink);
+  color: var(--ink-secondary);
+}
+
+.selector-optional {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--ink-tertiary);
+  margin-left: 0.25rem;
+}
+
+.selector-clear {
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  color: var(--ink-tertiary);
+  transition: all 0.2s ease;
+}
+
+.selector-clear:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+  background: rgba(239, 68, 68, 0.05);
+}
+
+/* Selection Preview Area */
+.selector-preview {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 1rem;
+  background: var(--stone);
+  border-radius: var(--radius-lg);
+  border: 2px dashed var(--border);
+  margin-bottom: 1rem;
+  min-height: 120px;
+  transition: all 0.3s ease;
+}
+
+.selector-preview.has-fish {
+  border-style: solid;
+  border-color: var(--forest);
+  background: var(--ivory);
+}
+
+.selector-preview-placeholder {
+  color: var(--ink-tertiary);
+  font-size: 0.9rem;
+}
+
+.selector-preview-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.selector-preview-image {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--white);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.selector-preview-name {
+  font-weight: 600;
+  color: var(--forest);
+  font-size: 1rem;
+}
+
+.selector-preview-scientific {
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--ink-tertiary);
+}
+
+/* Compare Button Wrapper */
+.compare-button-wrapper {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.selection-status {
+  font-size: 0.9rem;
+  color: var(--ink-tertiary);
+  margin-bottom: 0.75rem;
+}
+
+.selection-status.ready {
+  color: var(--forest);
+  font-weight: 500;
 }
 
 .species-panel {
@@ -1183,21 +2084,194 @@ p {
   font-style: italic;
 }
 
+/* ========================================
+   Compare Page Hero - Overlapping Fish Cards
+   ======================================== */
+
+.compare-hero {
+  padding: 3rem 2rem 4rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+}
+
+.compare-hero h1 {
+  font-family: var(--font-serif);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 0.5rem;
+}
+
+.compare-hero-subtitle {
+  color: var(--ink-secondary);
+  font-size: 1.1rem;
+  margin-bottom: 2.5rem;
+}
+
+/* Overlapping Fish Card Stack */
+.hero-fish-stack {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  height: 200px;
+  margin-bottom: 2rem;
+}
+
+.hero-fish-card {
+  position: absolute;
+  width: 160px;
+  height: 200px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  transition:
+    transform 0.4s ease,
+    box-shadow 0.3s ease;
+  cursor: pointer;
+  border: 3px solid var(--white);
+}
+
+.hero-fish-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-fish-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.4) 0%, transparent 50%);
+}
+
+.hero-fish-label {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  right: 12px;
+  color: var(--white);
+  font-weight: 600;
+  font-size: 0.9rem;
+  z-index: 1;
+}
+
+/* Card positions - overlapping at angles */
+.hero-fish-card:nth-child(1) {
+  transform: translateX(-120px) rotate(-8deg);
+  z-index: 1;
+}
+
+.hero-fish-card:nth-child(2) {
+  transform: translateY(-10px);
+  z-index: 3;
+}
+
+.hero-fish-card:nth-child(3) {
+  transform: translateX(120px) rotate(8deg);
+  z-index: 2;
+}
+
+/* Hover effects - cards spread apart */
+.hero-fish-stack:hover .hero-fish-card:nth-child(1) {
+  transform: translateX(-140px) rotate(-12deg) translateY(-5px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+}
+
+.hero-fish-stack:hover .hero-fish-card:nth-child(2) {
+  transform: translateY(-20px) scale(1.02);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.25);
+}
+
+.hero-fish-stack:hover .hero-fish-card:nth-child(3) {
+  transform: translateX(140px) rotate(12deg) translateY(-5px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+}
+
+.hero-cta-text {
+  font-size: 1rem;
+  color: var(--ink-tertiary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.hero-cta-text::before,
+.hero-cta-text::after {
+  content: '';
+  width: 40px;
+  height: 1px;
+  background: var(--border);
+}
+
+/* Mobile responsive for compare hero */
+@media (max-width: 640px) {
+  .compare-hero {
+    padding: 2rem 1rem 3rem;
+  }
+
+  .compare-hero h1 {
+    font-size: 1.75rem;
+  }
+
+  .hero-fish-stack {
+    height: 160px;
+  }
+
+  .hero-fish-card {
+    width: 120px;
+    height: 150px;
+  }
+
+  .hero-fish-card:nth-child(1) {
+    transform: translateX(-80px) rotate(-8deg);
+  }
+
+  .hero-fish-card:nth-child(3) {
+    transform: translateX(80px) rotate(8deg);
+  }
+
+  .hero-fish-stack:hover .hero-fish-card:nth-child(1) {
+    transform: translateX(-90px) rotate(-10deg) translateY(-3px);
+  }
+
+  .hero-fish-stack:hover .hero-fish-card:nth-child(3) {
+    transform: translateX(90px) rotate(10deg) translateY(-3px);
+  }
+}
+
+/* ========================================
+   Compare Page Main Content
+   ======================================== */
+
 .compare-button {
   background: var(--forest);
   color: var(--white);
   border: none;
-  padding: var(--space-md) var(--space-2xl);
+  padding: 1rem 3rem;
   font-size: 1.1rem;
   font-weight: 600;
   border-radius: var(--radius-md);
   cursor: pointer;
-  margin-top: var(--space-md);
-  transition: background var(--transition-base);
+  transition: all 0.2s ease;
+  font-family: var(--font-display);
 }
 
-.compare-button:hover {
+.compare-button:hover:not(:disabled) {
   background: var(--forest-light);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(35, 74, 58, 0.3);
+}
+
+.compare-button:disabled {
+  background: var(--ink-tertiary);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 /* Comparison Grid */
@@ -1638,7 +2712,10 @@ p {
   border-radius: var(--radius-xl);
   padding: var(--space-lg);
   margin-bottom: var(--space-md);
-  transition: all var(--transition-base);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color var(--transition-base);
   box-shadow:
     inset 1px 1px 0 rgba(255, 255, 255, 0.15),
     0 2px 8px rgba(0, 0, 0, 0.04);
@@ -1646,9 +2723,10 @@ p {
 
 .tank-card:hover {
   border-color: var(--forest);
+  transform: translateY(-4px);
   box-shadow:
     inset 1px 1px 0 rgba(255, 255, 255, 0.25),
-    0 8px 24px rgba(0, 0, 0, 0.08);
+    0 12px 32px rgba(0, 0, 0, 0.1);
 }
 
 .tank-card h3 {
@@ -2463,7 +3541,10 @@ p {
   border: 1px solid var(--border);
   border-radius: var(--radius-xl);
   overflow: hidden;
-  transition: all var(--transition-base);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color var(--transition-base);
   text-decoration: none;
   display: block;
   box-shadow:
@@ -2473,10 +3554,10 @@ p {
 
 .glossary-card:hover {
   border-color: var(--forest);
-  transform: translateY(-4px);
+  transform: translateY(-6px);
   box-shadow:
     inset 1px 1px 0 rgba(255, 255, 255, 0.25),
-    0 8px 24px rgba(0, 0, 0, 0.08);
+    0 12px 32px rgba(0, 0, 0, 0.12);
 }
 
 .glossary-card-image {
@@ -2496,7 +3577,7 @@ p {
 }
 
 .glossary-card:hover .glossary-card-image img {
-  transform: scale(1.05);
+  transform: scale(1.08);
 }
 
 .glossary-card-content {
@@ -3528,11 +4609,7 @@ p {
 .hero-video__overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(35, 74, 58, 0.4) 0%,
-    rgba(35, 74, 58, 0.85) 100%
-  );
+  background: linear-gradient(to bottom, rgba(35, 74, 58, 0.4) 0%, rgba(35, 74, 58, 0.85) 100%);
   z-index: 0;
 }
 

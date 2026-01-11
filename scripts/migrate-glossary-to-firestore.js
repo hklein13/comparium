@@ -100,6 +100,17 @@ function toKebabCase(str) {
   return str.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
 }
 
+function getOriginDisplayName(originKey) {
+  const originNames = {
+    southAmerica: 'South America',
+    africa: 'Africa',
+    asia: 'Asia',
+    northCentralAmerica: 'N. & C. America',
+    australiaOceania: 'Oceania',
+  };
+  return originNames[originKey] || originKey;
+}
+
 function generateFishTags(fish) {
   const tags = [];
 
@@ -185,6 +196,8 @@ function generateGlossaryEntry(key, fish, descriptions = {}) {
     scientificName: fish.scientificName,
     description: generateFishDescription(key, fish, descriptions),
     imageUrl: fish.imageUrl || null,
+    origin: fish.origin || null,
+    originDisplayName: fish.origin ? getOriginDisplayName(fish.origin) : null,
     tags: generateFishTags(fish),
     category: 'species',
     author: 'System',

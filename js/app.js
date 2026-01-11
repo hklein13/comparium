@@ -41,7 +41,8 @@ function loadComparisonFromUrl() {
 
   const speciesKeys = speciesParam.split(',').filter(key => fishDatabase[key]);
 
-  if (speciesKeys.length < 2) {return;
+  if (speciesKeys.length < 2) {
+    return;
   }
 
   // Auto-select the species (max 3)
@@ -94,11 +95,13 @@ function showAppErrorState(message) {
 // Auto-initialize when DOM is ready with error handling
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
-    initializeApp().catch(error => {showAppErrorState('Critical error loading application. Please refresh the page.');
+    initializeApp().catch(error => {
+      showAppErrorState('Critical error loading application. Please refresh the page.');
     });
   });
 } else {
-  initializeApp().catch(error => {showAppErrorState('Critical error loading application. Please refresh the page.');
+  initializeApp().catch(error => {
+    showAppErrorState('Critical error loading application. Please refresh the page.');
   });
 }
 
@@ -313,12 +316,110 @@ function buildPanels() {
 function selectSpecies(panelId, key, itemElement) {
   selectedSpecies[panelId] = key;
 
-  // Update visual selection
+  // Update visual selection in the panel
   const panel = document.getElementById(panelId);
   panel.querySelectorAll('.species-item').forEach(item => {
     item.classList.remove('selected');
   });
   itemElement.classList.add('selected');
+
+  // Update the preview card and selection status
+  updateSelectorPreview(panelId, key);
+  updateSelectionStatus();
+}
+
+// Update the preview area with fish image and info
+function updateSelectorPreview(panelId, key) {
+  const panelNum = panelId.replace('panel', '');
+  const previewEl = document.getElementById('preview' + panelNum);
+  const cardEl = document.getElementById('selector' + panelNum);
+  const clearBtn = cardEl.querySelector('.selector-clear');
+  const fish = fishDatabase[key];
+
+  if (fish && previewEl) {
+    // Build preview content with image
+    const imageUrl = fish.imageUrl || '';
+    const hasImage = imageUrl && imageUrl !== 'null';
+
+    previewEl.innerHTML = `
+      <div class="selector-preview-content">
+        ${hasImage ? `<img src="${imageUrl}" alt="${fish.commonName}" class="selector-preview-image">` : ''}
+        <div class="selector-preview-name">${fish.commonName}</div>
+        <div class="selector-preview-scientific">${fish.scientificName}</div>
+      </div>
+    `;
+
+    // Update states
+    previewEl.classList.add('has-fish');
+    cardEl.classList.add('has-selection');
+    if (clearBtn) clearBtn.style.display = 'block';
+  }
+}
+
+// Clear a selection
+function clearSelection(panelNum) {
+  const panelId = 'panel' + panelNum;
+  const previewEl = document.getElementById('preview' + panelNum);
+  const cardEl = document.getElementById('selector' + panelNum);
+  const clearBtn = cardEl ? cardEl.querySelector('.selector-clear') : null;
+  const searchInput = document.getElementById('search' + panelNum);
+  const panel = document.getElementById(panelId);
+
+  // Clear the selection
+  selectedSpecies[panelId] = null;
+
+  // Reset preview
+  if (previewEl) {
+    previewEl.innerHTML = `
+      <div class="selector-preview-placeholder">
+        <span>Search below to select</span>
+      </div>
+    `;
+    previewEl.classList.remove('has-fish');
+  }
+
+  // Reset card state
+  if (cardEl) cardEl.classList.remove('has-selection');
+  if (clearBtn) clearBtn.style.display = 'none';
+  if (searchInput) searchInput.value = '';
+
+  // Remove selected class from panel items
+  if (panel) {
+    panel.querySelectorAll('.species-item').forEach(item => {
+      item.classList.remove('selected');
+    });
+
+    // Reset category visibility
+    panel.querySelectorAll('.category-details').forEach(details => {
+      details.style.display = 'block';
+      details.removeAttribute('open');
+    });
+  }
+
+  updateSelectionStatus();
+}
+
+// Update selection status and compare button state
+function updateSelectionStatus() {
+  const statusEl = document.getElementById('selectionStatus');
+  const compareBtn = document.getElementById('compareBtn');
+  const count = Object.values(selectedSpecies).filter(v => v !== null).length;
+
+  if (!statusEl || !compareBtn) return;
+
+  if (count === 0) {
+    statusEl.textContent = 'Select at least 2 species to compare';
+    statusEl.classList.remove('ready');
+    compareBtn.disabled = true;
+  } else if (count === 1) {
+    statusEl.textContent = '1 species selected - select 1 more';
+    statusEl.classList.remove('ready');
+    compareBtn.disabled = true;
+  } else {
+    statusEl.textContent = `${count} species selected - ready to compare`;
+    statusEl.classList.add('ready');
+    compareBtn.disabled = false;
+  }
 }
 
 // Filter species based on search
@@ -679,9 +780,6 @@ function analyzeCompatibility(fishData) {
   alertHtml += '</div>';
   grid.innerHTML += alertHtml;
 }
-
-// Initialize panels on page load
-buildPanels();
 
 // ============================================================================
 // USER FEATURES INTEGRATION

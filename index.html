@@ -78,14 +78,7 @@
 
     <!-- Hero Section (Video Background) -->
     <section class="hero-video">
-      <video
-        autoplay
-        muted
-        loop
-        playsinline
-        preload="metadata"
-        class="hero-video__bg"
-      >
+      <video autoplay muted loop playsinline preload="metadata" class="hero-video__bg">
         <source src="assets/hero-tank.mp4" type="video/mp4" />
       </video>
       <div class="hero-video__overlay"></div>
@@ -111,67 +104,86 @@
       </div>
     </section>
 
-    <!-- Species Showcase -->
+    <!-- Browse Database Categories -->
     <section class="showcase-section">
       <h2>Browse the database</h2>
-      <div class="species-showcase">
-        <a href="species.html?fish=bettaFish" class="showcase-item">
-          <div class="showcase-image">
-            <img
-              src="https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FbettaFish.jpg?alt=media"
-              alt="Betta Fish"
-            />
-          </div>
-          <span class="showcase-name">Betta</span>
+      <div class="category-showcase">
+        <a href="glossary.html?category=species" class="category-card">
+          <span class="category-name">Species</span>
+          <span class="category-count">246 fish profiles</span>
         </a>
-        <a href="species.html?fish=clownLoach" class="showcase-item">
-          <div class="showcase-image">
-            <img
-              src="https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FclownLoach.jpg?alt=media"
-              alt="Clown Loach"
-            />
-          </div>
-          <span class="showcase-name">Clown Loach</span>
+        <a href="glossary.html?category=equipment" class="category-card">
+          <span class="category-name">Equipment</span>
+          <span class="category-count">Filters, heaters & more</span>
         </a>
-        <a href="species.html?fish=pearlGourami" class="showcase-item">
-          <div class="showcase-image">
-            <img
-              src="https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FpearlGourami.jpg?alt=media"
-              alt="Pearl Gourami"
-            />
-          </div>
-          <span class="showcase-name">Pearl Gourami</span>
+        <a href="glossary.html?category=diseases" class="category-card">
+          <span class="category-name">Diseases</span>
+          <span class="category-count">Common ailments</span>
         </a>
-        <a href="species.html?fish=cardinalTetra" class="showcase-item">
-          <div class="showcase-image">
-            <img
-              src="https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FcardinalTetra.jpg?alt=media"
-              alt="Cardinal Tetra"
-            />
-          </div>
-          <span class="showcase-name">Cardinal Tetra</span>
-        </a>
-        <a href="species.html?fish=cherryBarb" class="showcase-item">
-          <div class="showcase-image">
-            <img
-              src="https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FcherryBarb.jpg?alt=media"
-              alt="Cherry Barb"
-            />
-          </div>
-          <span class="showcase-name">Cherry Barb</span>
-        </a>
-        <a href="species.html?fish=pandaCory" class="showcase-item">
-          <div class="showcase-image">
-            <img
-              src="https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FpandaCory.jpg?alt=media"
-              alt="Panda Cory"
-            />
-          </div>
-          <span class="showcase-name">Panda Cory</span>
+        <a href="glossary.html?category=terminology" class="category-card">
+          <span class="category-name">Terminology</span>
+          <span class="category-count">Aquarium terms</span>
         </a>
       </div>
-      <div class="showcase-cta">
-        <a href="glossary.html">View all species &rarr;</a>
+    </section>
+
+    <!-- Explore by Origin Section -->
+    <section class="origin-explore-section">
+      <h2>Explore by origin</h2>
+      <p class="origin-explore-subtitle">
+        Discover species from freshwater habitats around the world
+      </p>
+      <div class="origin-cards">
+        <a href="glossary.html?origin=southAmerica" class="origin-card">
+          <img
+            src="https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FcardinalTetra.jpg?alt=media"
+            alt="Cardinal Tetra from South America"
+          />
+          <div class="origin-card-overlay">
+            <span class="origin-card-name">South America</span>
+            <span class="origin-card-count">90 species</span>
+          </div>
+        </a>
+        <a href="glossary.html?origin=asia" class="origin-card">
+          <img
+            src="https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FbettaFish.jpg?alt=media"
+            alt="Betta from Asia"
+          />
+          <div class="origin-card-overlay">
+            <span class="origin-card-name">Asia</span>
+            <span class="origin-card-count">89 species</span>
+          </div>
+        </a>
+        <a href="glossary.html?origin=africa" class="origin-card">
+          <img
+            src="https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FyellowLabCichlid.jpg?alt=media"
+            alt="Yellow Lab Cichlid from Africa"
+          />
+          <div class="origin-card-overlay">
+            <span class="origin-card-name">Africa</span>
+            <span class="origin-card-count">35 species</span>
+          </div>
+        </a>
+        <a href="glossary.html?origin=northCentralAmerica" class="origin-card">
+          <img
+            src="https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2Fplaty.jpg?alt=media"
+            alt="Platy from North America"
+          />
+          <div class="origin-card-overlay">
+            <span class="origin-card-name">N. &amp; C. America</span>
+            <span class="origin-card-count">23 species</span>
+          </div>
+        </a>
+        <a href="glossary.html?origin=australiaOceania" class="origin-card">
+          <img
+            src="https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FboesemansRainbowfish.jpg?alt=media"
+            alt="Boesemani Rainbowfish from Oceania"
+          />
+          <div class="origin-card-overlay">
+            <span class="origin-card-name">Oceania</span>
+            <span class="origin-card-count">9 species</span>
+          </div>
+        </a>
       </div>
     </section>
 
@@ -195,5 +207,6 @@
     <script type="module" src="js/firebase-init.js"></script>
     <script src="js/storage-service.js"></script>
     <script src="js/auth-manager.js"></script>
+    <script src="js/scroll-animations.js"></script>
   </body>
 </html>
