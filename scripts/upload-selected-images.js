@@ -5,6 +5,8 @@
  * Usage: npm run images:upload
  */
 
+/* global process, Buffer */
+
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getStorage } from 'firebase-admin/storage';
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
@@ -42,6 +44,10 @@ try {
 if (!existsSync(TEMP_DIR)) {
   mkdirSync(TEMP_DIR, { recursive: true });
 }
+
+// Configuration for rate limiting
+const DELAY_BETWEEN_REQUESTS = 2500; // 2.5 seconds between downloads to avoid Wikimedia rate limits
+const FAILED_UPLOADS_PATH = join(__dirname, 'failed-uploads.json');
 
 // Download image with proper headers, validation, and retry logic
 async function downloadImage(url, filename, retries = 3) {
@@ -113,8 +119,16 @@ function updateFishData(updates) {
   writeFileSync(fishDataPath, content);
 }
 
-// Read JSON input
+// Read JSON input (from file argument or interactive)
 async function readJsonInput() {
+  // Check for file argument: node script.js path/to/file.json
+  const fileArg = process.argv[2];
+  if (fileArg) {
+    console.log(`Reading from file: ${fileArg}`);
+    return readFileSync(fileArg, 'utf8');
+  }
+
+  // Fall back to interactive input
   const rl = createInterface({
     input: process.stdin,
     output: process.stdout,
@@ -165,9 +179,11 @@ async function main() {
     return;
   }
 
-  console.log(`\nUploading ${selectedSpecies.length} images...\n`);
+  console.log(`\nUploading ${selectedSpecies.length} images...`);
+  console.log(`Using ${DELAY_BETWEEN_REQUESTS}ms delay between requests to avoid rate limiting.\n`);
 
   const updates = [];
+  const failures = [];
   let successCount = 0;
 
   for (let i = 0; i < selectedSpecies.length; i++) {
@@ -177,7 +193,7 @@ async function main() {
     try {
       // Add delay between requests to avoid Wikimedia rate limiting
       if (i > 0) {
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise(resolve => setTimeout(resolve, DELAY_BETWEEN_REQUESTS));
       }
 
       // Download image
@@ -192,6 +208,7 @@ async function main() {
       console.log('OK');
     } catch (error) {
       console.log(`FAILED: ${error.message}`);
+      failures.push({ key: species.key, url: species.url, error: error.message });
     }
   }
 
@@ -205,6 +222,20 @@ async function main() {
   console.log('\n' + '='.repeat(60));
   console.log(`  COMPLETE: ${successCount}/${selectedSpecies.length} images uploaded`);
   console.log('='.repeat(60));
+
+  // Report and save failures
+  if (failures.length > 0) {
+    console.log(`\n⚠️  FAILURES (${failures.length}):`);
+    failures.forEach(f => console.log(`   - ${f.key}: ${f.error}`));
+
+    // Save failures to JSON for easy retry
+    writeFileSync(FAILED_UPLOADS_PATH, JSON.stringify(failures, null, 2));
+    console.log(`\nFailures saved to: scripts/failed-uploads.json`);
+    console.log('To retry: Copy the JSON array and run npm run images:upload again.');
+  } else {
+    console.log('\n✓ All images uploaded successfully!');
+  }
+
   console.log('\nNext steps:');
   console.log('1. Test locally: http-server -c-1');
   console.log('2. Sync Firestore: npm run migrate:glossary');
