@@ -17,28 +17,28 @@ function escapeRegex(string) {
  * Call this after displaying results
  */
 function makeSpeciesNamesClickable() {
-// Find the comparison grid (not .results!)
+  // Find the comparison grid (not .results!)
   const resultsDiv = document.getElementById('comparisonGrid');
   if (!resultsDiv) {
-return;
+    return;
   }
-// Safety check: ensure selectedSpecies exists
+  // Safety check: ensure selectedSpecies exists
   if (typeof selectedSpecies === 'undefined') {
-return;
+    return;
   }
-// Get all the fish data from selected panels
+  // Get all the fish data from selected panels
   const fish1Key = selectedSpecies.panel1;
   const fish2Key = selectedSpecies.panel2;
   const fish3Key = selectedSpecies.panel3;
 
   const selectedFish = [fish1Key, fish2Key, fish3Key].filter(Boolean);
-// Replace each fish name with clickable link
+  // Replace each fish name with clickable link
   selectedFish.forEach(fishKey => {
     const fish = fishDatabase[fishKey];
     if (!fish) {
-return;
+      return;
     }
-// Find all instances of this fish name in results
+    // Find all instances of this fish name in results
     // Escape special regex characters (fixes species with parentheses like "Bichir (Senegal)")
     const escapedName = escapeRegex(fish.commonName);
     // Only use trailing word boundary if name ends with a word character (fixes parentheses issue)
@@ -123,13 +123,13 @@ async function loadFavoriteStatesInResults() {
  * This wraps the existing compareSpecies function
  */
 if (typeof compareSpecies !== 'undefined') {
-const originalCompareSpecies = compareSpecies;
+  const originalCompareSpecies = compareSpecies;
   compareSpecies = function () {
-// Call original function
+    // Call original function
     const result = originalCompareSpecies();
-// Add enhancements after a brief delay to ensure DOM is updated
+    // Add enhancements after a brief delay to ensure DOM is updated
     setTimeout(() => {
-makeSpeciesNamesClickable();
+      makeSpeciesNamesClickable();
     }, 100);
 
     return result;

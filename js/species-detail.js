@@ -3,6 +3,42 @@
 // ============================================================================
 
 /**
+ * Get display name for origin/continent code
+ * @param {string} originKey - Origin key from fish-data.js (e.g., 'southAmerica')
+ * @returns {string} Human-readable continent name
+ */
+function getOriginDisplayName(originKey) {
+  const originNames = {
+    southAmerica: 'South America',
+    africa: 'Africa',
+    asia: 'Asia',
+    northCentralAmerica: 'N. & C. America',
+    australiaOceania: 'Oceania',
+  };
+  return originNames[originKey] || originKey;
+}
+
+/**
+ * Get related species from same origin
+ * @param {string} currentKey - Current fish key to exclude
+ * @param {string} origin - Origin to match
+ * @param {number} limit - Max number of species to return
+ * @returns {Array} Array of {key, fish} objects
+ */
+function getRelatedSpeciesByOrigin(currentKey, origin, limit = 4) {
+  if (!origin) return [];
+
+  const related = [];
+  for (const [key, fish] of Object.entries(fishDatabase)) {
+    if (key !== currentKey && fish.origin === origin && fish.imageUrl) {
+      related.push({ key, fish });
+      if (related.length >= limit) break;
+    }
+  }
+  return related;
+}
+
+/**
  * Generate species detail page content
  * Call this when user clicks on a fish species
  */
@@ -52,6 +88,14 @@ function loadSpeciesDetail() {
   // Update page title
   document.title = `${fish.commonName} - Comparium`;
 
+  // Generate origin badge if origin exists
+  const originBadge = fish.origin
+    ? `<a href="glossary.html?origin=${fish.origin}" class="origin-badge species-origin-badge" data-origin="${fish.origin}">${getOriginDisplayName(fish.origin)}</a>`
+    : '';
+
+  // Get related species from same origin
+  const relatedSpecies = getRelatedSpeciesByOrigin(fishKey, fish.origin, 4);
+
   // Generate content
   const content = `
         <div class="species-detail">
@@ -59,6 +103,7 @@ function loadSpeciesDetail() {
                 <div class="species-title">
                     <h1>${fish.commonName}</h1>
                     <p class="scientific-name"><em>${fish.scientificName}</em></p>
+                    ${originBadge}
                     ${generateFavoriteStar(fishKey)}
                 </div>
                 <div class="species-image-container">
@@ -196,6 +241,34 @@ function loadSpeciesDetail() {
                     : ''
                 }
             </div>
+
+            ${
+              relatedSpecies.length > 0
+                ? `
+            <div class="related-species-section">
+                <h3>From the same waters</h3>
+                <p class="related-species-subtitle">Other species from ${getOriginDisplayName(fish.origin)}</p>
+                <div class="related-species-grid">
+                    ${relatedSpecies
+                      .map(
+                        ({ key, fish: relatedFish }) => `
+                        <a href="species.html?fish=${key}" class="related-species-card">
+                            <div class="related-species-image">
+                                <img src="${relatedFish.imageUrl}" alt="${relatedFish.commonName}" loading="lazy">
+                            </div>
+                            <span class="related-species-name">${relatedFish.commonName}</span>
+                        </a>
+                    `
+                      )
+                      .join('')}
+                </div>
+                <a href="glossary.html?origin=${fish.origin}" class="related-species-link">
+                    View all ${getOriginDisplayName(fish.origin)} species &rarr;
+                </a>
+            </div>
+            `
+                : ''
+            }
 
             <div class="species-footer">
                 <p><small>Data sourced from SeriouslyFish, Aquarium Co-Op, FishLore, and Aqueon. Always research thoroughly before adding fish to your tank.</small></p>

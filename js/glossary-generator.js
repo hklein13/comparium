@@ -117,6 +117,22 @@ function generateFishDescription(key, fish, descriptions) {
  * @param {Object} descriptions - Curated descriptions object (optional)
  * @returns {Object} Glossary entry object
  */
+/**
+ * Get display name for origin/continent code
+ * @param {string} originKey - Origin key from fish-data.js (e.g., 'southAmerica')
+ * @returns {string} Human-readable continent name
+ */
+function getOriginDisplayName(originKey) {
+  const originNames = {
+    southAmerica: 'South America',
+    africa: 'Africa',
+    asia: 'Asia',
+    northCentralAmerica: 'N. & C. America',
+    australiaOceania: 'Oceania',
+  };
+  return originNames[originKey] || originKey;
+}
+
 function generateGlossaryEntry(key, fish, descriptions = {}) {
   return {
     id: toKebabCase(key),
@@ -125,6 +141,8 @@ function generateGlossaryEntry(key, fish, descriptions = {}) {
     scientificName: fish.scientificName,
     description: generateFishDescription(key, fish, descriptions),
     imageUrl: fish.imageUrl || null,
+    origin: fish.origin || null, // Continent origin
+    originDisplayName: fish.origin ? getOriginDisplayName(fish.origin) : null,
     tags: generateFishTags(fish),
     category: 'species',
     author: 'System',
@@ -160,6 +178,7 @@ if (typeof module !== 'undefined' && module.exports) {
     toKebabCase,
     generateFishTags,
     generateFishDescription,
+    getOriginDisplayName,
     generateGlossaryEntry,
     generateGlossaryEntries,
   };

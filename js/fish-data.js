@@ -2,6 +2,7 @@ var fishDatabase = {
   angelfish: {
     commonName: 'Freshwater Angelfish',
     scientificName: 'Pterophyllum scalare',
+    origin: 'southAmerica',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2Fangelfish.jpg?alt=media',
     tempMin: 75,
@@ -28,6 +29,7 @@ var fishDatabase = {
   pearlDanio: {
     commonName: 'Pearl Danio',
     scientificName: 'Danio albolineatus',
+    origin: 'asia',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FpearlDanio.jpg?alt=media',
     tempMin: 68,
@@ -46,14 +48,13 @@ var fishDatabase = {
     waterHardness: '4-18 dGH',
     lifespan: '3-5 years',
     careLevel: 'Easy',
-    breedingNeeds:
-      'Egg scatterer; spawns in open water near plants; eggs hatch in 24-36 hours',
-    genderDifferentiation:
-      'Males slimmer with more intense coloration; females fuller-bodied',
+    breedingNeeds: 'Egg scatterer; spawns in open water near plants; eggs hatch in 24-36 hours',
+    genderDifferentiation: 'Males slimmer with more intense coloration; females fuller-bodied',
   },
   neonTetra: {
     commonName: 'Neon Tetra',
     scientificName: 'Paracheirodon innesi',
+    origin: 'southAmerica',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FneonTetra.jpg?alt=media',
     tempMin: 72,
@@ -72,14 +73,14 @@ var fishDatabase = {
     waterHardness: '4-10 dGH',
     lifespan: '5-8 years',
     careLevel: 'Easy',
-    breedingNeeds:
-      'Egg scatterer; requires soft, acidic water; low light; eggs hatch in 24 hours',
+    breedingNeeds: 'Egg scatterer; requires soft, acidic water; low light; eggs hatch in 24 hours',
     genderDifferentiation:
       'Females fuller-bodied with curved blue stripe; males slimmer with straight stripe',
   },
   celestialPearlDanio: {
     commonName: 'Celestial Pearl Danio',
     scientificName: 'Danio margaritatus',
+    origin: 'asia',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FcelestialPearlDanio.jpg?alt=media',
     tempMin: 72,
@@ -106,6 +107,7 @@ var fishDatabase = {
   corydoras: {
     commonName: 'Corydoras Catfish',
     scientificName: 'Corydoras spp.',
+    origin: 'southAmerica',
     imageUrl: null,
     tempMin: 72,
     tempMax: 78,
@@ -125,12 +127,12 @@ var fishDatabase = {
     careLevel: 'Easy',
     breedingNeeds:
       'Egg scatterer; T-position spawning; deposits eggs on glass/plants; eggs hatch in 3-5 days',
-    genderDifferentiation:
-      'Females larger and rounder when viewed from above; males slimmer',
+    genderDifferentiation: 'Females larger and rounder when viewed from above; males slimmer',
   },
   bettaFish: {
     commonName: 'Betta Fish',
     scientificName: 'Betta splendens',
+    origin: 'asia',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FbettaFish.jpg?alt=media',
     tempMin: 76,
@@ -157,6 +159,7 @@ var fishDatabase = {
   guppy: {
     commonName: 'Guppy',
     scientificName: 'Poecilia reticulata',
+    origin: 'northCentralAmerica',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2Fguppy.jpg?alt=media',
     tempMin: 72,
@@ -183,6 +186,7 @@ var fishDatabase = {
   molly: {
     commonName: 'Molly',
     scientificName: 'Poecilia sphenops',
+    origin: 'southAmerica',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2Fmolly.jpg?alt=media',
     tempMin: 72,
@@ -201,14 +205,14 @@ var fishDatabase = {
     waterHardness: '10-25 dGH',
     lifespan: '3-5 years',
     careLevel: 'Easy',
-    breedingNeeds:
-      'Livebearer; gestation 4-6 weeks; females can store sperm for multiple batches',
+    breedingNeeds: 'Livebearer; gestation 4-6 weeks; females can store sperm for multiple batches',
     genderDifferentiation:
       'Males smaller with gonopodium; females larger with rounded anal fin and gravid spot',
   },
   platy: {
     commonName: 'Platy',
     scientificName: 'Xiphophorus maculatus',
+    origin: 'northCentralAmerica',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2Fplaty.jpg?alt=media',
     tempMin: 68,
@@ -235,6 +239,7 @@ var fishDatabase = {
   swordtail: {
     commonName: 'Swordtail',
     scientificName: 'Xiphophorus hellerii',
+    origin: 'northCentralAmerica',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2Fswordtail.jpg?alt=media',
     tempMin: 64,
@@ -261,6 +266,7 @@ var fishDatabase = {
   endlersLivebearer: {
     commonName: "Endler's Livebearer",
     scientificName: 'Poecilia wingei',
+    origin: 'southAmerica',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FendlersLivebearer.jpg?alt=media',
     tempMin: 72,
@@ -287,6 +293,7 @@ var fishDatabase = {
   whiteCloudMinnow: {
     commonName: 'White Cloud Mountain Minnow',
     scientificName: 'Tanichthys albonubes',
+    origin: 'asia',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FwhiteCloudMinnow.jpg?alt=media',
     tempMin: 57,
@@ -313,6 +320,7 @@ var fishDatabase = {
   cardinalTetra: {
     commonName: 'Cardinal Tetra',
     scientificName: 'Paracheirodon axelrodi',
+    origin: 'southAmerica',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FcardinalTetra.jpg?alt=media',
     tempMin: 73,
@@ -333,12 +341,12 @@ var fishDatabase = {
     careLevel: 'Easy',
     breedingNeeds:
       'Egg scatterer; requires very soft, acidic water (pH 5-6); challenging to breed; eggs light-sensitive',
-    genderDifferentiation:
-      'Females fuller-bodied, especially when gravid; males slightly slimmer',
+    genderDifferentiation: 'Females fuller-bodied, especially when gravid; males slightly slimmer',
   },
   rummyNoseTetra: {
     commonName: 'Rummy Nose Tetra',
     scientificName: 'Hemigrammus rhodostomus',
+    origin: 'southAmerica',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FrummyNoseTetra.jpg?alt=media',
     tempMin: 72,
@@ -365,6 +373,7 @@ var fishDatabase = {
   emberTetra: {
     commonName: 'Ember Tetra',
     scientificName: 'Hyphessobrycon amandae',
+    origin: 'southAmerica',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FemberTetra.jpg?alt=media',
     tempMin: 68,
@@ -391,6 +400,7 @@ var fishDatabase = {
   glowlightTetra: {
     commonName: 'Glowlight Tetra',
     scientificName: 'Hemigrammus erythrozonus',
+    origin: 'southAmerica',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FglowlightTetra.jpg?alt=media',
     tempMin: 75,
@@ -417,6 +427,7 @@ var fishDatabase = {
   blackSkirtTetra: {
     commonName: 'Black Skirt Tetra',
     scientificName: 'Gymnocorymbus ternetzi',
+    origin: 'southAmerica',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FblackSkirtTetra.jpg?alt=media',
     tempMin: 68,
@@ -443,6 +454,7 @@ var fishDatabase = {
   cherryBarb: {
     commonName: 'Cherry Barb',
     scientificName: 'Puntius titteya',
+    origin: 'asia',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FcherryBarb.jpg?alt=media',
     tempMin: 68,
@@ -469,6 +481,7 @@ var fishDatabase = {
   tigerBarb: {
     commonName: 'Tiger Barb',
     scientificName: 'Puntigrus tetrazona',
+    origin: 'asia',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FtigerBarb.jpg?alt=media',
     tempMin: 68,
@@ -495,6 +508,7 @@ var fishDatabase = {
   zebraDanio: {
     commonName: 'Zebra Danio',
     scientificName: 'Danio rerio',
+    origin: 'asia',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FzebraDanio.jpg?alt=media',
     tempMin: 64,
@@ -521,6 +535,7 @@ var fishDatabase = {
   harlequinRasbora: {
     commonName: 'Harlequin Rasbora',
     scientificName: 'Trigonostigma heteromorpha',
+    origin: 'asia',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FharlequinRasbora.jpg?alt=media',
     tempMin: 70,
@@ -547,6 +562,7 @@ var fishDatabase = {
   chiliRasbora: {
     commonName: 'Chili Rasbora',
     scientificName: 'Boraras brigittae',
+    origin: 'asia',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FchiliRasbora.jpg?alt=media',
     tempMin: 68,
@@ -573,6 +589,7 @@ var fishDatabase = {
   dwarfGourami: {
     commonName: 'Dwarf Gourami',
     scientificName: 'Trichogaster lalius',
+    origin: 'asia',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FdwarfGourami.jpg?alt=media',
     tempMin: 72,
@@ -599,6 +616,7 @@ var fishDatabase = {
   honeyGourami: {
     commonName: 'Honey Gourami',
     scientificName: 'Trichogaster chuna',
+    origin: 'asia',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FhoneyGourami.jpg?alt=media',
     tempMin: 72,
@@ -625,6 +643,7 @@ var fishDatabase = {
   pearlGourami: {
     commonName: 'Pearl Gourami',
     scientificName: 'Trichopodus leerii',
+    origin: 'asia',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FpearlGourami.jpg?alt=media',
     tempMin: 75,
@@ -651,6 +670,7 @@ var fishDatabase = {
   sparklingGourami: {
     commonName: 'Sparkling Gourami',
     scientificName: 'Trichopsis pumila',
+    origin: 'asia',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FsparklingGourami.jpg?alt=media',
     tempMin: 72,
@@ -677,6 +697,7 @@ var fishDatabase = {
   germanBlueRam: {
     commonName: 'German Blue Ram',
     scientificName: 'Mikrogeophagus ramirezi',
+    origin: 'southAmerica',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FgermanBlueRam.jpg?alt=media',
     tempMin: 78,
@@ -703,6 +724,7 @@ var fishDatabase = {
   pandaCory: {
     commonName: 'Panda Cory',
     scientificName: 'Corydoras panda',
+    origin: 'southAmerica',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FpandaCory.jpg?alt=media',
     tempMin: 72,
@@ -723,12 +745,12 @@ var fishDatabase = {
     careLevel: 'Moderate',
     breedingNeeds:
       'Egg scatterer; T-position spawning; deposits eggs on glass/plants; eggs hatch in 3-5 days',
-    genderDifferentiation:
-      'Females larger and rounder when viewed from above; males slimmer',
+    genderDifferentiation: 'Females larger and rounder when viewed from above; males slimmer',
   },
   bronzeCory: {
     commonName: 'Bronze Cory',
     scientificName: 'Corydoras aeneus',
+    origin: 'southAmerica',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FbronzeCory.jpg?alt=media',
     tempMin: 70,
@@ -747,14 +769,13 @@ var fishDatabase = {
     waterHardness: '2-15 dGH',
     lifespan: '10 years',
     careLevel: 'Easy',
-    breedingNeeds:
-      'Egg scatterer; T-position spawning; prolific breeder; eggs hatch in 3-5 days',
-    genderDifferentiation:
-      'Females larger and fuller; males slimmer with more pointed fins',
+    breedingNeeds: 'Egg scatterer; T-position spawning; prolific breeder; eggs hatch in 3-5 days',
+    genderDifferentiation: 'Females larger and fuller; males slimmer with more pointed fins',
   },
   pygmyCory: {
     commonName: 'Pygmy Cory',
     scientificName: 'Corydoras pygmaeus',
+    origin: 'southAmerica',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FpygmyCory.jpg?alt=media',
     tempMin: 72,
@@ -775,12 +796,12 @@ var fishDatabase = {
     careLevel: 'Easy',
     breedingNeeds:
       'Egg scatterer; spawns in small groups; eggs deposited on plants; eggs hatch in 3-4 days',
-    genderDifferentiation:
-      'Females larger and rounder; males slimmer and slightly smaller',
+    genderDifferentiation: 'Females larger and rounder; males slimmer and slightly smaller',
   },
   kuhliLoach: {
     commonName: 'Kuhli Loach',
     scientificName: 'Pangio kuhlii',
+    origin: 'asia',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FkuhliLoach.jpg?alt=media',
     tempMin: 72,
@@ -801,12 +822,12 @@ var fishDatabase = {
     careLevel: 'Easy',
     breedingNeeds:
       'Egg scatterer; rarely bred in captivity; requires soft, acidic water and floating plants',
-    genderDifferentiation:
-      'Females fuller when gravid with visible green eggs; males slimmer',
+    genderDifferentiation: 'Females fuller when gravid with visible green eggs; males slimmer',
   },
   otocinclus: {
     commonName: 'Otocinclus Catfish',
     scientificName: 'Otocinclus spp.',
+    origin: 'southAmerica',
     imageUrl: null,
     tempMin: 70,
     tempMax: 79,
@@ -826,12 +847,12 @@ var fishDatabase = {
     careLevel: 'Moderate',
     breedingNeeds:
       'Egg depositor; deposits eggs on plant leaves/glass; rarely bred in home aquarium',
-    genderDifferentiation:
-      'Females larger and rounder when viewed from above; males slimmer',
+    genderDifferentiation: 'Females larger and rounder when viewed from above; males slimmer',
   },
   bristlenosePleco: {
     commonName: 'Bristlenose Pleco',
     scientificName: 'Ancistrus spp.',
+    origin: 'northCentralAmerica',
     imageUrl: null,
     tempMin: 72,
     tempMax: 80,
@@ -857,6 +878,7 @@ var fishDatabase = {
   clownPleco: {
     commonName: 'Clown Pleco',
     scientificName: 'Panaqolus maccus',
+    origin: 'southAmerica',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FclownPleco.jpg?alt=media',
     tempMin: 73,
@@ -875,14 +897,14 @@ var fishDatabase = {
     waterHardness: '3-10 dGH',
     lifespan: '10 years',
     careLevel: 'Easy',
-    breedingNeeds:
-      'Cave spawner; male guards eggs; requires established tank with driftwood caves',
+    breedingNeeds: 'Cave spawner; male guards eggs; requires established tank with driftwood caves',
     genderDifferentiation:
       'Males have more prominent odontodes (small spines) on head; females rounder',
   },
   rainbowShark: {
     commonName: 'Rainbow Shark',
     scientificName: 'Epalzeorhynchos frenatum',
+    origin: 'asia',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FrainbowShark.jpg?alt=media',
     tempMin: 72,
@@ -903,12 +925,12 @@ var fishDatabase = {
     careLevel: 'Moderate',
     breedingNeeds:
       'Egg scatterer; not commonly bred in home aquarium; requires hormones in commercial settings',
-    genderDifferentiation:
-      'Males slimmer with brighter colors; females rounder and less colorful',
+    genderDifferentiation: 'Males slimmer with brighter colors; females rounder and less colorful',
   },
   cherryShrimp: {
     commonName: 'Cherry Shrimp',
     scientificName: 'Neocaridina davidi',
+    origin: 'asia',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FcherryShrimp.jpg?alt=media',
     tempMin: 65,
@@ -935,6 +957,7 @@ var fishDatabase = {
   amanoShrimp: {
     commonName: 'Amano Shrimp',
     scientificName: 'Caridina multidentata',
+    origin: 'asia',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FamanoShrimp.jpg?alt=media',
     tempMin: 65,
@@ -953,14 +976,14 @@ var fishDatabase = {
     waterHardness: '5-15 dGH',
     lifespan: '2-3 years',
     careLevel: 'Easy',
-    breedingNeeds:
-      'Requires brackish water for larvae; extremely difficult in home aquarium',
+    breedingNeeds: 'Requires brackish water for larvae; extremely difficult in home aquarium',
     genderDifferentiation:
       'Females larger with longer pleopods and rounder underside; males smaller',
   },
   ghostShrimp: {
     commonName: 'Ghost Shrimp',
     scientificName: 'Palaemonetes paludosus',
+    origin: 'northCentralAmerica',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FghostShrimp.jpg?alt=media',
     tempMin: 65,
@@ -987,6 +1010,7 @@ var fishDatabase = {
   mysterySnail: {
     commonName: 'Mystery Snail',
     scientificName: 'Pomacea bridgesii',
+    origin: 'southAmerica',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FmysterySnail.jpg?alt=media',
     tempMin: 68,
@@ -1013,6 +1037,7 @@ var fishDatabase = {
   neriteSnail: {
     commonName: 'Nerite Snail',
     scientificName: 'Neritina spp.',
+    origin: 'africa',
     imageUrl: null,
     tempMin: 65,
     tempMax: 85,
@@ -1032,14 +1057,14 @@ var fishDatabase = {
     careLevel: 'Easy',
     breedingNeeds:
       'Requires brackish/saltwater for larvae; eggs laid in freshwater but will not hatch',
-    genderDifferentiation:
-      'Very difficult to distinguish; no reliable external differences',
+    genderDifferentiation: 'Very difficult to distinguish; no reliable external differences',
   },
 
   // Additional Tetras
   blackNeonTetra: {
     commonName: 'Black Neon Tetra',
     scientificName: 'Hyphessobrycon herbertaxelrodi',
+    origin: 'southAmerica',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FblackNeonTetra.jpg?alt=media',
     tempMin: 72,
@@ -1060,12 +1085,12 @@ var fishDatabase = {
     careLevel: 'Easy',
     breedingNeeds:
       'Egg scatterer; requires very soft, acidic water and low lighting; eggs hatch in 24 hours',
-    genderDifferentiation:
-      'Females fuller-bodied; males slimmer',
+    genderDifferentiation: 'Females fuller-bodied; males slimmer',
   },
   buenosAiresTetra: {
     commonName: 'Buenos Aires Tetra',
     scientificName: 'Hyphessobrycon anisitsi',
+    origin: 'southAmerica',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FbuenosAiresTetra.jpg?alt=media',
     tempMin: 64,
@@ -1086,12 +1111,12 @@ var fishDatabase = {
     careLevel: 'Easy',
     breedingNeeds:
       'Egg scatterer; spawns among plants; eggs hatch in 24-36 hours; prolific breeder',
-    genderDifferentiation:
-      'Females rounder and larger; males slimmer with more intense coloration',
+    genderDifferentiation: 'Females rounder and larger; males slimmer with more intense coloration',
   },
   bloodfinTetra: {
     commonName: 'Bloodfin Tetra',
     scientificName: 'Aphyocharax anisitsi',
+    origin: 'southAmerica',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FbloodfinTetra.jpg?alt=media',
     tempMin: 64,
@@ -1118,6 +1143,7 @@ var fishDatabase = {
   congoTetra: {
     commonName: 'Congo Tetra',
     scientificName: 'Phenacogrammus interruptus',
+    origin: 'africa',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FcongoTetra.jpg?alt=media',
     tempMin: 73,
@@ -1136,14 +1162,14 @@ var fishDatabase = {
     waterHardness: '3-18 dGH',
     lifespan: '3-5 years',
     careLevel: 'Moderate',
-    breedingNeeds:
-      'Egg scatterer; spawns in dense vegetation; eggs hatch in 5-7 days; challenging',
+    breedingNeeds: 'Egg scatterer; spawns in dense vegetation; eggs hatch in 5-7 days; challenging',
     genderDifferentiation:
       'Males larger with elongated fins and brighter iridescent colors; females smaller, less colorful',
   },
   lemonTetra: {
     commonName: 'Lemon Tetra',
     scientificName: 'Hyphessobrycon pulchripinnis',
+    origin: 'southAmerica',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FlemonTetra.jpg?alt=media',
     tempMin: 70,
@@ -1170,6 +1196,7 @@ var fishDatabase = {
   serpaeTetra: {
     commonName: 'Serpae Tetra',
     scientificName: 'Hyphessobrycon eques',
+    origin: 'southAmerica',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FserpaeTetra.jpg?alt=media',
     tempMin: 72,
@@ -1196,6 +1223,7 @@ var fishDatabase = {
   diamondTetra: {
     commonName: 'Diamond Tetra',
     scientificName: 'Moenkhausia pittieri',
+    origin: 'southAmerica',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FdiamondTetra.jpg?alt=media',
     tempMin: 72,
@@ -1216,12 +1244,12 @@ var fishDatabase = {
     careLevel: 'Easy',
     breedingNeeds:
       'Egg scatterer; spawns in vegetation; eggs hatch in 24-36 hours; requires soft water',
-    genderDifferentiation:
-      'Males have longer dorsal fin with more sparkle; females rounder',
+    genderDifferentiation: 'Males have longer dorsal fin with more sparkle; females rounder',
   },
   xRayTetra: {
     commonName: 'X-Ray Tetra',
     scientificName: 'Pristella maxillaris',
+    origin: 'southAmerica',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FxRayTetra.jpg?alt=media',
     tempMin: 72,
@@ -1248,6 +1276,7 @@ var fishDatabase = {
   penguinTetra: {
     commonName: 'Penguin Tetra',
     scientificName: 'Thayeria boehlkei',
+    origin: 'southAmerica',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FpenguinTetra.jpg?alt=media',
     tempMin: 73,
@@ -1266,14 +1295,14 @@ var fishDatabase = {
     waterHardness: '5-19 dGH',
     lifespan: '5-8 years',
     careLevel: 'Easy',
-    breedingNeeds:
-      'Egg scatterer; spawns among fine-leaved plants; eggs hatch in 24-36 hours',
+    breedingNeeds: 'Egg scatterer; spawns among fine-leaved plants; eggs hatch in 24-36 hours',
     genderDifferentiation:
       'Females rounder especially when gravid; males slimmer with more intense black stripe',
   },
   silverDollar: {
     commonName: 'Silver Dollar',
     scientificName: 'Metynnis argenteus',
+    origin: 'southAmerica',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FsilverDollar.jpg?alt=media',
     tempMin: 75,
@@ -1300,6 +1329,7 @@ var fishDatabase = {
   greenNeonTetra: {
     commonName: 'Green Neon Tetra',
     scientificName: 'Paracheirodon simulans',
+    origin: 'southAmerica',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FgreenNeonTetra.jpg?alt=media',
     tempMin: 76,
@@ -1328,7 +1358,9 @@ var fishDatabase = {
   rosyBarb: {
     commonName: 'Rosy Barb',
     scientificName: 'Pethia conchonius',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FrosyBarb.jpg?alt=media",
+    origin: 'asia',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FrosyBarb.jpg?alt=media',
     tempMin: 61,
     tempMax: 75,
     tempUnit: '°F',
@@ -1353,7 +1385,9 @@ var fishDatabase = {
   goldBarb: {
     commonName: 'Gold Barb',
     scientificName: 'Barbodes semifasciolatus',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FgoldBarb.jpg?alt=media",
+    origin: 'asia',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FgoldBarb.jpg?alt=media',
     tempMin: 61,
     tempMax: 75,
     tempUnit: '°F',
@@ -1370,15 +1404,16 @@ var fishDatabase = {
     waterHardness: '2-20 dGH',
     lifespan: '4-6 years',
     careLevel: 'Very Easy',
-    breedingNeeds:
-      'Egg scatterer; spawns among plants; eggs hatch in 24-36 hours; easy to breed',
+    breedingNeeds: 'Egg scatterer; spawns among plants; eggs hatch in 24-36 hours; easy to breed',
     genderDifferentiation:
       'Females slightly fuller-bodied; males more slender with brighter coloration',
   },
   odessaBarb: {
     commonName: 'Odessa Barb',
     scientificName: 'Pethia padamya',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FodessaBarb.jpg?alt=media",
+    origin: 'asia',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FodessaBarb.jpg?alt=media',
     tempMin: 70,
     tempMax: 79,
     tempUnit: '°F',
@@ -1403,7 +1438,9 @@ var fishDatabase = {
   denisonBarb: {
     commonName: 'Denison Barb',
     scientificName: 'Sahyadria denisonii',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FdenisonBarb.jpg?alt=media",
+    origin: 'asia',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FdenisonBarb.jpg?alt=media',
     tempMin: 59,
     tempMax: 77,
     tempUnit: '°F',
@@ -1428,6 +1465,7 @@ var fishDatabase = {
   fiveBandedBarb: {
     commonName: 'Five-Banded Barb',
     scientificName: 'Desmopuntius pentazona',
+    origin: 'asia',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FfiveBandedBarb.jpg?alt=media',
     tempMin: 70,
@@ -1456,6 +1494,7 @@ var fishDatabase = {
   boesemansRainbowfish: {
     commonName: "Boeseman's Rainbowfish",
     scientificName: 'Melanotaenia boesemani',
+    origin: 'australiaOceania',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FboesemansRainbowfish.jpg?alt=media',
     tempMin: 75,
@@ -1474,14 +1513,14 @@ var fishDatabase = {
     waterHardness: '10-20 dGH',
     lifespan: '5-8 years',
     careLevel: 'Easy',
-    breedingNeeds:
-      'Egg scatterer; spawns over plants/spawning mops; eggs hatch in 7-12 days',
+    breedingNeeds: 'Egg scatterer; spawns over plants/spawning mops; eggs hatch in 7-12 days',
     genderDifferentiation:
       'Males display brilliant bicolor pattern (blue front, orange rear); females silvery-gray',
   },
   dwarfNeonRainbowfish: {
     commonName: 'Dwarf Neon Rainbowfish',
     scientificName: 'Melanotaenia praecox',
+    origin: 'australiaOceania',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FdwarfNeonRainbowfish.jpg?alt=media',
     tempMin: 73,
@@ -1500,14 +1539,14 @@ var fishDatabase = {
     waterHardness: '5-15 dGH',
     lifespan: '5-8 years',
     careLevel: 'Easy',
-    breedingNeeds:
-      'Egg scatterer; spawns over plants; eggs hatch in 5-8 days; relatively easy',
+    breedingNeeds: 'Egg scatterer; spawns over plants; eggs hatch in 5-8 days; relatively easy',
     genderDifferentiation:
       'Males more colorful with red-orange fins; females duller with yellowish fins',
   },
   turquoiseRainbowfish: {
     commonName: 'Turquoise Rainbowfish',
     scientificName: 'Melanotaenia lacustris',
+    origin: 'australiaOceania',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FturquoiseRainbowfish.jpg?alt=media',
     tempMin: 68,
@@ -1534,6 +1573,7 @@ var fishDatabase = {
   redRainbowfish: {
     commonName: 'Red Rainbowfish',
     scientificName: 'Glossolepis incisus',
+    origin: 'australiaOceania',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FredRainbowfish.jpg?alt=media',
     tempMin: 72,
@@ -1560,7 +1600,9 @@ var fishDatabase = {
   threadfinRainbowfish: {
     commonName: 'Threadfin Rainbowfish',
     scientificName: 'Iriatherina werneri',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FthreadfinRainbowfish.jpg?alt=media",
+    origin: 'australiaOceania',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FthreadfinRainbowfish.jpg?alt=media',
     tempMin: 72,
     tempMax: 86,
     tempUnit: '°F',
@@ -1577,8 +1619,7 @@ var fishDatabase = {
     waterHardness: '1-12 dGH',
     lifespan: '3-4 years',
     careLevel: 'Moderate',
-    breedingNeeds:
-      'Egg scatterer; spawns on glass/plants; eggs hatch in 3-4 days; fry very tiny',
+    breedingNeeds: 'Egg scatterer; spawns on glass/plants; eggs hatch in 3-4 days; fry very tiny',
     genderDifferentiation:
       'Males develop elongated threadlike fin extensions; females have normal fins and are rounder',
   },
@@ -1587,6 +1628,7 @@ var fishDatabase = {
   exclamationPointRasbora: {
     commonName: 'Exclamation Point Rasbora',
     scientificName: 'Boraras urophthalmoides',
+    origin: 'asia',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FexclamationPointRasbora.jpg?alt=media',
     tempMin: 68,
@@ -1607,12 +1649,12 @@ var fishDatabase = {
     careLevel: 'Moderate',
     breedingNeeds:
       'Egg scatterer; rarely bred in aquarium; requires very soft, acidic water; difficult',
-    genderDifferentiation:
-      'Males slimmer with more intense colors; females fuller-bodied',
+    genderDifferentiation: 'Males slimmer with more intense colors; females fuller-bodied',
   },
   microrasbora: {
     commonName: 'Green Kubotai Rasbora',
     scientificName: 'Microdevario kubotai',
+    origin: 'asia',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2Fmicrorasbora.jpg?alt=media',
     tempMin: 68,
@@ -1633,14 +1675,14 @@ var fishDatabase = {
     careLevel: 'Moderate',
     breedingNeeds:
       'Egg scatterer; spawns among fine-leaved plants; eggs hatch in 24-36 hours; challenging',
-    genderDifferentiation:
-      'Males slimmer with brighter green coloration; females fuller-bodied',
+    genderDifferentiation: 'Males slimmer with brighter green coloration; females fuller-bodied',
   },
 
   // Additional Livebearers
   balloonMolly: {
     commonName: 'Balloon Molly',
     scientificName: 'Poecilia sphenops (balloon morph)',
+    origin: 'southAmerica',
     imageUrl: null,
     tempMin: 70,
     tempMax: 82,
@@ -1666,7 +1708,9 @@ var fishDatabase = {
   variatusPlaty: {
     commonName: 'Variatus Platy',
     scientificName: 'Xiphophorus variatus',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FvariatusPlaty.jpg?alt=media",
+    origin: 'northCentralAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FvariatusPlaty.jpg?alt=media',
     tempMin: 68,
     tempMax: 79,
     tempUnit: '°F',
@@ -1683,14 +1727,14 @@ var fishDatabase = {
     waterHardness: '14-30 dGH',
     lifespan: '3-5 years',
     careLevel: 'Easy',
-    breedingNeeds:
-      'Livebearer; gestation 4-6 weeks; females store sperm; prolific breeders',
+    breedingNeeds: 'Livebearer; gestation 4-6 weeks; females store sperm; prolific breeders',
     genderDifferentiation:
       'Males smaller with gonopodium; females larger with fan-shaped anal fin and gravid spot',
   },
   blackMolly: {
     commonName: 'Black Molly',
     scientificName: 'Poecilia sphenops (melanistic)',
+    origin: 'southAmerica',
     imageUrl: null,
     tempMin: 70,
     tempMax: 82,
@@ -1708,14 +1752,14 @@ var fishDatabase = {
     waterHardness: '15-30 dGH',
     lifespan: '3-5 years',
     careLevel: 'Easy',
-    breedingNeeds:
-      'Livebearer; gestation 4-6 weeks; females can store sperm for multiple batches',
+    breedingNeeds: 'Livebearer; gestation 4-6 weeks; females can store sperm for multiple batches',
     genderDifferentiation:
       'Males smaller with gonopodium; females larger with rounded anal fin and gravid spot',
   },
   leastKillifish: {
     commonName: 'Least Killifish',
     scientificName: 'Heterandria formosa',
+    origin: 'northCentralAmerica',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FleastKillifish.jpg?alt=media',
     tempMin: 68,
@@ -1744,7 +1788,9 @@ var fishDatabase = {
   threeSpotGourami: {
     commonName: 'Three Spot Gourami',
     scientificName: 'Trichopodus trichopterus',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FthreeSpotGourami.jpg?alt=media",
+    origin: 'asia',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FthreeSpotGourami.jpg?alt=media',
     tempMin: 75,
     tempMax: 86,
     tempUnit: '°F',
@@ -1769,7 +1815,9 @@ var fishDatabase = {
   chocolateGourami: {
     commonName: 'Chocolate Gourami',
     scientificName: 'Sphaerichthys osphromenoides',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FchocolateGourami.jpg?alt=media",
+    origin: 'asia',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FchocolateGourami.jpg?alt=media',
     tempMin: 79,
     tempMax: 88,
     tempUnit: '°F',
@@ -1794,7 +1842,9 @@ var fishDatabase = {
   paradiseFish: {
     commonName: 'Paradise Fish',
     scientificName: 'Macropodus opercularis',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FparadiseFish.jpg?alt=media",
+    origin: 'asia',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FparadiseFish.jpg?alt=media',
     tempMin: 61,
     tempMax: 79,
     tempUnit: '°F',
@@ -1819,7 +1869,9 @@ var fishDatabase = {
   bettaImbellis: {
     commonName: 'Peaceful Betta',
     scientificName: 'Betta imbellis',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FbettaImbellis.jpg?alt=media",
+    origin: 'asia',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FbettaImbellis.jpg?alt=media',
     tempMin: 68,
     tempMax: 82,
     tempUnit: '°F',
@@ -1846,7 +1898,9 @@ var fishDatabase = {
   kribensis: {
     commonName: 'Kribensis',
     scientificName: 'Pelvicachromis pulcher',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2Fkribensis.jpg?alt=media",
+    origin: 'africa',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2Fkribensis.jpg?alt=media',
     tempMin: 75,
     tempMax: 81,
     tempUnit: '°F',
@@ -1863,15 +1917,16 @@ var fishDatabase = {
     waterHardness: '0-12 dGH',
     lifespan: '5-8 years',
     careLevel: 'Easy',
-    breedingNeeds:
-      'Cave spawner; pair guards eggs and fry; eggs hatch in 2-3 days; easy to breed',
+    breedingNeeds: 'Cave spawner; pair guards eggs and fry; eggs hatch in 2-3 days; easy to breed',
     genderDifferentiation:
       'Females smaller with cherry-red belly and rounded fins; males larger with pointed dorsal fin',
   },
   bolivianRam: {
     commonName: 'Bolivian Ram',
     scientificName: 'Mikrogeophagus altispinosus',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FbolivianRam.jpg?alt=media",
+    origin: 'southAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FbolivianRam.jpg?alt=media',
     tempMin: 75,
     tempMax: 82,
     tempUnit: '°F',
@@ -1896,7 +1951,9 @@ var fishDatabase = {
   cockatooDwarfCichlid: {
     commonName: 'Cockatoo Dwarf Cichlid',
     scientificName: 'Apistogramma cacatuoides',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FcockatooDwarfCichlid.jpg?alt=media",
+    origin: 'southAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FcockatooDwarfCichlid.jpg?alt=media',
     tempMin: 75,
     tempMax: 84,
     tempUnit: '°F',
@@ -1921,6 +1978,7 @@ var fishDatabase = {
   electricBlueAcara: {
     commonName: 'Electric Blue Acara',
     scientificName: 'Andinoacara pulcher',
+    origin: 'southAmerica',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FelectricBlueAcara.jpg?alt=media',
     tempMin: 72,
@@ -1947,7 +2005,9 @@ var fishDatabase = {
   firemouthCichlid: {
     commonName: 'Firemouth Cichlid',
     scientificName: 'Thorichthys meeki',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FfiremouthCichlid.jpg?alt=media",
+    origin: 'northCentralAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FfiremouthCichlid.jpg?alt=media',
     tempMin: 76,
     tempMax: 82,
     tempUnit: '°F',
@@ -1972,7 +2032,9 @@ var fishDatabase = {
   convictCichlid: {
     commonName: 'Convict Cichlid',
     scientificName: 'Amatitlania nigrofasciata',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FconvictCichlid.jpg?alt=media",
+    origin: 'northCentralAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FconvictCichlid.jpg?alt=media',
     tempMin: 75,
     tempMax: 82,
     tempUnit: '°F',
@@ -1997,6 +2059,7 @@ var fishDatabase = {
   africanButterflyCichlid: {
     commonName: 'African Butterfly Cichlid',
     scientificName: 'Anomalochromis thomasi',
+    origin: 'africa',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FafricanButterflyCichlid.jpg?alt=media',
     tempMin: 73,
@@ -2017,13 +2080,14 @@ var fishDatabase = {
     careLevel: 'Easy',
     breedingNeeds:
       'Cave spawner; pair guards eggs in caves; eggs hatch in 2-3 days; challenging in aquarium',
-    genderDifferentiation:
-      'Males slightly larger with more pointed fins; difficult to distinguish',
+    genderDifferentiation: 'Males slightly larger with more pointed fins; difficult to distinguish',
   },
   discus: {
     commonName: 'Discus',
     scientificName: 'Symphysodon aequifasciatus',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2Fdiscus.jpg?alt=media",
+    origin: 'southAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2Fdiscus.jpg?alt=media',
     tempMin: 82,
     tempMax: 86,
     tempUnit: '°F',
@@ -2050,7 +2114,9 @@ var fishDatabase = {
   yoyoLoach: {
     commonName: 'Yoyo Loach',
     scientificName: 'Botia almorhae',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FyoyoLoach.jpg?alt=media",
+    origin: 'asia',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FyoyoLoach.jpg?alt=media',
     tempMin: 66,
     tempMax: 82,
     tempUnit: '°F',
@@ -2075,6 +2141,7 @@ var fishDatabase = {
   dwarfChainLoach: {
     commonName: 'Dwarf Chain Loach',
     scientificName: 'Ambastaia sidthimunki',
+    origin: 'asia',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FdwarfChainLoach.jpg?alt=media',
     tempMin: 68,
@@ -2095,12 +2162,12 @@ var fishDatabase = {
     careLevel: 'Moderate',
     breedingNeeds:
       'Rarely bred in aquarium; requires specific conditions; commercially bred with hormone stimulation',
-    genderDifferentiation:
-      'Females slightly fuller-bodied when mature; difficult to distinguish',
+    genderDifferentiation: 'Females slightly fuller-bodied when mature; difficult to distinguish',
   },
   zebraLoach: {
     commonName: 'Zebra Loach',
     scientificName: 'Botia striata',
+    origin: 'asia',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FzebraLoach.jpg?alt=media',
     tempMin: 70,
@@ -2121,12 +2188,12 @@ var fishDatabase = {
     careLevel: 'Moderate',
     breedingNeeds:
       'Rarely bred in aquarium; egg scatterer; requires seasonal conditions; very difficult',
-    genderDifferentiation:
-      'Females fuller-bodied when mature; males slimmer; subtle differences',
+    genderDifferentiation: 'Females fuller-bodied when mature; males slimmer; subtle differences',
   },
   clownLoach: {
     commonName: 'Clown Loach',
     scientificName: 'Chromobotia macracanthus',
+    origin: 'asia',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FclownLoach.jpg?alt=media',
     tempMin: 75,
@@ -2153,7 +2220,9 @@ var fishDatabase = {
   hillstreamLoach: {
     commonName: 'Hillstream Loach',
     scientificName: 'Sewellia lineolata',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FhillstreamLoach.jpg?alt=media",
+    origin: 'asia',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FhillstreamLoach.jpg?alt=media',
     tempMin: 65,
     tempMax: 75,
     tempUnit: '°F',
@@ -2180,7 +2249,9 @@ var fishDatabase = {
   pepperedCory: {
     commonName: 'Peppered Cory',
     scientificName: 'Corydoras paleatus',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FpepperedCory.jpg?alt=media",
+    origin: 'southAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FpepperedCory.jpg?alt=media',
     tempMin: 60,
     tempMax: 78,
     tempUnit: '°F',
@@ -2199,13 +2270,14 @@ var fishDatabase = {
     careLevel: 'Very Easy',
     breedingNeeds:
       'Egg layer; T-position spawning; female carries eggs to chosen surface; eggs hatch in 3-6 days; easy',
-    genderDifferentiation:
-      'Females larger and fuller-bodied when viewed from above; males slimmer',
+    genderDifferentiation: 'Females larger and fuller-bodied when viewed from above; males slimmer',
   },
   sterbaiCory: {
     commonName: 'Sterbai Cory',
     scientificName: 'Corydoras sterbai',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FsterbaiCory.jpg?alt=media",
+    origin: 'southAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FsterbaiCory.jpg?alt=media',
     tempMin: 73,
     tempMax: 82,
     tempUnit: '°F',
@@ -2230,7 +2302,9 @@ var fishDatabase = {
   juliiCory: {
     commonName: 'Julii Cory',
     scientificName: 'Corydoras julii',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FjuliiCory.jpg?alt=media",
+    origin: 'southAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FjuliiCory.jpg?alt=media',
     tempMin: 73,
     tempMax: 79,
     tempUnit: '°F',
@@ -2249,13 +2323,14 @@ var fishDatabase = {
     careLevel: 'Easy',
     breedingNeeds:
       'Egg layer; T-position spawning; female carries eggs to chosen surface; eggs hatch in 3-6 days; moderate',
-    genderDifferentiation:
-      'Females larger and fuller-bodied when viewed from above; males slimmer',
+    genderDifferentiation: 'Females larger and fuller-bodied when viewed from above; males slimmer',
   },
   albinoCory: {
     commonName: 'Albino Cory',
     scientificName: 'Corydoras aeneus (albino)',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FalbinoCory.jpg?alt=media",
+    origin: 'southAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FalbinoCory.jpg?alt=media',
     tempMin: 72,
     tempMax: 80,
     tempUnit: '°F',
@@ -2274,12 +2349,12 @@ var fishDatabase = {
     careLevel: 'Very Easy',
     breedingNeeds:
       'Egg layer; T-position spawning; female carries eggs to chosen surface; eggs hatch in 3-6 days; easy',
-    genderDifferentiation:
-      'Females larger and fuller-bodied when viewed from above; males slimmer',
+    genderDifferentiation: 'Females larger and fuller-bodied when viewed from above; males slimmer',
   },
   saltAndPepperCory: {
     commonName: 'Salt and Pepper Cory',
     scientificName: 'Corydoras habrosus',
+    origin: 'southAmerica',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FsaltAndPepperCory.jpg?alt=media',
     tempMin: 70,
@@ -2300,14 +2375,14 @@ var fishDatabase = {
     careLevel: 'Easy',
     breedingNeeds:
       'Egg layer; T-position spawning; female carries eggs to chosen surface; eggs hatch in 3-6 days; moderate',
-    genderDifferentiation:
-      'Females larger and fuller-bodied when viewed from above; males slimmer',
+    genderDifferentiation: 'Females larger and fuller-bodied when viewed from above; males slimmer',
   },
 
   // Other Catfish
   chineseAlgaeEater: {
     commonName: 'Chinese Algae Eater',
     scientificName: 'Gyrinocheilus aymonieri',
+    origin: 'asia',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FchineseAlgaeEater.jpg?alt=media',
     tempMin: 72,
@@ -2334,7 +2409,9 @@ var fishDatabase = {
   stripedRaphaelCatfish: {
     commonName: 'Striped Raphael Catfish',
     scientificName: 'Platydoras armatulus',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FstripedRaphaelCatfish.jpg?alt=media",
+    origin: 'southAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FstripedRaphaelCatfish.jpg?alt=media',
     tempMin: 75,
     tempMax: 82,
     tempUnit: '°F',
@@ -2353,13 +2430,14 @@ var fishDatabase = {
     careLevel: 'Easy',
     breedingNeeds:
       'Rarely bred in aquarium; bubble nest builder in wild; requires specific conditions; very difficult',
-    genderDifferentiation:
-      'Females fuller-bodied when mature; difficult to distinguish externally',
+    genderDifferentiation: 'Females fuller-bodied when mature; difficult to distinguish externally',
   },
   glassCatfish: {
     commonName: 'Glass Catfish',
     scientificName: 'Kryptopterus vitreolus',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FglassCatfish.jpg?alt=media",
+    origin: 'asia',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FglassCatfish.jpg?alt=media',
     tempMin: 75,
     tempMax: 80,
     tempUnit: '°F',
@@ -2384,6 +2462,7 @@ var fishDatabase = {
   upsideDownCatfish: {
     commonName: 'Upside-Down Catfish',
     scientificName: 'Synodontis nigriventris',
+    origin: 'africa',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FupsideDownCatfish.jpg?alt=media',
     tempMin: 72,
@@ -2404,12 +2483,12 @@ var fishDatabase = {
     careLevel: 'Easy',
     breedingNeeds:
       'Rarely bred in aquarium; cave spawner in wild; requires specific conditions; very difficult',
-    genderDifferentiation:
-      'Females larger and rounder when mature; males slimmer',
+    genderDifferentiation: 'Females larger and rounder when mature; males slimmer',
   },
   commonPleco: {
     commonName: 'Common Pleco',
     scientificName: 'Hypostomus plecostomus',
+    origin: 'southAmerica',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FcommonPleco.jpg?alt=media',
     tempMin: 72,
@@ -2436,6 +2515,7 @@ var fishDatabase = {
   rubberLipPleco: {
     commonName: 'Rubber Lip Pleco',
     scientificName: 'Chaetostoma milesi',
+    origin: 'southAmerica',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FrubberLipPleco.jpg?alt=media',
     tempMin: 72,
@@ -2464,7 +2544,9 @@ var fishDatabase = {
   bambooShrimp: {
     commonName: 'Bamboo Shrimp',
     scientificName: 'Atyopsis moluccensis',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FbambooShrimp.jpg?alt=media",
+    origin: 'asia',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FbambooShrimp.jpg?alt=media',
     tempMin: 70,
     tempMax: 78,
     tempUnit: '°F',
@@ -2489,7 +2571,9 @@ var fishDatabase = {
   singaporeShrimp: {
     commonName: 'Singapore Shrimp',
     scientificName: 'Macrobrachium lanchesteri',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FsingaporeShrimp.jpg?alt=media",
+    origin: 'asia',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FsingaporeShrimp.jpg?alt=media',
     tempMin: 70,
     tempMax: 82,
     tempUnit: '°F',
@@ -2516,7 +2600,9 @@ var fishDatabase = {
   ramshornSnail: {
     commonName: 'Ramshorn Snail',
     scientificName: 'Planorbidae family',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FramshornSnail.jpg?alt=media",
+    origin: 'asia',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FramshornSnail.jpg?alt=media',
     tempMin: 60,
     tempMax: 80,
     tempUnit: '°F',
@@ -2543,6 +2629,7 @@ var fishDatabase = {
   africanDwarfFrog: {
     commonName: 'African Dwarf Frog',
     scientificName: 'Hymenochirus boettgeri',
+    origin: 'africa',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FafricanDwarfFrog.jpg?alt=media',
     tempMin: 72,
@@ -2575,7 +2662,9 @@ var fishDatabase = {
   emperorTetra: {
     commonName: 'Emperor Tetra',
     scientificName: 'Nematobrycon palmeri',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FemperorTetra.jpg?alt=media",
+    origin: 'southAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FemperorTetra.jpg?alt=media',
     tempMin: 73,
     tempMax: 81,
     tempUnit: '°F',
@@ -2601,6 +2690,7 @@ var fishDatabase = {
   flameTetra: {
     commonName: 'Flame Tetra',
     scientificName: 'Hyphessobrycon flammeus',
+    origin: 'southAmerica',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FflameTetra.jpg?alt=media',
     tempMin: 72,
@@ -2628,6 +2718,7 @@ var fishDatabase = {
   pristellaTetra: {
     commonName: 'Pristella Tetra',
     scientificName: 'Pristella maxillaris',
+    origin: 'southAmerica',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FpristellaTetra.jpg?alt=media',
     tempMin: 75,
@@ -2655,6 +2746,7 @@ var fishDatabase = {
   blackPhantomTetra: {
     commonName: 'Black Phantom Tetra',
     scientificName: 'Hyphessobrycon megalopterus',
+    origin: 'southAmerica',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FblackPhantomTetra.jpg?alt=media',
     tempMin: 72,
@@ -2682,7 +2774,9 @@ var fishDatabase = {
   redPhantomTetra: {
     commonName: 'Red Phantom Tetra',
     scientificName: 'Hyphessobrycon sweglesi',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FredPhantomTetra.jpg?alt=media",
+    origin: 'southAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FredPhantomTetra.jpg?alt=media',
     tempMin: 72,
     tempMax: 82,
     tempUnit: '°F',
@@ -2709,6 +2803,7 @@ var fishDatabase = {
   blackRubyBarb: {
     commonName: 'Black Ruby Barb',
     scientificName: 'Pethia nigrofasciata',
+    origin: 'asia',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FblackRubyBarb.jpg?alt=media',
     tempMin: 72,
@@ -2736,6 +2831,7 @@ var fishDatabase = {
   tictoBarb: {
     commonName: 'Ticto Barb',
     scientificName: 'Pethia ticto',
+    origin: 'asia',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FtictoBarb.jpg?alt=media',
     tempMin: 72,
@@ -2763,6 +2859,7 @@ var fishDatabase = {
   checkerBarb: {
     commonName: 'Checker Barb',
     scientificName: 'Oliotius oligolepis',
+    origin: 'asia',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FcheckerBarb.jpg?alt=media',
     tempMin: 68,
@@ -2790,6 +2887,7 @@ var fishDatabase = {
   pentazonaBarb: {
     commonName: 'Pentazona Barb',
     scientificName: 'Desmopuntius pentazona',
+    origin: 'asia',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FpentazonaBarb.jpg?alt=media',
     tempMin: 72,
@@ -2818,6 +2916,7 @@ var fishDatabase = {
   scissortailRasbora: {
     commonName: 'Scissortail Rasbora',
     scientificName: 'Rasbora trilineata',
+    origin: 'asia',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FscissortailRasbora.jpg?alt=media',
     tempMin: 72,
@@ -2845,6 +2944,7 @@ var fishDatabase = {
   lambchopRasbora: {
     commonName: 'Lambchop Rasbora',
     scientificName: 'Trigonostigma espei',
+    origin: 'asia',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FlambchopRasbora.jpg?alt=media',
     tempMin: 72,
@@ -2872,7 +2972,9 @@ var fishDatabase = {
   brilliantRasbora: {
     commonName: 'Brilliant Rasbora',
     scientificName: 'Rasbora einthovenii',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FbrilliantRasbora.jpg?alt=media",
+    origin: 'asia',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FbrilliantRasbora.jpg?alt=media',
     tempMin: 72,
     tempMax: 77,
     tempUnit: '°F',
@@ -2898,7 +3000,9 @@ var fishDatabase = {
   phoenixRasbora: {
     commonName: 'Phoenix Rasbora',
     scientificName: 'Boraras merah',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FphoenixRasbora.jpg?alt=media",
+    origin: 'asia',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FphoenixRasbora.jpg?alt=media',
     tempMin: 72,
     tempMax: 82,
     tempUnit: '°F',
@@ -2924,7 +3028,9 @@ var fishDatabase = {
   strawberryRasbora: {
     commonName: 'Strawberry Rasbora',
     scientificName: 'Boraras naevus',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FstrawberryRasbora.jpg?alt=media",
+    origin: 'asia',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FstrawberryRasbora.jpg?alt=media',
     tempMin: 76,
     tempMax: 82,
     tempUnit: '°F',
@@ -2950,6 +3056,7 @@ var fishDatabase = {
   emeraldDwarfRasbora: {
     commonName: 'Emerald Dwarf Rasbora',
     scientificName: 'Danio erythromicron',
+    origin: 'asia',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FemeraldDwarfRasbora.jpg?alt=media',
     tempMin: 68,
@@ -2977,6 +3084,7 @@ var fishDatabase = {
   goldWhiteCloud: {
     commonName: 'Gold White Cloud',
     scientificName: 'Tanichthys albonubes (Gold Morph)',
+    origin: 'asia',
     imageUrl: null,
     tempMin: 64,
     tempMax: 72,
@@ -3004,7 +3112,9 @@ var fishDatabase = {
   sailfinMolly: {
     commonName: 'Sailfin Molly',
     scientificName: 'Poecilia velifera',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FsailfinMolly.jpg?alt=media",
+    origin: 'northCentralAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FsailfinMolly.jpg?alt=media',
     tempMin: 72,
     tempMax: 82,
     tempUnit: '°F',
@@ -3030,6 +3140,7 @@ var fishDatabase = {
   dalmatianMolly: {
     commonName: 'Dalmatian Molly',
     scientificName: 'Poecilia sphenops (Dalmatian)',
+    origin: 'northCentralAmerica',
     imageUrl: null,
     tempMin: 70,
     tempMax: 82,
@@ -3056,6 +3167,7 @@ var fishDatabase = {
   mosquitofish: {
     commonName: 'Mosquitofish',
     scientificName: 'Gambusia affinis',
+    origin: 'northCentralAmerica',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2Fmosquitofish.jpg?alt=media',
     tempMin: 50,
@@ -3084,6 +3196,7 @@ var fishDatabase = {
   apistogrammaAgassizii: {
     commonName: 'Apistogramma Agassizii',
     scientificName: 'Apistogramma agassizii',
+    origin: 'southAmerica',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FapistogrammaAgassizii.jpg?alt=media',
     tempMin: 72,
@@ -3111,6 +3224,7 @@ var fishDatabase = {
   blueAcara: {
     commonName: 'Blue Acara',
     scientificName: 'Andinoacara pulcher',
+    origin: 'northCentralAmerica',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FblueAcara.jpg?alt=media',
     tempMin: 72,
@@ -3138,6 +3252,7 @@ var fishDatabase = {
   severum: {
     commonName: 'Severum',
     scientificName: 'Heros severus',
+    origin: 'southAmerica',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2Fseverum.jpg?alt=media',
     tempMin: 72,
@@ -3165,7 +3280,9 @@ var fishDatabase = {
   oscar: {
     commonName: 'Oscar',
     scientificName: 'Astronotus ocellatus',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2Foscar.jpg?alt=media",
+    origin: 'southAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2Foscar.jpg?alt=media',
     tempMin: 72,
     tempMax: 80,
     tempUnit: '°F',
@@ -3191,6 +3308,7 @@ var fishDatabase = {
   jackDempsey: {
     commonName: 'Jack Dempsey',
     scientificName: 'Rocio octofasciata',
+    origin: 'northCentralAmerica',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FjackDempsey.jpg?alt=media',
     tempMin: 72,
@@ -3218,6 +3336,7 @@ var fishDatabase = {
   jewelCichlid: {
     commonName: 'Jewel Cichlid',
     scientificName: 'Hemichromis bimaculatus',
+    origin: 'africa',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FjewelCichlid.jpg?alt=media',
     tempMin: 75,
@@ -3245,6 +3364,7 @@ var fishDatabase = {
   peacockCichlid: {
     commonName: 'Peacock Cichlid',
     scientificName: 'Aulonocara species',
+    origin: 'africa',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FpeacockCichlid.jpg?alt=media',
     tempMin: 76,
@@ -3272,7 +3392,9 @@ var fishDatabase = {
   yellowLabCichlid: {
     commonName: 'Yellow Lab Cichlid',
     scientificName: 'Labidochromis caeruleus',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FyellowLabCichlid.jpg?alt=media",
+    origin: 'africa',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FyellowLabCichlid.jpg?alt=media',
     tempMin: 72,
     tempMax: 82,
     tempUnit: '°F',
@@ -3298,6 +3420,7 @@ var fishDatabase = {
   keyholeCichlid: {
     commonName: 'Keyhole Cichlid',
     scientificName: 'Cleithracara maronii',
+    origin: 'southAmerica',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FkeyholeCichlid.jpg?alt=media',
     tempMin: 72,
@@ -3326,7 +3449,9 @@ var fishDatabase = {
   banditCory: {
     commonName: 'Bandit Cory',
     scientificName: 'Corydoras metae',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FbanditCory.jpg?alt=media",
+    origin: 'southAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FbanditCory.jpg?alt=media',
     tempMin: 72,
     tempMax: 79,
     tempUnit: '°F',
@@ -3352,7 +3477,9 @@ var fishDatabase = {
   pictusCatfish: {
     commonName: 'Pictus Catfish',
     scientificName: 'Pimelodus pictus',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FpictusCatfish.jpg?alt=media",
+    origin: 'southAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FpictusCatfish.jpg?alt=media',
     tempMin: 75,
     tempMax: 81,
     tempUnit: '°F',
@@ -3378,6 +3505,7 @@ var fishDatabase = {
   siameseAlgaeEater: {
     commonName: 'Siamese Algae Eater',
     scientificName: 'Crossocheilus oblongus',
+    origin: 'asia',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FsiameseAlgaeEater.jpg?alt=media',
     tempMin: 75,
@@ -3405,6 +3533,7 @@ var fishDatabase = {
   twigCatfish: {
     commonName: 'Twig Catfish',
     scientificName: 'Farlowella acus',
+    origin: 'southAmerica',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FtwigCatfish.jpg?alt=media',
     tempMin: 73,
@@ -3432,6 +3561,7 @@ var fishDatabase = {
   dwarfPetricola: {
     commonName: 'Dwarf Petricola',
     scientificName: 'Synodontis petricola',
+    origin: 'africa',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FdwarfPetricola.jpg?alt=media',
     tempMin: 72,
@@ -3460,6 +3590,7 @@ var fishDatabase = {
   dojoLoach: {
     commonName: 'Dojo Loach (Weather Loach)',
     scientificName: 'Misgurnus anguillicaudatus',
+    origin: 'asia',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FdojoLoach.jpg?alt=media',
     tempMin: 50,
@@ -3488,7 +3619,9 @@ var fishDatabase = {
   opalineGourami: {
     commonName: 'Opaline Gourami',
     scientificName: 'Trichopodus trichopterus',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FopalineGourami.jpg?alt=media",
+    origin: 'asia',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FopalineGourami.jpg?alt=media',
     tempMin: 73,
     tempMax: 82,
     tempUnit: '°F',
@@ -3514,6 +3647,7 @@ var fishDatabase = {
   goldGourami: {
     commonName: 'Gold Gourami',
     scientificName: 'Trichopodus trichopterus (Gold)',
+    origin: 'asia',
     imageUrl: null,
     tempMin: 73,
     tempMax: 82,
@@ -3540,7 +3674,9 @@ var fishDatabase = {
   blueGourami: {
     commonName: 'Blue Gourami',
     scientificName: 'Trichopodus trichopterus',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FblueGourami.jpg?alt=media",
+    origin: 'asia',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FblueGourami.jpg?alt=media',
     tempMin: 73,
     tempMax: 82,
     tempUnit: '°F',
@@ -3566,6 +3702,7 @@ var fishDatabase = {
   kissingGourami: {
     commonName: 'Kissing Gourami',
     scientificName: 'Helostoma temminckii',
+    origin: 'asia',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FkissingGourami.jpg?alt=media',
     tempMin: 72,
@@ -3593,6 +3730,7 @@ var fishDatabase = {
   moonlightGourami: {
     commonName: 'Moonlight Gourami',
     scientificName: 'Trichopodus microlepis',
+    origin: 'asia',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FmoonlightGourami.jpg?alt=media',
     tempMin: 77,
@@ -3621,6 +3759,7 @@ var fishDatabase = {
   africanButterflyFish: {
     commonName: 'African Butterfly Fish',
     scientificName: 'Pantodon buchholzi',
+    origin: 'africa',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FafricanButterflyFish.jpg?alt=media',
     tempMin: 75,
@@ -3648,6 +3787,7 @@ var fishDatabase = {
   senegalBichir: {
     commonName: 'Bichir (Senegal)',
     scientificName: 'Polypterus senegalus',
+    origin: 'africa',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FsenegalBichir.jpg?alt=media',
     tempMin: 75,
@@ -3675,7 +3815,9 @@ var fishDatabase = {
   peaPuffer: {
     commonName: 'Freshwater Pufferfish (Pea Puffer)',
     scientificName: 'Carinotetraodon travancoricus',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FpeaPuffer.jpg?alt=media",
+    origin: 'asia',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FpeaPuffer.jpg?alt=media',
     tempMin: 74,
     tempMax: 82,
     tempUnit: '°F',
@@ -3701,6 +3843,7 @@ var fishDatabase = {
   elephantNoseFish: {
     commonName: 'Elephant Nose Fish',
     scientificName: 'Gnathonemus petersii',
+    origin: 'africa',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FelephantNoseFish.jpg?alt=media',
     tempMin: 73,
@@ -3728,6 +3871,7 @@ var fishDatabase = {
   ropeFish: {
     commonName: 'Rope Fish',
     scientificName: 'Erpetoichthys calabaricus',
+    origin: 'africa',
     imageUrl:
       'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FropeFish.jpg?alt=media',
     tempMin: 72,
@@ -3759,7 +3903,9 @@ var fishDatabase = {
   silvertipTetra: {
     commonName: 'Silvertip Tetra',
     scientificName: 'Hasemania nana',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FsilvertipTetra.jpg?alt=media",
+    origin: 'southAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FsilvertipTetra.jpg?alt=media',
     tempMin: 72,
     tempMax: 82,
     tempUnit: '°F',
@@ -3785,6 +3931,7 @@ var fishDatabase = {
   headAndTailLightTetra: {
     commonName: 'Head and Tail Light Tetra',
     scientificName: 'Hemigrammus ocellifer',
+    origin: 'southAmerica',
     imageUrl: null,
     tempMin: 72,
     tempMax: 80,
@@ -3811,7 +3958,9 @@ var fishDatabase = {
   colombianTetra: {
     commonName: 'Colombian Tetra',
     scientificName: 'Hyphessobrycon columbianus',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FcolombianTetra.jpg?alt=media",
+    origin: 'northCentralAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FcolombianTetra.jpg?alt=media',
     tempMin: 72,
     tempMax: 82,
     tempUnit: '°F',
@@ -3837,7 +3986,9 @@ var fishDatabase = {
   rosyTetra: {
     commonName: 'Rosy Tetra',
     scientificName: 'Hyphessobrycon rosaceus',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FrosyTetra.jpg?alt=media",
+    origin: 'southAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FrosyTetra.jpg?alt=media',
     tempMin: 72,
     tempMax: 82,
     tempUnit: '°F',
@@ -3863,7 +4014,9 @@ var fishDatabase = {
   yellowPhantomTetra: {
     commonName: 'Yellow Phantom Tetra',
     scientificName: 'Hyphessobrycon roseus',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FyellowPhantomTetra.jpg?alt=media",
+    origin: 'southAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FyellowPhantomTetra.jpg?alt=media',
     tempMin: 72,
     tempMax: 80,
     tempUnit: '°F',
@@ -3889,6 +4042,7 @@ var fishDatabase = {
   beckfordsPencilfish: {
     commonName: "Beckford's Pencilfish",
     scientificName: 'Nannostomus beckfordi',
+    origin: 'southAmerica',
     imageUrl: null,
     tempMin: 75,
     tempMax: 82,
@@ -3915,7 +4069,9 @@ var fishDatabase = {
   goldenPencilfish: {
     commonName: 'Golden Pencilfish',
     scientificName: 'Nannostomus eques',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FgoldenPencilfish.jpg?alt=media",
+    origin: 'southAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FgoldenPencilfish.jpg?alt=media',
     tempMin: 75,
     tempMax: 82,
     tempUnit: '°F',
@@ -3941,7 +4097,9 @@ var fishDatabase = {
   blindCaveTetra: {
     commonName: 'Blind Cave Tetra',
     scientificName: 'Astyanax mexicanus',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FblindCaveTetra.jpg?alt=media",
+    origin: 'northCentralAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FblindCaveTetra.jpg?alt=media',
     tempMin: 68,
     tempMax: 77,
     tempUnit: '°F',
@@ -3967,7 +4125,9 @@ var fishDatabase = {
   garnetTetra: {
     commonName: 'Garnet Tetra',
     scientificName: 'Hemigrammus pulcher',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FgarnetTetra.jpg?alt=media",
+    origin: 'southAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FgarnetTetra.jpg?alt=media',
     tempMin: 75,
     tempMax: 81,
     tempUnit: '°F',
@@ -3993,7 +4153,9 @@ var fishDatabase = {
   dwarfPencilfish: {
     commonName: 'Dwarf Pencilfish',
     scientificName: 'Nannostomus marginatus',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FdwarfPencilfish.jpg?alt=media",
+    origin: 'southAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FdwarfPencilfish.jpg?alt=media',
     tempMin: 75,
     tempMax: 82,
     tempUnit: '°F',
@@ -4019,6 +4181,7 @@ var fishDatabase = {
   marginatedTetra: {
     commonName: 'Marginated Tetra',
     scientificName: 'Hyphessobrycon marginatus',
+    origin: 'southAmerica',
     imageUrl: null,
     tempMin: 72,
     tempMax: 82,
@@ -4038,13 +4201,13 @@ var fishDatabase = {
     careLevel: 'Easy',
     breedingNeeds:
       'Egg scatterer; separate breeding tank with soft acidic water, 77-80°F, dim lighting, fine-leaved plants; remove parents after spawning; eggs hatch in 24-36 hours',
-    genderDifferentiation:
-      'Males slimmer; females fuller-bodied when gravid; subtle differences',
+    genderDifferentiation: 'Males slimmer; females fuller-bodied when gravid; subtle differences',
   },
 
   flagTetra: {
     commonName: 'Flag Tetra',
     scientificName: 'Hyphessobrycon heterorhabdus',
+    origin: 'southAmerica',
     imageUrl: null,
     tempMin: 73,
     tempMax: 82,
@@ -4071,6 +4234,7 @@ var fishDatabase = {
   costelloTetra: {
     commonName: 'Costello Tetra',
     scientificName: 'Hemigrammus costelloi',
+    origin: 'southAmerica',
     imageUrl: null,
     tempMin: 72,
     tempMax: 80,
@@ -4090,13 +4254,13 @@ var fishDatabase = {
     careLevel: 'Moderate',
     breedingNeeds:
       'Egg scatterer; soft acidic water, fine-leaved plants, dim lighting; remove parents after spawning',
-    genderDifferentiation:
-      'Females fuller when gravid; males slimmer',
+    genderDifferentiation: 'Females fuller when gravid; males slimmer',
   },
 
   platinumTetra: {
     commonName: 'Platinum Tetra',
     scientificName: 'Hemigrammus vorderwinkleri',
+    origin: 'southAmerica',
     imageUrl: null,
     tempMin: 72,
     tempMax: 80,
@@ -4114,16 +4278,16 @@ var fishDatabase = {
     waterHardness: '2-12 dGH',
     lifespan: '3-5 years',
     careLevel: 'Easy',
-    breedingNeeds:
-      'Egg scatterer; soft acidic water, fine-leaved plants; remove parents',
-    genderDifferentiation:
-      'Females rounder when gravid; males slimmer',
+    breedingNeeds: 'Egg scatterer; soft acidic water, fine-leaved plants; remove parents',
+    genderDifferentiation: 'Females rounder when gravid; males slimmer',
   },
 
   blackLineTetra: {
     commonName: 'Black Line Tetra',
     scientificName: 'Hyphessobrycon scholzei',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FblackLineTetra.jpg?alt=media",
+    origin: 'southAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FblackLineTetra.jpg?alt=media',
     tempMin: 72,
     tempMax: 82,
     tempUnit: '°F',
@@ -4142,14 +4306,15 @@ var fishDatabase = {
     careLevel: 'Easy',
     breedingNeeds:
       'Egg scatterer; separate breeding tank, soft slightly acidic water, fine-leaved plants; remove parents',
-    genderDifferentiation:
-      'Males slimmer; females fuller, rounder',
+    genderDifferentiation: 'Males slimmer; females fuller, rounder',
   },
 
   loretoTetra: {
     commonName: 'Loreto Tetra',
     scientificName: 'Hyphessobrycon loretoensis',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FloretoTetra.jpg?alt=media",
+    origin: 'southAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FloretoTetra.jpg?alt=media',
     tempMin: 72,
     tempMax: 79,
     tempUnit: '°F',
@@ -4168,13 +4333,13 @@ var fishDatabase = {
     careLevel: 'Difficult',
     breedingNeeds:
       'Egg scatterer; soft acidic water, fine-leaved plants, pristine water quality required',
-    genderDifferentiation:
-      'Minimal; females slightly fuller when gravid',
+    genderDifferentiation: 'Minimal; females slightly fuller when gravid',
   },
 
   dawnTetra: {
     commonName: 'Dawn Tetra',
     scientificName: 'Aphyocharax paraguayensis',
+    origin: 'southAmerica',
     imageUrl: null,
     tempMin: 72,
     tempMax: 80,
@@ -4194,14 +4359,15 @@ var fishDatabase = {
     careLevel: 'Moderate',
     breedingNeeds:
       'Egg scatterer; soft acidic water, fine-leaved plants; remove parents after spawning',
-    genderDifferentiation:
-      'Males more contrasting coloration; females fuller',
+    genderDifferentiation: 'Males more contrasting coloration; females fuller',
   },
 
   kittyTetra: {
     commonName: 'Kitty Tetra',
     scientificName: 'Hyphessobrycon heliacus',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FkittyTetra.jpg?alt=media",
+    origin: 'southAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FkittyTetra.jpg?alt=media',
     tempMin: 72,
     tempMax: 82,
     tempUnit: '°F',
@@ -4227,7 +4393,9 @@ var fishDatabase = {
   goldenTetra: {
     commonName: 'Golden Tetra',
     scientificName: 'Hemigrammus rodwayi',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FgoldenTetra.jpg?alt=media",
+    origin: 'southAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FgoldenTetra.jpg?alt=media',
     tempMin: 72,
     tempMax: 82,
     tempUnit: '°F',
@@ -4244,16 +4412,16 @@ var fishDatabase = {
     waterHardness: '5-15 dGH',
     lifespan: '3-5 years',
     careLevel: 'Easy',
-    breedingNeeds:
-      'Egg scatterer; soft water, fine-leaved plants; remove parents',
-    genderDifferentiation:
-      'Females fuller-bodied; males slimmer',
+    breedingNeeds: 'Egg scatterer; soft water, fine-leaved plants; remove parents',
+    genderDifferentiation: 'Females fuller-bodied; males slimmer',
   },
 
   coralRedPencilfish: {
     commonName: 'Coral Red Pencilfish',
     scientificName: 'Nannostomus mortenthaleri',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FcoralRedPencilfish.jpg?alt=media",
+    origin: 'southAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FcoralRedPencilfish.jpg?alt=media',
     tempMin: 75,
     tempMax: 80,
     tempUnit: '°F',
@@ -4279,6 +4447,7 @@ var fishDatabase = {
   rubyTetra: {
     commonName: 'Ruby Tetra',
     scientificName: 'Axelrodia riesei',
+    origin: 'southAmerica',
     imageUrl: null,
     tempMin: 68,
     tempMax: 82,
@@ -4298,8 +4467,7 @@ var fishDatabase = {
     careLevel: 'Moderate',
     breedingNeeds:
       'Egg scatterer; soft acidic water, fine-leaved plants and mosses; eggs hatch in few days; remove adults after spawning',
-    genderDifferentiation:
-      'Minimal; males slightly more intensely colored during breeding',
+    genderDifferentiation: 'Minimal; males slightly more intensely colored during breeding',
   },
 
   // ============================================
@@ -4309,7 +4477,9 @@ var fishDatabase = {
   glassBloodfin: {
     commonName: 'Glass Bloodfin',
     scientificName: 'Prionobrama filigera',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FglassBloodfin.jpg?alt=media",
+    origin: 'southAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FglassBloodfin.jpg?alt=media',
     tempMin: 72,
     tempMax: 82,
     tempUnit: '°F',
@@ -4326,15 +4496,16 @@ var fishDatabase = {
     waterHardness: '5-15 dGH',
     lifespan: '3-5 years',
     careLevel: 'Easy',
-    breedingNeeds:
-      'Egg scatterer; soft water, plants; remove parents after spawning',
+    breedingNeeds: 'Egg scatterer; soft water, plants; remove parents after spawning',
     genderDifferentiation: 'Females fuller-bodied; males slimmer',
   },
 
   redeyeTetra: {
     commonName: 'Redeye Tetra',
     scientificName: 'Moenkhausia sanctaefilomenae',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FredeyeTetra.jpg?alt=media",
+    origin: 'southAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FredeyeTetra.jpg?alt=media',
     tempMin: 72,
     tempMax: 82,
     tempUnit: '°F',
@@ -4360,7 +4531,9 @@ var fishDatabase = {
   tinfoilBarb: {
     commonName: 'Tinfoil Barb',
     scientificName: 'Barbonymus schwanenfeldii',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FtinfoilBarb.jpg?alt=media",
+    origin: 'asia',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FtinfoilBarb.jpg?alt=media',
     tempMin: 72,
     tempMax: 77,
     tempUnit: '°F',
@@ -4379,14 +4552,15 @@ var fishDatabase = {
     careLevel: 'Moderate',
     breedingNeeds:
       'Egg scatterer; very large breeding setup required; spawns in groups; eggs hatch in 24-48 hours',
-    genderDifferentiation:
-      'Males slimmer, more colorful; females fuller-bodied',
+    genderDifferentiation: 'Males slimmer, more colorful; females fuller-bodied',
   },
 
   aruliusBarb: {
     commonName: 'Arulius Barb',
     scientificName: 'Dawkinsia arulius',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FaruliusBarb.jpg?alt=media",
+    origin: 'asia',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FaruliusBarb.jpg?alt=media',
     tempMin: 68,
     tempMax: 77,
     tempUnit: '°F',
@@ -4412,7 +4586,9 @@ var fishDatabase = {
   melonBarb: {
     commonName: 'Melon Barb',
     scientificName: 'Haludaria fasciata',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FmelonBarb.jpg?alt=media",
+    origin: 'asia',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FmelonBarb.jpg?alt=media',
     tempMin: 70,
     tempMax: 77,
     tempUnit: '°F',
@@ -4429,15 +4605,14 @@ var fishDatabase = {
     waterHardness: '5-15 dGH',
     lifespan: '5-8 years',
     careLevel: 'Easy',
-    breedingNeeds:
-      'Egg scatterer; moderate water flow, plants; eggs hatch in 24-48 hours',
-    genderDifferentiation:
-      'Males more colorful, slimmer; females fuller-bodied',
+    breedingNeeds: 'Egg scatterer; moderate water flow, plants; eggs hatch in 24-48 hours',
+    genderDifferentiation: 'Males more colorful, slimmer; females fuller-bodied',
   },
 
   tBarb: {
     commonName: 'T-Barb',
     scientificName: 'Puntigrus partipentazona',
+    origin: 'asia',
     imageUrl: null,
     tempMin: 72,
     tempMax: 79,
@@ -4455,14 +4630,14 @@ var fishDatabase = {
     waterHardness: '5-15 dGH',
     lifespan: '5-7 years',
     careLevel: 'Easy',
-    breedingNeeds:
-      'Egg scatterer; soft water, plants; remove parents after spawning',
+    breedingNeeds: 'Egg scatterer; soft water, plants; remove parents after spawning',
     genderDifferentiation: 'Males slimmer, more colorful; females rounder',
   },
 
   cumingsBarb: {
     commonName: "Cuming's Barb",
     scientificName: 'Pethia cumingii',
+    origin: 'asia',
     imageUrl: null,
     tempMin: 72,
     tempMax: 79,
@@ -4482,13 +4657,13 @@ var fishDatabase = {
     careLevel: 'Easy',
     breedingNeeds:
       'Egg scatterer; soft slightly acidic water, fine-leaved plants; remove parents; eggs hatch in 24-36 hours',
-    genderDifferentiation:
-      'Males more intensely colored; females fuller-bodied',
+    genderDifferentiation: 'Males more intensely colored; females fuller-bodied',
   },
 
   glowlightDanio: {
     commonName: 'Glowlight Danio',
     scientificName: 'Celestichthys choprae',
+    origin: 'asia',
     imageUrl: null,
     tempMin: 68,
     tempMax: 77,
@@ -4515,7 +4690,9 @@ var fishDatabase = {
   giantDanio: {
     commonName: 'Giant Danio',
     scientificName: 'Devario aequipinnatus',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FgiantDanio.jpg?alt=media",
+    origin: 'asia',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FgiantDanio.jpg?alt=media',
     tempMin: 72,
     tempMax: 75,
     tempUnit: '°F',
@@ -4534,14 +4711,15 @@ var fishDatabase = {
     careLevel: 'Easy',
     breedingNeeds:
       'Egg scatterer; soft water, plants, marbles to protect eggs; remove parents; eggs hatch in 24-48 hours',
-    genderDifferentiation:
-      'Males slimmer with more intense coloration; females fuller-bodied',
+    genderDifferentiation: 'Males slimmer with more intense coloration; females fuller-bodied',
   },
 
   malabarDanio: {
     commonName: 'Malabar Danio',
     scientificName: 'Devario malabaricus',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FmalabarDanio.jpg?alt=media",
+    origin: 'asia',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FmalabarDanio.jpg?alt=media',
     tempMin: 64,
     tempMax: 75,
     tempUnit: '°F',
@@ -4566,7 +4744,9 @@ var fishDatabase = {
   orangeFinnedDanio: {
     commonName: 'Orange-Finned Danio',
     scientificName: 'Danio kyathit',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2ForangeFinnedDanio.jpg?alt=media",
+    origin: 'asia',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2ForangeFinnedDanio.jpg?alt=media',
     tempMin: 64,
     tempMax: 77,
     tempUnit: '°F',
@@ -4585,14 +4765,15 @@ var fishDatabase = {
     careLevel: 'Easy',
     breedingNeeds:
       'Egg scatterer; marbles or fine gravel substrate to protect eggs; spawns early morning; remove parents immediately; eggs hatch in 24-48 hours; feed fry infusoria',
-    genderDifferentiation:
-      'Males slimmer; females fuller (similar to other danios)',
+    genderDifferentiation: 'Males slimmer; females fuller (similar to other danios)',
   },
 
   rummyNoseRasbora: {
     commonName: 'Rummy Nose Rasbora',
     scientificName: 'Sawbwa resplendens',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FrummyNoseRasbora.jpg?alt=media",
+    origin: 'asia',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FrummyNoseRasbora.jpg?alt=media',
     tempMin: 68,
     tempMax: 75,
     tempUnit: '°F',
@@ -4617,7 +4798,9 @@ var fishDatabase = {
   kubotaiRasbora: {
     commonName: 'Kubotai Rasbora',
     scientificName: 'Microdevario kubotai',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FkubotaiRasbora.jpg?alt=media",
+    origin: 'asia',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FkubotaiRasbora.jpg?alt=media',
     tempMin: 72,
     tempMax: 79,
     tempUnit: '°F',
@@ -4636,14 +4819,15 @@ var fishDatabase = {
     careLevel: 'Moderate',
     breedingNeeds:
       'Egg scatterer; soft acidic water, fine-leaved plants, dim lighting; eggs hatch in 24-36 hours',
-    genderDifferentiation:
-      'Females slightly fuller; males more intensely colored',
+    genderDifferentiation: 'Females slightly fuller; males more intensely colored',
   },
 
   dwarfSpottedRasbora: {
     commonName: 'Dwarf Spotted Rasbora',
     scientificName: 'Boraras maculatus',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FdwarfSpottedRasbora.jpg?alt=media",
+    origin: 'asia',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FdwarfSpottedRasbora.jpg?alt=media',
     tempMin: 75,
     tempMax: 82,
     tempUnit: '°F',
@@ -4668,7 +4852,9 @@ var fishDatabase = {
   redtailRasbora: {
     commonName: 'Redtail Rasbora',
     scientificName: 'Rasbora borapetensis',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FredtailRasbora.jpg?alt=media",
+    origin: 'asia',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FredtailRasbora.jpg?alt=media',
     tempMin: 72,
     tempMax: 77,
     tempUnit: '°F',
@@ -4685,15 +4871,16 @@ var fishDatabase = {
     waterHardness: '5-12 dGH',
     lifespan: '3-5 years',
     careLevel: 'Easy',
-    breedingNeeds:
-      'Egg scatterer; soft water, fine-leaved plants; remove parents',
+    breedingNeeds: 'Egg scatterer; soft water, fine-leaved plants; remove parents',
     genderDifferentiation: 'Females fuller-bodied; males slimmer',
   },
 
   leastRasbora: {
     commonName: 'Least Rasbora',
     scientificName: 'Boraras urophthalmoides',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FleastRasbora.jpg?alt=media",
+    origin: 'asia',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FleastRasbora.jpg?alt=media',
     tempMin: 72,
     tempMax: 82,
     tempUnit: '°F',
@@ -4710,15 +4897,16 @@ var fishDatabase = {
     waterHardness: '1-8 dGH',
     lifespan: '3-5 years',
     careLevel: 'Moderate',
-    breedingNeeds:
-      'Egg scatterer; soft acidic water, fine-leaved plants; very small eggs and fry',
+    breedingNeeds: 'Egg scatterer; soft acidic water, fine-leaved plants; very small eggs and fry',
     genderDifferentiation: 'Females fuller; males slimmer, more colorful',
   },
 
   bandedRainbowfish: {
     commonName: 'Banded Rainbowfish',
     scientificName: 'Melanotaenia trifasciata',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FbandedRainbowfish.jpg?alt=media",
+    origin: 'australiaOceania',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FbandedRainbowfish.jpg?alt=media',
     tempMin: 75,
     tempMax: 82,
     tempUnit: '°F',
@@ -4744,7 +4932,9 @@ var fishDatabase = {
   lakeKutubuRainbowfish: {
     commonName: 'Lake Kutubu Rainbowfish',
     scientificName: 'Melanotaenia lacustris',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FlakeKutubuRainbowfish.jpg?alt=media",
+    origin: 'australiaOceania',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FlakeKutubuRainbowfish.jpg?alt=media',
     tempMin: 75,
     tempMax: 86,
     tempUnit: '°F',
@@ -4770,7 +4960,9 @@ var fishDatabase = {
   kamakaRainbowfish: {
     commonName: 'Kamaka Rainbowfish',
     scientificName: 'Melanotaenia kamaka',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FkamakaRainbowfish.jpg?alt=media",
+    origin: 'australiaOceania',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FkamakaRainbowfish.jpg?alt=media',
     tempMin: 72,
     tempMax: 79,
     tempUnit: '°F',
@@ -4796,6 +4988,7 @@ var fishDatabase = {
   axelrodiRainbowfish: {
     commonName: 'Axelrodi Rainbowfish',
     scientificName: 'Chilatherina axelrodi',
+    origin: 'australiaOceania',
     imageUrl: null,
     tempMin: 75,
     tempMax: 82,
@@ -4815,8 +5008,7 @@ var fishDatabase = {
     careLevel: 'Moderate',
     breedingNeeds:
       'Continuous spawner; spawning mops, moderate water hardness; eggs hatch in 7-10 days',
-    genderDifferentiation:
-      'Males more intensely colored; females paler, less vibrant',
+    genderDifferentiation: 'Males more intensely colored; females paler, less vibrant',
   },
 
   // ============================================
@@ -4826,7 +5018,9 @@ var fishDatabase = {
   redZebra: {
     commonName: 'Red Zebra',
     scientificName: 'Maylandia estherae',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FredZebra.jpg?alt=media",
+    origin: 'africa',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FredZebra.jpg?alt=media',
     tempMin: 75,
     tempMax: 82,
     tempUnit: '°F',
@@ -4852,7 +5046,9 @@ var fishDatabase = {
   bumblebeeCichlid: {
     commonName: 'Bumblebee Cichlid',
     scientificName: 'Pseudotropheus crabro',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FbumblebeeCichlid.jpg?alt=media",
+    origin: 'africa',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FbumblebeeCichlid.jpg?alt=media',
     tempMin: 75,
     tempMax: 82,
     tempUnit: '°F',
@@ -4878,7 +5074,9 @@ var fishDatabase = {
   frontosaCichlid: {
     commonName: 'Frontosa Cichlid',
     scientificName: 'Cyphotilapia frontosa',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FfrontosaCichlid.jpg?alt=media",
+    origin: 'africa',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FfrontosaCichlid.jpg?alt=media',
     tempMin: 73,
     tempMax: 79,
     tempUnit: '°F',
@@ -4904,7 +5102,9 @@ var fishDatabase = {
   tropheus: {
     commonName: 'Tropheus',
     scientificName: 'Tropheus duboisi',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2Ftropheus.jpg?alt=media",
+    origin: 'africa',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2Ftropheus.jpg?alt=media',
     tempMin: 77,
     tempMax: 81,
     tempUnit: '°F',
@@ -4930,7 +5130,9 @@ var fishDatabase = {
   julieCichlid: {
     commonName: 'Julie Cichlid',
     scientificName: 'Julidochromis marlieri',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FjulieCichlid.jpg?alt=media",
+    origin: 'africa',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FjulieCichlid.jpg?alt=media',
     tempMin: 73,
     tempMax: 81,
     tempUnit: '°F',
@@ -4956,7 +5158,9 @@ var fishDatabase = {
   lemonCichlid: {
     commonName: 'Lemon Cichlid',
     scientificName: 'Neolamprologus leleupi',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FlemonCichlid.jpg?alt=media",
+    origin: 'africa',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FlemonCichlid.jpg?alt=media',
     tempMin: 73,
     tempMax: 79,
     tempUnit: '°F',
@@ -4982,7 +5186,9 @@ var fishDatabase = {
   princessCichlid: {
     commonName: 'Princess Cichlid',
     scientificName: 'Neolamprologus brichardi',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FprincessCichlid.jpg?alt=media",
+    origin: 'africa',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FprincessCichlid.jpg?alt=media',
     tempMin: 73,
     tempMax: 79,
     tempUnit: '°F',
@@ -5007,7 +5213,9 @@ var fishDatabase = {
   brevisCichlid: {
     commonName: 'Brevis',
     scientificName: 'Neolamprologus brevis',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FbrevisCichlid.jpg?alt=media",
+    origin: 'africa',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FbrevisCichlid.jpg?alt=media',
     tempMin: 73,
     tempMax: 79,
     tempUnit: '°F',
@@ -5026,14 +5234,15 @@ var fishDatabase = {
     careLevel: 'Moderate',
     breedingNeeds:
       'Shell spawners; eggs laid inside shells; male defends harem; fry remain in shells initially; very small broods',
-    genderDifferentiation:
-      'Males significantly larger; females stay very small, remain in shells',
+    genderDifferentiation: 'Males significantly larger; females stay very small, remain in shells',
   },
 
   eyeBiterCichlid: {
     commonName: 'Eye-Biter Cichlid',
     scientificName: 'Dimidiochromis compressiceps',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FeyeBiterCichlid.jpg?alt=media",
+    origin: 'africa',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FeyeBiterCichlid.jpg?alt=media',
     tempMin: 76,
     tempMax: 82,
     tempUnit: '°F',
@@ -5052,14 +5261,15 @@ var fishDatabase = {
     careLevel: 'Difficult',
     breedingNeeds:
       'Maternal mouthbrooder; challenging to breed in captivity; requires specialized setup',
-    genderDifferentiation:
-      'Males more intensely colored with blue; females duller, silver-gray',
+    genderDifferentiation: 'Males more intensely colored with blue; females duller, silver-gray',
   },
 
   redEmpress: {
     commonName: 'Red Empress',
     scientificName: 'Protomelas taeniolatus',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FredEmpress.jpg?alt=media",
+    origin: 'africa',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FredEmpress.jpg?alt=media',
     tempMin: 76,
     tempMax: 82,
     tempUnit: '°F',
@@ -5085,7 +5295,9 @@ var fishDatabase = {
   venustus: {
     commonName: 'Venustus',
     scientificName: 'Nimbochromis venustus',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2Fvenustus.jpg?alt=media",
+    origin: 'africa',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2Fvenustus.jpg?alt=media',
     tempMin: 76,
     tempMax: 82,
     tempUnit: '°F',
@@ -5111,7 +5323,9 @@ var fishDatabase = {
   blueDolphin: {
     commonName: 'Blue Dolphin',
     scientificName: 'Cyrtocara moorii',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FblueDolphin.jpg?alt=media",
+    origin: 'africa',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FblueDolphin.jpg?alt=media',
     tempMin: 76,
     tempMax: 82,
     tempUnit: '°F',
@@ -5137,7 +5351,9 @@ var fishDatabase = {
   sunshinePeacock: {
     commonName: 'Sunshine Peacock',
     scientificName: 'Aulonocara stuartgranti',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FsunshinePeacock.jpg?alt=media",
+    origin: 'africa',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FsunshinePeacock.jpg?alt=media',
     tempMin: 76,
     tempMax: 82,
     tempUnit: '°F',
@@ -5163,7 +5379,9 @@ var fishDatabase = {
   obPeacock: {
     commonName: 'OB Peacock',
     scientificName: 'Aulonocara sp.',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FobPeacock.jpg?alt=media",
+    origin: 'africa',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FobPeacock.jpg?alt=media',
     tempMin: 76,
     tempMax: 82,
     tempUnit: '°F',
@@ -5189,7 +5407,9 @@ var fishDatabase = {
   demasoni: {
     commonName: 'Demasoni',
     scientificName: 'Pseudotropheus demasoni',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2Fdemasoni.jpg?alt=media",
+    origin: 'africa',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2Fdemasoni.jpg?alt=media',
     tempMin: 76,
     tempMax: 82,
     tempUnit: '°F',
@@ -5219,7 +5439,9 @@ var fishDatabase = {
   texasCichlid: {
     commonName: 'Texas Cichlid',
     scientificName: 'Herichthys cyanoguttatus',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FtexasCichlid.jpg?alt=media",
+    origin: 'northCentralAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FtexasCichlid.jpg?alt=media',
     tempMin: 68,
     tempMax: 77,
     tempUnit: '°F',
@@ -5245,7 +5467,9 @@ var fishDatabase = {
   greenTerror: {
     commonName: 'Green Terror',
     scientificName: 'Andinoacara rivulatus',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FgreenTerror.jpg?alt=media",
+    origin: 'southAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FgreenTerror.jpg?alt=media',
     tempMin: 68,
     tempMax: 77,
     tempUnit: '°F',
@@ -5271,7 +5495,9 @@ var fishDatabase = {
   salviniCichlid: {
     commonName: 'Salvini Cichlid',
     scientificName: 'Trichromis salvini',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FsalviniCichlid.jpg?alt=media",
+    origin: 'northCentralAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FsalviniCichlid.jpg?alt=media',
     tempMin: 75,
     tempMax: 79,
     tempUnit: '°F',
@@ -5297,7 +5523,9 @@ var fishDatabase = {
   nicaraguanCichlid: {
     commonName: 'Nicaraguan Cichlid',
     scientificName: 'Hypsophrys nicaraguensis',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FnicaraguanCichlid.jpg?alt=media",
+    origin: 'northCentralAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FnicaraguanCichlid.jpg?alt=media',
     tempMin: 72,
     tempMax: 77,
     tempUnit: '°F',
@@ -5323,7 +5551,9 @@ var fishDatabase = {
   tBarCichlid: {
     commonName: 'T-Bar Cichlid',
     scientificName: 'Amatitlania sajica',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FtBarCichlid.jpg?alt=media",
+    origin: 'northCentralAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FtBarCichlid.jpg?alt=media',
     tempMin: 75,
     tempMax: 82,
     tempUnit: '°F',
@@ -5349,6 +5579,7 @@ var fishDatabase = {
   bloodParrotCichlid: {
     commonName: 'Blood Parrot Cichlid',
     scientificName: 'Amphilophus hybrid',
+    origin: 'northCentralAmerica',
     imageUrl: null,
     tempMin: 76,
     tempMax: 80,
@@ -5375,6 +5606,7 @@ var fishDatabase = {
   flowerhornCichlid: {
     commonName: 'Flowerhorn Cichlid',
     scientificName: 'Amphilophus hybrid',
+    origin: 'asia',
     imageUrl: null,
     tempMin: 80,
     tempMax: 86,
@@ -5401,7 +5633,9 @@ var fishDatabase = {
   festivum: {
     commonName: 'Festivum',
     scientificName: 'Mesonauta festivus',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2Ffestivum.jpg?alt=media",
+    origin: 'southAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2Ffestivum.jpg?alt=media',
     tempMin: 72,
     tempMax: 77,
     tempUnit: '°F',
@@ -5427,7 +5661,9 @@ var fishDatabase = {
   chocolateCichlid: {
     commonName: 'Chocolate Cichlid',
     scientificName: 'Hypselecara temporalis',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FchocolateCichlid.jpg?alt=media",
+    origin: 'southAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FchocolateCichlid.jpg?alt=media',
     tempMin: 72,
     tempMax: 82,
     tempUnit: '°F',
@@ -5457,7 +5693,9 @@ var fishDatabase = {
   duplicareusCorydoras: {
     commonName: 'Duplicareus Corydoras',
     scientificName: 'Corydoras duplicareus',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FduplicareusCorydoras.jpg?alt=media",
+    origin: 'southAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FduplicareusCorydoras.jpg?alt=media',
     tempMin: 72,
     tempMax: 79,
     tempUnit: '°F',
@@ -5476,14 +5714,15 @@ var fishDatabase = {
     careLevel: 'Moderate',
     breedingNeeds:
       'Egg scatterer; requires soft acidic water (pH 6.0-6.5); spawning triggered by temperature drops and large water changes; eggs hatch in 5-7 days',
-    genderDifferentiation:
-      'Females larger, more robust especially when gravid; males slimmer',
+    genderDifferentiation: 'Females larger, more robust especially when gravid; males slimmer',
   },
 
   schwartziCorydoras: {
     commonName: "Schwartz's Corydoras",
     scientificName: 'Corydoras schwartzi',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FschwartziCorydoras.jpg?alt=media",
+    origin: 'southAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FschwartziCorydoras.jpg?alt=media',
     tempMin: 72,
     tempMax: 79,
     tempUnit: '°F',
@@ -5509,6 +5748,7 @@ var fishDatabase = {
   melanistiusCorydoras: {
     commonName: 'Melanistius Corydoras',
     scientificName: 'Corydoras melanistius',
+    origin: 'southAmerica',
     imageUrl: null,
     tempMin: 72,
     tempMax: 79,
@@ -5535,6 +5775,7 @@ var fishDatabase = {
   agassiziCorydoras: {
     commonName: 'Agassizi Corydoras',
     scientificName: 'Corydoras agassizii',
+    origin: 'southAmerica',
     imageUrl: null,
     tempMin: 72,
     tempMax: 80,
@@ -5561,7 +5802,9 @@ var fishDatabase = {
   threeStripeCorydoras: {
     commonName: 'Three Stripe Corydoras',
     scientificName: 'Corydoras trilineatus',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FthreeStripeCorydoras.jpg?alt=media",
+    origin: 'southAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FthreeStripeCorydoras.jpg?alt=media',
     tempMin: 72,
     tempMax: 79,
     tempUnit: '°F',
@@ -5587,7 +5830,9 @@ var fishDatabase = {
   venezuelaCorydoras: {
     commonName: 'Venezuela Corydoras',
     scientificName: 'Corydoras venezuelanus',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FvenezuelaCorydoras.jpg?alt=media",
+    origin: 'southAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FvenezuelaCorydoras.jpg?alt=media',
     tempMin: 66,
     tempMax: 77,
     tempUnit: '°F',
@@ -5617,6 +5862,7 @@ var fishDatabase = {
   skunkBotia: {
     commonName: 'Skunk Botia',
     scientificName: 'Yasuhikotakia morleti',
+    origin: 'asia',
     imageUrl: null,
     tempMin: 78,
     tempMax: 86,
@@ -5643,7 +5889,9 @@ var fishDatabase = {
   bengalLoach: {
     commonName: 'Bengal Loach',
     scientificName: 'Botia dario',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FbengalLoach.jpg?alt=media",
+    origin: 'asia',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FbengalLoach.jpg?alt=media',
     tempMin: 73,
     tempMax: 79,
     tempUnit: '°F',
@@ -5669,7 +5917,9 @@ var fishDatabase = {
   polkaDotLoach: {
     commonName: 'Polka Dot Loach',
     scientificName: 'Botia kubotai',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FpolkaDotLoach.jpg?alt=media",
+    origin: 'asia',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FpolkaDotLoach.jpg?alt=media',
     tempMin: 75,
     tempMax: 82,
     tempUnit: '°F',
@@ -5688,14 +5938,15 @@ var fishDatabase = {
     careLevel: 'Moderate',
     breedingNeeds:
       'Not bred by hobbyists; commercial breeding likely uses hormones; seasonal spawners in wild',
-    genderDifferentiation:
-      'Not easily sexed; mature females may be slightly fuller-bodied',
+    genderDifferentiation: 'Not easily sexed; mature females may be slightly fuller-bodied',
   },
 
   horsefaceLoach: {
     commonName: 'Horseface Loach',
     scientificName: 'Acantopsis dialuzona',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FhorsefaceLoach.jpg?alt=media",
+    origin: 'asia',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FhorsefaceLoach.jpg?alt=media',
     tempMin: 75,
     tempMax: 82,
     tempUnit: '°F',
@@ -5712,15 +5963,16 @@ var fishDatabase = {
     waterHardness: '5-12 dGH',
     lifespan: '10-12 years',
     careLevel: 'Moderate',
-    breedingNeeds:
-      'Not bred in captivity; breeding behavior unknown; likely seasonal spawners',
+    breedingNeeds: 'Not bred in captivity; breeding behavior unknown; likely seasonal spawners',
     genderDifferentiation: 'Not easily distinguished externally',
   },
 
   reticulatedHillstreamLoach: {
     commonName: 'Reticulated Hillstream Loach',
     scientificName: 'Sewellia lineolata',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FreticulatedHillstreamLoach.jpg?alt=media",
+    origin: 'asia',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FreticulatedHillstreamLoach.jpg?alt=media',
     tempMin: 64,
     tempMax: 75,
     tempUnit: '°F',
@@ -5746,7 +5998,9 @@ var fishDatabase = {
   orangeFinnedLoach: {
     commonName: 'Orange-Finned Loach',
     scientificName: 'Yasuhikotakia modesta',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2ForangeFinnedLoach.jpg?alt=media",
+    origin: 'asia',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2ForangeFinnedLoach.jpg?alt=media',
     tempMin: 77,
     tempMax: 86,
     tempUnit: '°F',
@@ -5765,8 +6019,7 @@ var fishDatabase = {
     careLevel: 'Moderate',
     breedingNeeds:
       'Not bred in home aquariums; commercial breeding uses hormones; seasonal spawners in wild',
-    genderDifferentiation:
-      'Difficult to sex; females may be slightly fuller when mature',
+    genderDifferentiation: 'Difficult to sex; females may be slightly fuller when mature',
   },
 
   // ============================================
@@ -5776,7 +6029,9 @@ var fishDatabase = {
   royalPleco: {
     commonName: 'Royal Pleco',
     scientificName: 'Panaque nigrolineatus',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FroyalPleco.jpg?alt=media",
+    origin: 'southAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FroyalPleco.jpg?alt=media',
     tempMin: 72,
     tempMax: 86,
     tempUnit: '°F',
@@ -5802,7 +6057,9 @@ var fishDatabase = {
   goldNuggetPleco: {
     commonName: 'Gold Nugget Pleco',
     scientificName: 'Baryancistrus xanthellus',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FgoldNuggetPleco.jpg?alt=media",
+    origin: 'southAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FgoldNuggetPleco.jpg?alt=media',
     tempMin: 77,
     tempMax: 86,
     tempUnit: '°F',
@@ -5832,6 +6089,7 @@ var fishDatabase = {
   whiptailCatfish: {
     commonName: 'Whiptail Catfish',
     scientificName: 'Rineloricaria lanceolata',
+    origin: 'southAmerica',
     imageUrl: null,
     tempMin: 72,
     tempMax: 79,
@@ -5858,7 +6116,9 @@ var fishDatabase = {
   spottedRafaelCatfish: {
     commonName: 'Spotted Rafael Catfish',
     scientificName: 'Agamyxis pectinifrons',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FspottedRafaelCatfish.jpg?alt=media",
+    origin: 'southAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FspottedRafaelCatfish.jpg?alt=media',
     tempMin: 72,
     tempMax: 79,
     tempUnit: '°F',
@@ -5877,13 +6137,13 @@ var fishDatabase = {
     careLevel: 'Easy',
     breedingNeeds:
       'Not commonly bred in home aquariums; breeding behavior not well documented; cave spawners in wild',
-    genderDifferentiation:
-      'Difficult to sex externally; females may be fuller when mature',
+    genderDifferentiation: 'Difficult to sex externally; females may be fuller when mature',
   },
 
   talkingCatfish: {
     commonName: 'Talking Catfish',
     scientificName: 'Acanthodoras spinosissimus',
+    origin: 'southAmerica',
     imageUrl: null,
     tempMin: 72,
     tempMax: 82,
@@ -5910,6 +6170,7 @@ var fishDatabase = {
   banjoCatfish: {
     commonName: 'Banjo Catfish',
     scientificName: 'Bunocephalus coracoideus',
+    origin: 'southAmerica',
     imageUrl: null,
     tempMin: 72,
     tempMax: 79,
@@ -5935,7 +6196,9 @@ var fishDatabase = {
   featherfinSqueaker: {
     commonName: 'Featherfin Squeaker',
     scientificName: 'Synodontis eupterus',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FfeatherfinSqueaker.jpg?alt=media",
+    origin: 'africa',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FfeatherfinSqueaker.jpg?alt=media',
     tempMin: 73,
     tempMax: 82,
     tempUnit: '°F',
@@ -5965,7 +6228,9 @@ var fishDatabase = {
   snakeskinGourami: {
     commonName: 'Snakeskin Gourami',
     scientificName: 'Trichopodus pectoralis',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FsnakeskinGourami.jpg?alt=media",
+    origin: 'asia',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FsnakeskinGourami.jpg?alt=media',
     tempMin: 75,
     tempMax: 86,
     tempUnit: '°F',
@@ -5991,6 +6256,7 @@ var fishDatabase = {
   bandedGourami: {
     commonName: 'Banded Gourami',
     scientificName: 'Trichogaster fasciata',
+    origin: 'asia',
     imageUrl: null,
     tempMin: 72,
     tempMax: 82,
@@ -6017,7 +6283,9 @@ var fishDatabase = {
   croakingGourami: {
     commonName: 'Croaking Gourami',
     scientificName: 'Trichopsis vittata',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FcroakingGourami.jpg?alt=media",
+    origin: 'asia',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FcroakingGourami.jpg?alt=media',
     tempMin: 72,
     tempMax: 82,
     tempUnit: '°F',
@@ -6043,7 +6311,9 @@ var fishDatabase = {
   thickLippedGourami: {
     commonName: 'Thick-Lipped Gourami',
     scientificName: 'Trichogaster labiosa',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FthickLippedGourami.jpg?alt=media",
+    origin: 'asia',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FthickLippedGourami.jpg?alt=media',
     tempMin: 72,
     tempMax: 82,
     tempUnit: '°F',
@@ -6069,6 +6339,7 @@ var fishDatabase = {
   licoriceGourami: {
     commonName: 'Licorice Gourami',
     scientificName: 'Parosphromenus deissneri',
+    origin: 'asia',
     imageUrl: null,
     tempMin: 72,
     tempMax: 82,
@@ -6095,7 +6366,9 @@ var fishDatabase = {
   giantGourami: {
     commonName: 'Giant Gourami',
     scientificName: 'Osphronemus goramy',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FgiantGourami.jpg?alt=media",
+    origin: 'asia',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FgiantGourami.jpg?alt=media',
     tempMin: 68,
     tempMax: 86,
     tempUnit: '°F',
@@ -6125,7 +6398,9 @@ var fishDatabase = {
   balaShark: {
     commonName: 'Bala Shark',
     scientificName: 'Balantiocheilos melanopterus',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FbalaShark.jpg?alt=media",
+    origin: 'asia',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FbalaShark.jpg?alt=media',
     tempMin: 72,
     tempMax: 82,
     tempUnit: '°F',
@@ -6144,13 +6419,13 @@ var fishDatabase = {
     careLevel: 'Moderate',
     breedingNeeds:
       'Rarely bred in home aquariums; commercial breeding in large ponds/farms; egg scatterers requiring massive space',
-    genderDifferentiation:
-      'Difficult to sex; females may be fuller when mature',
+    genderDifferentiation: 'Difficult to sex; females may be fuller when mature',
   },
 
   blackShark: {
     commonName: 'Black Shark',
     scientificName: 'Labeo chrysophekadion',
+    origin: 'asia',
     imageUrl: null,
     tempMin: 72,
     tempMax: 79,
@@ -6177,7 +6452,9 @@ var fishDatabase = {
   iridescentShark: {
     commonName: 'Iridescent Shark',
     scientificName: 'Pangasianodon hypophthalmus',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FiridescentShark.jpg?alt=media",
+    origin: 'africa',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FiridescentShark.jpg?alt=media',
     tempMin: 72,
     tempMax: 79,
     tempUnit: '°F',
@@ -6194,15 +6471,16 @@ var fishDatabase = {
     waterHardness: '2-20 dGH',
     lifespan: '15-20 years',
     careLevel: 'Difficult',
-    breedingNeeds:
-      'Not bred in home aquariums; commercial breeding in ponds; migratory spawners',
+    breedingNeeds: 'Not bred in home aquariums; commercial breeding in ponds; migratory spawners',
     genderDifferentiation: 'Nearly impossible to distinguish externally',
   },
 
   ornateBichir: {
     commonName: 'Ornate Bichir',
     scientificName: 'Polypterus ornatipinnis',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FornateBichir.jpg?alt=media",
+    origin: 'africa',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FornateBichir.jpg?alt=media',
     tempMin: 77,
     tempMax: 84,
     tempUnit: '°F',
@@ -6228,7 +6506,9 @@ var fishDatabase = {
   violetGoby: {
     commonName: 'Violet Goby',
     scientificName: 'Gobioides broussonnetii',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FvioletGoby.jpg?alt=media",
+    origin: 'northCentralAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FvioletGoby.jpg?alt=media',
     tempMin: 75,
     tempMax: 82,
     tempUnit: '°F',
@@ -6245,15 +6525,16 @@ var fishDatabase = {
     waterHardness: '10-25 dGH',
     lifespan: '10-15 years',
     careLevel: 'Moderate',
-    breedingNeeds:
-      'Not bred in home aquariums; breeding requirements unknown',
+    breedingNeeds: 'Not bred in home aquariums; breeding requirements unknown',
     genderDifferentiation: 'Not easily distinguished externally',
   },
 
   indianGlassfish: {
     commonName: 'Indian Glassfish',
     scientificName: 'Parambassis ranga',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FindianGlassfish.jpg?alt=media",
+    origin: 'asia',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FindianGlassfish.jpg?alt=media',
     tempMin: 68,
     tempMax: 82,
     tempUnit: '°F',
@@ -6279,7 +6560,9 @@ var fishDatabase = {
   archerFish: {
     commonName: 'Archer Fish',
     scientificName: 'Toxotes jaculatrix',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FarcherFish.jpg?alt=media",
+    origin: 'asia',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FarcherFish.jpg?alt=media',
     tempMin: 75,
     tempMax: 82,
     tempUnit: '°F',
@@ -6298,14 +6581,15 @@ var fishDatabase = {
     careLevel: 'Difficult',
     breedingNeeds:
       'Rarely bred in captivity; breeding behavior not well documented; likely spawn in brackish conditions',
-    genderDifferentiation:
-      'Difficult to sex; females may be fuller when mature',
+    genderDifferentiation: 'Difficult to sex; females may be fuller when mature',
   },
 
   leafFish: {
     commonName: 'Leaf Fish',
     scientificName: 'Monocirrhus polyacanthus',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FleafFish.jpg?alt=media",
+    origin: 'southAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FleafFish.jpg?alt=media',
     tempMin: 72,
     tempMax: 82,
     tempUnit: '°F',
@@ -6322,10 +6606,8 @@ var fishDatabase = {
     waterHardness: '5-15 dGH',
     lifespan: '5-8 years',
     careLevel: 'Difficult',
-    breedingNeeds:
-      'Rarely bred in captivity; likely spawn among vegetation; eggs guarded',
-    genderDifferentiation:
-      'Males may have longer lower jaw appendage; difficult to distinguish',
+    breedingNeeds: 'Rarely bred in captivity; likely spawn among vegetation; eggs guarded',
+    genderDifferentiation: 'Males may have longer lower jaw appendage; difficult to distinguish',
   },
 
   // ============================================
@@ -6335,7 +6617,9 @@ var fishDatabase = {
   americanFlagfish: {
     commonName: 'American Flagfish',
     scientificName: 'Jordanella floridae',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FamericanFlagfish.jpg?alt=media",
+    origin: 'northCentralAmerica',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FamericanFlagfish.jpg?alt=media',
     tempMin: 64,
     tempMax: 72,
     tempUnit: '°F',
@@ -6361,6 +6645,7 @@ var fishDatabase = {
   goldenWonderKillifish: {
     commonName: 'Golden Wonder Killifish',
     scientificName: 'Aplocheilus lineatus',
+    origin: 'asia',
     imageUrl: null,
     tempMin: 72,
     tempMax: 79,
@@ -6387,7 +6672,9 @@ var fishDatabase = {
   gardneriKillifish: {
     commonName: 'Gardneri Killifish',
     scientificName: 'Fundulopanchax gardneri',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FgardneriKillifish.jpg?alt=media",
+    origin: 'africa',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FgardneriKillifish.jpg?alt=media',
     tempMin: 68,
     tempMax: 75,
     tempUnit: '°F',
@@ -6413,7 +6700,9 @@ var fishDatabase = {
   clownKillifish: {
     commonName: 'Clown Killifish',
     scientificName: 'Epiplatys annulatus',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FclownKillifish.jpg?alt=media",
+    origin: 'africa',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FclownKillifish.jpg?alt=media',
     tempMin: 68,
     tempMax: 79,
     tempUnit: '°F',
@@ -6439,7 +6728,9 @@ var fishDatabase = {
   steelBlueKillifish: {
     commonName: 'Steel-Blue Killifish',
     scientificName: 'Fundulopanchax sjoestedti',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FsteelBlueKillifish.jpg?alt=media",
+    origin: 'africa',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FsteelBlueKillifish.jpg?alt=media',
     tempMin: 70,
     tempMax: 77,
     tempUnit: '°F',
