@@ -53,11 +53,11 @@ If a phase is in progress (see "Current Phase" below), there should be a plan fi
 - **Repository:** https://github.com/hklein13/comparium
 - **Firebase Project:** `comparium-21b69`
 
-**Current Stats:** 246 species in database, 130 with images (116 still need images)
+**Current Stats:** 246 species in database, 213 with images (33 still need images)
 
-**Current Phase:** Phase 3 In Progress (Content Expansion) - Sub-Phases 3A, 3B (partial), 3C complete + hotfix
+**Current Phase:** Phase 3 In Progress (Content Expansion) - Sub-Phases 3A-3D in progress, 3C complete
 
-**Active Branch:** `claude/phase3-content-expansion`
+**Active Branch:** `claude/phase3d-species-images`
 
 ## Commands
 
@@ -73,7 +73,8 @@ npm run migrate:glossary         # Sync fish-data.js to Firestore
 # Image Pipeline
 npm run images                   # Interactive image upload (y/n per species)
 npm run images:preview           # Generate HTML preview of all species needing images
-npm run images:upload            # Batch upload from preview selection (paste JSON)
+npm run images:upload            # Batch upload (interactive JSON paste)
+node scripts/upload-selected-images.js scripts/temp-selection.json  # Batch upload from file
 
 # Testing
 npm test                         # Run Playwright tests
@@ -345,9 +346,9 @@ Development follows a phased approach. See `DATA-MODEL.md` for complete specific
 | Sub-Phase | Status | Description |
 |-----------|--------|-------------|
 | **3A** | ✅ Complete | Added 3 new fields to all species (`tankSizeRecommended`, `breedingNeeds`, `genderDifferentiation`) |
-| **3B** | 🔄 Partial | 130/246 species have images; 4 failed due to Wikimedia rate limits |
+| **3B** | ✅ Complete | Initial 130 species images uploaded |
 | **3C** | ✅ Complete | Added 103 new species (143 → 246) + updated ALL 246 descriptions to full versions |
-| **3D** | ⏳ Pending | Add images for remaining 115 species |
+| **3D** | 🔄 In Progress | 213/246 species have images (83 added Jan 10); 33 remaining |
 | **3E** | ⏳ Pending | Add disease reference images |
 | **3F** | ⏳ Pending | Expand equipment entries (6 → 16) |
 | **3G** | ⏸️ Deferred | Plants section (waiting on user) |
@@ -366,10 +367,12 @@ Development follows a phased approach. See `DATA-MODEL.md` for complete specific
 - **Validation:** All 246 species now have matching descriptions (verified with key sync check)
 - **Lesson learned:** ALWAYS validate key sync after bulk additions (see "Critical: fish-data.js ↔ fish-descriptions.js Key Sync" above)
 
-**Sub-Phase 3B Status (January 8, 2026):**
-- 130 species have images, 116 still need images
-- 4 species failed upload due to Wikimedia rate limiting: sailfinMolly, yellowLabCichlid, banditCory, peaPuffer
-- Retry these later or find alternative Wikimedia URLs
+**Sub-Phase 3D Progress (January 10, 2026):**
+- Uploaded 83 additional species images in single batch
+- **Total:** 213/246 species now have images (33 remaining)
+- 1 failure: melanistiusCorydoras (Wikimedia returned PDF, not image - needs different URL)
+- Previously failed species (sailfinMolly, yellowLabCichlid, banditCory, peaPuffer) now successfully uploaded
+- **Rate limiting solved:** Increased delay to 2.5s between requests - zero rate limit failures
 
 ## Git Workflow
 
@@ -520,20 +523,22 @@ fishKey: {
 }
 ```
 
-### Wikimedia Rate Limiting Issues
+### Wikimedia Rate Limiting - SOLVED
 Wikimedia Commons returns HTML error pages instead of images when rate limited.
 
 **Symptoms:**
 - Upload script reports: `FAILED: Invalid response: expected image, got text/html`
 - `scripts/temp-images/` contains small HTML files instead of JPG images
 
-**Solutions:**
-1. Wait 1 hour and retry
-2. Process images in smaller batches (10-15 at a time)
-3. Find alternative Wikimedia URLs for the same species
-4. The upload script has built-in retry logic (3 attempts with delays)
+**Solution (January 2026):**
+The upload script was improved with proper rate limiting:
+- **Delay between requests:** 2.5 seconds (was 500ms)
+- **Batch size:** 80+ images work fine with proper delays
+- **Retry logic:** 3 attempts with exponential backoff (1s, 2s, 3s)
+- **Failure tracking:** Failures saved to `scripts/failed-uploads.json` for easy retry
+- **File argument:** Can now run `node scripts/upload-selected-images.js path/to/file.json`
 
-**Currently failed (need retry):** sailfinMolly, yellowLabCichlid, banditCory, peaPuffer
+**Result:** 83 images uploaded in single batch with zero rate limit failures.
 
 ## Decision-Making
 
@@ -589,13 +594,14 @@ Wikimedia Commons returns HTML error pages instead of images when rate limited.
 - Saving selections to `temp-selection.json` allows retry after failures
 - Key sync validation script catches description/data mismatches immediately
 - **Code-simplifier plugin** makes refactoring safe - run before UI changes to make edits easier
+- **2.5s delay between Wikimedia requests** - eliminated rate limiting entirely, 83 images uploaded in one batch
 
 ### What Went Wrong & Fixes
 | Issue | What Happened | Fix |
 |-------|---------------|-----|
 | **Descriptions condensed** | Claude summarized source content without asking | Always use FULL source content unless user explicitly asks to condense |
 | **Images not showing** | Upload workflow interrupted - temp-selection.json created but upload never run | Complete ALL steps: upload → migrate → commit → push |
-| **Wikimedia rate limits** | Too many image downloads in quick succession | Process 10-15 images at a time, wait 1 hour between batches |
+| **Wikimedia rate limits** | 500ms delay too aggressive, caused HTML error responses | **FIXED:** Increased delay to 2.5s - now supports 80+ image batches |
 | **Description key typos** | 13 typos in fish-descriptions.js keys caused descriptions not to display (e.g., `betaImbellis` vs `bettaImbellis`) | ALWAYS run key sync validation after bulk additions to fish-descriptions.js |
 
 ### Key Takeaways
@@ -603,6 +609,7 @@ Wikimedia Commons returns HTML error pages instead of images when rate limited.
 2. **Verify each step completed** - especially multi-step workflows like image upload
 3. **Ask questions when uncertain** - collaborative decision-making prevents rework
 4. **Validate key sync after bulk additions** - typos in description keys silently break the site
+5. **Respect external API rate limits** - 2.5s delays for Wikimedia; batch sizes of 80+ work fine with proper delays
 
 ## Security Notes
 
