@@ -8,6 +8,9 @@ window.tankManager = {
   currentTankSpecies: [],
   editingTankId: null,
   isInitialized: false,
+  currentPhotoFile: null, // File object for new photo to upload
+  currentPhotoUrl: null, // Preview URL for display
+  existingPhotoUrl: null, // URL of existing photo (for cleanup on replace)
 
   // ============================================
   // HELPER FUNCTIONS
@@ -57,6 +60,133 @@ window.tankManager = {
    */
   getTankSection() {
     return document.getElementById('my-tanks-section');
+  },
+
+  // ============================================
+  // PHOTO HANDLING
+  // ============================================
+
+  /**
+   * Handle photo file selection
+   */
+  handlePhotoSelect(event) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!validTypes.includes(file.type)) {
+      authManager?.showMessage?.('Invalid file type. Please use JPEG, PNG, or WebP.', 'error');
+      return;
+    }
+
+    // Validate file size (5MB max)
+    const maxSize = 5 * 1024 * 1024;
+    if (file.size > maxSize) {
+      authManager?.showMessage?.('File too large. Maximum size is 5MB.', 'error');
+      return;
+    }
+
+    // Store file and create preview
+    this.currentPhotoFile = file;
+    this.currentPhotoUrl = URL.createObjectURL(file);
+    this.showPhotoPreview(this.currentPhotoUrl);
+  },
+
+  /**
+   * Remove selected photo
+   */
+  removePhotoSelection() {
+    // Revoke object URL if it's a blob URL
+    if (this.currentPhotoUrl && this.currentPhotoUrl.startsWith('blob:')) {
+      URL.revokeObjectURL(this.currentPhotoUrl);
+    }
+
+    this.currentPhotoFile = null;
+    this.currentPhotoUrl = null;
+
+    // Show placeholder, hide preview
+    const placeholder = document.getElementById('photo-upload-placeholder');
+    const preview = document.getElementById('photo-upload-preview');
+    const fileInput = document.getElementById('tank-photo');
+
+    if (placeholder) placeholder.style.display = 'flex';
+    if (preview) preview.style.display = 'none';
+    if (fileInput) fileInput.value = '';
+  },
+
+  /**
+   * Show photo preview
+   */
+  showPhotoPreview(url) {
+    const placeholder = document.getElementById('photo-upload-placeholder');
+    const preview = document.getElementById('photo-upload-preview');
+    const previewImg = document.getElementById('photo-preview-image');
+
+    if (placeholder) placeholder.style.display = 'none';
+    if (preview) preview.style.display = 'block';
+    if (previewImg) previewImg.src = url;
+  },
+
+  /**
+   * Reset photo state for new form
+   */
+  resetPhotoState() {
+    if (this.currentPhotoUrl && this.currentPhotoUrl.startsWith('blob:')) {
+      URL.revokeObjectURL(this.currentPhotoUrl);
+    }
+    this.currentPhotoFile = null;
+    this.currentPhotoUrl = null;
+    this.existingPhotoUrl = null;
+
+    // Reset UI
+    const placeholder = document.getElementById('photo-upload-placeholder');
+    const preview = document.getElementById('photo-upload-preview');
+    const fileInput = document.getElementById('tank-photo');
+
+    if (placeholder) placeholder.style.display = 'flex';
+    if (preview) preview.style.display = 'none';
+    if (fileInput) fileInput.value = '';
+  },
+
+  /**
+   * Setup drag-drop for photo upload zone
+   */
+  setupPhotoDragDrop() {
+    const zone = document.getElementById('photo-upload-zone');
+    const fileInput = document.getElementById('tank-photo');
+    if (!zone || !fileInput) return;
+
+    // Click to open file picker
+    zone.addEventListener('click', e => {
+      if (e.target.closest('.photo-remove-btn')) return; // Don't trigger on remove button
+      fileInput.click();
+    });
+
+    // Drag and drop
+    zone.addEventListener('dragover', e => {
+      e.preventDefault();
+      zone.classList.add('drag-over');
+    });
+
+    zone.addEventListener('dragleave', e => {
+      e.preventDefault();
+      zone.classList.remove('drag-over');
+    });
+
+    zone.addEventListener('drop', e => {
+      e.preventDefault();
+      zone.classList.remove('drag-over');
+      const file = e.dataTransfer.files?.[0];
+      if (file) {
+        // Simulate file input change
+        // eslint-disable-next-line no-undef
+        const dt = new DataTransfer();
+        dt.items.add(file);
+        fileInput.files = dt.files;
+        this.handlePhotoSelect({ target: { files: [file] } });
+      }
+    });
   },
 
   // ============================================
@@ -113,119 +243,85 @@ window.tankManager = {
   },
 
   // ============================================
-  // TANK CARD COMPONENT HELPERS
+  // TANK PORTRAIT COMPONENT HELPERS
   // ============================================
 
   /**
-   * Create the base tank card element with name and meta
+   * Get species images for mosaic display
    */
-  createCardElement(tank, speciesCount) {
-    const card = document.createElement('div');
-    card.className = 'tank-card';
-
-    // Tank name
-    const h3 = document.createElement('h3');
-    h3.textContent = tank.name || 'Untitled Tank';
-    card.appendChild(h3);
-
-    // Meta info
-    const meta = document.createElement('div');
-    meta.className = 'tank-card-meta';
-    meta.textContent = `${tank.size} gallons | ${speciesCount} species`;
-    card.appendChild(meta);
-
-    return card;
+  getSpeciesImages(species, maxImages = 6) {
+    if (!this.hasItems(species)) return [];
+    return species
+      .slice(0, maxImages)
+      .map(key => fishDatabase[key]?.imageUrl)
+      .filter(url => url);
   },
 
   /**
-   * Add notes section to a tank card (if notes exist)
+   * Create species mosaic HTML for tank portrait
    */
-  addNotesSection(card, tank) {
-    if (!tank.notes || !tank.notes.trim()) {
-      return;
+  createSpeciesMosaic(images) {
+    const mosaic = document.createElement('div');
+    mosaic.className = 'tank-portrait-mosaic';
+
+    if (images.length === 0) {
+      mosaic.classList.add('no-images');
+      const placeholder = document.createElement('div');
+      placeholder.className = 'tank-portrait-placeholder';
+      placeholder.textContent = 'No species images';
+      mosaic.appendChild(placeholder);
+      return mosaic;
     }
 
-    const notesContainer = document.createElement('div');
-    notesContainer.className = 'tank-notes-container';
-
-    const notes = document.createElement('div');
-    notes.className = 'tank-notes';
-    notes.textContent = tank.notes;
-    notesContainer.appendChild(notes);
-
-    // Add toggle if notes are long
-    if (tank.notes.length > 100) {
-      const toggle = document.createElement('button');
-      toggle.type = 'button';
-      toggle.className = 'tank-notes-toggle';
-      toggle.textContent = 'Show more';
-      toggle.onclick = e => {
-        e.stopPropagation();
-        notes.classList.toggle('expanded');
-        toggle.textContent = notes.classList.contains('expanded') ? 'Show less' : 'Show more';
-      };
-      notesContainer.appendChild(toggle);
-    }
-
-    card.appendChild(notesContainer);
-  },
-
-  /**
-   * Add species preview badges to a tank card
-   */
-  addSpeciesPreview(card, tank, speciesCount) {
-    const speciesPreview = document.createElement('div');
-    speciesPreview.className = 'tank-species-preview';
-
-    if (this.hasItems(tank.species)) {
-      tank.species.slice(0, 5).forEach(key => {
-        const fish = fishDatabase[key];
-        if (!fish) return;
-        const span = document.createElement('span');
-        span.className = 'species-badge';
-        span.textContent = fish.commonName;
-        speciesPreview.appendChild(span);
+    if (images.length <= 2) {
+      mosaic.classList.add('single-image');
+      const img = document.createElement('img');
+      img.src = images[0];
+      img.alt = 'Tank species';
+      img.loading = 'lazy';
+      mosaic.appendChild(img);
+    } else {
+      // Grid of images
+      images.forEach(url => {
+        const img = document.createElement('img');
+        img.src = url;
+        img.alt = 'Species';
+        img.loading = 'lazy';
+        mosaic.appendChild(img);
       });
-      if (speciesCount > 5) {
-        const more = document.createElement('span');
-        more.className = 'species-badge';
-        more.textContent = `+${speciesCount - 5} more`;
-        speciesPreview.appendChild(more);
-      }
     }
 
-    card.appendChild(speciesPreview);
+    return mosaic;
   },
 
   /**
-   * Add action buttons (Edit, Delete) to a tank card
+   * Create size badge element
    */
-  addActionButtons(card, tankId) {
-    const actions = document.createElement('div');
-    actions.className = 'tank-card-actions';
-
-    const editBtn = document.createElement('button');
-    editBtn.className = 'btn-small';
-    editBtn.textContent = 'Edit';
-    editBtn.onclick = () => this.editTank(tankId);
-
-    const delBtn = document.createElement('button');
-    delBtn.className = 'btn-small btn-danger';
-    delBtn.textContent = 'Delete';
-    delBtn.onclick = () => this.deleteTank(tankId);
-
-    actions.appendChild(editBtn);
-    actions.appendChild(delBtn);
-    card.appendChild(actions);
+  createSizeBadge(size) {
+    const badge = document.createElement('div');
+    badge.className = 'tank-portrait-badge';
+    badge.textContent = `${size}g`;
+    return badge;
   },
 
   /**
-   * Add maintenance section to a tank card (Phase 1)
+   * Create info overlay with tank name and species count
    */
-  addMaintenanceSection(card, tank) {
-    if (window.maintenanceManager) {
-      window.maintenanceManager.renderTankMaintenance(card, tank);
-    }
+  createInfoOverlay(name, speciesCount) {
+    const overlay = document.createElement('div');
+    overlay.className = 'tank-portrait-overlay';
+
+    const nameEl = document.createElement('h3');
+    nameEl.className = 'tank-portrait-name';
+    nameEl.textContent = name || 'Untitled Tank';
+    overlay.appendChild(nameEl);
+
+    const meta = document.createElement('span');
+    meta.className = 'tank-portrait-meta';
+    meta.textContent = `${speciesCount} species`;
+    overlay.appendChild(meta);
+
+    return overlay;
   },
 
   // ============================================
@@ -240,6 +336,7 @@ window.tankManager = {
     if (this.isInitialized) return;
 
     this.populateSpeciesSelector();
+    this.setupPhotoDragDrop();
     await this.loadTanks();
     this.checkPendingSpecies();
     this.isInitialized = true;
@@ -351,6 +448,9 @@ window.tankManager = {
     this.editingTankId = null;
     this.updateSpeciesList();
 
+    // Reset photo state
+    this.resetPhotoState();
+
     // Reset species search filter
     const searchInput = document.getElementById('species-search');
     if (searchInput) {
@@ -369,12 +469,20 @@ window.tankManager = {
    * Cancel/hide the tank form
    */
   cancelForm() {
+    // Clean up blob URLs to prevent memory leaks
+    if (this.currentPhotoUrl && this.currentPhotoUrl.startsWith('blob:')) {
+      URL.revokeObjectURL(this.currentPhotoUrl);
+    }
+
     const formContainer = this.getFormContainer();
     if (formContainer) {
       formContainer.style.display = 'none';
     }
     this.currentTankSpecies = [];
     this.editingTankId = null;
+    this.currentPhotoFile = null;
+    this.currentPhotoUrl = null;
+    this.existingPhotoUrl = null;
   },
 
   /**
@@ -455,30 +563,73 @@ window.tankManager = {
     }
 
     const tankId = document.getElementById('tank-id')?.value;
+    const isNewTank = !tankId;
+
+    // Generate ID for new tanks (needed for photo upload path)
+    const finalTankId = tankId || `tank_${Date.now()}`;
+
+    let coverPhotoUrl = this.existingPhotoUrl || null;
+    let newPhotoUploaded = false;
+
+    // Handle photo upload if new photo selected
+    if (this.currentPhotoFile) {
+      authManager.showMessage('Uploading photo...', 'info');
+
+      const uploadResult = await window.storageUploadTankPhoto(finalTankId, this.currentPhotoFile);
+
+      if (uploadResult.success) {
+        coverPhotoUrl = uploadResult.url;
+        newPhotoUploaded = true;
+        // Note: Don't delete old photo yet - wait until Firestore save succeeds
+      } else {
+        // Clean up blob URL on upload failure
+        if (this.currentPhotoUrl && this.currentPhotoUrl.startsWith('blob:')) {
+          URL.revokeObjectURL(this.currentPhotoUrl);
+        }
+        this.currentPhotoFile = null;
+        this.currentPhotoUrl = null;
+
+        authManager.showMessage(`Photo upload failed: ${uploadResult.error}`, 'error');
+        return;
+      }
+    }
 
     const tank = {
-      id: tankId || null,
+      id: isNewTank ? null : tankId,
       name: document.getElementById('tank-name')?.value || 'Untitled Tank',
       size: parseInt(document.getElementById('tank-size')?.value, 10) || 0,
       notes: document.getElementById('tank-notes')?.value || '',
       species: this.currentTankSpecies,
+      coverPhoto: coverPhotoUrl,
       updated: new Date().toISOString(),
     };
+
+    // For new tanks, we need to pass the pre-generated ID
+    if (isNewTank) {
+      tank.id = finalTankId;
+    }
 
     const result = await storageService.saveTank(uid, tank);
 
     if (result.success) {
+      // Note: When replacing a photo, the new upload already overwrites the old file
+      // at the same storage path (images/tanks/{tankId}.jpg), so no deletion needed.
+
       authManager.showMessage('Tank saved successfully!', 'success');
       this.cancelForm();
       await this.loadTanks();
       this.updateDashboardStats();
     } else {
+      // Firestore save failed - clean up newly uploaded photo to avoid orphan
+      if (newPhotoUploaded && coverPhotoUrl !== this.existingPhotoUrl) {
+        await window.storageDeleteTankPhoto(finalTankId);
+      }
       authManager.showMessage('Failed to save tank', 'error');
     }
   },
 
   /**
-   * Load and display all tanks
+   * Load and display all tanks as portrait gallery
    */
   async loadTanks() {
     const container = this.getTanksContainer();
@@ -488,7 +639,7 @@ window.tankManager = {
       const uid = authManager.getCurrentUid();
       if (!uid) {
         container.innerHTML = '';
-        container.appendChild(this.createEmptyState('Please log in to view your tanks.'));
+        container.appendChild(this.createGalleryEmptyState('Please log in to view your tanks.'));
         return;
       }
 
@@ -497,43 +648,75 @@ window.tankManager = {
       if (!this.hasItems(tanks)) {
         container.innerHTML = '';
         container.appendChild(
-          this.createEmptyState('No tanks yet. Click "Create New Tank" to get started!')
+          this.createGalleryEmptyState(
+            'No tanks yet. Click the button above to create your first tank!'
+          )
         );
         return;
       }
 
       container.innerHTML = '';
-      tanks.forEach(tank => this.renderTankCard(container, tank));
+      tanks.forEach(tank => this.renderTankPortrait(container, tank));
     } catch (error) {
       console.error('Error loading tanks:', error);
       container.innerHTML = '';
-      container.appendChild(this.createErrorState('Error loading tanks', 'refresh the page'));
+      container.appendChild(
+        this.createGalleryEmptyState('Error loading tanks. Please refresh the page.', true)
+      );
     }
   },
 
   /**
-   * Render a single tank card
+   * Create empty state for gallery container
    */
-  renderTankCard(container, tank) {
+  createGalleryEmptyState(message, isError = false) {
+    const div = document.createElement('div');
+    div.className = 'tank-gallery-empty';
+    if (isError) div.classList.add('error');
+    const p = document.createElement('p');
+    p.textContent = message;
+    div.appendChild(p);
+    return div;
+  },
+
+  /**
+   * Render a single tank as a portrait card
+   */
+  renderTankPortrait(container, tank) {
     const speciesCount = tank.species ? tank.species.length : 0;
 
-    // Create base card with name and meta
-    const card = this.createCardElement(tank, speciesCount);
+    // Create portrait card
+    const portrait = document.createElement('div');
+    portrait.className = 'tank-portrait';
+    portrait.onclick = () => window.openTankModal?.(tank.id);
 
-    // Add notes section (if present)
-    this.addNotesSection(card, tank);
+    // Show cover photo if available, otherwise show species mosaic
+    if (tank.coverPhoto) {
+      const coverImg = document.createElement('div');
+      coverImg.className = 'tank-portrait-cover';
+      const img = document.createElement('img');
+      img.src = tank.coverPhoto;
+      img.alt = tank.name || 'Tank photo';
+      img.loading = 'lazy';
+      coverImg.appendChild(img);
+      portrait.appendChild(coverImg);
+    } else {
+      const images = this.getSpeciesImages(tank.species);
+      const mosaic = this.createSpeciesMosaic(images);
+      portrait.appendChild(mosaic);
+    }
 
-    // Add species preview badges
-    this.addSpeciesPreview(card, tank, speciesCount);
+    // Add size badge
+    if (tank.size) {
+      const badge = this.createSizeBadge(tank.size);
+      portrait.appendChild(badge);
+    }
 
-    // Add action buttons
-    this.addActionButtons(card, tank.id);
+    // Add info overlay
+    const overlay = this.createInfoOverlay(tank.name, speciesCount);
+    portrait.appendChild(overlay);
 
-    // Append card to container
-    container.appendChild(card);
-
-    // Add maintenance section (Phase 1)
-    this.addMaintenanceSection(card, tank);
+    container.appendChild(portrait);
   },
 
   /**
@@ -564,6 +747,14 @@ window.tankManager = {
       this.editingTankId = tank.id;
       this.updateSpeciesList();
 
+      // Handle existing photo
+      this.resetPhotoState();
+      if (tank.coverPhoto) {
+        this.existingPhotoUrl = tank.coverPhoto;
+        this.currentPhotoUrl = tank.coverPhoto;
+        this.showPhotoPreview(tank.coverPhoto);
+      }
+
       // Scroll to form
       const tankSection = this.getTankSection();
       if (tankSection) {
@@ -585,6 +776,18 @@ window.tankManager = {
 
     const uid = authManager.getCurrentUid();
     if (!uid) return;
+
+    // Get tank to check for cover photo before deleting
+    const tank = await storageService.getTank(uid, tankId);
+
+    // Delete cover photo from storage if exists
+    if (tank?.coverPhoto) {
+      const deleteResult = await window.storageDeleteTankPhoto(tankId);
+      if (!deleteResult.success) {
+        console.warn('Failed to delete tank photo:', deleteResult.error);
+        // Continue anyway - tank deletion is more important
+      }
+    }
 
     const result = await storageService.deleteTank(uid, tankId);
 
@@ -639,4 +842,12 @@ function saveTank(event) {
 function filterSpeciesSelector() {
   const searchInput = document.getElementById('species-search');
   window.tankManager.filterSpeciesSelector(searchInput ? searchInput.value : '');
+}
+
+function handlePhotoSelect(event) {
+  window.tankManager.handlePhotoSelect(event);
+}
+
+function removePhotoSelection() {
+  window.tankManager.removePhotoSelection();
 }

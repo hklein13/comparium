@@ -532,6 +532,38 @@ fishKey: {
 }
 ```
 
+### User Tank Photo Uploads (January 2026)
+Users can upload a single cover photo per tank that replaces the species mosaic on portrait cards.
+
+**Storage Path:** `images/tanks/{tankId}.jpg`
+- Matches species images pattern
+- One photo per tank (overwrites on replace)
+- Deleted automatically when tank is deleted
+
+**Tank Schema with Photo:**
+```javascript
+{
+  id: "tank_1736261234567",
+  name: "Community Tank",
+  size: 55,
+  notes: "...",
+  species: ["neonTetra", "cardinalTetra"],
+  coverPhoto: "https://firebasestorage.../images%2Ftanks%2Ftank_1736261234567.jpg?alt=media",
+  created: "2026-01-12T...",
+  updated: "2026-01-12T..."
+}
+```
+
+**Key Files:**
+| File | What It Does |
+|------|--------------|
+| `js/firebase-init.js` | `storageUploadTankPhoto()`, `storageDeleteTankPhoto()` helpers |
+| `js/tank-manager.js` | Photo state, upload on save, display logic |
+| `dashboard.html` | File input UI with drag-drop zone |
+| `css/naturalist.css` | `.photo-upload-zone`, `.tank-portrait-cover` styles |
+
+**⚠️ Important:** Photo replacement uses Firebase overwrite (same path). No manual deletion needed - the new upload automatically replaces the old file.
+
 ### Wikimedia Rate Limiting - SOLVED
 Wikimedia Commons returns HTML error pages instead of images when rate limited.
 

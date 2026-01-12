@@ -49,203 +49,319 @@
       </nav>
     </header>
 
-    <div class="dashboard-container">
-      <div class="dashboard-header">
-        <div class="dashboard-header-text">
-          <h1>Welcome back, <span id="username-display"></span></h1>
-          <p>Manage your fish comparisons, tanks, and favorites</p>
-        </div>
-        <div class="dashboard-header-actions">
-          <!-- Notification Bell -->
-          <div class="notification-wrapper">
-            <button
-              id="notification-toggle"
-              class="icon-btn"
-              onclick="toggleNotifications()"
-              aria-label="Notifications"
-            >
-              <svg
-                width="22"
-                height="22"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+    <!-- Dashboard Layout -->
+    <div class="dashboard-layout">
+      <!-- Dashboard Hero Section -->
+      <section class="dashboard-hero dashboard-section-animate">
+        <div class="dashboard-hero-ambient"></div>
+        <div class="dashboard-hero-content">
+          <!-- Actions (Notifications + Settings) - positioned absolute -->
+          <div class="dashboard-header-actions">
+            <!-- Notification Bell -->
+            <div class="notification-wrapper">
+              <button
+                id="notification-toggle"
+                class="icon-btn"
+                onclick="toggleNotifications()"
+                aria-label="Notifications"
               >
-                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-              </svg>
-              <span id="notification-badge" class="notification-badge">0</span>
-            </button>
-            <div id="notification-dropdown" class="header-dropdown notification-dropdown">
-              <div class="dropdown-header">
-                <h3>Notifications</h3>
-                <button onclick="markAllRead()" class="dropdown-action">Mark all read</button>
-              </div>
-              <div id="notification-list" class="notification-list">
-                <div class="notification-empty">
-                  <p>No notifications yet</p>
-                  <small>Maintenance reminders will appear here</small>
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                  <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                </svg>
+                <span id="notification-badge" class="notification-badge">0</span>
+              </button>
+              <div id="notification-dropdown" class="header-dropdown notification-dropdown">
+                <div class="dropdown-header">
+                  <h3>Notifications</h3>
+                  <button onclick="markAllRead()" class="dropdown-action">Mark all read</button>
+                </div>
+                <div id="notification-list" class="notification-list">
+                  <div class="notification-empty">
+                    <p>No notifications yet</p>
+                    <small>Maintenance reminders will appear here</small>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <!-- Settings Gear -->
-          <div class="settings-wrapper">
-            <button
-              id="settings-toggle"
-              class="icon-btn"
-              onclick="toggleSettings()"
-              aria-label="Settings"
-            >
-              <svg
-                width="22"
-                height="22"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+            <!-- Settings Gear -->
+            <div class="settings-wrapper">
+              <button
+                id="settings-toggle"
+                class="icon-btn"
+                onclick="toggleSettings()"
+                aria-label="Settings"
               >
-                <circle cx="12" cy="12" r="3"></circle>
-                <path
-                  d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"
-                ></path>
-              </svg>
-            </button>
-            <div id="settings-dropdown" class="header-dropdown settings-dropdown">
-              <div class="dropdown-header">
-                <h3>Settings</h3>
-              </div>
-              <div class="settings-dropdown-content">
-                <div class="settings-dropdown-item">
-                  <span class="settings-label">Account</span>
-                  <span class="settings-value" id="settings-username"></span>
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="12" cy="12" r="3"></circle>
+                  <path
+                    d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"
+                  ></path>
+                </svg>
+              </button>
+              <div id="settings-dropdown" class="header-dropdown settings-dropdown">
+                <div class="dropdown-header">
+                  <h3>Settings</h3>
                 </div>
-                <div class="settings-dropdown-divider"></div>
-                <div class="settings-dropdown-item" id="push-notification-setting">
-                  <span class="settings-label">Push Notifications</span>
-                  <button
-                    id="push-toggle-btn"
-                    class="settings-toggle-btn"
-                    onclick="togglePushNotifications()"
-                  >
-                    Enable
+                <div class="settings-dropdown-content">
+                  <div class="settings-dropdown-item">
+                    <span class="settings-label">Account</span>
+                    <span class="settings-value" id="settings-username"></span>
+                  </div>
+                  <div class="settings-dropdown-divider"></div>
+                  <div class="settings-dropdown-item" id="push-notification-setting">
+                    <span class="settings-label">Push Notifications</span>
+                    <button
+                      id="push-toggle-btn"
+                      class="settings-toggle-btn"
+                      onclick="togglePushNotifications()"
+                    >
+                      Enable
+                    </button>
+                  </div>
+                  <div class="settings-dropdown-divider"></div>
+                  <button onclick="authManager.logout()" class="settings-dropdown-btn">
+                    Log Out
                   </button>
                 </div>
-                <div class="settings-dropdown-divider"></div>
-                <button onclick="authManager.logout()" class="settings-dropdown-btn">
-                  Log Out
-                </button>
               </div>
             </div>
           </div>
+
+          <!-- Greeting -->
+          <h1 class="dashboard-greeting">
+            <span id="greeting-time">Good evening</span>,
+            <span class="username" id="username-display"></span>
+          </h1>
+          <p class="dashboard-status" id="dashboard-status">Your aquariums are looking great</p>
+
+          <!-- Integrated Stats -->
+          <div class="dashboard-hero-stats">
+            <span class="hero-stat"><span id="tank-count">0</span> tanks</span>
+            <span class="hero-stat-divider">·</span>
+            <span class="hero-stat"><span id="species-total-count">0</span> species</span>
+            <span class="hero-stat-divider">·</span>
+            <span class="hero-stat"><span id="favorite-count">0</span> favorites</span>
+          </div>
+
+          <!-- Hero Actions -->
+          <div class="dashboard-hero-actions">
+            <button onclick="showNewTankForm()" class="btn btn-primary" id="hero-cta-btn">
+              + Add New Tank
+            </button>
+          </div>
+
+          <!-- Hidden element for comparison count (used by JS) -->
+          <span id="comparison-count" style="display: none">0</span>
         </div>
+      </section>
+
+      <!-- Main Row: Tanks + Maintenance -->
+      <div class="dashboard-main-row">
+        <!-- Tank Gallery Section -->
+        <section class="tank-gallery-section dashboard-section-animate" id="my-tanks-section">
+          <div class="tank-gallery-header">
+            <h2>My Tanks</h2>
+          </div>
+
+          <!-- Tank Form (Initially Hidden) -->
+          <div id="tank-form-container" class="tank-form" style="display: none">
+            <h3 id="form-title">Create New Tank</h3>
+            <form id="tank-form" onsubmit="saveTank(event)">
+              <input type="hidden" id="tank-id" />
+
+              <div class="form-group">
+                <label for="tank-name">Tank Name</label>
+                <input type="text" id="tank-name" required placeholder="e.g., Living Room 55g" />
+              </div>
+
+              <div class="form-group">
+                <label for="tank-size">Tank Size (gallons)</label>
+                <input type="number" id="tank-size" required min="1" placeholder="e.g., 55" />
+              </div>
+
+              <div class="form-group">
+                <label for="tank-notes">Notes (Optional)</label>
+                <textarea
+                  id="tank-notes"
+                  rows="3"
+                  placeholder="Equipment, substrate, plans..."
+                ></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="tank-photo">Tank Photo (Optional)</label>
+                <div class="photo-upload-zone" id="photo-upload-zone">
+                  <input
+                    type="file"
+                    id="tank-photo"
+                    accept="image/jpeg,image/png,image/webp"
+                    onchange="handlePhotoSelect(event)"
+                    style="display: none"
+                  />
+                  <div class="photo-upload-placeholder" id="photo-upload-placeholder">
+                    <span class="photo-upload-icon">+</span>
+                    <span>Click or drag to add a photo</span>
+                    <small>JPEG, PNG, or WebP (max 5MB)</small>
+                  </div>
+                  <div class="photo-upload-preview" id="photo-upload-preview" style="display: none">
+                    <img id="photo-preview-image" src="" alt="Tank photo preview" />
+                    <button type="button" class="photo-remove-btn" onclick="removePhotoSelection()">
+                      Remove
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Select Fish Species</label>
+                <input
+                  type="text"
+                  id="species-search"
+                  placeholder="Search species..."
+                  oninput="filterSpeciesSelector()"
+                />
+                <select id="species-selector" onchange="addSpeciesToTank()" size="6">
+                  <option value="">-- Choose a species to add --</option>
+                </select>
+                <small class="form-hint">Type to filter, click to add</small>
+              </div>
+
+              <div id="selected-species-list" class="selected-species">
+                <strong>Selected Species:</strong>
+                <ul id="species-list" class="fish-list"></ul>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Save Tank</button>
+                <button type="button" onclick="cancelForm()" class="btn btn-ghost">Cancel</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Tank Gallery (populated by JS) -->
+          <div id="tanks-container" class="tank-gallery">
+            <div class="tank-gallery-empty">
+              <p>Loading tanks...</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Maintenance Timeline Section -->
+        <section class="maintenance-timeline-section dashboard-section-animate">
+          <div class="maintenance-timeline-header">
+            <h2>Upcoming Care</h2>
+            <span class="maintenance-timeline-summary" id="maintenance-summary"></span>
+          </div>
+
+          <!-- Maintenance Timeline (populated by JS) -->
+          <div id="maintenance-timeline">
+            <div class="maintenance-timeline-empty">
+              <p>No maintenance scheduled</p>
+            </div>
+          </div>
+
+          <!-- Quick Log Section -->
+          <div class="timeline-quicklog" id="timeline-quicklog" style="display: none">
+            <h3>Quick Log</h3>
+            <div class="quick-log-buttons" id="timeline-quicklog-buttons">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </section>
       </div>
 
-      <!-- Stats Cards -->
-      <div class="dashboard-stats">
-        <div class="stat-card">
-          <span class="stat-number" id="comparison-count">0</span>
-          <span class="stat-label">Comparisons Saved</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-number" id="tank-count">0</span>
-          <span class="stat-label">Tanks Created</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-number" id="favorite-count">0</span>
-          <span class="stat-label">Favorite Species</span>
-        </div>
-      </div>
+      <!-- Activity Row: Comparisons + Favorites -->
+      <div class="dashboard-activity-row">
+        <!-- Recent Comparisons -->
+        <section class="activity-section dashboard-section-animate">
+          <div class="activity-section-header">
+            <h2>Recent Comparisons</h2>
+          </div>
+          <div id="recent-comparisons" class="activity-list">
+            <div class="activity-empty">
+              <p>No comparisons yet. <a href="compare.html">Start comparing fish!</a></p>
+            </div>
+          </div>
+        </section>
 
-      <!-- Recent Comparisons -->
-      <div class="dashboard-section">
-        <h2>Recent Comparisons</h2>
-        <div id="recent-comparisons">
-          <div class="empty-state-small">
-            <p>No comparisons yet. <a href="compare.html">Start comparing fish!</a></p>
+        <!-- Favorite Species -->
+        <section class="activity-section dashboard-section-animate">
+          <div class="activity-section-header">
+            <h2>Favorite Species</h2>
+          </div>
+          <div id="favorite-species" class="activity-list">
+            <div class="activity-empty">
+              <p>No favorites yet. Click the star on species to save them!</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- Tank Detail Modal -->
+    <div class="tank-modal-backdrop" id="tank-modal-backdrop">
+      <div class="tank-modal">
+        <button class="tank-modal-close" onclick="closeTankModal()">&times;</button>
+        <div class="tank-modal-header">
+          <div class="tank-modal-mosaic" id="tank-modal-mosaic">
+            <!-- Species images populated by JS -->
           </div>
         </div>
-      </div>
+        <div class="tank-modal-body">
+          <h2 class="tank-modal-name" id="tank-modal-name"></h2>
+          <p class="tank-modal-meta" id="tank-modal-meta"></p>
 
-      <!-- My Tanks - Full Management -->
-      <div class="dashboard-section" id="my-tanks-section">
-        <div class="dashboard-section-header">
-          <h2>My Tanks</h2>
-          <button onclick="showNewTankForm()" class="btn btn-primary">+ Create New Tank</button>
-        </div>
+          <div class="tank-modal-notes" id="tank-modal-notes" style="display: none"></div>
 
-        <!-- Tank Form (Initially Hidden) -->
-        <div id="tank-form-container" class="tank-form" style="display: none">
-          <h3 id="form-title">Create New Tank</h3>
-          <form id="tank-form" onsubmit="saveTank(event)">
-            <input type="hidden" id="tank-id" />
+          <div class="tank-modal-section">
+            <h3>Inhabitants</h3>
+            <ul class="tank-modal-species-list" id="tank-modal-species"></ul>
+          </div>
 
-            <div class="form-group">
-              <label for="tank-name">Tank Name</label>
-              <input type="text" id="tank-name" required placeholder="e.g., Living Room 55g" />
+          <div class="tank-modal-section tank-modal-quicklog">
+            <h3>Quick Log</h3>
+            <div class="quick-log-buttons" id="tank-modal-quicklog-buttons">
+              <!-- Populated by JS -->
             </div>
+          </div>
 
-            <div class="form-group">
-              <label for="tank-size">Tank Size (gallons)</label>
-              <input type="number" id="tank-size" required min="1" placeholder="e.g., 55" />
+          <div class="tank-modal-section">
+            <h3>Maintenance Schedules</h3>
+            <div id="tank-modal-schedules">
+              <!-- Populated by JS -->
             </div>
+          </div>
 
-            <div class="form-group">
-              <label for="tank-notes">Notes (Optional)</label>
-              <textarea
-                id="tank-notes"
-                rows="3"
-                placeholder="Equipment, substrate, plans..."
-              ></textarea>
+          <div class="tank-modal-section">
+            <h3>Recent Activity</h3>
+            <div class="recent-events" id="tank-modal-events">
+              <!-- Populated by JS -->
             </div>
-
-            <div class="form-group">
-              <label>Select Fish Species</label>
-              <input
-                type="text"
-                id="species-search"
-                placeholder="Search species..."
-                oninput="filterSpeciesSelector()"
-              />
-              <select id="species-selector" onchange="addSpeciesToTank()" size="6">
-                <option value="">-- Choose a species to add --</option>
-              </select>
-              <small class="form-hint">Type to filter, click to add</small>
-            </div>
-
-            <div id="selected-species-list" class="selected-species">
-              <strong>Selected Species:</strong>
-              <ul id="species-list" class="fish-list"></ul>
-            </div>
-
-            <div class="form-actions">
-              <button type="submit" class="btn btn-primary">Save Tank</button>
-              <button type="button" onclick="cancelForm()" class="btn btn-ghost">Cancel</button>
-            </div>
-          </form>
-        </div>
-
-        <!-- Tanks List -->
-        <div id="tanks-container">
-          <div class="loading-state">
-            <p>Loading tanks...</p>
           </div>
         </div>
-      </div>
-
-      <!-- Favorite Species -->
-      <div class="dashboard-section">
-        <h2>Favorite Species</h2>
-        <div id="favorite-species">
-          <div class="empty-state-small">
-            <p>No favorites yet. Click the star on species when comparing to save them!</p>
-          </div>
+        <div class="tank-modal-footer">
+          <button class="btn btn-ghost" id="tank-modal-edit-btn">Edit Tank</button>
+          <button class="btn btn-danger" id="tank-modal-delete-btn">Delete Tank</button>
         </div>
       </div>
     </div>
@@ -275,7 +391,10 @@
     <script src="js/tank-manager.js"></script>
     <script src="js/maintenance-manager.js"></script>
     <script>
-      // PRODUCTION: Proper auth check using Firebase's event system
+      // ============================================
+      // Dashboard Initialization
+      // ============================================
+
       (async () => {
         try {
           // Wait for Firebase to initialize with timeout
@@ -315,19 +434,37 @@
       })();
 
       function showErrorState(message) {
-        const container = document.querySelector('.dashboard-container');
+        const container = document.querySelector('.dashboard-layout');
         if (container) {
           container.innerHTML = `
-                    <div class="dashboard-section" style="text-align: center; padding: 3rem;">
-                        <h2 style="color: #dc3545;">Error Loading Dashboard</h2>
-                        <p style="margin: 1rem 0;">${message}</p>
-                        <p style="margin-top: 2rem;">
-                            <a href="login.html" class="btn btn-primary">Return to Login</a>
-                        </p>
-                    </div>
-                `;
+            <div class="activity-section" style="text-align: center; padding: 3rem;">
+              <h2 style="color: #dc3545;">Error Loading Dashboard</h2>
+              <p style="margin: 1rem 0;">${message}</p>
+              <p style="margin-top: 2rem;">
+                <a href="login.html" class="btn btn-primary">Return to Login</a>
+              </p>
+            </div>
+          `;
         }
       }
+
+      // ============================================
+      // Time-Aware Greeting
+      // ============================================
+
+      function getTimeGreeting() {
+        const hour = new Date().getHours();
+        if (hour < 12) return 'Good morning';
+        if (hour < 17) return 'Good afternoon';
+        return 'Good evening';
+      }
+
+      // Set greeting on load
+      document.getElementById('greeting-time').textContent = getTimeGreeting();
+
+      // ============================================
+      // Dashboard Loading
+      // ============================================
 
       async function loadDashboard(user) {
         try {
@@ -340,7 +477,7 @@
             return;
           }
 
-          // Display username in header and settings
+          // Display username in greeting and settings
           const username = profile.username || 'User';
           document.getElementById('username-display').textContent = username;
           document.getElementById('settings-username').textContent = username;
@@ -355,13 +492,20 @@
             document.getElementById('tank-count').textContent = tanks.length;
             document.getElementById('favorite-count').textContent = favorites.length;
 
-            // Load recent comparisons
+            // Calculate total species across all tanks
+            const totalSpecies = tanks.reduce((sum, tank) => sum + (tank.species?.length || 0), 0);
+            document.getElementById('species-total-count').textContent = totalSpecies;
+
+            // Update hero CTA based on tank count
+            updateHeroCTA(tanks.length);
+
+            // Load recent comparisons (new format)
             loadRecentComparisons(comparisons.slice(0, 5));
 
             // Initialize tank manager (loads full tank list)
             await window.tankManager.init();
 
-            // Load favorites
+            // Load favorites (new format)
             loadFavorites(favorites);
 
             // Load notifications
@@ -369,6 +513,9 @@
 
             // Update push notification UI state
             await updatePushNotificationUI();
+
+            // Load maintenance timeline
+            await loadMaintenanceTimeline();
           }
         } catch (error) {
           console.error('Error loading dashboard data:', error);
@@ -378,68 +525,101 @@
         }
       }
 
+      function updateHeroCTA(tankCount) {
+        const btn = document.getElementById('hero-cta-btn');
+        if (tankCount === 0) {
+          btn.textContent = '+ Create Your First Tank';
+        } else {
+          btn.textContent = '+ Add New Tank';
+        }
+      }
+
+      // ============================================
+      // Recent Comparisons (New Card Format)
+      // ============================================
+
       function loadRecentComparisons(comparisons) {
         const container = document.getElementById('recent-comparisons');
 
         if (comparisons.length === 0) {
-          return; // Keep empty state
+          container.innerHTML = `
+            <div class="activity-empty">
+              <p>No comparisons yet. <a href="compare.html">Start comparing fish!</a></p>
+            </div>
+          `;
+          return;
         }
 
-        let html = '<ul class="item-list">';
+        let html = '';
         comparisons.forEach(comp => {
           const speciesNames = comp.species.map(s => s.name).join(', ');
           const speciesKeys = comp.species.map(s => s.key).join(',');
           const compareUrl = `compare.html?species=${encodeURIComponent(speciesKeys)}`;
           const date = new Date(comp.date).toLocaleDateString();
-          const icon = comp.compatible ? '&#10003;' : '&#9888;';
+          const isCompatible = comp.compatible;
 
           html += `
-                    <li>
-                        <a href="${compareUrl}" class="item-link">
-                            <strong>${icon} ${speciesNames}</strong><br>
-                            <small>${date}</small>
-                        </a>
-                    </li>
-                `;
+            <a href="${compareUrl}" class="activity-item">
+              <div class="activity-icon ${isCompatible ? 'compatible' : 'incompatible'}">
+                ${isCompatible ? '&#10003;' : '&#9888;'}
+              </div>
+              <div class="activity-content">
+                <span class="activity-title">${escapeHTML(speciesNames)}</span>
+                <span class="activity-meta">${date}</span>
+              </div>
+            </a>
+          `;
         });
-        html += '</ul>';
 
         container.innerHTML = html;
       }
+
+      // ============================================
+      // Favorites (New Card Format with Images)
+      // ============================================
 
       function loadFavorites(favorites) {
         const container = document.getElementById('favorite-species');
 
         if (favorites.length === 0) {
-          return; // Keep empty state
+          container.innerHTML = `
+            <div class="activity-empty">
+              <p>No favorites yet. Click the star on species to save them!</p>
+            </div>
+          `;
+          return;
         }
 
-        let html = '<ul class="item-list">';
+        let html = '';
         favorites.forEach(speciesKey => {
           const fish = fishDatabase[speciesKey];
           if (fish) {
-            // Use encodeURIComponent for URL and data-species for click handler (XSS-safe)
+            const imageUrl = fish.imageUrl || '';
             html += `
-                        <li>
-                            <a href="species.html?fish=${encodeURIComponent(speciesKey)}" class="item-link">
-                                <strong>${fish.commonName}</strong><br>
-                                <small><em>${fish.scientificName}</em></small>
-                            </a>
-                            <span class="favorite-star active" data-species="${speciesKey}">&#9733;</span>
-                        </li>
-                    `;
+              <div class="activity-item">
+                <a href="species.html?fish=${encodeURIComponent(speciesKey)}" class="activity-icon" style="text-decoration: none;">
+                  ${imageUrl ? `<img src="${imageUrl}" alt="${escapeHTML(fish.commonName)}" loading="lazy" />` : '🐟'}
+                </a>
+                <a href="species.html?fish=${encodeURIComponent(speciesKey)}" class="activity-content" style="text-decoration: none; color: inherit;">
+                  <span class="activity-title">${escapeHTML(fish.commonName)}</span>
+                  <span class="activity-meta"><em>${escapeHTML(fish.scientificName)}</em></span>
+                </a>
+                <button class="activity-action" data-species="${speciesKey}" aria-label="Remove from favorites">
+                  &#9733;
+                </button>
+              </div>
+            `;
           }
         });
-        html += '</ul>';
 
         container.innerHTML = html;
       }
 
-      // Delegated click handler for favorite stars (XSS-safe alternative to inline onclick)
+      // Delegated click handler for favorite removal
       document.getElementById('favorite-species').addEventListener('click', function (event) {
-        const star = event.target.closest('.favorite-star');
-        if (star && star.dataset.species) {
-          removeFavorite(star.dataset.species);
+        const btn = event.target.closest('.activity-action');
+        if (btn && btn.dataset.species) {
+          removeFavorite(btn.dataset.species);
         }
       });
 
@@ -454,6 +634,384 @@
           authManager.showMessage('Failed to remove favorite', 'error');
         }
       }
+
+      // ============================================
+      // Maintenance Timeline
+      // ============================================
+
+      async function loadMaintenanceTimeline() {
+        const timelineContainer = document.getElementById('maintenance-timeline');
+        const summaryEl = document.getElementById('maintenance-summary');
+        const quicklogSection = document.getElementById('timeline-quicklog');
+        const quicklogButtons = document.getElementById('timeline-quicklog-buttons');
+
+        // Get all tanks
+        const uid = window.getFirebaseUid?.();
+        if (!uid) return;
+
+        const profile = await window.firestoreGetProfile(uid);
+        const tanks = profile?.profile?.tanks || [];
+
+        if (tanks.length === 0) {
+          timelineContainer.innerHTML = `
+            <div class="maintenance-timeline-empty">
+              <p>Create a tank to start tracking maintenance</p>
+            </div>
+          `;
+          quicklogSection.style.display = 'none';
+          return;
+        }
+
+        // Collect all schedules across all tanks
+        const allSchedules = [];
+        for (const tank of tanks) {
+          try {
+            const schedules = await window.firestoreGetTankSchedules?.(uid, tank.id);
+            if (schedules) {
+              schedules.forEach(schedule => {
+                if (schedule.active !== false) {
+                  allSchedules.push({
+                    ...schedule,
+                    tankId: tank.id,
+                    tankName: tank.name,
+                  });
+                }
+              });
+            }
+          } catch (e) {
+            console.error('Error loading schedules for tank:', tank.id, e);
+          }
+        }
+
+        if (allSchedules.length === 0) {
+          timelineContainer.innerHTML = `
+            <div class="maintenance-timeline-empty">
+              <p>No maintenance scheduled</p>
+              <p style="font-size: 0.9rem; margin-top: 0.5rem;">Add schedules to your tanks to see upcoming tasks</p>
+            </div>
+          `;
+          summaryEl.textContent = '';
+          quicklogSection.style.display = 'none';
+          return;
+        }
+
+        // Sort by due date
+        allSchedules.sort((a, b) => new Date(a.nextDue) - new Date(b.nextDue));
+
+        // Group by time period
+        const today = [];
+        const thisWeek = [];
+        const later = [];
+        const now = new Date();
+        now.setHours(0, 0, 0, 0);
+
+        allSchedules.forEach(schedule => {
+          const dueDate = new Date(schedule.nextDue);
+          dueDate.setHours(0, 0, 0, 0);
+          const diffDays = Math.round((dueDate - now) / (1000 * 60 * 60 * 24));
+
+          if (diffDays <= 0) {
+            today.push({ ...schedule, diffDays });
+          } else if (diffDays <= 7) {
+            thisWeek.push({ ...schedule, diffDays });
+          } else {
+            later.push({ ...schedule, diffDays });
+          }
+        });
+
+        // Count tasks needing attention
+        const overdueCount = today.filter(s => s.diffDays < 0).length;
+        const dueTodayCount = today.filter(s => s.diffDays === 0).length;
+        const dueThisWeekCount = thisWeek.length;
+
+        // Update summary
+        if (overdueCount > 0) {
+          summaryEl.textContent = `${overdueCount} overdue`;
+          document.getElementById('dashboard-status').textContent =
+            `${overdueCount} task${overdueCount > 1 ? 's need' : ' needs'} attention`;
+          document.getElementById('dashboard-status').classList.add('needs-attention');
+        } else if (dueTodayCount > 0) {
+          summaryEl.textContent = `${dueTodayCount} due today`;
+        } else if (dueThisWeekCount > 0) {
+          summaryEl.textContent = `${dueThisWeekCount} this week`;
+        } else {
+          summaryEl.textContent = 'All clear';
+          document.getElementById('dashboard-status').textContent =
+            'Your aquariums are looking great';
+        }
+
+        // Build HTML
+        let html = '';
+
+        if (today.length > 0) {
+          html += `<div class="timeline-group">`;
+          html += `<div class="timeline-label">${overdueCount > 0 ? 'Overdue / Today' : 'Today'}</div>`;
+          today.forEach(schedule => {
+            html += renderMaintenanceTask(schedule);
+          });
+          html += `</div>`;
+        }
+
+        if (thisWeek.length > 0) {
+          html += `<div class="timeline-group">`;
+          html += `<div class="timeline-label">This Week</div>`;
+          thisWeek.forEach(schedule => {
+            html += renderMaintenanceTask(schedule);
+          });
+          html += `</div>`;
+        }
+
+        if (later.length > 0 && today.length + thisWeek.length < 5) {
+          html += `<div class="timeline-group">`;
+          html += `<div class="timeline-label">Later</div>`;
+          later.slice(0, 3).forEach(schedule => {
+            html += renderMaintenanceTask(schedule);
+          });
+          html += `</div>`;
+        }
+
+        timelineContainer.innerHTML = html;
+
+        // Show quick log section
+        quicklogSection.style.display = 'block';
+        quicklogButtons.innerHTML = `
+          <button class="quick-log-btn" onclick="openQuickLogModal('waterChange')">Water Change</button>
+          <button class="quick-log-btn" onclick="openQuickLogModal('parameterTest')">Parameter Test</button>
+          <button class="quick-log-btn" onclick="openQuickLogModal('filterMaintenance')">Filter</button>
+        `;
+      }
+
+      function renderMaintenanceTask(schedule) {
+        const statusClass =
+          schedule.diffDays < 0
+            ? 'overdue'
+            : schedule.diffDays === 0
+              ? 'approaching'
+              : schedule.diffDays <= 3
+                ? 'approaching'
+                : 'relaxed';
+
+        const typeInfo = window.maintenanceManager?.getEventTypeInfo(schedule.type) || {
+          label: schedule.type,
+        };
+
+        return `
+          <div class="maintenance-task-card">
+            <div class="maintenance-status-indicator ${statusClass}"></div>
+            <div class="task-info">
+              <span class="task-name">${escapeHTML(typeInfo.label)}</span>
+              <span class="task-tank">${escapeHTML(schedule.tankName)}</span>
+            </div>
+            <button class="task-complete-btn" onclick="completeScheduleFromTimeline('${schedule.id}', '${schedule.tankId}', '${schedule.type}')">
+              Done
+            </button>
+          </div>
+        `;
+      }
+
+      async function completeScheduleFromTimeline(scheduleId, tankId, type) {
+        await window.maintenanceManager?.markScheduleComplete(scheduleId, tankId, type);
+        // Reload timeline
+        await loadMaintenanceTimeline();
+        // Refresh tank display if visible
+        await window.tankManager?.loadTanks();
+      }
+
+      function openQuickLogModal(type) {
+        // Get first tank for quick log (or show tank selector if multiple)
+        const uid = window.getFirebaseUid?.();
+        if (!uid) return;
+
+        window.firestoreGetProfile(uid).then(profile => {
+          const tanks = profile?.profile?.tanks || [];
+          if (tanks.length === 0) {
+            alert('Create a tank first to log events');
+            return;
+          }
+          // Open event modal for first tank (could be enhanced to show tank selector)
+          window.maintenanceManager?.openEventModal(tanks[0].id, tanks[0].name, type);
+        });
+      }
+
+      // ============================================
+      // Tank Modal Functions
+      // ============================================
+
+      let currentModalTankId = null;
+
+      function openTankModal(tankId) {
+        currentModalTankId = tankId;
+        const backdrop = document.getElementById('tank-modal-backdrop');
+        backdrop.classList.add('active');
+        document.body.style.overflow = 'hidden';
+
+        // Load tank data
+        loadTankModalData(tankId);
+      }
+
+      function closeTankModal() {
+        const backdrop = document.getElementById('tank-modal-backdrop');
+        backdrop.classList.remove('active');
+        document.body.style.overflow = '';
+        currentModalTankId = null;
+      }
+
+      // Close on backdrop click
+      document.getElementById('tank-modal-backdrop').addEventListener('click', function (e) {
+        if (e.target === this) {
+          closeTankModal();
+        }
+      });
+
+      // Close on ESC
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && currentModalTankId) {
+          closeTankModal();
+        }
+      });
+
+      async function loadTankModalData(tankId) {
+        const uid = window.getFirebaseUid?.();
+        if (!uid) return;
+
+        const profile = await window.firestoreGetProfile(uid);
+        const tank = profile?.profile?.tanks?.find(t => t.id === tankId);
+        if (!tank) return;
+
+        // Set tank info
+        document.getElementById('tank-modal-name').textContent = tank.name || 'Untitled Tank';
+        document.getElementById('tank-modal-meta').textContent =
+          `${tank.size} gallons · ${tank.species?.length || 0} species`;
+
+        // Notes
+        const notesEl = document.getElementById('tank-modal-notes');
+        if (tank.notes && tank.notes.trim()) {
+          notesEl.textContent = tank.notes;
+          notesEl.style.display = 'block';
+        } else {
+          notesEl.style.display = 'none';
+        }
+
+        // Species mosaic
+        const mosaicEl = document.getElementById('tank-modal-mosaic');
+        const speciesListEl = document.getElementById('tank-modal-species');
+        if (tank.species && tank.species.length > 0) {
+          const images = tank.species
+            .slice(0, 6)
+            .map(key => fishDatabase[key]?.imageUrl)
+            .filter(url => url);
+
+          if (images.length <= 2) {
+            mosaicEl.className = 'tank-modal-mosaic single-image';
+            mosaicEl.innerHTML = images[0] ? `<img src="${images[0]}" alt="Tank species" />` : '';
+          } else {
+            mosaicEl.className = 'tank-modal-mosaic';
+            mosaicEl.innerHTML = images.map(url => `<img src="${url}" alt="Species" />`).join('');
+          }
+
+          // Species list
+          speciesListEl.innerHTML = tank.species
+            .map(key => {
+              const fish = fishDatabase[key];
+              if (!fish) return '';
+              return `
+              <li class="tank-modal-species-item">
+                ${fish.imageUrl ? `<img src="${fish.imageUrl}" alt="${escapeHTML(fish.commonName)}" />` : ''}
+                <span>${escapeHTML(fish.commonName)}</span>
+              </li>
+            `;
+            })
+            .join('');
+        } else {
+          mosaicEl.innerHTML = '<div class="tank-portrait-placeholder">No species added</div>';
+          speciesListEl.innerHTML =
+            '<li class="tank-modal-species-item"><span>No species added yet</span></li>';
+        }
+
+        // Quick log buttons
+        document.getElementById('tank-modal-quicklog-buttons').innerHTML = `
+          <button class="quick-log-btn" onclick="window.maintenanceManager.quickLogEvent('${tankId}', 'waterChange')">Water Change</button>
+          <button class="quick-log-btn" onclick="window.maintenanceManager.quickLogEvent('${tankId}', 'parameterTest')">Parameter Test</button>
+          <button class="quick-log-btn" onclick="window.maintenanceManager.quickLogEvent('${tankId}', 'filterMaintenance')">Filter</button>
+        `;
+
+        // Load schedules
+        const schedulesEl = document.getElementById('tank-modal-schedules');
+        try {
+          const schedules = await window.firestoreGetTankSchedules?.(uid, tankId);
+          if (schedules && schedules.length > 0) {
+            schedulesEl.innerHTML = schedules
+              .map(s => {
+                const typeInfo = window.maintenanceManager?.getEventTypeInfo(s.type) || {
+                  label: s.type,
+                };
+                const due = window.maintenanceManager?.formatDueDate(s.nextDue) || {
+                  text: 'Unknown',
+                  class: '',
+                };
+                return `
+                <div class="schedule-pill ${due.class}">
+                  <span class="schedule-name">${escapeHTML(typeInfo.label)}</span>
+                  <span class="schedule-due">${due.text}</span>
+                </div>
+              `;
+              })
+              .join('');
+          } else {
+            schedulesEl.innerHTML =
+              '<p style="color: var(--ink-tertiary); font-size: 0.9rem;">No schedules set</p>';
+          }
+        } catch (e) {
+          schedulesEl.innerHTML =
+            '<p style="color: var(--ink-tertiary);">Unable to load schedules</p>';
+        }
+
+        // Load events
+        const eventsEl = document.getElementById('tank-modal-events');
+        try {
+          const events = await window.firestoreGetTankEvents?.(uid, tankId, 5);
+          if (events && events.length > 0) {
+            eventsEl.innerHTML = events
+              .map(e => {
+                const typeInfo = window.maintenanceManager?.getEventTypeInfo(e.type) || {
+                  label: e.type,
+                };
+                const dateStr = window.maintenanceManager?.formatDate(e.date) || 'Unknown';
+                return `
+                <div class="event-item">
+                  <div class="event-info">
+                    <span class="event-type">${escapeHTML(typeInfo.label)}</span>
+                    <span class="event-date">${dateStr}</span>
+                    ${e.notes ? `<span class="event-notes">${escapeHTML(e.notes)}</span>` : ''}
+                  </div>
+                </div>
+              `;
+              })
+              .join('');
+          } else {
+            eventsEl.innerHTML =
+              '<p style="color: var(--ink-tertiary); font-size: 0.9rem;">No recent activity</p>';
+          }
+        } catch (e) {
+          eventsEl.innerHTML = '<p style="color: var(--ink-tertiary);">Unable to load events</p>';
+        }
+
+        // Edit/Delete buttons
+        document.getElementById('tank-modal-edit-btn').onclick = () => {
+          closeTankModal();
+          window.tankManager.editTank(tankId);
+        };
+        document.getElementById('tank-modal-delete-btn').onclick = () => {
+          closeTankModal();
+          window.tankManager.deleteTank(tankId);
+        };
+      }
+
+      // Make functions globally available
+      window.openTankModal = openTankModal;
+      window.closeTankModal = closeTankModal;
+      window.loadTankModalData = loadTankModalData;
+      window.loadMaintenanceTimeline = loadMaintenanceTimeline;
 
       // ============================================
       // Notification Functions
