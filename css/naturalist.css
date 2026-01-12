@@ -3426,6 +3426,22 @@ p {
   margin-top: 0.25rem;
 }
 
+.glossary-hero-cta {
+  margin-top: 1.5rem;
+  font-size: 0.95rem;
+  color: var(--ink-secondary);
+}
+
+.glossary-hero-cta a {
+  color: var(--forest);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.glossary-hero-cta a:hover {
+  color: var(--ink);
+}
+
 /* Glossary Container */
 .glossary-container {
   max-width: 1200px;
@@ -3940,6 +3956,20 @@ p {
 
 .modal-actions .btn-ghost:hover {
   background: var(--success-bg);
+}
+
+.modal-report-link {
+  display: block;
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  color: var(--ink-tertiary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-align: center;
+}
+
+.modal-report-link:hover {
+  color: var(--forest);
 }
 
 /* Toast Notification */

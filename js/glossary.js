@@ -1537,9 +1537,11 @@ class GlossaryManager {
 
     // Set actions
     if (modalActions) {
+      const reportUrl = `mailto:admin@comparium.net?subject=Error%20Report%3A%20${encodeURIComponent(fish.commonName)}&body=Species%3A%20${encodeURIComponent(fish.commonName)}%0AError%20Description%3A%20`;
       modalActions.innerHTML = `
         <a href="species.html?fish=${encodeURIComponent(fishKey)}" class="btn btn-primary">View Full Profile</a>
         <button class="btn btn-ghost" onclick="addToCompare('${fishKey}')">Add to Compare</button>
+        <a href="${reportUrl}" class="modal-report-link">Report an error</a>
       `;
     }
 
@@ -1608,21 +1610,18 @@ function searchGlossary() {
 }
 
 /**
- * Show contribution information
+ * Show contribution information - opens email with pre-filled template
  */
 function showContributeInfo() {
-  if (window.authManager && !window.authManager.isLoggedIn()) {
-    window.authManager.showMessage('Please log in to contribute to the glossary', 'info');
-    setTimeout(() => {
-      window.location.href = 'login.html';
-    }, 2000);
-    return;
-  }
+  const email = 'admin@comparium.net';
+  const subject = 'Species Suggestion';
+  const body = `Species Name:
+Scientific Name:
+Care Level:
+Origin:
+Additional Info: `;
 
-  // Future: Open contribution form
-  alert(
-    'Contribution feature coming soon! This will allow logged-in users to submit glossary entries for review. All contributions will be stored in Firestore and reviewed by the Comparium team before being published.'
-  );
+  window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
 
 /**
