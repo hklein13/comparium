@@ -451,14 +451,19 @@ window.maintenanceManager = {
   },
 
   /**
-   * Refresh the maintenance section of a tank card
+   * Refresh maintenance displays after an event is logged
+   * Updates the timeline and any open tank modal
    */
   async refreshTankMaintenance(tankId) {
-    const maintenanceSection = document.getElementById(`tank-maintenance-${tankId}`);
-    if (!maintenanceSection) return;
+    // Refresh the dashboard timeline if the function exists
+    if (typeof window.loadMaintenanceTimeline === 'function') {
+      await window.loadMaintenanceTimeline();
+    }
 
-    const events = await this.loadTankEvents(tankId);
-    this.renderRecentEvents(maintenanceSection.querySelector('.recent-events'), events, tankId);
+    // Refresh tank modal if it's open for this tank
+    if (typeof window.loadTankModalData === 'function' && window.currentModalTankId === tankId) {
+      await window.loadTankModalData(tankId);
+    }
   },
 
   /**
@@ -829,14 +834,18 @@ window.maintenanceManager = {
 
   /**
    * Refresh schedules display for a tank
+   * Updates the timeline and any open tank modal
    */
   async refreshTankSchedules(tankId) {
-    const schedulesContainer = document.getElementById(`tank-schedules-${tankId}`);
-    if (!schedulesContainer) return;
+    // Refresh the dashboard timeline
+    if (typeof window.loadMaintenanceTimeline === 'function') {
+      await window.loadMaintenanceTimeline();
+    }
 
-    const schedules = await this.loadTankSchedules(tankId);
-    const tankName = schedulesContainer.dataset.tankName || 'Tank';
-    this.renderSchedulePills(schedulesContainer, schedules, tankId, tankName);
+    // Refresh tank modal if it's open for this tank
+    if (typeof window.loadTankModalData === 'function' && window.currentModalTankId === tankId) {
+      await window.loadTankModalData(tankId);
+    }
   },
 
   /**

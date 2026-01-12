@@ -15,6 +15,13 @@ import {
   onMessage,
   isSupported,
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging.js';
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  deleteObject,
+} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
 
 // NOTE: Keep the same config that's currently in index.html
 const firebaseConfig = {
@@ -34,11 +41,13 @@ try {
   const analytics = getAnalytics(app);
   window.firebaseAnalytics = analytics;
 } catch (e) {
-  // Analytics may error in local file:// contexts; ignore}
+  // Analytics may error in local file:// contexts; ignore
+}
 
-// Auth and Firestore
+// Auth, Firestore, and Storage
 const auth = getAuth(app);
 const firestore = getFirestore(app);
+const storage = getStorage(app);
 
 // ============================================================================
 // FIREBASE CLOUD MESSAGING (FCM) - Push Notifications
@@ -53,18 +62,23 @@ let messaging = null;
 async function initializeMessaging() {
   try {
     const supported = await isSupported();
-    if (!supported) {return false;
+    if (!supported) {
+      return false;
     }
 
     // CRITICAL: Register service worker before getting messaging
     if ('serviceWorker' in navigator) {
       try {
-        await navigator.serviceWorker.register('/firebase-messaging-sw.js');} catch (swError) {// Continue anyway - might already be registered
+        await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+      } catch (swError) {
+        // Continue anyway - might already be registered
       }
     }
 
-    messaging = getMessaging(app);return true;
-  } catch (e) {return false;
+    messaging = getMessaging(app);
+    return true;
+  } catch (e) {
+    return false;
   }
 }
 
@@ -90,6 +104,7 @@ onAuthStateChanged(auth, user => {
 window.firebaseApp = app;
 window.firebaseAuth = auth;
 window.firebaseFirestore = firestore;
+window.firebaseStorage = storage;
 window.firebaseSignIn = signInWithEmailAndPassword;
 window.firebaseSignUp = createUserWithEmailAndPassword;
 window.firebaseSignOut = signOut;
@@ -123,7 +138,8 @@ window.firestoreGetProfile = async uid => {
     const ref = doc(firestore, 'users', uid);
     const snap = await getDoc(ref);
     return snap.exists() ? snap.data() : null;
-  } catch (e) {return null;
+  } catch (e) {
+    return null;
   }
 };
 
@@ -137,7 +153,8 @@ window.firestoreGetProfileByEmail = async email => {
       return docSnap.data();
     }
     return null;
-  } catch (e) {return null;
+  } catch (e) {
+    return null;
   }
 };
 
@@ -147,7 +164,8 @@ window.firestoreSetProfile = async (uid, data) => {
     const ref = doc(firestore, 'users', uid);
     await setDoc(ref, data, { merge: true });
     return true;
-  } catch (e) {return false;
+  } catch (e) {
+    return false;
   }
 };
 
@@ -157,7 +175,8 @@ window.firestoreUpdateProfile = async (uid, updates) => {
     const ref = doc(firestore, 'users', uid);
     await updateDoc(ref, updates);
     return true;
-  } catch (e) {return false;
+  } catch (e) {
+    return false;
   }
 };
 
@@ -167,7 +186,8 @@ window.firestoreAddComparison = async (uid, comparison) => {
   try {
     await updateDoc(ref, { 'profile.comparisonHistory': arrayUnion(record) });
     return { success: true, id: record.id };
-  } catch (e) {return { success: false };
+  } catch (e) {
+    return { success: false };
   }
 };
 
@@ -175,7 +195,8 @@ window.firestoreGetComparisons = async uid => {
   try {
     const profile = await window.firestoreGetProfile(uid);
     return profile?.profile?.comparisonHistory || [];
-  } catch (e) {return [];
+  } catch (e) {
+    return [];
   }
 };
 
@@ -184,7 +205,8 @@ window.firestoreAddFavorite = async (uid, speciesKey) => {
   try {
     await updateDoc(ref, { 'profile.favoriteSpecies': arrayUnion(speciesKey) });
     return { success: true };
-  } catch (e) {return { success: false };
+  } catch (e) {
+    return { success: false };
   }
 };
 
@@ -193,7 +215,8 @@ window.firestoreRemoveFavorite = async (uid, speciesKey) => {
   try {
     await updateDoc(ref, { 'profile.favoriteSpecies': arrayRemove(speciesKey) });
     return { success: true };
-  } catch (e) {return { success: false };
+  } catch (e) {
+    return { success: false };
   }
 };
 
@@ -201,7 +224,8 @@ window.firestoreGetFavorites = async uid => {
   try {
     const profile = await window.firestoreGetProfile(uid);
     return profile?.profile?.favoriteSpecies || [];
-  } catch (e) {return [];
+  } catch (e) {
+    return [];
   }
 };
 
@@ -212,15 +236,24 @@ window.firestoreSaveTank = async (uid, tank) => {
     profile.profile.tanks = profile.profile.tanks || [];
     if (tank.id) {
       const index = profile.profile.tanks.findIndex(t => t.id === tank.id);
-      if (index !== -1) profile.profile.tanks[index] = tank;
+      if (index !== -1) {
+        // Update existing tank
+        profile.profile.tanks[index] = tank;
+      } else {
+        // New tank with pre-generated ID (e.g., for photo upload)
+        tank.created = tank.created || new Date().toISOString();
+        profile.profile.tanks.push(tank);
+      }
     } else {
+      // New tank without pre-generated ID
       tank.id = Date.now().toString();
       tank.created = new Date().toISOString();
       profile.profile.tanks.push(tank);
     }
     await setDoc(ref, profile, { merge: true });
     return { success: true, tankId: tank.id };
-  } catch (e) {return { success: false };
+  } catch (e) {
+    return { success: false };
   }
 };
 
@@ -228,7 +261,8 @@ window.firestoreGetTanks = async uid => {
   try {
     const profile = await window.firestoreGetProfile(uid);
     return profile?.profile?.tanks || [];
-  } catch (e) {return [];
+  } catch (e) {
+    return [];
   }
 };
 
@@ -239,7 +273,8 @@ window.firestoreDeleteTank = async (uid, tankId) => {
     profile.profile.tanks = (profile.profile.tanks || []).filter(t => t.id !== tankId);
     await setDoc(ref, profile, { merge: true });
     return { success: true };
-  } catch (e) {return { success: false };
+  } catch (e) {
+    return { success: false };
   }
 };
 
@@ -254,7 +289,8 @@ window.firestoreExportUserData = async uid => {
       profile: profile.profile,
       exportDate: new Date().toISOString(),
     };
-  } catch (e) {return null;
+  } catch (e) {
+    return null;
   }
 };
 
@@ -265,7 +301,8 @@ window.firestoreImportUserData = async (uid, importData) => {
     base.profile = { ...base.profile, ...(importData.profile || {}) };
     await setDoc(ref, base, { merge: true });
     return { success: true };
-  } catch (e) {return { success: false };
+  } catch (e) {
+    return { success: false };
   }
 };
 
@@ -293,7 +330,8 @@ window.firestoreAddTankEvent = async (uid, eventData) => {
     };
     const ref = await addDoc(collection(firestore, 'tankEvents'), event);
     return { success: true, eventId: ref.id };
-  } catch (e) {return { success: false };
+  } catch (e) {
+    return { success: false };
   }
 };
 
@@ -322,7 +360,8 @@ window.firestoreGetTankEvents = async (uid, tankId, maxResults = 50) => {
       date: d.data().date?.toDate?.()?.toISOString() || d.data().date,
       created: d.data().created?.toDate?.()?.toISOString() || d.data().created,
     }));
-  } catch (e) {return [];
+  } catch (e) {
+    return [];
   }
 };
 
@@ -348,7 +387,8 @@ window.firestoreGetAllUserEvents = async (uid, maxResults = 100) => {
       date: d.data().date?.toDate?.()?.toISOString() || d.data().date,
       created: d.data().created?.toDate?.()?.toISOString() || d.data().created,
     }));
-  } catch (e) {return [];
+  } catch (e) {
+    return [];
   }
 };
 
@@ -369,7 +409,8 @@ window.firestoreDeleteTankEvent = async (uid, eventId) => {
     }
     await deleteDoc(eventRef);
     return { success: true };
-  } catch (e) {return { success: false };
+  } catch (e) {
+    return { success: false };
   }
 };
 
@@ -429,7 +470,8 @@ window.firestoreSaveTankSchedule = async (uid, scheduleData) => {
       const ref = await addDoc(collection(firestore, 'tankSchedules'), schedule);
       return { success: true, scheduleId: ref.id };
     }
-  } catch (e) {return { success: false };
+  } catch (e) {
+    return { success: false };
   }
 };
 
@@ -462,7 +504,8 @@ window.firestoreGetTankSchedules = async (uid, tankId) => {
         },
       };
     });
-  } catch (e) {return [];
+  } catch (e) {
+    return [];
   }
 };
 
@@ -505,7 +548,8 @@ window.firestoreGetAllUserSchedules = async (uid, enabledOnly = false) => {
         },
       };
     });
-  } catch (e) {return [];
+  } catch (e) {
+    return [];
   }
 };
 
@@ -540,7 +584,8 @@ window.firestoreCompleteSchedule = async (uid, scheduleId, completedDate = new D
     });
 
     return { success: true };
-  } catch (e) {return { success: false };
+  } catch (e) {
+    return { success: false };
   }
 };
 
@@ -562,7 +607,8 @@ window.firestoreDeleteTankSchedule = async (uid, scheduleId) => {
 
     await deleteDoc(scheduleRef);
     return { success: true };
-  } catch (e) {return { success: false };
+  } catch (e) {
+    return { success: false };
   }
 };
 
@@ -581,7 +627,8 @@ window.firestoreUsernameExists = async username => {
     const ref = doc(firestore, 'usernames', username);
     const snap = await getDoc(ref);
     return { error: false, exists: snap.exists() };
-  } catch (e) {return { error: true, exists: false };
+  } catch (e) {
+    return { error: true, exists: false };
   }
 };
 
@@ -602,7 +649,8 @@ window.firestoreCreateUsername = async (username, uid, email) => {
       created: new Date().toISOString(),
     });
     return true;
-  } catch (e) {return false;
+  } catch (e) {
+    return false;
   }
 };
 
@@ -621,7 +669,8 @@ window.firestoreGetUidByUsername = async username => {
       return { uid: data.uid, email: data.email };
     }
     return null;
-  } catch (e) {return null;
+  } catch (e) {
+    return null;
   }
 };
 
@@ -636,7 +685,8 @@ window.firestoreDeleteUsername = async username => {
     const ref = doc(firestore, 'usernames', username);
     await deleteDoc(ref);
     return true;
-  } catch (e) {return false;
+  } catch (e) {
+    return false;
   }
 };
 
@@ -659,7 +709,8 @@ window.firestoreGetNotifications = async (uid, maxResults = 20) => {
     );
     const snap = await getDocs(q);
     return snap.docs.map(d => ({ id: d.id, ...d.data() }));
-  } catch (e) {return [];
+  } catch (e) {
+    return [];
   }
 };
 
@@ -672,7 +723,8 @@ window.firestoreMarkNotificationRead = async notificationId => {
     const ref = doc(firestore, 'notifications', notificationId);
     await updateDoc(ref, { read: true });
     return true;
-  } catch (e) {return false;
+  } catch (e) {
+    return false;
   }
 };
 
@@ -707,7 +759,8 @@ window.fcmRequestPermission = async uid => {
     }
   }
 
-  if (!VAPID_KEY) {return { success: false, error: 'Push notifications not configured' };
+  if (!VAPID_KEY) {
+    return { success: false, error: 'Push notifications not configured' };
   }
 
   try {
@@ -727,8 +780,10 @@ window.fcmRequestPermission = async uid => {
     const saved = await window.fcmSaveToken(uid, token);
     if (!saved) {
       return { success: false, error: 'Failed to save notification token' };
-    }return { success: true, token };
-  } catch (e) {return { success: false, error: e.message };
+    }
+    return { success: true, token };
+  } catch (e) {
+    return { success: false, error: e.message };
   }
 };
 
@@ -740,7 +795,8 @@ window.fcmRequestPermission = async uid => {
  * @returns {Promise<boolean>}
  */
 window.fcmSaveToken = async (uid, token) => {
-  if (!firestore || !uid || !token) {return false;
+  if (!firestore || !uid || !token) {
+    return false;
   }
   try {
     // Create a simple hash of the token for the document ID
@@ -757,8 +813,10 @@ window.fcmSaveToken = async (uid, token) => {
       valid: true,
     };
 
-    await setDoc(doc(firestore, 'fcmTokens', tokenHash), tokenDoc);return true;
-  } catch (e) {return false;
+    await setDoc(doc(firestore, 'fcmTokens', tokenHash), tokenDoc);
+    return true;
+  } catch (e) {
+    return false;
   }
 };
 
@@ -777,7 +835,8 @@ window.fcmGetUserTokens = async uid => {
     );
     const snap = await getDocs(q);
     return snap.docs.map(d => ({ id: d.id, ...d.data() }));
-  } catch (e) {return [];
+  } catch (e) {
+    return [];
   }
 };
 
@@ -798,7 +857,8 @@ window.fcmDisableNotifications = async uid => {
     );
     const snap = await getDocs(q);
 
-    if (snap.empty) {return true; // Nothing to disable, consider it success
+    if (snap.empty) {
+      return true; // Nothing to disable, consider it success
     }
 
     // Mark all tokens as invalid
@@ -807,7 +867,8 @@ window.fcmDisableNotifications = async uid => {
     }
 
     return true;
-  } catch (e) {return false;
+  } catch (e) {
+    return false;
   }
 };
 
@@ -828,7 +889,8 @@ window.fcmIsEnabled = async uid => {
     );
     const snap = await getDocs(q);
     return !snap.empty;
-  } catch (e) {return false;
+  } catch (e) {
+    return false;
   }
 };
 
@@ -840,7 +902,8 @@ window.fcmIsEnabled = async uid => {
 window.fcmSetupForegroundHandler = callback => {
   if (!messaging) return;
 
-  onMessage(messaging, payload => {// Show browser notification
+  onMessage(messaging, payload => {
+    // Show browser notification
     if (Notification.permission === 'granted') {
       const title = payload.notification?.title || 'Comparium';
       const body = payload.notification?.body || 'You have a new notification';
@@ -902,4 +965,73 @@ function detectBrowser() {
   return 'unknown';
 }
 
-export { app, auth, firestore, messaging };
+// ============================================================================
+// FIREBASE STORAGE - Tank Photo Uploads
+// ============================================================================
+
+/**
+ * Upload a tank cover photo to Firebase Storage
+ * @param {string} tankId - Tank ID (used as filename)
+ * @param {File} file - Image file to upload
+ * @returns {Promise<{success: boolean, url?: string, error?: string}>}
+ */
+window.storageUploadTankPhoto = async (tankId, file) => {
+  if (!storage || !tankId || !file) {
+    return { success: false, error: 'Missing required parameters' };
+  }
+
+  // Validate file type
+  const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
+  if (!validTypes.includes(file.type)) {
+    return { success: false, error: 'Invalid file type. Please use JPEG, PNG, or WebP.' };
+  }
+
+  // Validate file size (max 5MB)
+  const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+  if (file.size > maxSize) {
+    return { success: false, error: 'File too large. Maximum size is 5MB.' };
+  }
+
+  try {
+    // Create storage reference
+    const storageRef = ref(storage, `images/tanks/${tankId}.jpg`);
+
+    // Upload file
+    const snapshot = await uploadBytes(storageRef, file, {
+      contentType: file.type,
+      cacheControl: 'public, max-age=31536000', // 1-year cache
+    });
+
+    // Get download URL
+    const url = await getDownloadURL(snapshot.ref);
+
+    return { success: true, url };
+  } catch (e) {
+    return { success: false, error: e.message || 'Upload failed' };
+  }
+};
+
+/**
+ * Delete a tank cover photo from Firebase Storage
+ * @param {string} tankId - Tank ID (filename without extension)
+ * @returns {Promise<{success: boolean, error?: string}>}
+ */
+window.storageDeleteTankPhoto = async tankId => {
+  if (!storage || !tankId) {
+    return { success: false, error: 'Missing tank ID' };
+  }
+
+  try {
+    const storageRef = ref(storage, `images/tanks/${tankId}.jpg`);
+    await deleteObject(storageRef);
+    return { success: true };
+  } catch (e) {
+    // If file doesn't exist, consider it a success (nothing to delete)
+    if (e.code === 'storage/object-not-found') {
+      return { success: true };
+    }
+    return { success: false, error: e.message || 'Delete failed' };
+  }
+};
+
+export { app, auth, firestore, storage, messaging };
