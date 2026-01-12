@@ -8,7 +8,7 @@
     <title>Species Glossary | Comparium - Aquarium Fish Encyclopedia</title>
     <meta
       name="description"
-      content="Comprehensive aquarium glossary covering 143+ fish species. Search and learn about freshwater fish care, compatibility, and requirements."
+      content="Comprehensive aquarium glossary covering 246 fish species. Search and learn about freshwater fish care, compatibility, and requirements."
     />
     <meta
       name="keywords"
@@ -22,7 +22,7 @@
     <meta property="og:title" content="Species Glossary | Comparium" />
     <meta
       property="og:description"
-      content="Browse 143+ freshwater fish species. Detailed care guides, compatibility info, and water parameters."
+      content="Browse 246 freshwater fish species. Detailed care guides, compatibility info, and water parameters."
     />
 
     <!-- Twitter -->
@@ -31,7 +31,7 @@
     <meta property="twitter:title" content="Species Glossary | Comparium" />
     <meta
       property="twitter:description"
-      content="Browse 143+ freshwater fish species. Detailed care guides, compatibility info, and water parameters."
+      content="Browse 246 freshwater fish species. Detailed care guides, compatibility info, and water parameters."
     />
 
     <!-- Favicon -->
@@ -76,38 +76,87 @@
       </nav>
     </header>
 
-    <div class="glossary-container">
-      <div class="glossary-header">
-        <h1>Encyclopedia</h1>
-        <p>Browse our collection of 143+ freshwater fish species with detailed care guides</p>
-      </div>
-
-      <div class="glossary-search">
-        <div class="search-box">
-          <input
-            type="text"
-            id="glossarySearch"
-            placeholder="Search species by name, care level, or temperament..."
-            oninput="searchGlossary()"
-          />
+    <!-- Glossary Hero Section -->
+    <section class="glossary-hero">
+      <h1>Encyclopedia</h1>
+      <p class="glossary-hero-subtitle">Explore our growing collection of aquarium information</p>
+      <div class="glossary-stats">
+        <div class="stat-item">
+          <span class="stat-number">246</span>
+          <span class="stat-label">Species</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">27</span>
+          <span class="stat-label">Diseases</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">6</span>
+          <span class="stat-label">Equipment</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">14</span>
+          <span class="stat-label">Terms</span>
         </div>
       </div>
+    </section>
 
-      <div class="glossary-categories" id="glossaryCategories">
+    <div class="glossary-container">
+      <!-- Category Cards -->
+      <div class="category-cards" id="glossaryCategories">
         <!-- Categories will be populated by JavaScript -->
       </div>
 
+      <!-- Controls: Search + Sort -->
+      <div class="glossary-controls">
+        <div class="glossary-search-wrapper">
+          <input
+            type="text"
+            class="glossary-search-input"
+            id="glossarySearch"
+            placeholder="Search by name..."
+            oninput="searchGlossary()"
+          />
+        </div>
+        <div class="glossary-sort-wrapper">
+          <select class="sort-dropdown" id="sortDropdown" onchange="sortGlossary()">
+            <option value="name-asc">Name (A-Z)</option>
+            <option value="name-desc">Name (Z-A)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Origin Filters (species only) -->
       <div class="origin-filters" id="originFilters">
         <!-- Origin filter chips will be populated by JavaScript -->
       </div>
 
+      <!-- Content Grid -->
       <div class="glossary-content" id="glossaryContent">
         <div class="empty-state">
           <h3>Select a category above to browse</h3>
-          <p>Or use the search bar to find specific species</p>
+          <p>Or use the search bar to find specific entries</p>
         </div>
       </div>
     </div>
+
+    <!-- Species Modal -->
+    <div class="species-modal-backdrop" id="speciesModal" onclick="closeSpeciesModal()">
+      <div class="species-modal" onclick="event.stopPropagation()">
+        <button class="modal-close" onclick="closeSpeciesModal()">&times;</button>
+        <div class="modal-image" id="modalImage"></div>
+        <div class="modal-content">
+          <h2 class="modal-title" id="modalTitle"></h2>
+          <p class="modal-scientific" id="modalScientific"></p>
+          <div class="modal-tags" id="modalTags"></div>
+          <p class="modal-description" id="modalDescription"></p>
+          <div class="modal-stats" id="modalStats"></div>
+          <div class="modal-actions" id="modalActions"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
 
     <!-- Footer -->
     <footer class="footer">

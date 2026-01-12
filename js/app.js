@@ -32,6 +32,7 @@ function initializeApp() {
 /**
  * Load comparison from URL parameters
  * URL format: compare.html?species=neonTetra,cardinalTetra,cherryBarb
+ * Also supports single species: compare.html?species=neonTetra (pre-selects in slot 1)
  */
 function loadComparisonFromUrl() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -41,32 +42,23 @@ function loadComparisonFromUrl() {
 
   const speciesKeys = speciesParam.split(',').filter(key => fishDatabase[key]);
 
-  if (speciesKeys.length < 2) {
-    return;
-  }
+  if (speciesKeys.length === 0) return;
 
-  // Auto-select the species (max 3)
-  const panels = ['panel1', 'panel2', 'panel3'];
+  // Pre-select each species in order (panels 1, 2, 3)
   speciesKeys.slice(0, 3).forEach((key, index) => {
-    selectedSpecies[panels[index]] = key;
-
-    // Visual selection - find and highlight the item
-    const panel = document.getElementById(panels[index]);
-    if (panel) {
-      const item = panel.querySelector(`[data-key="${key}"]`);
-      if (item) {
-        item.classList.add('selected');
-        // Open the parent details element
-        const details = item.closest('.category-details');
-        if (details) details.setAttribute('open', '');
-      }
-    }
+    const panelId = 'panel' + (index + 1);
+    selectedSpecies[panelId] = key;
+    updateSelectorPreview(panelId, key);
   });
 
-  // Run the comparison after a brief delay for DOM updates
-  setTimeout(() => {
-    compareSpecies();
-  }, 100);
+  updateSelectionStatus();
+
+  // Only auto-compare if 2+ species
+  if (speciesKeys.length >= 2) {
+    setTimeout(() => {
+      compareSpecies();
+    }, 100);
+  }
 }
 
 function showAppErrorState(message) {

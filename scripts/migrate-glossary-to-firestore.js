@@ -189,6 +189,14 @@ function generateFishDescription(key, fish, descriptions) {
 }
 
 function generateGlossaryEntry(key, fish, descriptions = {}) {
+  // Normalize care level for sorting (beginner, intermediate, advanced)
+  let normalizedCareLevel = 'intermediate';
+  if (fish.careLevel === 'Very Easy' || fish.careLevel === 'Easy') {
+    normalizedCareLevel = 'beginner';
+  } else if (fish.careLevel === 'Difficult' || fish.careLevel === 'Very Difficult') {
+    normalizedCareLevel = 'advanced';
+  }
+
   return {
     id: toKebabCase(key),
     fishKey: key, // Original camelCase key for fishDatabase lookups and species.html links
@@ -198,6 +206,7 @@ function generateGlossaryEntry(key, fish, descriptions = {}) {
     imageUrl: fish.imageUrl || null,
     origin: fish.origin || null,
     originDisplayName: fish.origin ? getOriginDisplayName(fish.origin) : null,
+    careLevel: normalizedCareLevel, // For sorting: beginner, intermediate, advanced
     tags: generateFishTags(fish),
     category: 'species',
     author: 'System',
