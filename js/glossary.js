@@ -10,6 +10,7 @@ class GlossaryManager {
     this.currentCategory = null;
     this.searchTerm = '';
     this.currentOriginFilter = null; // Filter by continent/origin
+    this.currentSort = 'name-asc'; // Default sort
     this.glossaryData = this.initializeGlossaryData();
     this.categories = this.initializeCategories();
 
@@ -1014,12 +1015,12 @@ class GlossaryManager {
       .map(category => {
         const count = (this.glossaryData[category.id] || []).length;
         const activeClass = this.currentCategory === category.id ? 'active' : '';
+        const countLabel = count === 1 ? 'entry' : 'entries';
 
         return `
                 <div class="category-card ${activeClass}" onclick="glossaryManager.selectCategory('${category.id}')">
-                    <div class="category-icon">${category.icon}</div>
-                    <div class="category-title">${category.title}</div>
-                    <div class="category-count">${count} entries</div>
+                    <span class="category-card-name">${category.title}</span>
+                    <span class="category-card-count">${count} ${countLabel}</span>
                 </div>
             `;
       })
@@ -1116,8 +1117,8 @@ class GlossaryManager {
     // Load data (from Firestore in the future)
     const entries = await this.loadFromFirestore(this.currentCategory);
 
-    // Filter based on search term
-    const filteredEntries = this.filterEntries(entries);
+    // Filter and sort entries
+    const filteredEntries = this.sortEntries(this.filterEntries(entries));
 
     if (!this.currentCategory && !this.searchTerm) {
       // Show empty state
@@ -1186,73 +1187,18 @@ class GlossaryManager {
       paginationInfo = `<p class="pagination-info">Showing ${startNum}-${endNum} of ${totalEntries} entries</p>`;
     }
 
+    // Use grid layout for species, items layout for others
+    const layoutClass = this.currentCategory === 'species' ? 'glossary-grid' : 'glossary-items';
+
     // Render entries with pagination
     container.innerHTML = `
             <h2 class="section-title">${categoryTitle}</h2>
             ${paginationInfo}
-            <div class="glossary-items">
+            <div class="${layoutClass}">
                 ${entriesToShow.map(entry => this.renderEntry(entry)).join('')}
             </div>
             ${usePagination && totalPages > 1 ? this.renderPagination(totalPages) : ''}
         `;
-  }
-
-  /**
-   * Render species grouped by origin with section headers
-   * @param {Array} entries - Species entries to render
-   * @returns {string} HTML string
-   */
-  renderGroupedByOrigin(entries) {
-    // Group entries by origin
-    const grouped = {};
-    this.originOptions.forEach(opt => (grouped[opt.key] = []));
-    grouped.unknown = []; // For entries without origin
-
-    entries.forEach(entry => {
-      if (entry.origin && grouped[entry.origin]) {
-        grouped[entry.origin].push(entry);
-      } else {
-        grouped.unknown.push(entry);
-      }
-    });
-
-    // Build HTML for each group
-    let html = '<h2 class="section-title">Species</h2>';
-
-    this.originOptions.forEach(opt => {
-      const groupEntries = grouped[opt.key];
-      if (groupEntries.length === 0) return;
-
-      html += `
-        <div class="origin-section" data-origin="${opt.key}">
-          <div class="origin-section-header">
-            <span class="origin-section-dot"></span>
-            <h3 class="origin-section-title">${opt.label}</h3>
-            <span class="origin-section-count">${groupEntries.length} species</span>
-          </div>
-          <div class="glossary-items">
-            ${groupEntries.map(entry => this.renderEntry(entry)).join('')}
-          </div>
-        </div>
-      `;
-    });
-
-    // Add unknown origin entries at the end if any
-    if (grouped.unknown.length > 0) {
-      html += `
-        <div class="origin-section" data-origin="unknown">
-          <div class="origin-section-header">
-            <h3 class="origin-section-title">Other</h3>
-            <span class="origin-section-count">${grouped.unknown.length} species</span>
-          </div>
-          <div class="glossary-items">
-            ${grouped.unknown.map(entry => this.renderEntry(entry)).join('')}
-          </div>
-        </div>
-      `;
-    }
-
-    return html;
   }
 
   /**
@@ -1338,6 +1284,28 @@ class GlossaryManager {
    * @returns {string}
    */
   renderEntry(entry) {
+    const fishKey = entry.fishKey || entry.id;
+    const isSpecies =
+      entry.category === 'species' && typeof fishDatabase !== 'undefined' && fishDatabase[fishKey];
+
+    // For species entries, render as a card that opens modal
+    if (isSpecies) {
+      const imageHtml = entry.imageUrl
+        ? `<div class="glossary-card-image"><img src="${entry.imageUrl}" alt="${entry.title}" loading="lazy"></div>`
+        : `<div class="glossary-card-image"></div>`;
+
+      return `
+        <div class="glossary-card" onclick="glossaryManager.openSpeciesModal('${fishKey}')">
+          ${imageHtml}
+          <div class="glossary-card-content">
+            <div class="glossary-card-title">${entry.title}</div>
+            <div class="glossary-card-subtitle">${entry.scientificName || ''}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    // For non-species entries, use original detailed layout
     const scientificName = entry.scientificName
       ? `<div class="glossary-item-meta">${entry.scientificName}</div>`
       : '';
@@ -1353,34 +1321,16 @@ class GlossaryManager {
                </div>`
         : '';
 
-    // Build origin badge for species entries (shown below scientific name)
-    const originBadge =
-      entry.category === 'species' && entry.origin && entry.originDisplayName
-        ? `<span class="origin-badge origin-badge-inline" data-origin="${entry.origin}">${entry.originDisplayName}</span>`
-        : '';
-
-    // Build image (no badge overlay)
     const imageHtml = entry.imageUrl
       ? `<img src="${entry.imageUrl}" alt="${entry.title}" class="glossary-item-image" loading="lazy">`
       : '';
-
-    // For species entries, make the title a clickable link to the species detail page
-    // Use entry.fishKey (camelCase) for fishDatabase lookup and URL, not entry.id (kebab-case)
-    const fishKey = entry.fishKey || entry.id;
-    const isSpeciesWithDetailPage =
-      entry.category === 'species' && typeof fishDatabase !== 'undefined' && fishDatabase[fishKey];
-
-    const titleContent = isSpeciesWithDetailPage
-      ? `<a href="species.html?fish=${encodeURIComponent(fishKey)}" class="glossary-title-link">${entry.title}</a>`
-      : entry.title;
 
     return `
             <div class="glossary-item ${entry.imageUrl ? 'has-image' : ''}">
                 ${imageHtml}
                 <div class="glossary-item-content">
-                    ${originBadge ? `<div class="glossary-item-origin-corner">${originBadge}</div>` : ''}
                     <div class="glossary-item-title">
-                        ${titleContent}
+                        ${entry.title}
                         ${verifiedBadge}
                     </div>
                     ${scientificName}
@@ -1418,6 +1368,34 @@ class GlossaryManager {
     }
 
     return filtered;
+  }
+
+  /**
+   * Sort entries alphabetically
+   * @param {Array} entries
+   * @returns {Array} sorted entries
+   */
+  sortEntries(entries) {
+    const sorted = [...entries];
+
+    if (this.currentSort === 'name-desc') {
+      sorted.sort((a, b) => b.title.localeCompare(a.title));
+    } else {
+      // Default: A-Z
+      sorted.sort((a, b) => a.title.localeCompare(b.title));
+    }
+
+    return sorted;
+  }
+
+  /**
+   * Handle sort dropdown change
+   * @param {string} sortValue
+   */
+  async setSort(sortValue) {
+    this.currentSort = sortValue;
+    this.currentPage = 1;
+    await this.renderContent();
   }
 
   /**
@@ -1478,6 +1456,125 @@ class GlossaryManager {
             </div>
         `;
   }
+
+  /**
+   * Open species modal with entry data
+   * @param {string} fishKey - The fish key to look up
+   */
+  openSpeciesModal(fishKey) {
+    const modal = document.getElementById('speciesModal');
+    if (!modal || typeof fishDatabase === 'undefined') return;
+
+    const fish = fishDatabase[fishKey];
+    if (!fish) return;
+
+    // Get description from fish-descriptions if available
+    const description =
+      typeof fishDescriptions !== 'undefined' && fishDescriptions[fishKey]
+        ? fishDescriptions[fishKey]
+        : fish.description || 'No description available.';
+
+    // Populate modal content
+    const modalImage = document.getElementById('modalImage');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalScientific = document.getElementById('modalScientific');
+    const modalTags = document.getElementById('modalTags');
+    const modalDescription = document.getElementById('modalDescription');
+    const modalStats = document.getElementById('modalStats');
+    const modalActions = document.getElementById('modalActions');
+
+    // Set image
+    if (modalImage) {
+      modalImage.innerHTML = fish.imageUrl
+        ? `<img src="${fish.imageUrl}" alt="${fish.commonName}" loading="lazy">`
+        : '';
+    }
+
+    // Set title and scientific name
+    if (modalTitle) modalTitle.textContent = fish.commonName;
+    if (modalScientific) modalScientific.textContent = fish.scientificName || '';
+
+    // Set tags
+    if (modalTags) {
+      const tags = [];
+      if (fish.careLevel) tags.push(fish.careLevel);
+      if (fish.temperament) tags.push(fish.temperament);
+      if (fish.origin) tags.push(fish.origin.replace(/([A-Z])/g, ' $1').trim());
+      modalTags.innerHTML = tags.map(tag => `<span class="tag">${tag}</span>`).join('');
+    }
+
+    // Set description (truncated for modal)
+    if (modalDescription) {
+      const truncated =
+        description.length > 300 ? description.substring(0, 300) + '...' : description;
+      modalDescription.textContent = truncated;
+    }
+
+    // Set stats
+    if (modalStats) {
+      const stats = [];
+      if (fish.temperatureRange)
+        stats.push({
+          label: 'Temp',
+          value: `${fish.temperatureRange.min}-${fish.temperatureRange.max}°F`,
+        });
+      if (fish.pHRange)
+        stats.push({ label: 'pH', value: `${fish.pHRange.min}-${fish.pHRange.max}` });
+      if (fish.adultSize) stats.push({ label: 'Size', value: fish.adultSize });
+      if (fish.careLevel) stats.push({ label: 'Care', value: fish.careLevel });
+
+      modalStats.innerHTML = stats
+        .map(
+          stat => `
+        <div class="modal-stat">
+          <div class="modal-stat-label">${stat.label}</div>
+          <div class="modal-stat-value">${stat.value}</div>
+        </div>
+      `
+        )
+        .join('');
+    }
+
+    // Set actions
+    if (modalActions) {
+      modalActions.innerHTML = `
+        <a href="species.html?fish=${encodeURIComponent(fishKey)}" class="btn btn-primary">View Full Profile</a>
+        <button class="btn btn-ghost" onclick="addToCompare('${fishKey}')">Add to Compare</button>
+      `;
+    }
+
+    // Show modal
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  /**
+   * Close species modal
+   */
+  closeSpeciesModal() {
+    const modal = document.getElementById('speciesModal');
+    if (modal) {
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  }
+
+  /**
+   * Show toast notification
+   * @param {string} message
+   * @param {number} duration - Duration in ms (default 3000)
+   */
+  showToast(message, duration = 3000) {
+    const toast = document.getElementById('toast');
+    if (!toast) return;
+
+    toast.textContent = message;
+    toast.classList.add('active');
+
+    setTimeout(() => {
+      toast.classList.remove('active');
+    }, duration);
+  }
 }
 
 // Initialize glossary manager
@@ -1527,3 +1624,38 @@ function showContributeInfo() {
     'Contribution feature coming soon! This will allow logged-in users to submit glossary entries for review. All contributions will be stored in Firestore and reviewed by the Comparium team before being published.'
   );
 }
+
+/**
+ * Sort function called from HTML dropdown
+ */
+function sortGlossary() {
+  const sortDropdown = document.getElementById('sortDropdown');
+  if (sortDropdown) {
+    glossaryManager.setSort(sortDropdown.value);
+  }
+}
+
+/**
+ * Close species modal - global function for onclick
+ */
+function closeSpeciesModal() {
+  glossaryManager.closeSpeciesModal();
+}
+
+/**
+ * Add species to compare and navigate to compare page
+ * @param {string} fishKey
+ */
+function addToCompare(fishKey) {
+  if (typeof fishDatabase === 'undefined' || !fishDatabase[fishKey]) return;
+
+  // Navigate to compare.html with the species pre-selected via URL parameter
+  window.location.href = `compare.html?species=${encodeURIComponent(fishKey)}`;
+}
+
+// Handle ESC key to close modal
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape') {
+    closeSpeciesModal();
+  }
+});

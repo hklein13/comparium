@@ -55,7 +55,7 @@ If a phase is in progress (see "Current Phase" below), there should be a plan fi
 
 **Current Stats:** 246 species in database, 213 with images (33 still need images)
 
-**Current Phase:** Phase 3 In Progress (Content Expansion) - Sub-Phases 3A-3D in progress, 3C complete
+**Current Phase:** Phase 3 In Progress (Content Expansion) - 3A-3C complete, 3D in progress + Glossary UI redesign complete
 
 **Active Branch:** `claude/phase3d-species-images`
 
@@ -374,13 +374,21 @@ Development follows a phased approach. See `DATA-MODEL.md` for complete specific
 - Previously failed species (sailfinMolly, yellowLabCichlid, banditCory, peaPuffer) now successfully uploaded
 - **Rate limiting solved:** Increased delay to 2.5s between requests - zero rate limit failures
 
+**Glossary UI Redesign (January 11, 2026):**
+- **Complete redesign** of glossary.html with visual gallery approach
+- **New features:** Hero section with stats, category cards, species modal with "Add to Compare"
+- **Bug fixes:** Fixed Add to Compare (now pre-populates species on compare page), simplified sorting to A-Z/Z-A
+- **Code cleanup:** Removed ~220 lines of unused code (origin groups, old CSS)
+- **Kept for future:** Toast notification system, contribute function, careLevel normalization
+- **Files modified:** glossary.html, css/naturalist.css, js/glossary.js, js/app.js, js/glossary-generator.js
+
 ## Git Workflow
 
 ### CRITICAL RULE
 **NEVER push directly to main.** Always use a staging branch and let the user merge via PR.
 
 ### Current State (January 2026)
-**Active branch:** `claude/phase3-content-expansion` (Phase 3 content expansion in progress)
+**Active branch:** `claude/phase3d-species-images` (Phase 3D images + Glossary UI redesign)
 
 **Main branch:** Up to date with Phase 2 + security audit merged (January 9, 2026)
 
@@ -436,8 +444,9 @@ git push -u origin claude/phase3-content-expansion
 - ✅ Cloud Function tests available (dry-run simulation)
 - ✅ All 4 Cloud Functions deployed and operational
 - ✅ **Phase 2 complete and merged to main**
-- 🔄 **Phase 3 in progress** (3A complete, 3B partial, 3C complete)
-- ✅ **Code cleanup complete** - tank-manager.js refactored for maintainability
+- 🔄 **Phase 3 in progress** (3A-3C complete, 3D in progress, 33 species need images)
+- ✅ **Glossary UI redesign complete** - hero section, category cards, species modal, Add to Compare
+- ✅ **Code cleanup complete** - tank-manager.js refactored, ~220 lines unused code removed from glossary
 
 ### Claude Code Plugins (MCP Servers)
 The following plugins enhance development workflow:

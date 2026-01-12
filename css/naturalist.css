@@ -251,83 +251,6 @@
 }
 
 /* ============================================
-   ORIGIN SECTION HEADERS (Grouped View)
-   ============================================ */
-
-.origin-section {
-  margin-bottom: var(--space-xl);
-}
-
-.origin-section-header {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-  padding: var(--space-md) var(--space-lg);
-  margin-bottom: var(--space-md);
-  background: linear-gradient(135deg, var(--ivory) 0%, var(--stone) 100%);
-  border-radius: var(--radius-lg);
-  border-left: 4px solid var(--forest);
-}
-
-.origin-section-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.origin-section-title {
-  font-family: var(--font-display);
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--ink);
-  margin: 0;
-  flex-grow: 1;
-}
-
-.origin-section-count {
-  font-size: 0.875rem;
-  color: var(--ink-secondary);
-  font-weight: 500;
-}
-
-/* Continent-specific section header colors */
-.origin-section[data-origin='southAmerica'] .origin-section-header {
-  border-left-color: var(--origin-south-america);
-}
-.origin-section[data-origin='southAmerica'] .origin-section-dot {
-  background: var(--origin-south-america);
-}
-
-.origin-section[data-origin='africa'] .origin-section-header {
-  border-left-color: var(--origin-africa);
-}
-.origin-section[data-origin='africa'] .origin-section-dot {
-  background: var(--origin-africa);
-}
-
-.origin-section[data-origin='asia'] .origin-section-header {
-  border-left-color: var(--origin-asia);
-}
-.origin-section[data-origin='asia'] .origin-section-dot {
-  background: var(--origin-asia);
-}
-
-.origin-section[data-origin='northCentralAmerica'] .origin-section-header {
-  border-left-color: var(--origin-north-central-america);
-}
-.origin-section[data-origin='northCentralAmerica'] .origin-section-dot {
-  background: var(--origin-north-central-america);
-}
-
-.origin-section[data-origin='australiaOceania'] .origin-section-header {
-  border-left-color: var(--origin-australia-oceania);
-}
-.origin-section[data-origin='australiaOceania'] .origin-section-dot {
-  background: var(--origin-australia-oceania);
-}
-
-/* ============================================
    ORIGIN EXPLORE SECTION (Homepage)
    ============================================ */
 
@@ -3450,79 +3373,173 @@ p {
    GLOSSARY PAGE
    ============================================ */
 
+/* Glossary Hero Section */
+.glossary-hero {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+}
+
+.glossary-hero h1 {
+  font-family: var(--font-serif);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 0.5rem;
+}
+
+.glossary-hero-subtitle {
+  color: var(--ink-secondary);
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+
+.glossary-stats {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.stat-item {
+  text-align: center;
+  padding: 1rem 1.5rem;
+  background: var(--ivory);
+  border-radius: var(--radius-lg);
+  min-width: 100px;
+}
+
+.stat-number {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--forest);
+  line-height: 1;
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--ink-secondary);
+  margin-top: 0.25rem;
+}
+
+/* Glossary Container */
 .glossary-container {
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0 1.5rem;
 }
 
-.glossary-header {
-  text-align: center;
-  padding: var(--space-2xl) var(--space-xl);
-  background: linear-gradient(to bottom, var(--ivory), var(--white));
-  border-bottom: 1px solid var(--border);
+/* Category Cards */
+.category-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  padding: 2rem 0;
 }
 
-.glossary-header h1 {
-  font-size: 2.5rem;
-  margin-bottom: var(--space-sm);
-  color: var(--ink);
+@media (max-width: 900px) {
+  .category-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
-.glossary-header p {
-  color: var(--ink-secondary);
-  font-size: 1.1rem;
-  max-width: 600px;
-  margin: 0 auto;
+@media (max-width: 500px) {
+  .category-cards {
+    grid-template-columns: 1fr;
+  }
 }
 
-.glossary-search {
-  padding: var(--space-lg) var(--space-xl);
+.category-card {
   background: var(--white);
-  border-bottom: 1px solid var(--border);
-}
-
-.glossary-search .search-box {
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.glossary-categories {
-  padding: var(--space-lg) var(--space-xl);
-  background: var(--ivory);
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  gap: var(--space-sm);
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.glossary-controls {
-  display: flex;
-  gap: var(--space-md);
-  flex-wrap: wrap;
-  margin-bottom: var(--space-lg);
-}
-
-.filter-btn {
-  padding: 0.6rem 1.25rem;
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-full);
-  font-size: 0.9rem;
-  font-weight: 500;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 1.5rem;
   cursor: pointer;
-  transition: all var(--transition-base);
-  color: var(--ink-secondary);
+  transition: all 0.2s ease;
+  text-align: center;
 }
 
-.filter-btn:hover {
+.category-card:hover {
+  border-color: var(--ink-tertiary);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.category-card.active {
   border-color: var(--forest);
+  background: var(--success-bg);
+}
+
+.category-card-name {
+  display: block;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 0.25rem;
+}
+
+.category-card-count {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--ink-tertiary);
+}
+
+.category-card.active .category-card-name {
   color: var(--forest);
 }
 
-.filter-btn.active {
-  background: var(--forest);
-  color: var(--white);
+/* Glossary Controls */
+.glossary-controls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.glossary-search-wrapper {
+  flex: 1;
+  min-width: 200px;
+  max-width: 400px;
+}
+
+.glossary-search-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.glossary-search-input:focus {
+  outline: none;
+  border-color: var(--forest);
+  box-shadow: 0 0 0 3px rgba(35, 74, 58, 0.1);
+}
+
+.glossary-sort-wrapper {
+  flex-shrink: 0;
+}
+
+.sort-dropdown {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  background: var(--white);
+  cursor: pointer;
+  min-width: 180px;
+}
+
+.sort-dropdown:focus {
+  outline: none;
   border-color: var(--forest);
 }
 
@@ -3581,7 +3598,21 @@ p {
 }
 
 .glossary-card-content {
-  padding: var(--space-lg);
+  padding: 1rem;
+}
+
+.glossary-card-title {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 0.25rem;
+}
+
+.glossary-card-subtitle {
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--ink-tertiary);
 }
 
 .glossary-card h3 {
@@ -3597,66 +3628,10 @@ p {
   margin-bottom: var(--space-sm);
 }
 
-.glossary-card .species-meta {
-  display: flex;
-  gap: var(--space-sm);
-  margin-top: var(--space-md);
-}
-
-.glossary-card .species-tag {
-  font-size: 0.75rem;
-  padding: 0.2rem 0.6rem;
-  background: var(--ivory);
-  border-radius: var(--radius-full);
-  color: var(--ink-secondary);
-}
-
 .glossary-card p {
   font-size: 0.9rem;
   color: var(--ink-secondary);
   line-height: 1.6;
-}
-
-/* Glossary Category Cards */
-.category-card {
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-full);
-  padding: 0.65rem 1.25rem;
-  cursor: pointer;
-  transition: all var(--transition-base);
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-sm);
-}
-
-.category-card:hover {
-  border-color: var(--forest);
-  background: var(--ivory);
-}
-
-.category-card.active {
-  background: var(--forest);
-  color: var(--white);
-  border-color: var(--forest);
-}
-
-.category-card .category-icon {
-  font-size: 1rem;
-}
-
-.category-card .category-title {
-  font-weight: 500;
-  font-size: 0.9rem;
-}
-
-.category-card .category-count {
-  font-size: 0.8rem;
-  color: var(--ink-tertiary);
-}
-
-.category-card.active .category-count {
-  color: rgba(255, 255, 255, 0.8);
 }
 
 /* Glossary Items */
@@ -3701,18 +3676,6 @@ p {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
-}
-
-/* Glossary title link for species entries */
-.glossary-title-link {
-  text-decoration: none;
-  color: inherit;
-  transition: color 0.2s ease;
-}
-
-.glossary-title-link:hover {
-  color: var(--forest);
-  text-decoration: underline;
 }
 
 .glossary-item-title span {
@@ -3803,6 +3766,222 @@ p {
   margin-bottom: var(--space-lg);
   padding-bottom: var(--space-sm);
   border-bottom: 2px solid var(--border);
+}
+
+/* Species Modal */
+.species-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  padding: 1rem;
+}
+
+.species-modal-backdrop.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.species-modal {
+  background: var(--white);
+  border-radius: var(--radius-xl);
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+  position: relative;
+}
+
+.species-modal-backdrop.active .species-modal {
+  transform: scale(1);
+}
+
+.modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: var(--white);
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+  background: var(--ivory);
+  transform: scale(1.1);
+}
+
+.modal-image {
+  width: 100%;
+  aspect-ratio: 16/10;
+  background: var(--ivory);
+  overflow: hidden;
+}
+
+.modal-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.modal-content {
+  padding: 1.5rem;
+}
+
+.modal-title {
+  font-family: var(--font-serif);
+  font-size: 1.75rem;
+  color: var(--ink);
+  margin-bottom: 0.25rem;
+}
+
+.modal-scientific {
+  font-style: italic;
+  color: var(--ink-tertiary);
+  margin-bottom: 1rem;
+}
+
+.modal-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.modal-tags .tag {
+  background: var(--ivory);
+  color: var(--ink-secondary);
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+}
+
+.modal-description {
+  color: var(--ink-secondary);
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+
+.modal-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--ivory);
+  border-radius: var(--radius-lg);
+  margin-bottom: 1.5rem;
+}
+
+.modal-stat {
+  text-align: center;
+}
+
+.modal-stat-label {
+  font-size: 0.75rem;
+  color: var(--ink-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.modal-stat-value {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.modal-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.modal-actions .btn {
+  flex: 1;
+  text-align: center;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.modal-actions .btn-primary {
+  background: var(--forest);
+  color: var(--white);
+  border: none;
+}
+
+.modal-actions .btn-primary:hover {
+  background: var(--forest-light);
+}
+
+.modal-actions .btn-ghost {
+  background: transparent;
+  color: var(--forest);
+  border: 1px solid var(--forest);
+}
+
+.modal-actions .btn-ghost:hover {
+  background: var(--success-bg);
+}
+
+/* Toast Notification */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--ink);
+  color: var(--white);
+  padding: 0.875rem 1.5rem;
+  border-radius: var(--radius-full);
+  font-size: 0.9rem;
+  font-weight: 500;
+  z-index: 2000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+.toast.active {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Glossary Empty State */
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--ink-secondary);
+}
+
+.empty-state h3 {
+  font-size: 1.25rem;
+  color: var(--ink);
+  margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+  font-size: 0.95rem;
 }
 
 /* ============================================
