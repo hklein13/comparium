@@ -557,6 +557,14 @@ function displayComparison(fishData) {
   });
   html += '</div>';
 
+  // Add report error link at bottom of comparison
+  const speciesNames = fishData.map(f => f.commonName).join(', ');
+  const reportSubject = encodeURIComponent(`Error Report: ${speciesNames}`);
+  const reportBody = encodeURIComponent(`Species: ${speciesNames}\nError Description: `);
+  html += `<div class="comparison-footer">
+    <a href="mailto:admin@comparium.net?subject=${reportSubject}&body=${reportBody}" class="report-error-link">Report an error</a>
+  </div>`;
+
   grid.innerHTML = html;
   grid.classList.add('active');
 }

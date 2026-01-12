@@ -1608,21 +1608,18 @@ function searchGlossary() {
 }
 
 /**
- * Show contribution information
+ * Show contribution information - opens email with pre-filled template
  */
 function showContributeInfo() {
-  if (window.authManager && !window.authManager.isLoggedIn()) {
-    window.authManager.showMessage('Please log in to contribute to the glossary', 'info');
-    setTimeout(() => {
-      window.location.href = 'login.html';
-    }, 2000);
-    return;
-  }
+  const email = 'admin@comparium.net';
+  const subject = 'Species Suggestion';
+  const body = `Species Name:
+Scientific Name:
+Care Level:
+Origin:
+Additional Info: `;
 
-  // Future: Open contribution form
-  alert(
-    'Contribution feature coming soon! This will allow logged-in users to submit glossary entries for review. All contributions will be stored in Firestore and reviewed by the Comparium team before being published.'
-  );
+  window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
 
 /**

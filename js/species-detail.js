@@ -271,7 +271,7 @@ function loadSpeciesDetail() {
             }
 
             <div class="species-footer">
-                <p><small>Data sourced from SeriouslyFish, Aquarium Co-Op, FishLore, and Aqueon. Always research thoroughly before adding fish to your tank.</small></p>
+                <a href="mailto:admin@comparium.net?subject=Error%20Report%3A%20${encodeURIComponent(fish.commonName)}&body=Species%3A%20${encodeURIComponent(fish.commonName)}%0AError%20Description%3A%20" class="report-error-link">Report an error</a>
             </div>
         </div>
     `;

@@ -110,14 +110,14 @@
       </nav>
     </header>
 
-    <div class="faq-container">
-      <div class="faq-header">
-        <h1>Frequently Asked Questions</h1>
-        <p>Answers to the most common aquarium keeping questions</p>
-      </div>
-
-      <div class="faq-search">
-        <div class="search-box">
+    <!-- Hero Section -->
+    <section class="faq-hero">
+      <div class="faq-hero__content">
+        <h1>Common Questions, Clear Answers</h1>
+        <p class="faq-hero__subtitle">
+          Everything you need to know about keeping a healthy aquarium
+        </p>
+        <div class="faq-hero__search">
           <input
             type="text"
             id="faqSearch"
@@ -126,402 +126,452 @@
           />
         </div>
       </div>
+    </section>
 
-      <div class="faq-categories">
-        <button class="faq-category-btn active" onclick="filterCategory('all')" data-category="all">
-          All Questions
+    <!-- Category Navigation -->
+    <nav class="faq-nav">
+      <div class="faq-nav__tabs">
+        <button class="faq-nav__tab active" onclick="filterCategory('all')" data-category="all">
+          All
         </button>
         <button
-          class="faq-category-btn"
+          class="faq-nav__tab"
           onclick="filterCategory('getting-started')"
           data-category="getting-started"
         >
           Getting Started
         </button>
         <button
-          class="faq-category-btn"
+          class="faq-nav__tab"
           onclick="filterCategory('compatibility')"
           data-category="compatibility"
         >
           Compatibility
         </button>
-        <button class="faq-category-btn" onclick="filterCategory('water')" data-category="water">
-          Water & Chemistry
+        <button class="faq-nav__tab" onclick="filterCategory('water')" data-category="water">
+          Water
         </button>
-        <button class="faq-category-btn" onclick="filterCategory('health')" data-category="health">
-          Fish Health
+        <button class="faq-nav__tab" onclick="filterCategory('health')" data-category="health">
+          Health
         </button>
         <button
-          class="faq-category-btn"
+          class="faq-nav__tab"
           onclick="filterCategory('maintenance')"
           data-category="maintenance"
         >
           Maintenance
         </button>
+        <span class="faq-nav__indicator"></span>
       </div>
+    </nav>
 
+    <!-- FAQ Content -->
+    <div class="faq-container">
       <div class="faq-content" id="faqContent">
         <!-- Getting Started Section -->
-        <div class="faq-section" data-section="getting-started">
-          <h2 class="faq-section-title">Getting Started</h2>
-
-          <div
-            class="faq-item"
-            data-category="getting-started"
-            data-keywords="beginner tank size gallon start"
-          >
-            <button class="faq-question" onclick="toggleFAQ(this)">
-              <span class="faq-question-text">What size tank should I get for beginners?</span>
-              <span class="faq-toggle">&#9660;</span>
-            </button>
-            <div class="faq-answer">
-              <div class="faq-answer-content">
-                <p>
-                  Larger tanks are actually easier for beginners because water parameters are more
-                  stable. A <strong>20-gallon tank</strong> is ideal for starting out - it's big
-                  enough to be forgiving but small enough to be affordable.
-                </p>
-                <p>
-                  Avoid tanks under 10 gallons unless you're experienced, as small volumes are
-                  harder to maintain.
-                </p>
-              </div>
-            </div>
+        <section class="faq-section" data-section="getting-started">
+          <div class="faq-section__header">
+            <span class="faq-section__number">01</span>
+            <h2 class="faq-section__title">Getting Started</h2>
           </div>
 
-          <div
-            class="faq-item"
-            data-category="getting-started"
-            data-keywords="nitrogen cycle cycling ammonia nitrite nitrate bacteria"
-          >
-            <button class="faq-question" onclick="toggleFAQ(this)">
-              <span class="faq-question-text"
-                >What is the nitrogen cycle and how do I cycle my tank?</span
-              >
-              <span class="faq-toggle">&#9660;</span>
-            </button>
-            <div class="faq-answer">
-              <div class="faq-answer-content">
-                <p>
-                  The nitrogen cycle is the biological process that converts toxic fish waste
-                  (ammonia) into less harmful substances. It's the most important concept in
-                  fishkeeping.
-                </p>
-                <p><strong>How it works:</strong></p>
-                <ol>
-                  <li>Fish produce ammonia (toxic)</li>
-                  <li>Beneficial bacteria convert ammonia to nitrite (also toxic)</li>
-                  <li>Other bacteria convert nitrite to nitrate (less toxic)</li>
-                  <li>You remove nitrates through water changes</li>
-                </ol>
-                <p><strong>To cycle your tank:</strong></p>
-                <ol>
-                  <li>Set up your tank with filter running</li>
-                  <li>Add an ammonia source (fish food or pure ammonia)</li>
-                  <li>Test water daily with a test kit</li>
-                  <li>Wait 4-8 weeks until ammonia and nitrite read 0 and nitrates are present</li>
-                </ol>
-                <p>
-                  <strong>Never add fish until the cycle is complete!</strong>
-                </p>
+          <div class="faq-items">
+            <article
+              class="faq-card"
+              data-category="getting-started"
+              data-keywords="beginner tank size gallon start"
+            >
+              <button class="faq-card__question" onclick="toggleFAQ(this)">
+                <span class="faq-card__q">Q:</span>
+                <span class="faq-card__text">What size tank should I get for beginners?</span>
+                <span class="faq-card__icon">+</span>
+              </button>
+              <div class="faq-card__answer">
+                <div class="faq-card__answer-inner">
+                  <p>
+                    Larger tanks are actually easier for beginners because water parameters are more
+                    stable. A <strong>20-gallon tank</strong> is ideal for starting out - it's big
+                    enough to be forgiving but small enough to be affordable.
+                  </p>
+                  <p>
+                    Avoid tanks under 10 gallons unless you're experienced, as small volumes are
+                    harder to maintain.
+                  </p>
+                </div>
               </div>
-            </div>
-          </div>
+            </article>
 
-          <div
-            class="faq-item"
-            data-category="getting-started"
-            data-keywords="equipment filter heater light pump basic setup"
-          >
-            <button class="faq-question" onclick="toggleFAQ(this)">
-              <span class="faq-question-text">What equipment do I need for a basic aquarium?</span>
-              <span class="faq-toggle">&#9660;</span>
-            </button>
-            <div class="faq-answer">
-              <div class="faq-answer-content">
-                <p>Essential equipment for a freshwater aquarium:</p>
-                <ul>
-                  <li>
-                    <strong>Tank</strong> - Glass or acrylic, 20 gallons recommended for beginners
-                  </li>
-                  <li>
-                    <strong>Filter</strong> - Sized for your tank (hang-on-back filters are easiest)
-                  </li>
-                  <li>
-                    <strong>Heater</strong> - If keeping tropical fish (5 watts per gallon rule)
-                  </li>
-                  <li><strong>Thermometer</strong> - To monitor water temperature</li>
-                  <li><strong>Water conditioner</strong> - To remove chlorine from tap water</li>
-                  <li><strong>Test kit</strong> - API Master Test Kit is the gold standard</li>
-                  <li><strong>Substrate</strong> - Gravel or sand for the bottom</li>
-                  <li><strong>Light</strong> - Basic LED hood light is fine for fish-only tanks</li>
-                </ul>
+            <article
+              class="faq-card"
+              data-category="getting-started"
+              data-keywords="nitrogen cycle cycling ammonia nitrite nitrate bacteria"
+            >
+              <button class="faq-card__question" onclick="toggleFAQ(this)">
+                <span class="faq-card__q">Q:</span>
+                <span class="faq-card__text"
+                  >What is the nitrogen cycle and how do I cycle my tank?</span
+                >
+                <span class="faq-card__icon">+</span>
+              </button>
+              <div class="faq-card__answer">
+                <div class="faq-card__answer-inner">
+                  <p>
+                    The nitrogen cycle is the biological process that converts toxic fish waste
+                    (ammonia) into less harmful substances. It's the most important concept in
+                    fishkeeping.
+                  </p>
+                  <p><strong>How it works:</strong></p>
+                  <ol>
+                    <li>Fish produce ammonia (toxic)</li>
+                    <li>Beneficial bacteria convert ammonia to nitrite (also toxic)</li>
+                    <li>Other bacteria convert nitrite to nitrate (less toxic)</li>
+                    <li>You remove nitrates through water changes</li>
+                  </ol>
+                  <p><strong>To cycle your tank:</strong></p>
+                  <ol>
+                    <li>Set up your tank with filter running</li>
+                    <li>Add an ammonia source (fish food or pure ammonia)</li>
+                    <li>Test water daily with a test kit</li>
+                    <li>
+                      Wait 4-8 weeks until ammonia and nitrite read 0 and nitrates are present
+                    </li>
+                  </ol>
+                  <p><strong>Never add fish until the cycle is complete!</strong></p>
+                </div>
               </div>
-            </div>
+            </article>
+
+            <article
+              class="faq-card"
+              data-category="getting-started"
+              data-keywords="equipment filter heater light pump basic setup"
+            >
+              <button class="faq-card__question" onclick="toggleFAQ(this)">
+                <span class="faq-card__q">Q:</span>
+                <span class="faq-card__text">What equipment do I need for a basic aquarium?</span>
+                <span class="faq-card__icon">+</span>
+              </button>
+              <div class="faq-card__answer">
+                <div class="faq-card__answer-inner">
+                  <p>Essential equipment for a freshwater aquarium:</p>
+                  <ul>
+                    <li>
+                      <strong>Tank</strong> - Glass or acrylic, 20 gallons recommended for beginners
+                    </li>
+                    <li>
+                      <strong>Filter</strong> - Sized for your tank (hang-on-back filters are
+                      easiest)
+                    </li>
+                    <li>
+                      <strong>Heater</strong> - If keeping tropical fish (5 watts per gallon rule)
+                    </li>
+                    <li><strong>Thermometer</strong> - To monitor water temperature</li>
+                    <li><strong>Water conditioner</strong> - To remove chlorine from tap water</li>
+                    <li><strong>Test kit</strong> - API Master Test Kit is the gold standard</li>
+                    <li><strong>Substrate</strong> - Gravel or sand for the bottom</li>
+                    <li>
+                      <strong>Light</strong> - Basic LED hood light is fine for fish-only tanks
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </article>
           </div>
-        </div>
+        </section>
 
         <!-- Fish Compatibility Section -->
-        <div class="faq-section" data-section="compatibility">
-          <h2 class="faq-section-title">Fish Compatibility</h2>
-
-          <div
-            class="faq-item"
-            data-category="compatibility"
-            data-keywords="stock stocking how many fish tank gallon inch rule"
-          >
-            <button class="faq-question" onclick="toggleFAQ(this)">
-              <span class="faq-question-text">How many fish can I put in my tank?</span>
-              <span class="faq-toggle">&#9660;</span>
-            </button>
-            <div class="faq-answer">
-              <div class="faq-answer-content">
-                <p>
-                  The old "one inch per gallon" rule is outdated and often leads to overstocking.
-                  Proper stocking depends on:
-                </p>
-                <ul>
-                  <li>
-                    <strong>Adult fish size</strong> - Not purchase size! A 2" juvenile Oscar will
-                    grow to 12"
-                  </li>
-                  <li>
-                    <strong>Filtration capacity</strong> - Better filtration allows slightly more
-                    fish
-                  </li>
-                  <li>
-                    <strong>Fish activity level</strong> - Active swimmers need more space than
-                    sedentary fish
-                  </li>
-                  <li>
-                    <strong>Territorial needs</strong> - Some fish claim territory regardless of
-                    tank size
-                  </li>
-                </ul>
-                <p>
-                  Use our <a href="compare.html">fish comparison tool</a> to check compatibility.
-                  When in doubt, understock - your fish will be healthier.
-                </p>
-              </div>
-            </div>
+        <section class="faq-section" data-section="compatibility">
+          <div class="faq-section__header">
+            <span class="faq-section__number">02</span>
+            <h2 class="faq-section__title">Fish Compatibility</h2>
           </div>
 
-          <div
-            class="faq-item"
-            data-category="compatibility"
-            data-keywords="peaceful community fish together mix compatible"
-          >
-            <button class="faq-question" onclick="toggleFAQ(this)">
-              <span class="faq-question-text">Which fish can live together peacefully?</span>
-              <span class="faq-toggle">&#9660;</span>
-            </button>
-            <div class="faq-answer">
-              <div class="faq-answer-content">
-                <p>Successful community tanks match fish by:</p>
-                <ul>
-                  <li><strong>Temperament</strong> - Don't mix aggressive with peaceful species</li>
-                  <li><strong>Size</strong> - Avoid fish that can eat tankmates</li>
-                  <li><strong>Water parameters</strong> - Similar pH and temperature needs</li>
-                  <li><strong>Swimming level</strong> - Mix top, middle, and bottom dwellers</li>
-                </ul>
-                <p>
-                  <strong>Popular peaceful community fish:</strong> Tetras, Corydoras catfish,
-                  Rasboras, Guppies, Platies, and smaller Gouramis.
-                </p>
-                <p>
-                  Use our <a href="compare.html">comparison tool</a> to check specific species
-                  compatibility before buying.
-                </p>
+          <div class="faq-items">
+            <article
+              class="faq-card"
+              data-category="compatibility"
+              data-keywords="stock stocking how many fish tank gallon inch rule"
+            >
+              <button class="faq-card__question" onclick="toggleFAQ(this)">
+                <span class="faq-card__q">Q:</span>
+                <span class="faq-card__text">How many fish can I put in my tank?</span>
+                <span class="faq-card__icon">+</span>
+              </button>
+              <div class="faq-card__answer">
+                <div class="faq-card__answer-inner">
+                  <p>
+                    The old "one inch per gallon" rule is outdated and often leads to overstocking.
+                    Proper stocking depends on:
+                  </p>
+                  <ul>
+                    <li>
+                      <strong>Adult fish size</strong> - Not purchase size! A 2" juvenile Oscar will
+                      grow to 12"
+                    </li>
+                    <li>
+                      <strong>Filtration capacity</strong> - Better filtration allows slightly more
+                      fish
+                    </li>
+                    <li>
+                      <strong>Fish activity level</strong> - Active swimmers need more space than
+                      sedentary fish
+                    </li>
+                    <li>
+                      <strong>Territorial needs</strong> - Some fish claim territory regardless of
+                      tank size
+                    </li>
+                  </ul>
+                  <p>
+                    Use our <a href="compare.html">fish comparison tool</a> to check compatibility.
+                    When in doubt, understock - your fish will be healthier.
+                  </p>
+                </div>
               </div>
-            </div>
+            </article>
+
+            <article
+              class="faq-card"
+              data-category="compatibility"
+              data-keywords="peaceful community fish together mix compatible"
+            >
+              <button class="faq-card__question" onclick="toggleFAQ(this)">
+                <span class="faq-card__q">Q:</span>
+                <span class="faq-card__text">Which fish can live together peacefully?</span>
+                <span class="faq-card__icon">+</span>
+              </button>
+              <div class="faq-card__answer">
+                <div class="faq-card__answer-inner">
+                  <p>Successful community tanks match fish by:</p>
+                  <ul>
+                    <li>
+                      <strong>Temperament</strong> - Don't mix aggressive with peaceful species
+                    </li>
+                    <li><strong>Size</strong> - Avoid fish that can eat tankmates</li>
+                    <li><strong>Water parameters</strong> - Similar pH and temperature needs</li>
+                    <li><strong>Swimming level</strong> - Mix top, middle, and bottom dwellers</li>
+                  </ul>
+                  <p>
+                    <strong>Popular peaceful community fish:</strong> Tetras, Corydoras catfish,
+                    Rasboras, Guppies, Platies, and smaller Gouramis.
+                  </p>
+                  <p>
+                    Use our <a href="compare.html">comparison tool</a> to check specific species
+                    compatibility before buying.
+                  </p>
+                </div>
+              </div>
+            </article>
           </div>
-        </div>
+        </section>
 
         <!-- Water Parameters Section -->
-        <div class="faq-section" data-section="water">
-          <h2 class="faq-section-title">Water & Chemistry</h2>
-
-          <div
-            class="faq-item"
-            data-category="water"
-            data-keywords="ammonia nitrite nitrate parameters levels safe"
-          >
-            <button class="faq-question" onclick="toggleFAQ(this)">
-              <span class="faq-question-text"
-                >What are ammonia, nitrite, nitrate and what should they be?</span
-              >
-              <span class="faq-toggle">&#9660;</span>
-            </button>
-            <div class="faq-answer">
-              <div class="faq-answer-content">
-                <p>These are the key water quality parameters every fishkeeper must understand:</p>
-                <ul>
-                  <li><strong>Ammonia:</strong> 0 ppm (toxic at any level)</li>
-                  <li><strong>Nitrite:</strong> 0 ppm (toxic)</li>
-                  <li>
-                    <strong>Nitrate:</strong> Under 40 ppm (less toxic, removed via water changes)
-                  </li>
-                </ul>
-                <p>
-                  Test weekly with a liquid test kit (not strips). If ammonia or nitrite ever show
-                  above 0 in a cycled tank, do an immediate water change.
-                </p>
-              </div>
-            </div>
+        <section class="faq-section" data-section="water">
+          <div class="faq-section__header">
+            <span class="faq-section__number">03</span>
+            <h2 class="faq-section__title">Water & Chemistry</h2>
           </div>
 
-          <div
-            class="faq-item"
-            data-category="water"
-            data-keywords="tap water safe chlorine dechlorinator conditioner"
-          >
-            <button class="faq-question" onclick="toggleFAQ(this)">
-              <span class="faq-question-text">Is my tap water safe for fish?</span>
-              <span class="faq-toggle">&#9660;</span>
-            </button>
-            <div class="faq-answer">
-              <div class="faq-answer-content">
-                <p>
-                  Tap water requires treatment before use. Municipal water contains chlorine or
-                  chloramine that will harm fish.
-                </p>
-                <p>
-                  <strong>Always use a water conditioner</strong> (like Seachem Prime or API Tap
-                  Water Conditioner) that neutralizes chlorine, chloramine, and heavy metals.
-                </p>
+          <div class="faq-items">
+            <article
+              class="faq-card"
+              data-category="water"
+              data-keywords="ammonia nitrite nitrate parameters levels safe"
+            >
+              <button class="faq-card__question" onclick="toggleFAQ(this)">
+                <span class="faq-card__q">Q:</span>
+                <span class="faq-card__text"
+                  >What are ammonia, nitrite, nitrate and what should they be?</span
+                >
+                <span class="faq-card__icon">+</span>
+              </button>
+              <div class="faq-card__answer">
+                <div class="faq-card__answer-inner">
+                  <p>
+                    These are the key water quality parameters every fishkeeper must understand:
+                  </p>
+                  <ul>
+                    <li><strong>Ammonia:</strong> 0 ppm (toxic at any level)</li>
+                    <li><strong>Nitrite:</strong> 0 ppm (toxic)</li>
+                    <li>
+                      <strong>Nitrate:</strong> Under 40 ppm (less toxic, removed via water changes)
+                    </li>
+                  </ul>
+                  <p>
+                    Test weekly with a liquid test kit (not strips). If ammonia or nitrite ever show
+                    above 0 in a cycled tank, do an immediate water change.
+                  </p>
+                </div>
               </div>
-            </div>
+            </article>
+
+            <article
+              class="faq-card"
+              data-category="water"
+              data-keywords="tap water safe chlorine dechlorinator conditioner"
+            >
+              <button class="faq-card__question" onclick="toggleFAQ(this)">
+                <span class="faq-card__q">Q:</span>
+                <span class="faq-card__text">Is my tap water safe for fish?</span>
+                <span class="faq-card__icon">+</span>
+              </button>
+              <div class="faq-card__answer">
+                <div class="faq-card__answer-inner">
+                  <p>
+                    Tap water requires treatment before use. Municipal water contains chlorine or
+                    chloramine that will harm fish.
+                  </p>
+                  <p>
+                    <strong>Always use a water conditioner</strong> (like Seachem Prime or API Tap
+                    Water Conditioner) that neutralizes chlorine, chloramine, and heavy metals.
+                  </p>
+                </div>
+              </div>
+            </article>
           </div>
-        </div>
+        </section>
 
         <!-- Fish Health Section -->
-        <div class="faq-section" data-section="health">
-          <h2 class="faq-section-title">Fish Health</h2>
-
-          <div
-            class="faq-item"
-            data-category="health"
-            data-keywords="ich ick white spot disease treatment salt temperature"
-          >
-            <button class="faq-question" onclick="toggleFAQ(this)">
-              <span class="faq-question-text">How do I treat ich (white spot disease)?</span>
-              <span class="faq-toggle">&#9660;</span>
-            </button>
-            <div class="faq-answer">
-              <div class="faq-answer-content">
-                <p>
-                  Ich appears as white salt-like spots on fish. It's common but treatable if caught
-                  early.
-                </p>
-                <p><strong>Treatment steps:</strong></p>
-                <ol>
-                  <li>Raise temperature gradually to 86°F (30°C) over 24-48 hours</li>
-                  <li>Add aquarium salt (1 tablespoon per 5 gallons) if your fish tolerate it</li>
-                  <li>Increase aeration - warmer water holds less oxygen</li>
-                  <li>For severe cases, use ich medication following package directions</li>
-                  <li>Continue treatment for 3-4 days after spots disappear</li>
-                </ol>
-              </div>
-            </div>
+        <section class="faq-section" data-section="health">
+          <div class="faq-section__header">
+            <span class="faq-section__number">04</span>
+            <h2 class="faq-section__title">Fish Health</h2>
           </div>
 
-          <div
-            class="faq-item"
-            data-category="health"
-            data-keywords="quarantine new fish tank separate hospital"
-          >
-            <button class="faq-question" onclick="toggleFAQ(this)">
-              <span class="faq-question-text">How do I quarantine new fish?</span>
-              <span class="faq-toggle">&#9660;</span>
-            </button>
-            <div class="faq-answer">
-              <div class="faq-answer-content">
-                <p>
-                  Quarantine prevents introducing diseases to your main tank. It's the single best
-                  thing you can do to protect your fish.
-                </p>
-                <p><strong>Quarantine tank setup:</strong></p>
-                <ul>
-                  <li>10-20 gallon tank (can be bare-bottom)</li>
-                  <li>Sponge filter (can seed from main tank)</li>
-                  <li>Heater matched to main tank temperature</li>
-                  <li>Hiding spots (PVC pipes work well)</li>
-                </ul>
-                <p>
-                  <strong>Process:</strong> Add new fish to quarantine tank, observe for 2-4 weeks
-                  minimum, only move healthy fish to main tank.
-                </p>
+          <div class="faq-items">
+            <article
+              class="faq-card"
+              data-category="health"
+              data-keywords="ich ick white spot disease treatment salt temperature"
+            >
+              <button class="faq-card__question" onclick="toggleFAQ(this)">
+                <span class="faq-card__q">Q:</span>
+                <span class="faq-card__text">How do I treat ich (white spot disease)?</span>
+                <span class="faq-card__icon">+</span>
+              </button>
+              <div class="faq-card__answer">
+                <div class="faq-card__answer-inner">
+                  <p>
+                    Ich appears as white salt-like spots on fish. It's common but treatable if
+                    caught early.
+                  </p>
+                  <p><strong>Treatment steps:</strong></p>
+                  <ol>
+                    <li>Raise temperature gradually to 86°F (30°C) over 24-48 hours</li>
+                    <li>Add aquarium salt (1 tablespoon per 5 gallons) if your fish tolerate it</li>
+                    <li>Increase aeration - warmer water holds less oxygen</li>
+                    <li>For severe cases, use ich medication following package directions</li>
+                    <li>Continue treatment for 3-4 days after spots disappear</li>
+                  </ol>
+                </div>
               </div>
-            </div>
+            </article>
+
+            <article
+              class="faq-card"
+              data-category="health"
+              data-keywords="quarantine new fish tank separate hospital"
+            >
+              <button class="faq-card__question" onclick="toggleFAQ(this)">
+                <span class="faq-card__q">Q:</span>
+                <span class="faq-card__text">How do I quarantine new fish?</span>
+                <span class="faq-card__icon">+</span>
+              </button>
+              <div class="faq-card__answer">
+                <div class="faq-card__answer-inner">
+                  <p>
+                    Quarantine prevents introducing diseases to your main tank. It's the single best
+                    thing you can do to protect your fish.
+                  </p>
+                  <p><strong>Quarantine tank setup:</strong></p>
+                  <ul>
+                    <li>10-20 gallon tank (can be bare-bottom)</li>
+                    <li>Sponge filter (can seed from main tank)</li>
+                    <li>Heater matched to main tank temperature</li>
+                    <li>Hiding spots (PVC pipes work well)</li>
+                  </ul>
+                  <p>
+                    <strong>Process:</strong> Add new fish to quarantine tank, observe for 2-4 weeks
+                    minimum, only move healthy fish to main tank.
+                  </p>
+                </div>
+              </div>
+            </article>
           </div>
-        </div>
+        </section>
 
         <!-- Maintenance Section -->
-        <div class="faq-section" data-section="maintenance">
-          <h2 class="faq-section-title">Maintenance</h2>
-
-          <div
-            class="faq-item"
-            data-category="maintenance"
-            data-keywords="water change how often much percent weekly"
-          >
-            <button class="faq-question" onclick="toggleFAQ(this)">
-              <span class="faq-question-text"
-                >How often should I do water changes and how much?</span
-              >
-              <span class="faq-toggle">&#9660;</span>
-            </button>
-            <div class="faq-answer">
-              <div class="faq-answer-content">
-                <p>
-                  Most aquariums benefit from <strong>20-30% weekly water changes</strong>. This
-                  removes nitrates and replenishes minerals.
-                </p>
-                <p><strong>Adjust based on your situation:</strong></p>
-                <ul>
-                  <li><strong>Heavily stocked tanks:</strong> 50% weekly</li>
-                  <li><strong>Lightly stocked planted tanks:</strong> 10-15% every 1-2 weeks</li>
-                </ul>
-                <p><strong>Water change tips:</strong></p>
-                <ul>
-                  <li>Match new water temperature to tank (within 2°F)</li>
-                  <li>Always use dechlorinator</li>
-                  <li>Gravel vacuum while changing water</li>
-                  <li>Never replace all water at once</li>
-                </ul>
-              </div>
-            </div>
+        <section class="faq-section" data-section="maintenance">
+          <div class="faq-section__header">
+            <span class="faq-section__number">05</span>
+            <h2 class="faq-section__title">Maintenance</h2>
           </div>
 
-          <div
-            class="faq-item"
-            data-category="maintenance"
-            data-keywords="algae remove clean scrape green brown"
-          >
-            <button class="faq-question" onclick="toggleFAQ(this)">
-              <span class="faq-question-text">How do I remove algae from my tank?</span>
-              <span class="faq-toggle">&#9660;</span>
-            </button>
-            <div class="faq-answer">
-              <div class="faq-answer-content">
-                <p>Algae is a symptom, not the root problem. Address the cause while cleaning:</p>
-                <p><strong>Immediate removal:</strong></p>
-                <ul>
-                  <li>Scrape glass with algae scraper or old credit card</li>
-                  <li>Remove heavily affected decorations and scrub</li>
-                  <li>Vacuum algae off substrate during water changes</li>
-                </ul>
-                <p><strong>Address the cause:</strong></p>
-                <ul>
-                  <li><strong>Reduce light</strong> - 6-8 hours max, no direct sunlight</li>
-                  <li><strong>Don't overfeed</strong> - Excess food feeds algae</li>
-                  <li><strong>More water changes</strong> - Removes excess nutrients</li>
-                  <li><strong>Add fast-growing plants</strong> - They outcompete algae</li>
-                </ul>
+          <div class="faq-items">
+            <article
+              class="faq-card"
+              data-category="maintenance"
+              data-keywords="water change how often much percent weekly"
+            >
+              <button class="faq-card__question" onclick="toggleFAQ(this)">
+                <span class="faq-card__q">Q:</span>
+                <span class="faq-card__text"
+                  >How often should I do water changes and how much?</span
+                >
+                <span class="faq-card__icon">+</span>
+              </button>
+              <div class="faq-card__answer">
+                <div class="faq-card__answer-inner">
+                  <p>
+                    Most aquariums benefit from <strong>20-30% weekly water changes</strong>. This
+                    removes nitrates and replenishes minerals.
+                  </p>
+                  <p><strong>Adjust based on your situation:</strong></p>
+                  <ul>
+                    <li><strong>Heavily stocked tanks:</strong> 50% weekly</li>
+                    <li><strong>Lightly stocked planted tanks:</strong> 10-15% every 1-2 weeks</li>
+                  </ul>
+                  <p><strong>Water change tips:</strong></p>
+                  <ul>
+                    <li>Match new water temperature to tank (within 2°F)</li>
+                    <li>Always use dechlorinator</li>
+                    <li>Gravel vacuum while changing water</li>
+                    <li>Never replace all water at once</li>
+                  </ul>
+                </div>
               </div>
-            </div>
+            </article>
+
+            <article
+              class="faq-card"
+              data-category="maintenance"
+              data-keywords="algae remove clean scrape green brown"
+            >
+              <button class="faq-card__question" onclick="toggleFAQ(this)">
+                <span class="faq-card__q">Q:</span>
+                <span class="faq-card__text">How do I remove algae from my tank?</span>
+                <span class="faq-card__icon">+</span>
+              </button>
+              <div class="faq-card__answer">
+                <div class="faq-card__answer-inner">
+                  <p>Algae is a symptom, not the root problem. Address the cause while cleaning:</p>
+                  <p><strong>Immediate removal:</strong></p>
+                  <ul>
+                    <li>Scrape glass with algae scraper or old credit card</li>
+                    <li>Remove heavily affected decorations and scrub</li>
+                    <li>Vacuum algae off substrate during water changes</li>
+                  </ul>
+                  <p><strong>Address the cause:</strong></p>
+                  <ul>
+                    <li><strong>Reduce light</strong> - 6-8 hours max, no direct sunlight</li>
+                    <li><strong>Don't overfeed</strong> - Excess food feeds algae</li>
+                    <li><strong>More water changes</strong> - Removes excess nutrients</li>
+                    <li><strong>Add fast-growing plants</strong> - They outcompete algae</li>
+                  </ul>
+                </div>
+              </div>
+            </article>
           </div>
-        </div>
+        </section>
 
         <div id="faqNoResults" class="faq-no-results" style="display: none">
           <h3>No questions found</h3>
@@ -537,6 +587,7 @@
         <a href="about.html">About</a>
         <a href="faq.html">FAQ</a>
         <a href="glossary.html">Glossary</a>
+        <a href="mailto:admin@comparium.net">Contact</a>
       </div>
       <p class="footer-copy">&copy; <span id="copyright-year"></span> Comparium</p>
     </footer>
