@@ -1537,11 +1537,9 @@ class GlossaryManager {
 
     // Set actions
     if (modalActions) {
-      const reportUrl = `mailto:admin@comparium.net?subject=Error%20Report%3A%20${encodeURIComponent(fish.commonName)}&body=Species%3A%20${encodeURIComponent(fish.commonName)}%0AError%20Description%3A%20`;
       modalActions.innerHTML = `
         <a href="species.html?fish=${encodeURIComponent(fishKey)}" class="btn btn-primary">View Full Profile</a>
         <button class="btn btn-ghost" onclick="addToCompare('${fishKey}')">Add to Compare</button>
-        <a href="${reportUrl}" class="modal-report-link">Report an error</a>
       `;
     }
 

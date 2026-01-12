@@ -3972,6 +3972,29 @@ p {
   color: var(--forest);
 }
 
+/* Report Error Links (species page, compare page) */
+.report-error-link {
+  font-size: 0.85rem;
+  color: var(--ink-tertiary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.report-error-link:hover {
+  color: var(--forest);
+}
+
+.report-error-line {
+  margin-bottom: 0.5rem;
+}
+
+.comparison-footer {
+  text-align: center;
+  padding: 1.5rem 0 0.5rem;
+  margin-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
 /* Toast Notification */
 .toast {
   position: fixed;
