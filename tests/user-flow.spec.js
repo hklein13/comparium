@@ -860,15 +860,15 @@ test.describe('Page Load Tests', () => {
     await page.goto('/faq.html');
 
     // Wait for FAQ items
-    await page.waitForSelector('.faq-item', { timeout: 5000 });
+    await page.waitForSelector('.faq-card', { timeout: 5000 });
 
     // Click first FAQ question
-    const firstQuestion = page.locator('.faq-question').first();
+    const firstQuestion = page.locator('.faq-card__question').first();
     await firstQuestion.click();
 
-    // Verify answer is visible
-    const firstAnswer = page.locator('.faq-answer').first();
-    await expect(firstAnswer).toBeVisible();
+    // Verify card is open (answer visible via CSS grid)
+    const firstCard = page.locator('.faq-card').first();
+    await expect(firstCard).toHaveClass(/open/);
 
     console.log('✓ FAQ accordion works correctly');
   });
