@@ -5,7 +5,19 @@
   },
   "hosting": {
     "public": ".",
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**", "functions/**"]
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**",
+      "functions/**",
+      "scripts/**",
+      "tests/**",
+      "*.md",
+      "*.json",
+      "package*.json",
+      "eslint.config.js",
+      "playwright.config.js"
+    ]
   },
   "functions": {
     "source": "functions"
