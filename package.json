@@ -21,6 +21,7 @@
     "migrate:glossary": "node scripts/migrate-glossary-to-firestore.js",
     "images": "node scripts/image-pipeline.js",
     "images:preview": "node scripts/generate-image-preview.js",
+    "images:inaturalist": "node scripts/generate-inaturalist-preview.js",
     "images:upload": "node scripts/upload-selected-images.js",
     "lint": "eslint js/",
     "lint:fix": "eslint js/ --fix",

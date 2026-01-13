@@ -925,7 +925,6 @@ class GlossaryManager {
         ...doc.data(),
       }));
 
-      console.log(`Loaded ${entries.length} ${category} entries from Firestore`);
       return entries;
     } catch (error) {
       console.error(`Error loading ${category} from Firestore:`, error);

@@ -19,8 +19,6 @@ const __dirname = dirname(__filename);
 const BUCKET_NAME = 'comparium-21b69.firebasestorage.app';
 const IMAGE_FOLDER = 'images/species';
 const TEMP_DIR = join(__dirname, 'temp-images');
-const MAX_WIDTH = 1200;
-const MAX_HEIGHT = 800;
 
 // Priority species for Phase 1 (most common beginner fish)
 const PRIORITY_SPECIES = [
@@ -29,7 +27,6 @@ const PRIORITY_SPECIES = [
   'guppy',
   'molly',
   'platy',
-  'corydoras',
   'angelfish',
   'cardinalTetra',
   'cherryBarb',

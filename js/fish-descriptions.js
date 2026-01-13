@@ -102,9 +102,6 @@ const fishDescriptions = {
   dwarfPencilfish:
     'A tiny surface-dwelling nano fish reaching 1 inch with silver body, two prominent black horizontal stripes, and red patch at tail base. Native to calm shallow blackwater streams and swamps of the Amazon basin throughout Guyana, Suriname, Brazil, Peru, and Colombia, they navigate through dense vegetation in tannin-stained water. Peaceful, playful, and charming despite their diminutive size, these active schoolers zip around in groups, engaging in playful tag before gathering in tight shoals, requiring heavily planted tanks with floating plants and groups of 6+.',
 
-  marginatedTetra:
-    'A small peaceful schooling tetra reaching 1.75 inches with pale silver-gold body, black shoulder spot, and subtle horizontal stripe. Native to slow-moving tributaries and flooded forests of the Amazon and Orinoco basins, they thrive in soft acidic blackwater conditions with dense vegetation and leaf litter. Hardy, active, and beginner-friendly, these undemanding fish school readily and display best in planted tanks with tannins and subdued lighting, requiring groups of 6+ for optimal confidence and natural behavior.',
-
   flagTetra:
     'A beautiful tetra reaching 2 inches with silver body, prominent black horizontal stripe, iridescent green-yellow band above, and orange upper eye. Native to slow-moving Amazon tributaries and coastal drainages in Brazil, they inhabit heavily vegetated blackwater and clearwater streams. Peaceful, shy schooling fish that require groups of 8+ for confidence and best coloration display, thriving in densely planted tanks with subdued lighting and gentle current where males show vibrant colors when competing for females.',
 
@@ -543,9 +540,6 @@ const fishDescriptions = {
   // ============================================
   // CORYDORAS
   // ============================================
-  corydoras:
-    'Small, armored catfish typically reaching 2-3 inches with numerous species displaying varied patterns from spotted to striped. Native to South American streams and rivers, they inhabit sandy or fine gravel substrates where they forage for food with sensitive barbels. Peaceful, social bottom-dwellers that thrive in groups of 6+, these hardy scavengers are ideal community fish requiring soft, sandy substrates to protect their delicate barbels from damage.',
-
   bronzeCory:
     'The classic wild-type corydoras reaching 2.5 inches with bronze-olive body and metallic sheen. Native to South American rivers throughout much of the continent, they are among the most common corydoras. Peaceful, extremely hardy, and beginner-friendly, these prolific breeding catfish thrive in groups of 6+ with sandy substrate and are the foundation species from which albino and other color variants derive.',
 
