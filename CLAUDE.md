@@ -194,7 +194,7 @@ if (!missing.length && !orphaned.length) console.log('SUCCESS: All keys match!')
 ### Page Structure
 - **index.html** - Landing page (video hero with looping aquarium background, demo CTA, species showcase, origin note)
 - **compare.html** - Fish comparison tool (the main app functionality)
-- **dashboard.html** - User hub with stats, comparisons, tank management, maintenance tracking, and favorites
+- **dashboard.html** - User hub with stats, comparisons, tank management, maintenance tracking (full CRUD), and favorites
 - **glossary.html** - Species database with search and filtering
 - **my-tanks.html** - Redirects to dashboard#my-tanks-section (backward compat)
 - **faq.html** - Static FAQ with accordion toggle and search (js/faq.js)
@@ -462,6 +462,26 @@ git push -u origin claude/phase3-content-expansion
 - ✅ **Phase 3D complete** - 235/244 species have images (96.3%), 9 need manual sourcing
 - ✅ **Glossary UI redesign complete** - hero section, category cards, species modal, Add to Compare
 - ✅ **Code cleanup complete** - tank-manager.js refactored, ~220 lines unused code removed from glossary
+- ✅ **Dashboard maintenance features complete** - full event/schedule CRUD from timeline and tank modal
+
+### Dashboard Maintenance Features (January 2026)
+The dashboard now has full maintenance CRUD capabilities:
+
+**Timeline View (main dashboard):**
+- "+ Log Event" and "+ Add Schedule" buttons with tank selector for multi-tank users
+- Scheduled tasks show edit button (pencil icon) - clicking opens schedule modal for edit/delete
+- Task info is also clickable for quick editing
+
+**Tank Modal (click any tank card):**
+- Schedule pills are clickable - opens schedule modal for edit/delete
+- Logged events have × delete button with confirmation
+- "+ Log Event" and "+ Add Schedule" buttons in section headers
+
+**Key Functions (in dashboard.html):**
+- `editScheduleFromTimeline(schedule)` - Opens schedule modal from timeline tasks
+- `deleteEventFromModal(eventId, tankId)` - Deletes logged event with confirmation
+- `openScheduleForEdit(tankId, tankName, scheduleData)` - Opens schedule modal in edit mode
+- `showTankSelectorModal(actionType, tanks)` - Tank picker for multi-tank users
 
 ### Claude Code Plugins (MCP Servers)
 The following plugins enhance development workflow:

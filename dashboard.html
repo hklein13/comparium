@@ -280,12 +280,10 @@
             </div>
           </div>
 
-          <!-- Quick Log Section -->
-          <div class="timeline-quicklog" id="timeline-quicklog" style="display: none">
-            <h3>Quick Log</h3>
-            <div class="quick-log-buttons" id="timeline-quicklog-buttons">
-              <!-- Populated by JS -->
-            </div>
+          <!-- Actions Section -->
+          <div class="timeline-actions" id="timeline-actions" style="display: none">
+            <button class="btn btn-primary" id="timeline-log-event-btn">+ Log Event</button>
+            <button class="btn btn-ghost" id="timeline-add-schedule-btn">+ Add Schedule</button>
           </div>
         </section>
       </div>
@@ -339,14 +337,20 @@
           </div>
 
           <div class="tank-modal-section tank-modal-quicklog">
-            <h3>Quick Log</h3>
+            <div class="section-header-with-action">
+              <h3>Quick Log</h3>
+              <button class="btn-small btn-text" id="tank-modal-log-event-btn">+ Log Event</button>
+            </div>
             <div class="quick-log-buttons" id="tank-modal-quicklog-buttons">
               <!-- Populated by JS -->
             </div>
           </div>
 
           <div class="tank-modal-section">
-            <h3>Maintenance Schedules</h3>
+            <div class="section-header-with-action">
+              <h3>Maintenance Schedules</h3>
+              <button class="btn-small btn-text" id="tank-modal-add-schedule-btn">+ Add Schedule</button>
+            </div>
             <div id="tank-modal-schedules">
               <!-- Populated by JS -->
             </div>
@@ -365,6 +369,9 @@
         </div>
       </div>
     </div>
+
+    <!-- Event/Schedule Modal Container (used by maintenance-manager.js) -->
+    <div id="event-modal-container"></div>
 
     <!-- Footer -->
     <footer class="footer">
@@ -639,32 +646,34 @@
       // Maintenance Timeline
       // ============================================
 
+      // Store tanks globally for modal access
+      let userTanks = [];
+
       async function loadMaintenanceTimeline() {
         const timelineContainer = document.getElementById('maintenance-timeline');
         const summaryEl = document.getElementById('maintenance-summary');
-        const quicklogSection = document.getElementById('timeline-quicklog');
-        const quicklogButtons = document.getElementById('timeline-quicklog-buttons');
+        const actionsSection = document.getElementById('timeline-actions');
 
         // Get all tanks
         const uid = window.getFirebaseUid?.();
         if (!uid) return;
 
         const profile = await window.firestoreGetProfile(uid);
-        const tanks = profile?.profile?.tanks || [];
+        userTanks = profile?.profile?.tanks || [];
 
-        if (tanks.length === 0) {
+        if (userTanks.length === 0) {
           timelineContainer.innerHTML = `
             <div class="maintenance-timeline-empty">
               <p>Create a tank to start tracking maintenance</p>
             </div>
           `;
-          quicklogSection.style.display = 'none';
+          actionsSection.style.display = 'none';
           return;
         }
 
         // Collect all schedules across all tanks
         const allSchedules = [];
-        for (const tank of tanks) {
+        for (const tank of userTanks) {
           try {
             const schedules = await window.firestoreGetTankSchedules?.(uid, tank.id);
             if (schedules) {
@@ -691,7 +700,16 @@
             </div>
           `;
           summaryEl.textContent = '';
-          quicklogSection.style.display = 'none';
+        }
+
+        // Always show actions section if user has tanks
+        actionsSection.style.display = 'flex';
+
+        // Wire up action buttons
+        document.getElementById('timeline-log-event-btn').onclick = () => openEventModalWithTankSelector();
+        document.getElementById('timeline-add-schedule-btn').onclick = () => openScheduleModalWithTankSelector();
+
+        if (allSchedules.length === 0) {
           return;
         }
 
@@ -771,14 +789,6 @@
         }
 
         timelineContainer.innerHTML = html;
-
-        // Show quick log section
-        quicklogSection.style.display = 'block';
-        quicklogButtons.innerHTML = `
-          <button class="quick-log-btn" onclick="openQuickLogModal('waterChange')">Water Change</button>
-          <button class="quick-log-btn" onclick="openQuickLogModal('parameterTest')">Parameter Test</button>
-          <button class="quick-log-btn" onclick="openQuickLogModal('filterMaintenance')">Filter</button>
-        `;
       }
 
       function renderMaintenanceTask(schedule) {
@@ -795,18 +805,33 @@
           label: schedule.type,
         };
 
+        // Prepare schedule data for edit button
+        const scheduleData = JSON.stringify(schedule).replace(/"/g, '&quot;');
+
         return `
           <div class="maintenance-task-card">
             <div class="maintenance-status-indicator ${statusClass}"></div>
-            <div class="task-info">
+            <div class="task-info" onclick="editScheduleFromTimeline(${scheduleData})" style="cursor: pointer;" title="Click to edit or delete">
               <span class="task-name">${escapeHTML(typeInfo.label)}</span>
               <span class="task-tank">${escapeHTML(schedule.tankName)}</span>
             </div>
-            <button class="task-complete-btn" onclick="completeScheduleFromTimeline('${schedule.id}', '${schedule.tankId}', '${schedule.type}')">
-              Done
-            </button>
+            <div class="task-actions">
+              <button class="task-edit-btn" onclick="editScheduleFromTimeline(${scheduleData})" title="Edit schedule">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                </svg>
+              </button>
+              <button class="task-complete-btn" onclick="completeScheduleFromTimeline('${schedule.id}', '${schedule.tankId}', '${schedule.type}')">
+                Done
+              </button>
+            </div>
           </div>
         `;
+      }
+
+      function editScheduleFromTimeline(schedule) {
+        window.maintenanceManager?.openScheduleModal(schedule.tankId, schedule.tankName, schedule);
       }
 
       async function completeScheduleFromTimeline(scheduleId, tankId, type) {
@@ -817,21 +842,108 @@
         await window.tankManager?.loadTanks();
       }
 
-      function openQuickLogModal(type) {
-        // Get first tank for quick log (or show tank selector if multiple)
+      // Open event modal with tank selector (if multiple tanks)
+      async function openEventModalWithTankSelector() {
+        // Always fetch fresh tank data
         const uid = window.getFirebaseUid?.();
         if (!uid) return;
 
-        window.firestoreGetProfile(uid).then(profile => {
-          const tanks = profile?.profile?.tanks || [];
-          if (tanks.length === 0) {
-            alert('Create a tank first to log events');
-            return;
-          }
-          // Open event modal for first tank (could be enhanced to show tank selector)
-          window.maintenanceManager?.openEventModal(tanks[0].id, tanks[0].name, type);
-        });
+        const profile = await window.firestoreGetProfile(uid);
+        const tanks = profile?.profile?.tanks || [];
+
+        if (tanks.length === 0) {
+          alert('Create a tank first to log events');
+          return;
+        }
+
+        if (tanks.length === 1) {
+          // Only one tank - go directly to event modal
+          window.maintenanceManager?.openEventModal(tanks[0].id, tanks[0].name);
+        } else {
+          // Multiple tanks - show selector modal
+          showTankSelectorModal('event', tanks);
+        }
       }
+
+      // Open schedule modal with tank selector (if multiple tanks)
+      async function openScheduleModalWithTankSelector() {
+        // Always fetch fresh tank data
+        const uid = window.getFirebaseUid?.();
+        if (!uid) return;
+
+        const profile = await window.firestoreGetProfile(uid);
+        const tanks = profile?.profile?.tanks || [];
+
+        if (tanks.length === 0) {
+          alert('Create a tank first to add schedules');
+          return;
+        }
+
+        if (tanks.length === 1) {
+          // Only one tank - go directly to schedule modal
+          window.maintenanceManager?.openScheduleModal(tanks[0].id, tanks[0].name);
+        } else {
+          // Multiple tanks - show selector modal
+          showTankSelectorModal('schedule', tanks);
+        }
+      }
+
+      // Show tank selector modal
+      function showTankSelectorModal(actionType, tanks) {
+        const container = document.getElementById('event-modal-container');
+        if (!container) return;
+
+        const title = actionType === 'event' ? 'Log Event' : 'Add Schedule';
+
+        const modal = document.createElement('div');
+        modal.className = 'event-modal-overlay';
+        modal.onclick = e => {
+          if (e.target === modal) closeTankSelectorModal();
+        };
+
+        modal.innerHTML = `
+          <div class="event-modal" style="max-width: 400px;">
+            <div class="event-modal-header">
+              <h3>${title}</h3>
+              <button class="event-modal-close" onclick="closeTankSelectorModal()">&times;</button>
+            </div>
+            <div class="event-modal-body">
+              <div class="form-group">
+                <label>Select Tank</label>
+                <div class="tank-selector-grid">
+                  ${tanks.map(tank => `
+                    <button class="tank-selector-btn" onclick="selectTankForAction('${tank.id}', '${tank.name.replace(/'/g, "\\'")}', '${actionType}')">
+                      <span class="tank-selector-name">${escapeHTML(tank.name)}</span>
+                      <span class="tank-selector-meta">${tank.size} gal · ${tank.species?.length || 0} species</span>
+                    </button>
+                  `).join('')}
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+
+        container.innerHTML = '';
+        container.appendChild(modal);
+      }
+
+      function closeTankSelectorModal() {
+        const container = document.getElementById('event-modal-container');
+        if (container) container.innerHTML = '';
+      }
+
+      function selectTankForAction(tankId, tankName, actionType) {
+        closeTankSelectorModal();
+        if (actionType === 'event') {
+          window.maintenanceManager?.openEventModal(tankId, tankName);
+        } else {
+          window.maintenanceManager?.openScheduleModal(tankId, tankName);
+        }
+      }
+
+      // Make functions globally available
+      window.closeTankSelectorModal = closeTankSelectorModal;
+      window.selectTankForAction = selectTankForAction;
 
       // ============================================
       // Tank Modal Functions
@@ -841,6 +953,7 @@
 
       function openTankModal(tankId) {
         currentModalTankId = tankId;
+        window.currentModalTankId = tankId; // Expose for maintenance-manager.js
         const backdrop = document.getElementById('tank-modal-backdrop');
         backdrop.classList.add('active');
         document.body.style.overflow = 'hidden';
@@ -854,6 +967,7 @@
         backdrop.classList.remove('active');
         document.body.style.overflow = '';
         currentModalTankId = null;
+        window.currentModalTankId = null; // Clear for maintenance-manager.js
       }
 
       // Close on backdrop click
@@ -935,7 +1049,23 @@
           <button class="quick-log-btn" onclick="window.maintenanceManager.quickLogEvent('${tankId}', 'filterMaintenance')">Filter</button>
         `;
 
-        // Load schedules
+        // Wire up "+ Log Event" button to open full event modal
+        const logEventBtn = document.getElementById('tank-modal-log-event-btn');
+        if (logEventBtn) {
+          logEventBtn.onclick = () => {
+            window.maintenanceManager?.openEventModal(tankId, tank.name);
+          };
+        }
+
+        // Wire up "+ Add Schedule" button to open schedule modal
+        const addScheduleBtn = document.getElementById('tank-modal-add-schedule-btn');
+        if (addScheduleBtn) {
+          addScheduleBtn.onclick = () => {
+            window.maintenanceManager?.openScheduleModal(tankId, tank.name);
+          };
+        }
+
+        // Load schedules (clickable to edit/delete)
         const schedulesEl = document.getElementById('tank-modal-schedules');
         try {
           const schedules = await window.firestoreGetTankSchedules?.(uid, tankId);
@@ -949,8 +1079,12 @@
                   text: 'Unknown',
                   class: '',
                 };
+                // Store schedule data for click handler
+                const scheduleData = JSON.stringify(s).replace(/"/g, '&quot;');
                 return `
-                <div class="schedule-pill ${due.class}">
+                <div class="schedule-pill clickable ${due.class}"
+                     onclick="openScheduleForEdit('${tankId}', '${tank.name.replace(/'/g, "\\'")}', ${scheduleData})"
+                     title="Click to edit or delete">
                   <span class="schedule-name">${escapeHTML(typeInfo.label)}</span>
                   <span class="schedule-due">${due.text}</span>
                 </div>
@@ -966,7 +1100,7 @@
             '<p style="color: var(--ink-tertiary);">Unable to load schedules</p>';
         }
 
-        // Load events
+        // Load events (with delete buttons)
         const eventsEl = document.getElementById('tank-modal-events');
         try {
           const events = await window.firestoreGetTankEvents?.(uid, tankId, 5);
@@ -984,6 +1118,7 @@
                     <span class="event-date">${dateStr}</span>
                     ${e.notes ? `<span class="event-notes">${escapeHTML(e.notes)}</span>` : ''}
                   </div>
+                  <button class="event-delete-btn" onclick="deleteEventFromModal('${e.id}', '${tankId}')" title="Delete event">&times;</button>
                 </div>
               `;
               })
@@ -1007,11 +1142,40 @@
         };
       }
 
+      // Open schedule for editing (from tank modal)
+      function openScheduleForEdit(tankId, tankName, scheduleData) {
+        window.maintenanceManager?.openScheduleModal(tankId, tankName, scheduleData);
+      }
+
+      // Delete event from tank modal
+      async function deleteEventFromModal(eventId, tankId) {
+        if (!confirm('Delete this event?')) return;
+
+        const uid = window.getFirebaseUid?.();
+        if (!uid) return;
+
+        try {
+          const result = await window.firestoreDeleteTankEvent(uid, eventId);
+          if (result.success) {
+            authManager?.showMessage?.('Event deleted', 'success');
+            // Refresh the tank modal to show updated events
+            await loadTankModalData(tankId);
+            // Also refresh the timeline
+            await loadMaintenanceTimeline();
+          }
+        } catch (e) {
+          console.error('Error deleting event:', e);
+          authManager?.showMessage?.('Failed to delete event', 'error');
+        }
+      }
+
       // Make functions globally available
       window.openTankModal = openTankModal;
       window.closeTankModal = closeTankModal;
       window.loadTankModalData = loadTankModalData;
       window.loadMaintenanceTimeline = loadMaintenanceTimeline;
+      window.openScheduleForEdit = openScheduleForEdit;
+      window.deleteEventFromModal = deleteEventFromModal;
 
       // ============================================
       // Notification Functions
