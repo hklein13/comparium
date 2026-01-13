@@ -1,7 +1,7 @@
 # Comparium Data Model
 
 **Purpose:** Comprehensive Firestore database structure for all current and planned features.
-**Last Updated:** January 6, 2026
+**Last Updated:** January 12, 2026
 **Firebase Plan:** Blaze (Cloud Functions available)
 
 ---
@@ -12,7 +12,7 @@
 |-------|--------|-------|
 | **Phase 1** | ✅ Complete | Tank management, events, schedules |
 | **Phase 2** | ✅ Complete | Notifications + FCM push (January 2026) |
-| **Phase 3** | ⏳ Planned | Expanded glossary |
+| **Phase 3** | 🔄 In Progress | Content expansion + Dashboard redesign + Tank photos |
 | **Phase 4** | ⏳ Planned | Social features |
 | **Phase 5** | ⏳ Planned | Diagnostic tool |
 | **Phase 6** | ⏳ Long-term | Native mobile app (iOS + Android) |
@@ -101,7 +101,7 @@ tanks/{tankId}                       // Auto-generated ID
 ├── created: timestamp
 ├── updated: timestamp
 ├── description: string              // Optional notes
-├── imageUrl: string                 // Optional tank photo
+├── coverPhoto: string               // User-uploaded tank photo URL (Firebase Storage)
 │
 ├── parameters: {                    // Current/target parameters
 │   ├── temperature: number          // Fahrenheit
