@@ -4570,18 +4570,24 @@ p {
 /* Category Cards */
 .category-cards {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 1rem;
   padding: 2rem 0;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1000px) {
+  .category-cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 700px) {
   .category-cards {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 450px) {
   .category-cards {
     grid-template-columns: 1fr;
   }

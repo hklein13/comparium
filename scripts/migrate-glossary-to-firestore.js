@@ -90,6 +90,38 @@ function loadFishDescriptions() {
   return fishDescriptions;
 }
 
+// Load plant database from plant-data.js
+function loadPlantDatabase() {
+  const plantDataPath = join(__dirname, '../js/plant-data.js');
+  const content = readFileSync(plantDataPath, 'utf-8');
+
+  // Extract the plantDatabase object
+  const match = content.match(/(?:var|let|const)\s+plantDatabase\s*=\s*({[\s\S]*?});/);
+  if (!match) {
+    throw new Error('Could not find plantDatabase in plant-data.js');
+  }
+
+  // Parse the object
+  const plantDatabase = eval(`(${match[1]})`);
+  return plantDatabase;
+}
+
+// Load plant descriptions from plant-descriptions.js
+function loadPlantDescriptions() {
+  const descriptionsPath = join(__dirname, '../js/plant-descriptions.js');
+  const content = readFileSync(descriptionsPath, 'utf-8');
+
+  // Extract the plantDescriptions object
+  const match = content.match(/(?:var|let|const)\s+plantDescriptions\s*=\s*({[\s\S]*?});/);
+  if (!match) {
+    throw new Error('Could not find plantDescriptions in plant-descriptions.js');
+  }
+
+  // Parse the object
+  const plantDescriptions = eval(`(${match[1]})`);
+  return plantDescriptions;
+}
+
 // ============================================================================
 // GLOSSARY GENERATOR FUNCTIONS (Inlined for simplicity)
 // ============================================================================
@@ -227,6 +259,133 @@ function generateGlossaryEntries(fishDatabase, descriptions = {}) {
   return entries;
 }
 
+// ============================================================================
+// PLANT GENERATOR FUNCTIONS
+// ============================================================================
+
+function generatePlantTags(plant) {
+  const tags = [];
+
+  // Difficulty tags
+  if (plant.difficulty === 'Easy') {
+    tags.push('Beginner Friendly');
+  } else if (plant.difficulty === 'Moderate') {
+    tags.push('Intermediate');
+  } else if (plant.difficulty === 'Difficult') {
+    tags.push('Advanced');
+  }
+
+  // Light needs tag
+  if (plant.lightNeeds) {
+    tags.push(plant.lightNeeds + ' Light');
+  }
+
+  // Position tag
+  if (plant.position) {
+    const positionLabels = {
+      foreground: 'Foreground',
+      midground: 'Midground',
+      background: 'Background',
+      surface: 'Floating',
+    };
+    tags.push(positionLabels[plant.position] || plant.position);
+  }
+
+  // Planting style tag
+  if (plant.plantingStyle) {
+    const styleLabels = {
+      substrate: 'Plant in Substrate',
+      floating: 'Floating',
+      attachToWood: 'Attach to Wood',
+      attachToRock: 'Attach to Rock',
+    };
+    if (plant.plantingStyle !== 'floating' || plant.position !== 'surface') {
+      tags.push(styleLabels[plant.plantingStyle] || plant.plantingStyle);
+    }
+  }
+
+  // CO2 requirement
+  if (plant.co2Required) {
+    tags.push('CO2 Required');
+  }
+
+  // Growth rate tag
+  if (plant.growthRate) {
+    tags.push(plant.growthRate + ' Growth');
+  }
+
+  return tags;
+}
+
+function generatePlantDescription(key, plant, descriptions) {
+  // Use curated description if available
+  if (descriptions && descriptions[key]) {
+    return descriptions[key];
+  }
+
+  // Generate basic description from attributes
+  const tempRange = `${plant.tempMin}-${plant.tempMax}°F`;
+  const phRange = `${plant.phMin}-${plant.phMax}`;
+
+  let difficultyDesc = 'moderately easy to grow';
+  if (plant.difficulty === 'Easy') {
+    difficultyDesc = 'easy to grow and beginner-friendly';
+  } else if (plant.difficulty === 'Difficult') {
+    difficultyDesc = 'challenging to grow and requires attention';
+  }
+
+  const co2Desc = plant.co2Required ? ' CO2 supplementation recommended.' : ' Does not require CO2 supplementation.';
+
+  return `A ${plant.position} plant that is ${difficultyDesc}. Grows to ${plant.maxHeight} ${plant.heightUnit} with ${plant.growthRate.toLowerCase()} growth rate. Thrives in ${tempRange} water with pH ${phRange}. Requires ${plant.lightNeeds.toLowerCase()} lighting.${co2Desc}`.replace(
+    /\s+/g,
+    ' '
+  );
+}
+
+function generatePlantEntry(key, plant, descriptions = {}) {
+  // Normalize difficulty level for sorting
+  let normalizedDifficulty = 'intermediate';
+  if (plant.difficulty === 'Easy') {
+    normalizedDifficulty = 'beginner';
+  } else if (plant.difficulty === 'Difficult') {
+    normalizedDifficulty = 'advanced';
+  }
+
+  return {
+    id: toKebabCase(key),
+    plantKey: key, // Original camelCase key for plantDatabase lookups
+    title: plant.commonName,
+    scientificName: plant.scientificName,
+    description: generatePlantDescription(key, plant, descriptions),
+    imageUrl: plant.imageUrl || null,
+    origin: plant.origin || null,
+    originDisplayName: plant.origin ? getOriginDisplayName(plant.origin) : null,
+    difficulty: normalizedDifficulty,
+    position: plant.position,
+    plantingStyle: plant.plantingStyle,
+    lightNeeds: plant.lightNeeds,
+    co2Required: plant.co2Required,
+    growthRate: plant.growthRate,
+    tags: generatePlantTags(plant),
+    category: 'plants',
+    author: 'System',
+    firestoreId: null,
+    userId: null,
+    upvotes: 0,
+    verified: true,
+  };
+}
+
+function generatePlantEntries(plantDatabase, descriptions = {}) {
+  const entries = [];
+
+  for (const [key, plant] of Object.entries(plantDatabase)) {
+    entries.push(generatePlantEntry(key, plant, descriptions));
+  }
+
+  return entries;
+}
+
 // Load diseases, equipment, and terminology from glossary.js
 function loadOtherGlossaryData() {
   const glossaryPath = join(__dirname, '../js/glossary.js');
@@ -259,6 +418,14 @@ async function migrateGlossaryData() {
     const fishDescriptions = loadFishDescriptions();
     console.log(`✅ Loaded ${Object.keys(fishDescriptions).length} curated descriptions\n`);
 
+    console.log('📖 Loading plant data...');
+    const plantDatabase = loadPlantDatabase();
+    console.log(`✅ Loaded ${Object.keys(plantDatabase).length} plants\n`);
+
+    console.log('📖 Loading plant descriptions...');
+    const plantDescriptions = loadPlantDescriptions();
+    console.log(`✅ Loaded ${Object.keys(plantDescriptions).length} plant descriptions\n`);
+
     console.log('📖 Loading other glossary data (diseases, equipment, terminology)...');
     const { diseases, equipment, terminology } = loadOtherGlossaryData();
     console.log(
@@ -269,11 +436,16 @@ async function migrateGlossaryData() {
     const speciesEntries = generateGlossaryEntries(fishDatabase, fishDescriptions);
     console.log(`✅ Generated ${speciesEntries.length} species entries\n`);
 
+    console.log('🔄 Generating plant entries dynamically...');
+    const plantEntries = generatePlantEntries(plantDatabase, plantDescriptions);
+    console.log(`✅ Generated ${plantEntries.length} plant entries\n`);
+
     // Combine all entries
-    const allEntries = [...speciesEntries, ...diseases, ...equipment, ...terminology];
+    const allEntries = [...speciesEntries, ...plantEntries, ...diseases, ...equipment, ...terminology];
 
     console.log(`📊 Total entries to migrate: ${allEntries.length}`);
     console.log(`   - Species: ${speciesEntries.length}`);
+    console.log(`   - Plants: ${plantEntries.length}`);
     console.log(`   - Diseases: ${diseases.length}`);
     console.log(`   - Equipment: ${equipment.length}`);
     console.log(`   - Terminology: ${terminology.length}\n`);
