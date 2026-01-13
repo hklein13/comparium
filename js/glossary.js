@@ -47,6 +47,14 @@ class GlossaryManager {
         firestoreSubcollection: 'species_entries', // For future Firestore migration
       },
       {
+        id: 'plants',
+        title: 'Plants',
+        icon: '',
+        description: 'Aquarium plants and care guides',
+        imageUrl: null,
+        firestoreSubcollection: 'plant_entries',
+      },
+      {
         id: 'diseases',
         title: 'Diseases',
         icon: '',
@@ -89,8 +97,18 @@ class GlossaryManager {
           )
         : [];
 
+    // Dynamically generate plant entries from plant-data.js
+    const plantEntries =
+      typeof generatePlantEntries === 'function' && typeof plantDatabase !== 'undefined'
+        ? generatePlantEntries(
+            plantDatabase,
+            typeof plantDescriptions !== 'undefined' ? plantDescriptions : {}
+          )
+        : [];
+
     return {
       species: speciesEntries,
+      plants: plantEntries,
       diseases: [
         {
           id: 'ich',
@@ -1284,8 +1302,11 @@ class GlossaryManager {
    */
   renderEntry(entry) {
     const fishKey = entry.fishKey || entry.id;
+    const plantKey = entry.plantKey || entry.id;
     const isSpecies =
       entry.category === 'species' && typeof fishDatabase !== 'undefined' && fishDatabase[fishKey];
+    const isPlant =
+      entry.category === 'plants' && typeof plantDatabase !== 'undefined' && plantDatabase[plantKey];
 
     // For species entries, render as a card that opens modal
     if (isSpecies) {
@@ -1304,7 +1325,26 @@ class GlossaryManager {
       `;
     }
 
-    // For non-species entries, use original detailed layout
+    // For plant entries, render as a card that opens plant modal
+    if (isPlant) {
+      const imageHtml = entry.imageUrl
+        ? `<div class="glossary-card-image"><img src="${entry.imageUrl}" alt="${entry.title}" loading="lazy"></div>`
+        : `<div class="glossary-card-image"></div>`;
+
+      // Use data attribute to avoid XSS from plantKey interpolation
+      const safeKey = plantKey.replace(/[^a-zA-Z0-9]/g, '');
+      return `
+        <div class="glossary-card" data-plant-key="${safeKey}" onclick="glossaryManager.openPlantModal(this.dataset.plantKey)">
+          ${imageHtml}
+          <div class="glossary-card-content">
+            <div class="glossary-card-title">${entry.title}</div>
+            <div class="glossary-card-subtitle">${entry.scientificName || ''}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    // For non-species/plant entries, use original detailed layout
     const scientificName = entry.scientificName
       ? `<div class="glossary-item-meta">${entry.scientificName}</div>`
       : '';
@@ -1556,6 +1596,100 @@ class GlossaryManager {
       modal.classList.remove('active');
       document.body.style.overflow = '';
     }
+  }
+
+  /**
+   * Open plant modal with entry data
+   * @param {string} plantKey - The plant key to look up
+   */
+  openPlantModal(plantKey) {
+    const modal = document.getElementById('speciesModal');
+    if (!modal || typeof plantDatabase === 'undefined') return;
+
+    const plant = plantDatabase[plantKey];
+    if (!plant) return;
+
+    // Get description from plant-descriptions if available
+    const description =
+      typeof plantDescriptions !== 'undefined' && plantDescriptions[plantKey]
+        ? plantDescriptions[plantKey]
+        : 'No description available.';
+
+    // Populate modal content
+    const modalImage = document.getElementById('modalImage');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalScientific = document.getElementById('modalScientific');
+    const modalTags = document.getElementById('modalTags');
+    const modalDescription = document.getElementById('modalDescription');
+    const modalStats = document.getElementById('modalStats');
+    const modalActions = document.getElementById('modalActions');
+
+    // Set image
+    if (modalImage) {
+      modalImage.innerHTML = plant.imageUrl
+        ? `<img src="${plant.imageUrl}" alt="${plant.commonName}" loading="lazy">`
+        : '';
+    }
+
+    // Set title and scientific name
+    if (modalTitle) modalTitle.textContent = plant.commonName;
+    if (modalScientific) modalScientific.textContent = plant.scientificName || '';
+
+    // Set tags
+    if (modalTags) {
+      const tags = [];
+      if (plant.difficulty) tags.push(plant.difficulty);
+      if (plant.lightNeeds) tags.push(plant.lightNeeds + ' Light');
+      if (plant.position) {
+        const positionLabels = {
+          foreground: 'Foreground',
+          midground: 'Midground',
+          background: 'Background',
+          surface: 'Floating',
+        };
+        tags.push(positionLabels[plant.position] || plant.position);
+      }
+      if (plant.co2Required) tags.push('CO2 Required');
+      modalTags.innerHTML = tags.map(tag => `<span class="tag">${tag}</span>`).join('');
+    }
+
+    // Set description (truncated for modal)
+    if (modalDescription) {
+      const truncated =
+        description.length > 300 ? description.substring(0, 300) + '...' : description;
+      modalDescription.textContent = truncated;
+    }
+
+    // Set stats - plant-specific
+    if (modalStats) {
+      const stats = [];
+      stats.push({ label: 'Temp', value: `${plant.tempMin}-${plant.tempMax}°F` });
+      stats.push({ label: 'pH', value: `${plant.phMin}-${plant.phMax}` });
+      if (plant.maxHeight) stats.push({ label: 'Height', value: `${plant.maxHeight}"` });
+      if (plant.growthRate) stats.push({ label: 'Growth', value: plant.growthRate });
+
+      modalStats.innerHTML = stats
+        .map(
+          stat => `
+        <div class="modal-stat">
+          <div class="modal-stat-label">${stat.label}</div>
+          <div class="modal-stat-value">${stat.value}</div>
+        </div>
+      `
+        )
+        .join('');
+    }
+
+    // Set actions - link to plant detail page
+    if (modalActions) {
+      modalActions.innerHTML = `
+        <a href="plant.html?plant=${encodeURIComponent(plantKey)}" class="btn btn-primary">View Full Profile</a>
+      `;
+    }
+
+    // Show modal
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
   }
 
   /**

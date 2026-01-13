@@ -181,6 +181,163 @@ function generateGlossaryEntries(fishDatabase, descriptions = {}) {
   return entries;
 }
 
+// ============================================================================
+// PLANT ENTRY GENERATORS
+// ============================================================================
+
+/**
+ * Generate tags based on plant attributes
+ *
+ * @param {Object} plant - Plant object from plant-data.js
+ * @returns {Array<string>} Array of tag strings
+ */
+function generatePlantTags(plant) {
+  const tags = [];
+
+  // Difficulty tags
+  if (plant.difficulty === 'Easy') {
+    tags.push('Beginner Friendly');
+  } else if (plant.difficulty === 'Moderate') {
+    tags.push('Intermediate');
+  } else if (plant.difficulty === 'Difficult') {
+    tags.push('Advanced');
+  }
+
+  // Light needs tag
+  if (plant.lightNeeds) {
+    tags.push(plant.lightNeeds + ' Light');
+  }
+
+  // Position tag
+  if (plant.position) {
+    const positionLabels = {
+      foreground: 'Foreground',
+      midground: 'Midground',
+      background: 'Background',
+      surface: 'Floating',
+    };
+    tags.push(positionLabels[plant.position] || plant.position);
+  }
+
+  // Planting style tag
+  if (plant.plantingStyle) {
+    const styleLabels = {
+      substrate: 'Plant in Substrate',
+      floating: 'Floating',
+      attachToWood: 'Attach to Wood',
+      attachToRock: 'Attach to Rock',
+    };
+    if (plant.plantingStyle !== 'floating' || plant.position !== 'surface') {
+      tags.push(styleLabels[plant.plantingStyle] || plant.plantingStyle);
+    }
+  }
+
+  // CO2 requirement
+  if (plant.co2Required) {
+    tags.push('CO2 Required');
+  }
+
+  // Growth rate tag
+  if (plant.growthRate) {
+    tags.push(plant.growthRate + ' Growth');
+  }
+
+  return tags;
+}
+
+/**
+ * Generate description for a plant
+ * Uses curated description if available, otherwise generates from attributes
+ *
+ * @param {string} key - Plant key from plant-data.js
+ * @param {Object} plant - Plant object from plant-data.js
+ * @param {Object} descriptions - Curated descriptions object
+ * @returns {string} Description text
+ */
+function generatePlantDescription(key, plant, descriptions) {
+  // Use curated description if available
+  if (descriptions && descriptions[key]) {
+    return descriptions[key];
+  }
+
+  // Generate basic description from attributes
+  const tempRange = `${plant.tempMin}-${plant.tempMax}°F`;
+  const phRange = `${plant.phMin}-${plant.phMax}`;
+
+  let difficultyDesc = 'moderately easy to grow';
+  if (plant.difficulty === 'Easy') {
+    difficultyDesc = 'easy to grow and beginner-friendly';
+  } else if (plant.difficulty === 'Difficult') {
+    difficultyDesc = 'challenging to grow and requires attention';
+  }
+
+  const co2Desc = plant.co2Required ? ' CO2 supplementation recommended.' : ' Does not require CO2 supplementation.';
+
+  return `A ${plant.position} plant that is ${difficultyDesc}. Grows to ${plant.maxHeight} ${plant.heightUnit} with ${plant.growthRate.toLowerCase()} growth rate. Thrives in ${tempRange} water with pH ${phRange}. Requires ${plant.lightNeeds.toLowerCase()} lighting.${co2Desc}`.replace(
+    /\s+/g,
+    ' '
+  );
+}
+
+/**
+ * Generate glossary entry from plant data
+ *
+ * @param {string} key - Plant key from plant-data.js
+ * @param {Object} plant - Plant object from plant-data.js
+ * @param {Object} descriptions - Curated descriptions object (optional)
+ * @returns {Object} Glossary entry object
+ */
+function generatePlantEntry(key, plant, descriptions = {}) {
+  // Normalize difficulty level for sorting
+  let normalizedDifficulty = 'intermediate';
+  if (plant.difficulty === 'Easy') {
+    normalizedDifficulty = 'beginner';
+  } else if (plant.difficulty === 'Difficult') {
+    normalizedDifficulty = 'advanced';
+  }
+
+  return {
+    id: toKebabCase(key),
+    plantKey: key, // Original camelCase key for plantDatabase lookups
+    title: plant.commonName,
+    scientificName: plant.scientificName,
+    description: generatePlantDescription(key, plant, descriptions),
+    imageUrl: plant.imageUrl || null,
+    origin: plant.origin || null,
+    originDisplayName: plant.origin ? getOriginDisplayName(plant.origin) : null,
+    difficulty: normalizedDifficulty, // For sorting: beginner, intermediate, advanced
+    position: plant.position,
+    plantingStyle: plant.plantingStyle,
+    lightNeeds: plant.lightNeeds,
+    co2Required: plant.co2Required,
+    growthRate: plant.growthRate,
+    tags: generatePlantTags(plant),
+    category: 'plants',
+    author: 'System',
+    firestoreId: null,
+    userId: null,
+    upvotes: 0,
+    verified: true,
+  };
+}
+
+/**
+ * Generate all glossary entries from plant database
+ *
+ * @param {Object} plantDatabase - The plantDatabase object from plant-data.js
+ * @param {Object} descriptions - Curated descriptions object from plant-descriptions.js (optional)
+ * @returns {Array<Object>} Array of glossary entry objects
+ */
+function generatePlantEntries(plantDatabase, descriptions = {}) {
+  const entries = [];
+
+  for (const [key, plant] of Object.entries(plantDatabase)) {
+    entries.push(generatePlantEntry(key, plant, descriptions));
+  }
+
+  return entries;
+}
+
 // Export functions for use in glossary.js and tests
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
@@ -190,5 +347,10 @@ if (typeof module !== 'undefined' && module.exports) {
     getOriginDisplayName,
     generateGlossaryEntry,
     generateGlossaryEntries,
+    // Plant functions
+    generatePlantTags,
+    generatePlantDescription,
+    generatePlantEntry,
+    generatePlantEntries,
   };
 }
