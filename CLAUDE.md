@@ -29,6 +29,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Present options with pros/cons when applicable
 - Don't assume - verify with the user first
 
+### When User Pushes Back:
+**CRITICAL:** If the user repeatedly questions Claude's explanation or diagnosis, this is a signal to STOP and re-verify assumptions. User confusion often indicates Claude's mental model is wrong. Don't double down - instead:
+- Re-examine the evidence from scratch
+- Verify assumptions against actual state (check GitHub directly, not just local git)
+- Consider simpler explanations/solutions
+- The user is not always right, but neither is Claude - collaborative verification prevents wasted time
+
 **This helps ensure we think through everything in tandem.**
 
 ## Session Start Checklist
@@ -55,9 +62,9 @@ If a phase is in progress (see "Current Phase" below), there should be a plan fi
 
 **Current Stats:** 244 fish species (235 with images), 15 aquarium plants (14 with images)
 
-**Current Phase:** Phase 3 In Progress (Content Expansion) - 3A-3D complete, 3G complete (Plants section)
+**Current Phase:** Phase 3 In Progress (Content Expansion) - 3A-3D complete, 3G complete (Plants section deployed and live)
 
-**Active Branch:** `claude/phase3g-plants-section`
+**Active Branch:** `main` (Phase 3G merged January 13, 2026)
 
 ## Commands
 
@@ -759,6 +766,7 @@ The upload script was improved with proper rate limiting:
 | **Wikipedia API 403** | Wikipedia REST API blocked automated requests with 403 Forbidden (Jan 13) | Use Wikimedia Commons search instead, or provide user with direct search links for manual selection |
 | **Batch rate limiting** | After uploading 14 plant images, Wikimedia returned HTTP 429 for remaining requests | Wait ~1 hour for rate limit reset, or manually retry with `node scripts/upload-plant-images.js scripts/duckweed-retry.json` |
 | **XSS in plant code** | Plant keys interpolated directly into onclick handlers; URL params used unsanitized | Sanitize keys with `.replace(/[^a-zA-Z0-9]/g, '')` and use data attributes for onclick handlers |
+| **Deployment debugging rabbit hole** | Spent hours on wrong diagnosis. Claude insisted "merge succeeded, only deploy failed" when user kept questioning. Trusted `git log` over user's observation that GitHub showed no plant PR. Led user through manual Firebase deploy which didn't help. **Actual fix:** Re-run GitHub Actions (took seconds). | **CRITICAL:** When user repeatedly questions Claude's explanation, STOP and verify more thoroughly. User confusion is often a signal Claude's mental model is wrong. Don't conflate local git state with remote GitHub state. Simple solutions (re-run CI) should be tried before complex debugging. |
 
 ### Key Takeaways
 1. **Don't modify source content without asking** - preserving original text is usually better
@@ -772,6 +780,9 @@ The upload script was improved with proper rate limiting:
 9. **Run code-reviewer + code-simplifier before merging** - Catches XSS vulnerabilities and redundant code patterns
 10. **Wikipedia API may block requests** - Use Wikimedia Commons API or provide direct search links for manual selection
 11. **Batch uploads can hit rate limits mid-batch** - Save progress; use retry JSON files for failed items
+12. **User pushback = verification signal** - When user repeatedly questions Claude's diagnosis, that's a sign to STOP and verify assumptions more carefully, not double down
+13. **Try simple solutions first** - Re-running GitHub Actions should be tried before complex debugging like manual Firebase deployments
+14. **Local git ≠ remote GitHub** - `git log` showing commits doesn't guarantee remote is in expected state; verify on GitHub directly when debugging deploy issues
 
 ### Image Sourcing Decision Tree
 ```
