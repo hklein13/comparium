@@ -206,7 +206,6 @@ const fishCategories = {
     'keyholeCichlid',
   ],
   'Corydoras Catfish': [
-    'corydoras',
     'pandaCory',
     'bronzeCory',
     'pepperedCory',

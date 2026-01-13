@@ -53,9 +53,9 @@ If a phase is in progress (see "Current Phase" below), there should be a plan fi
 - **Repository:** https://github.com/hklein13/comparium
 - **Firebase Project:** `comparium-21b69`
 
-**Current Stats:** 246 species in database, 213 with images (33 still need images)
+**Current Stats:** 244 species in database, 235 with images (9 still need manual sourcing - aquarium morphs/hybrids)
 
-**Current Phase:** Phase 3 In Progress (Content Expansion) - 3A-3C complete, 3D in progress + Glossary UI redesign complete
+**Current Phase:** Phase 3 In Progress (Content Expansion) - 3A-3D complete + Glossary UI redesign complete
 
 **Active Branch:** `claude/phase3d-species-images`
 
@@ -72,7 +72,8 @@ npm run migrate:glossary         # Sync fish-data.js to Firestore
 
 # Image Pipeline
 npm run images                   # Interactive image upload (y/n per species)
-npm run images:preview           # Generate HTML preview of all species needing images
+npm run images:preview           # Generate HTML preview (Wikimedia source)
+npm run images:inaturalist       # Generate HTML preview (iNaturalist source - better for rare species)
 npm run images:upload            # Batch upload (interactive JSON paste)
 node scripts/upload-selected-images.js scripts/temp-selection.json  # Batch upload from file
 
@@ -348,7 +349,7 @@ Development follows a phased approach. See `DATA-MODEL.md` for complete specific
 | **3A** | ✅ Complete | Added 3 new fields to all species (`tankSizeRecommended`, `breedingNeeds`, `genderDifferentiation`) |
 | **3B** | ✅ Complete | Initial 130 species images uploaded |
 | **3C** | ✅ Complete | Added 103 new species (143 → 246) + updated ALL 246 descriptions to full versions |
-| **3D** | 🔄 In Progress | 213/246 species have images (83 added Jan 10); 33 remaining |
+| **3D** | ✅ Complete | 235/244 species have images (96.3%); 9 remaining need manual sourcing |
 | **3E** | ⏳ Pending | Add disease reference images |
 | **3F** | ⏳ Pending | Expand equipment entries (6 → 16) |
 | **3G** | ⏸️ Deferred | Plants section (waiting on user) |
@@ -373,6 +374,20 @@ Development follows a phased approach. See `DATA-MODEL.md` for complete specific
 - 1 failure: melanistiusCorydoras (Wikimedia returned PDF, not image - needs different URL)
 - Previously failed species (sailfinMolly, yellowLabCichlid, banditCory, peaPuffer) now successfully uploaded
 - **Rate limiting solved:** Increased delay to 2.5s between requests - zero rate limit failures
+
+**Sub-Phase 3D Completion (January 12, 2026):**
+- Used iNaturalist as alternative source after Wikimedia returned same rejected images
+- Uploaded 22 additional images via iNaturalist search (17 initial + 5 deep search)
+- **Deleted 2 invalid species entries:**
+  - `corydoras` - Generic genus entry, redundant (replaced by specific species like bronzeCory, pandaCory)
+  - `marginatedTetra` - Not a valid species (Hyphessobrycon marginatus is not recognized in aquarium trade)
+- **Final count:** 244 species, 235 with images (96.3% coverage)
+- **9 species still need manual sourcing** (aquarium morphs/hybrids not found in nature):
+  1. balloonMolly, blackMolly, dalmatianMolly (captive-bred color morphs)
+  2. goldWhiteCloud (captive-bred variant)
+  3. platinumTetra (possibly captive variant)
+  4. cumingsBarb, axelrodiRainbowfish (natural but rare on image APIs)
+  5. bloodParrotCichlid, flowerhornCichlid (man-made hybrids)
 
 **Glossary UI Redesign (January 11, 2026):**
 - **Complete redesign** of glossary.html with visual gallery approach
@@ -439,12 +454,12 @@ git push -u origin claude/phase3-content-expansion
 - ✅ Prettier configured and all files formatted
 - ✅ Claude Code hooks set up in `.claude/settings.json`
 - ✅ Playwright tests passing (7 passed, 11 skipped)
-- ✅ Data integrity tests passing (246 species validated)
+- ✅ Data integrity tests passing (244 species validated)
 - ✅ Security rules tests passing (25 checks)
 - ✅ Cloud Function tests available (dry-run simulation)
 - ✅ All 4 Cloud Functions deployed and operational
 - ✅ **Phase 2 complete and merged to main**
-- 🔄 **Phase 3 in progress** (3A-3C complete, 3D in progress, 33 species need images)
+- ✅ **Phase 3D complete** - 235/244 species have images (96.3%), 9 need manual sourcing
 - ✅ **Glossary UI redesign complete** - hero section, category cards, species modal, Add to Compare
 - ✅ **Code cleanup complete** - tank-manager.js refactored, ~220 lines unused code removed from glossary
 
@@ -522,6 +537,27 @@ Images are stored in Firebase Storage at `images/species/{fishKey}.jpg`
 6. Commit changes: `git add js/fish-data.js && git commit -m "Add images" && git push`
 
 **CRITICAL:** Steps 4-6 must ALL be completed. If interrupted, images won't appear on live site.
+
+### Alternative: iNaturalist Image Source
+When Wikimedia returns poor quality or duplicate images, use iNaturalist as an alternative:
+
+1. `npm run images:inaturalist` - Generates `image-preview-inaturalist.html`
+2. Open preview in browser, select quality images, click "Export Selected"
+3. Same upload workflow as above (steps 3-6)
+
+**When to use iNaturalist:**
+- Wikimedia search returns same images that were previously rejected
+- Species is rare or not well-represented on Wikimedia
+- Need higher quality wildlife photography
+
+**Limitations:**
+- **Aquarium morphs/hybrids won't be found** - iNaturalist only has wild species observations
+- Examples: balloonMolly, bloodParrotCichlid, flowerhornCichlid (man-made varieties)
+- For these, user must manually source images from other licensed sources
+
+**Scripts:**
+- `scripts/generate-inaturalist-preview.js` - Primary iNaturalist search (uses scientificName)
+- `scripts/deep-inaturalist-search.js` - Deeper search using observations API + multiple query strategies
 
 ### Image URLs in fish-data.js
 ```javascript
@@ -636,6 +672,8 @@ The upload script was improved with proper rate limiting:
 - Key sync validation script catches description/data mismatches immediately
 - **Code-simplifier plugin** makes refactoring safe - run before UI changes to make edits easier
 - **2.5s delay between Wikimedia requests** - eliminated rate limiting entirely, 83 images uploaded in one batch
+- **iNaturalist as alternative source** - Found 22 additional images when Wikimedia returned duplicates (Jan 12)
+- **Code-reviewer + code-simplifier combo** - Running both after completing work catches orphaned references
 
 ### What Went Wrong & Fixes
 | Issue | What Happened | Fix |
@@ -644,6 +682,10 @@ The upload script was improved with proper rate limiting:
 | **Images not showing** | Upload workflow interrupted - temp-selection.json created but upload never run | Complete ALL steps: upload → migrate → commit → push |
 | **Wikimedia rate limits** | 500ms delay too aggressive, caused HTML error responses | **FIXED:** Increased delay to 2.5s - now supports 80+ image batches |
 | **Description key typos** | 13 typos in fish-descriptions.js keys caused descriptions not to display (e.g., `betaImbellis` vs `bettaImbellis`) | ALWAYS run key sync validation after bulk additions to fish-descriptions.js |
+| **Wikimedia same images** | Re-running `npm run images:preview` returned identical images that were already rejected for poor quality | **FIXED:** Use iNaturalist as alternative source (`npm run images:inaturalist`) |
+| **Wrong species list** | Manual regex to find species without images returned incorrect results | Use existing script patterns: `new Function(code + '; return fishDatabase;')()` |
+| **Invalid species in database** | `corydoras` (generic genus) and `marginatedTetra` (invalid species name) were in database | Deleted both; always verify species validity before adding |
+| **Orphaned references** | Deleted species were still referenced in app.js categories and image-pipeline.js | ALWAYS run code-reviewer after deletions to find orphaned references |
 
 ### Key Takeaways
 1. **Don't modify source content without asking** - preserving original text is usually better
@@ -651,6 +693,21 @@ The upload script was improved with proper rate limiting:
 3. **Ask questions when uncertain** - collaborative decision-making prevents rework
 4. **Validate key sync after bulk additions** - typos in description keys silently break the site
 5. **Respect external API rate limits** - 2.5s delays for Wikimedia; batch sizes of 80+ work fine with proper delays
+6. **Use alternative image sources** - When one source fails, try iNaturalist before manual sourcing
+7. **Run code-reviewer after deletions** - Catches orphaned references in category arrays, priority lists, etc.
+8. **Aquarium morphs won't be on wildlife APIs** - balloonMolly, bloodParrotCichlid, flowerhornCichlid need manual sourcing
+
+### Image Sourcing Decision Tree
+```
+Need species image?
+├── Run npm run images:preview (Wikimedia)
+│   ├── Good quality images found → Select and upload
+│   └── Poor quality OR same as rejected images
+│       └── Run npm run images:inaturalist (iNaturalist)
+│           ├── Found CC-licensed images → Select and upload
+│           └── No results (likely aquarium morph/hybrid)
+│               └── Manual sourcing required
+```
 
 ## Security Notes
 
