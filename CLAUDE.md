@@ -53,11 +53,11 @@ If a phase is in progress (see "Current Phase" below), there should be a plan fi
 - **Repository:** https://github.com/hklein13/comparium
 - **Firebase Project:** `comparium-21b69`
 
-**Current Stats:** 244 species in database, 235 with images (9 still need manual sourcing - aquarium morphs/hybrids)
+**Current Stats:** 244 fish species (235 with images), 15 aquarium plants (14 with images)
 
-**Current Phase:** Phase 3 In Progress (Content Expansion) - 3A-3D complete + Glossary UI redesign complete
+**Current Phase:** Phase 3 In Progress (Content Expansion) - 3A-3D complete, 3G complete (Plants section)
 
-**Active Branch:** `claude/phase3d-species-images`
+**Active Branch:** `claude/phase3g-plants-section`
 
 ## Commands
 
@@ -118,13 +118,17 @@ glossary-generator.js (transforms data)
 ```
 
 ### Key Files
-- `js/fish-data.js` - Single source of truth for all species (246 entries, 17 fields including `tankSizeRecommended`, `breedingNeeds`, `genderDifferentiation`)
-- `js/fish-descriptions.js` - Curated descriptions for ALL 246 species (full descriptions from source document)
-- `js/glossary-generator.js` - Reusable logic for generating glossary entries
+- `js/fish-data.js` - Single source of truth for all fish species (244 entries)
+- `js/fish-descriptions.js` - Curated descriptions for all 244 fish species
+- `js/plant-data.js` - Plant database (15 entries with position, planting style, difficulty, lighting, water params)
+- `js/plant-descriptions.js` - Curated descriptions for all 15 plants
+- `js/plant-detail.js` - Plant detail page logic (similar to species-detail.js)
+- `js/glossary-generator.js` - Reusable logic for generating glossary entries (fish + plants)
 - `js/tank-manager.js` - Tank CRUD operations (used by dashboard) - **refactored January 2026**
 - `js/maintenance-manager.js` - Event logging and schedule management for tanks
 - `js/faq.js` - FAQ accordion toggle and search functionality
 - `scripts/serviceAccountKey.json` - Firebase Admin credentials (gitignored, never commit)
+- `scripts/upload-plant-images.js` - Plant image upload script (separate from fish images)
 - `assets/hero-tank.mp4` - Homepage video background (bright planted aquarium, ~13MB)
 
 ### tank-manager.js Architecture (Refactored January 2026)
@@ -195,7 +199,9 @@ if (!missing.length && !orphaned.length) console.log('SUCCESS: All keys match!')
 - **index.html** - Landing page (video hero with looping aquarium background, demo CTA, species showcase, origin note)
 - **compare.html** - Fish comparison tool (the main app functionality)
 - **dashboard.html** - User hub with stats, comparisons, tank management, maintenance tracking (full CRUD), and favorites
-- **glossary.html** - Species database with search and filtering
+- **glossary.html** - Encyclopedia with 5 categories: Species, Plants, Diseases, Equipment, Terminology
+- **species.html** - Fish species detail page (loaded via `?species=fishKey`)
+- **plant.html** - Plant detail page (loaded via `?plant=plantKey`)
 - **my-tanks.html** - Redirects to dashboard#my-tanks-section (backward compat)
 - **faq.html** - Static FAQ with accordion toggle and search (js/faq.js)
 
@@ -352,7 +358,7 @@ Development follows a phased approach. See `DATA-MODEL.md` for complete specific
 | **3D** | ✅ Complete | 235/244 species have images (96.3%); 9 remaining need manual sourcing |
 | **3E** | ⏳ Pending | Add disease reference images |
 | **3F** | ⏳ Pending | Expand equipment entries (6 → 16) |
-| **3G** | ⏸️ Deferred | Plants section (waiting on user) |
+| **3G** | ✅ Complete | Plants section with 15 aquarium plants, detail pages, and 14/15 images |
 
 **Sub-Phase 3C Completion Notes (January 8, 2026):**
 - Added 103 new species to fish-data.js (now 246 total)
@@ -396,6 +402,20 @@ Development follows a phased approach. See `DATA-MODEL.md` for complete specific
 - **Code cleanup:** Removed ~220 lines of unused code (origin groups, old CSS)
 - **Kept for future:** Toast notification system, contribute function, careLevel normalization
 - **Files modified:** glossary.html, css/naturalist.css, js/glossary.js, js/app.js, js/glossary-generator.js
+
+**Phase 3G: Plants Section (January 13, 2026):**
+- **Added 15 aquarium plants** with full data: position, planting style, difficulty, lighting, water params, growth rate, propagation
+- **Created plant detail pages** with `plant.html` and `plant-detail.js` (follows species-detail.js pattern)
+- **Glossary integration:** Plants appear as 5th category card, click opens modal, "View Full Profile" links to detail page
+- **Category cards grid:** Updated from 4 to 5 columns to accommodate new Plants category
+- **Uploaded 14/15 images** to Firebase Storage (duckweed pending due to Wikimedia rate limiting)
+- **XSS fixes:** Sanitized plant keys in onclick handlers and URL parameters (found by code-reviewer agent)
+- **Files created:** plant-data.js, plant-descriptions.js, plant-detail.js, plant.html, upload-plant-images.js
+- **Files modified:** glossary-generator.js, glossary.js, glossary.html, naturalist.css, eslint.config.js, migrate-glossary-to-firestore.js
+
+**Plant Image TODO (for later):**
+- Retry `duckweed` image (rate limited)
+- Replace `amazonSword`, `javaMoss`, `dwarfHairgrass` with better aquarium-context images
 
 ## Git Workflow
 
@@ -546,7 +566,10 @@ allow write: if isAdmin();        // Admin-only writes
 
 ## Image System
 
-Images are stored in Firebase Storage at `images/species/{fishKey}.jpg`
+Images are stored in Firebase Storage:
+- **Fish species:** `images/species/{fishKey}.jpg`
+- **Plants:** `images/plants/{plantKey}.jpg`
+- **User tank photos:** `images/tanks/{tankId}.jpg`
 
 ### Adding Images Workflow
 1. `npm run images:preview` - Generates `image-preview.html` showing species without images
@@ -587,6 +610,33 @@ fishKey: {
     // ... other attributes
 }
 ```
+
+### Plant Images Workflow
+Plant images use a separate upload script that stores to `images/plants/`:
+
+1. User provides Wikimedia Commons URLs (copy from search results)
+2. Save URLs to `scripts/plant-selection.json`:
+```json
+[
+  {"key": "javaFern", "url": "https://upload.wikimedia.org/..."},
+  {"key": "javaMoss", "url": "https://upload.wikimedia.org/..."}
+]
+```
+3. Run: `node scripts/upload-plant-images.js scripts/plant-selection.json`
+4. Run: `npm run migrate:glossary`
+5. Commit and push
+
+**Plant Image URLs in plant-data.js:**
+```javascript
+javaFern: {
+    commonName: "Java Fern",
+    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fplants%2FjavaFern.jpg?alt=media",
+    // ... other attributes
+}
+```
+
+**Wikimedia Search Links for Plants:**
+Use direct Wikimedia Commons search: `https://commons.wikimedia.org/w/index.php?search={scientificName}&title=Special:MediaSearch&type=image`
 
 ### User Tank Photo Uploads (January 2026)
 Users can upload a single cover photo per tank that replaces the species mosaic on portrait cards.
@@ -706,6 +756,9 @@ The upload script was improved with proper rate limiting:
 | **Wrong species list** | Manual regex to find species without images returned incorrect results | Use existing script patterns: `new Function(code + '; return fishDatabase;')()` |
 | **Invalid species in database** | `corydoras` (generic genus) and `marginatedTetra` (invalid species name) were in database | Deleted both; always verify species validity before adding |
 | **Orphaned references** | Deleted species were still referenced in app.js categories and image-pipeline.js | ALWAYS run code-reviewer after deletions to find orphaned references |
+| **Wikipedia API 403** | Wikipedia REST API blocked automated requests with 403 Forbidden (Jan 13) | Use Wikimedia Commons search instead, or provide user with direct search links for manual selection |
+| **Batch rate limiting** | After uploading 14 plant images, Wikimedia returned HTTP 429 for remaining requests | Wait ~1 hour for rate limit reset, or manually retry with `node scripts/upload-plant-images.js scripts/duckweed-retry.json` |
+| **XSS in plant code** | Plant keys interpolated directly into onclick handlers; URL params used unsanitized | Sanitize keys with `.replace(/[^a-zA-Z0-9]/g, '')` and use data attributes for onclick handlers |
 
 ### Key Takeaways
 1. **Don't modify source content without asking** - preserving original text is usually better
@@ -716,6 +769,9 @@ The upload script was improved with proper rate limiting:
 6. **Use alternative image sources** - When one source fails, try iNaturalist before manual sourcing
 7. **Run code-reviewer after deletions** - Catches orphaned references in category arrays, priority lists, etc.
 8. **Aquarium morphs won't be on wildlife APIs** - balloonMolly, bloodParrotCichlid, flowerhornCichlid need manual sourcing
+9. **Run code-reviewer + code-simplifier before merging** - Catches XSS vulnerabilities and redundant code patterns
+10. **Wikipedia API may block requests** - Use Wikimedia Commons API or provide direct search links for manual selection
+11. **Batch uploads can hit rate limits mid-batch** - Save progress; use retry JSON files for failed items
 
 ### Image Sourcing Decision Tree
 ```
