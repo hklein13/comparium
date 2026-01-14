@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- SEO Meta Tags (will be updated dynamically) -->
+    <title>Tank Details | Comparium</title>
+    <meta name="description" content="View aquarium setup details shared by a Comparium community member." />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/naturalist.css" />
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VNY458QF3"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', 'G-8VNY458QF3');
+    </script>
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="header">
+      <a href="index.html" class="logo">Comparium</a>
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="compare.html">Compare</a>
+        <a href="glossary.html">Glossary</a>
+        <a href="community.html">Community</a>
+        <a href="faq.html">FAQ</a>
+        <a href="dashboard.html">Dashboard</a>
+        <div id="auth-links">
+          <a href="login.html">Login</a>
+          <a href="signup.html" class="nav-cta">Sign Up</a>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Back Navigation -->
+    <div class="tank-detail-back">
+      <a href="community.html" class="back-link">&larr; Back to Community</a>
+    </div>
+
+    <!-- Main Content -->
+    <main class="tank-detail-main">
+      <!-- Loading State -->
+      <div id="tank-loading" class="tank-detail-loading">
+        <p>Loading tank details...</p>
+      </div>
+
+      <!-- Error State -->
+      <div id="tank-error" class="tank-detail-error" style="display: none">
+        <h2>Tank Not Found</h2>
+        <p>This tank may have been made private or deleted.</p>
+        <a href="community.html" class="btn btn-primary">Browse Community</a>
+      </div>
+
+      <!-- Tank Content (hidden until loaded) -->
+      <article id="tank-content" class="tank-detail-content" style="display: none">
+        <!-- Cover Photo / Mosaic -->
+        <div id="tank-hero" class="tank-detail-hero">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Tank Info -->
+        <div class="tank-detail-info">
+          <div class="tank-detail-header">
+            <h1 id="tank-name">Tank Name</h1>
+            <span id="tank-size" class="tank-detail-size">0g</span>
+          </div>
+
+          <div class="tank-detail-owner">
+            <span>by </span>
+            <a id="tank-owner-link" href="#">@username</a>
+          </div>
+
+          <p id="tank-description" class="tank-detail-description"></p>
+
+          <!-- Species Section -->
+          <section class="tank-detail-section">
+            <h2>Species <span id="species-count" class="section-count">(0)</span></h2>
+            <div id="species-grid" class="tank-detail-species-grid">
+              <!-- Populated by JS -->
+            </div>
+          </section>
+
+          <!-- Plants Section -->
+          <section id="plants-section" class="tank-detail-section" style="display: none">
+            <h2>Plants <span id="plants-count" class="section-count">(0)</span></h2>
+            <div id="plants-list" class="tank-detail-plants-list">
+              <!-- Populated by JS -->
+            </div>
+          </section>
+
+          <!-- Shared Date -->
+          <div class="tank-detail-meta">
+            <span id="tank-shared-date">Shared recently</span>
+          </div>
+        </div>
+      </article>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>Comparium &copy; 2026 | Built for aquarium enthusiasts</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script type="module" src="js/firebase-init.js"></script>
+    <script src="js/storage-service.js"></script>
+    <script src="js/auth-manager.js"></script>
+    <script src="js/fish-data.js"></script>
+    <script src="js/plant-data.js"></script>
+    <script src="js/public-tank-manager.js"></script>
+    <script src="js/tank-detail.js"></script>
+  </body>
+</html>

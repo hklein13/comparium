@@ -6829,3 +6829,262 @@ body.logged-in .favorite-star {
     grid-template-columns: 1fr;
   }
 }
+
+/* ============================================
+   TANK DETAIL PAGE
+   ============================================ */
+
+/* Back Link */
+.tank-detail-back {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--space-md) var(--space-lg);
+}
+
+.back-link {
+  color: var(--forest);
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: color 0.2s ease;
+}
+
+.back-link:hover {
+  color: var(--forest-light);
+}
+
+/* Main Container */
+.tank-detail-main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 var(--space-lg) var(--space-2xl);
+}
+
+/* Loading & Error States */
+.tank-detail-loading,
+.tank-detail-error {
+  text-align: center;
+  padding: var(--space-2xl);
+}
+
+.tank-detail-error h2 {
+  font-family: var(--font-serif);
+  color: var(--ink);
+  margin-bottom: var(--space-sm);
+}
+
+.tank-detail-error p {
+  color: var(--ink-secondary);
+  margin-bottom: var(--space-lg);
+}
+
+/* Content Container */
+.tank-detail-content {
+  background: var(--white);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+/* Hero Section */
+.tank-detail-hero {
+  aspect-ratio: 16 / 9;
+  max-height: 400px;
+  background: var(--stone);
+  overflow: hidden;
+}
+
+.tank-detail-hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tank-detail-hero-mosaic {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  width: 100%;
+  height: 100%;
+}
+
+.tank-detail-hero-mosaic img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tank-detail-hero-mosaic.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-tertiary);
+}
+
+/* Info Section */
+.tank-detail-info {
+  padding: var(--space-xl);
+}
+
+.tank-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-md);
+  margin-bottom: var(--space-xs);
+}
+
+.tank-detail-header h1 {
+  font-family: var(--font-serif);
+  font-size: 1.75rem;
+  color: var(--ink);
+  margin: 0;
+}
+
+.tank-detail-size {
+  background: var(--forest);
+  color: white;
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-full);
+  font-size: 0.95rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.tank-detail-owner {
+  color: var(--ink-secondary);
+  margin-bottom: var(--space-lg);
+}
+
+.tank-detail-owner a {
+  color: var(--forest);
+  text-decoration: none;
+}
+
+.tank-detail-owner a:hover {
+  text-decoration: underline;
+}
+
+.tank-detail-description {
+  color: var(--ink-secondary);
+  line-height: 1.6;
+  margin-bottom: var(--space-xl);
+  padding-bottom: var(--space-lg);
+  border-bottom: 1px solid var(--border);
+}
+
+/* Sections */
+.tank-detail-section {
+  margin-bottom: var(--space-xl);
+}
+
+.tank-detail-section h2 {
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  color: var(--ink);
+  margin-bottom: var(--space-md);
+}
+
+.section-count {
+  font-weight: normal;
+  color: var(--ink-tertiary);
+}
+
+/* Species Grid */
+.tank-detail-species-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: var(--space-md);
+}
+
+.species-mini-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  padding: var(--space-sm);
+  border-radius: var(--radius-md);
+  transition: background 0.2s ease;
+}
+
+.species-mini-card:hover {
+  background: var(--stone);
+}
+
+.species-mini-card__image {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--stone);
+  margin-bottom: var(--space-xs);
+}
+
+.species-mini-card__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.species-mini-card__name {
+  font-size: 0.85rem;
+  color: var(--ink);
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* Plants List */
+.tank-detail-plants-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.plant-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--stone);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.plant-list-item:hover {
+  background: var(--border);
+}
+
+.plant-list-item__name {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.plant-list-item__meta {
+  color: var(--ink-tertiary);
+  font-size: 0.85rem;
+}
+
+/* Meta */
+.tank-detail-meta {
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--border);
+  color: var(--ink-tertiary);
+  font-size: 0.9rem;
+}
+
+.empty-message {
+  color: var(--ink-tertiary);
+  font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .tank-detail-header {
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .tank-detail-species-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
