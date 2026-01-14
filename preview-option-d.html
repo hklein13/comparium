@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Compare Page Preview - Option D: Silhouette Fill-In</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Darker+Grotesque:wght@400;500;600;700;800&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --forest: #234a3a;
+        --forest-light: #2d5a47;
+        --white: #fefdfb;
+        --ivory: #faf9f6;
+        --stone: #f4f3f0;
+        --border: #e5e3de;
+        --ink: #1a1a1a;
+        --ink-secondary: #4a4a4a;
+        --ink-tertiary: #7a7a7a;
+        --font-display: 'Darker Grotesque', sans-serif;
+        --font-serif: 'Libre Baskerville', serif;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: var(--font-display);
+        background: var(--ivory);
+        color: var(--ink);
+        min-height: 100vh;
+      }
+
+      /* Header */
+      .header {
+        background: var(--white);
+        padding: 1rem 2rem;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo {
+        font-family: var(--font-serif);
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--forest);
+        text-decoration: none;
+      }
+
+      .preview-badge {
+        background: var(--forest);
+        color: var(--white);
+        padding: 0.25rem 0.75rem;
+        border-radius: 999px;
+        font-size: 0.8rem;
+        font-weight: 600;
+      }
+
+      /* Hero Section - Option D: Interactive Silhouettes */
+      .compare-hero {
+        padding: 2.5rem 2rem 3rem;
+        text-align: center;
+        background: var(--white);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .compare-hero h1 {
+        font-family: var(--font-serif);
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--ink);
+        margin-bottom: 0.5rem;
+      }
+
+      .compare-hero-subtitle {
+        color: var(--ink-secondary);
+        font-size: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      /* The star of Option D: Interactive silhouette slots */
+      .silhouette-row {
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        gap: 2rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .silhouette-slot {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+      }
+
+      .silhouette-slot:hover {
+        transform: translateY(-5px);
+      }
+
+      .silhouette-frame {
+        width: 120px;
+        height: 150px;
+        border-radius: 60px 60px 40px 40px;
+        background: var(--stone);
+        border: 3px dashed var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.4s ease;
+      }
+
+      .silhouette-frame.filled {
+        border-style: solid;
+        border-color: var(--forest);
+        background: var(--ivory);
+        box-shadow: 0 8px 24px rgba(35, 74, 58, 0.2);
+      }
+
+      .silhouette-frame img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0;
+        transform: scale(0.8);
+        transition: all 0.4s ease;
+      }
+
+      .silhouette-frame.filled img {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      /* Fish silhouette SVG placeholder */
+      .silhouette-placeholder {
+        position: absolute;
+        width: 60%;
+        height: 60%;
+        opacity: 0.3;
+        transition: opacity 0.3s ease;
+      }
+
+      .silhouette-frame.filled .silhouette-placeholder {
+        opacity: 0;
+      }
+
+      .silhouette-slot:hover .silhouette-frame:not(.filled) {
+        border-color: var(--ink-tertiary);
+        background: rgba(35, 74, 58, 0.05);
+      }
+
+      .silhouette-slot:hover .silhouette-placeholder {
+        opacity: 0.5;
+      }
+
+      .slot-label {
+        margin-top: 0.75rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--ink-secondary);
+      }
+
+      .slot-label.filled {
+        color: var(--forest);
+      }
+
+      .slot-name {
+        font-size: 0.85rem;
+        color: var(--ink-tertiary);
+        font-style: italic;
+        min-height: 1.2em;
+      }
+
+      /* VS indicators between slots */
+      .vs-indicator {
+        font-family: var(--font-serif);
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--border);
+        align-self: center;
+        margin-bottom: 2rem;
+      }
+
+      .vs-indicator.active {
+        color: var(--forest);
+      }
+
+      /* Progress indicator */
+      .progress-bar {
+        max-width: 400px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .progress-step {
+        flex: 1;
+        height: 4px;
+        background: var(--border);
+        border-radius: 2px;
+        transition: background 0.3s ease;
+      }
+
+      .progress-step.complete {
+        background: var(--forest);
+      }
+
+      .progress-text {
+        font-size: 0.85rem;
+        color: var(--ink-tertiary);
+        margin-top: 0.5rem;
+        text-align: center;
+      }
+
+      /* Main Content Area */
+      .main-content {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 2rem;
+      }
+
+      /* Search/Selection Panel */
+      .selection-panel {
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+
+      .panel-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--ink);
+      }
+
+      .search-input {
+        width: 100%;
+        padding: 0.875rem 1rem;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        font-size: 1rem;
+        font-family: var(--font-display);
+        transition: all 0.2s ease;
+      }
+
+      .search-input:focus {
+        outline: none;
+        border-color: var(--forest);
+        box-shadow: 0 0 0 3px rgba(35, 74, 58, 0.1);
+      }
+
+      .search-input::placeholder {
+        color: var(--ink-tertiary);
+      }
+
+      /* Quick picks */
+      .quick-picks {
+        margin-top: 1rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .quick-pick {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 0.75rem;
+        background: var(--stone);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 0.85rem;
+      }
+
+      .quick-pick:hover {
+        border-color: var(--forest);
+        background: rgba(35, 74, 58, 0.05);
+      }
+
+      .quick-pick img {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      /* Compare Button */
+      .compare-section {
+        text-align: center;
+        margin-top: 2rem;
+      }
+
+      .compare-btn {
+        background: var(--forest);
+        color: var(--white);
+        border: none;
+        padding: 1rem 3rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-family: var(--font-display);
+      }
+
+      .compare-btn:hover {
+        background: var(--forest-light);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 16px rgba(35, 74, 58, 0.3);
+      }
+
+      .compare-btn:disabled {
+        background: var(--ink-tertiary);
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+
+      /* Info Box */
+      .info-box {
+        margin-top: 2rem;
+        padding: 1.5rem;
+        background: var(--white);
+        border-radius: 8px;
+        border-left: 4px solid var(--forest);
+      }
+
+      .info-box h3 {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+        color: var(--ink);
+      }
+
+      .info-box p {
+        color: var(--ink-secondary);
+        font-size: 0.9rem;
+        line-height: 1.6;
+      }
+
+      /* Animation for demo */
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.02);
+        }
+      }
+
+      .silhouette-frame:not(.filled) {
+        animation: pulse 2s ease-in-out infinite;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <a href="#" class="logo">Comparium</a>
+      <span class="preview-badge">Option D Preview</span>
+    </header>
+
+    <section class="compare-hero">
+      <h1>Compare Species</h1>
+      <p class="compare-hero-subtitle">Select fish to fill in the comparison slots</p>
+
+      <!-- The interactive silhouette slots -->
+      <div class="silhouette-row">
+        <!-- Slot 1 - Filled -->
+        <div class="silhouette-slot">
+          <div class="silhouette-frame filled">
+            <svg class="silhouette-placeholder" viewBox="0 0 100 80" fill="currentColor">
+              <ellipse cx="40" cy="40" rx="35" ry="25" />
+              <polygon points="75,40 100,25 100,55" />
+              <ellipse cx="25" cy="35" rx="5" ry="5" />
+            </svg>
+            <img
+              src="https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FneonTetra.jpg?alt=media"
+              alt="Neon Tetra"
+            />
+          </div>
+          <div class="slot-label filled">Species 1</div>
+          <div class="slot-name">Neon Tetra</div>
+        </div>
+
+        <div class="vs-indicator active">vs</div>
+
+        <!-- Slot 2 - Filled -->
+        <div class="silhouette-slot">
+          <div class="silhouette-frame filled">
+            <svg class="silhouette-placeholder" viewBox="0 0 100 80" fill="currentColor">
+              <ellipse cx="40" cy="40" rx="35" ry="25" />
+              <polygon points="75,40 100,25 100,55" />
+              <ellipse cx="25" cy="35" rx="5" ry="5" />
+            </svg>
+            <img
+              src="https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FcherryBarb.jpg?alt=media"
+              alt="Cherry Barb"
+            />
+          </div>
+          <div class="slot-label filled">Species 2</div>
+          <div class="slot-name">Cherry Barb</div>
+        </div>
+
+        <div class="vs-indicator">vs</div>
+
+        <!-- Slot 3 - Empty (with placeholder silhouette) -->
+        <div class="silhouette-slot">
+          <div class="silhouette-frame">
+            <svg class="silhouette-placeholder" viewBox="0 0 100 80" fill="currentColor">
+              <ellipse cx="40" cy="40" rx="35" ry="25" />
+              <polygon points="75,40 100,25 100,55" />
+              <ellipse cx="25" cy="35" rx="5" ry="5" />
+            </svg>
+            <img src="" alt="" />
+          </div>
+          <div class="slot-label">Species 3</div>
+          <div class="slot-name">(optional)</div>
+        </div>
+      </div>
+
+      <!-- Progress indicator -->
+      <div class="progress-bar">
+        <div class="progress-step complete"></div>
+        <div class="progress-step complete"></div>
+        <div class="progress-step"></div>
+      </div>
+      <p class="progress-text">2 of 3 slots filled</p>
+    </section>
+
+    <main class="main-content">
+      <div class="selection-panel">
+        <div class="panel-header">
+          <span class="panel-title">Add a species</span>
+        </div>
+        <input type="text" class="search-input" placeholder="Search 246 species by name..." />
+
+        <div class="quick-picks">
+          <div class="quick-pick">
+            <img
+              src="https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FbettaFish.jpg?alt=media"
+              alt="Betta"
+            />
+            Betta
+          </div>
+          <div class="quick-pick">
+            <img
+              src="https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FcardinalTetra.jpg?alt=media"
+              alt="Cardinal Tetra"
+            />
+            Cardinal Tetra
+          </div>
+          <div class="quick-pick">
+            <img
+              src="https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FpearlGourami.jpg?alt=media"
+              alt="Pearl Gourami"
+            />
+            Pearl Gourami
+          </div>
+          <div class="quick-pick">
+            <img
+              src="https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FclownLoach.jpg?alt=media"
+              alt="Clown Loach"
+            />
+            Clown Loach
+          </div>
+        </div>
+      </div>
+
+      <div class="compare-section">
+        <button class="compare-btn">Compare Species</button>
+      </div>
+
+      <div class="info-box">
+        <h3>Option D: Silhouette Fill-In</h3>
+        <p>
+          This design makes the selection process itself the hero. Empty fish-shaped slots wait to
+          be filled with actual photos. As users select species, the silhouettes transform into
+          vibrant fish images with a satisfying animation. A progress bar shows completion status.
+          The visual metaphor: building your comparison piece by piece.
+        </p>
+      </div>
+    </main>
+  </body>
+</html>

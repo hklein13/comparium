@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Compare Page Preview - Option B: Overlapping Cards</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Darker+Grotesque:wght@400;500;600;700;800&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --forest: #234a3a;
+        --forest-light: #2d5a47;
+        --white: #fefdfb;
+        --ivory: #faf9f6;
+        --stone: #f4f3f0;
+        --border: #e5e3de;
+        --ink: #1a1a1a;
+        --ink-secondary: #4a4a4a;
+        --ink-tertiary: #7a7a7a;
+        --font-display: 'Darker Grotesque', sans-serif;
+        --font-serif: 'Libre Baskerville', serif;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: var(--font-display);
+        background: var(--ivory);
+        color: var(--ink);
+        min-height: 100vh;
+      }
+
+      /* Header */
+      .header {
+        background: var(--white);
+        padding: 1rem 2rem;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo {
+        font-family: var(--font-serif);
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--forest);
+        text-decoration: none;
+      }
+
+      .preview-badge {
+        background: var(--forest);
+        color: var(--white);
+        padding: 0.25rem 0.75rem;
+        border-radius: 999px;
+        font-size: 0.8rem;
+        font-weight: 600;
+      }
+
+      /* Hero Section - Option B: Overlapping Cards */
+      .compare-hero {
+        padding: 3rem 2rem 4rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .compare-hero h1 {
+        font-family: var(--font-serif);
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--ink);
+        margin-bottom: 0.5rem;
+      }
+
+      .compare-hero-subtitle {
+        color: var(--ink-secondary);
+        font-size: 1.1rem;
+        margin-bottom: 2.5rem;
+      }
+
+      /* The star of Option B: Overlapping fish cards */
+      .hero-fish-stack {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        height: 200px;
+        margin-bottom: 2rem;
+      }
+
+      .hero-fish-card {
+        position: absolute;
+        width: 160px;
+        height: 200px;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+        transition:
+          transform 0.4s ease,
+          box-shadow 0.3s ease;
+        cursor: pointer;
+        border: 3px solid var(--white);
+      }
+
+      .hero-fish-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .hero-fish-card::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.4) 0%, transparent 50%);
+      }
+
+      .hero-fish-card .card-label {
+        position: absolute;
+        bottom: 12px;
+        left: 12px;
+        right: 12px;
+        color: var(--white);
+        font-weight: 600;
+        font-size: 0.9rem;
+        z-index: 1;
+      }
+
+      /* Card positions - overlapping at angles */
+      .hero-fish-card:nth-child(1) {
+        transform: translateX(-120px) rotate(-8deg);
+        z-index: 1;
+      }
+
+      .hero-fish-card:nth-child(2) {
+        transform: translateY(-10px);
+        z-index: 3;
+      }
+
+      .hero-fish-card:nth-child(3) {
+        transform: translateX(120px) rotate(8deg);
+        z-index: 2;
+      }
+
+      /* Hover effects - cards spread apart */
+      .hero-fish-stack:hover .hero-fish-card:nth-child(1) {
+        transform: translateX(-140px) rotate(-12deg) translateY(-5px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+      }
+
+      .hero-fish-stack:hover .hero-fish-card:nth-child(2) {
+        transform: translateY(-20px) scale(1.02);
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.25);
+      }
+
+      .hero-fish-stack:hover .hero-fish-card:nth-child(3) {
+        transform: translateX(140px) rotate(12deg) translateY(-5px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+      }
+
+      .hero-cta {
+        font-size: 1rem;
+        color: var(--ink-tertiary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+      }
+
+      .hero-cta::before,
+      .hero-cta::after {
+        content: '';
+        width: 40px;
+        height: 1px;
+        background: var(--border);
+      }
+
+      /* Main Content Area */
+      .main-content {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 0 2rem 4rem;
+      }
+
+      /* Selector Cards */
+      .selector-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .selector-card {
+        background: var(--white);
+        border: 2px solid var(--border);
+        border-radius: 12px;
+        padding: 1.5rem;
+        transition: all 0.3s ease;
+        min-height: 280px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .selector-card:hover {
+        border-color: var(--ink-tertiary);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      }
+
+      .selector-card.selected {
+        border-color: var(--forest);
+        box-shadow: 0 4px 20px rgba(35, 74, 58, 0.15);
+      }
+
+      .selector-label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--ink-secondary);
+        margin-bottom: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .optional-tag {
+        font-weight: 400;
+        color: var(--ink-tertiary);
+        font-size: 0.75rem;
+      }
+
+      .selector-preview {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 1rem;
+        background: var(--stone);
+        border-radius: 8px;
+        border: 2px dashed var(--border);
+      }
+
+      .selector-preview.has-fish {
+        border-style: solid;
+        border-color: var(--forest);
+        background: var(--ivory);
+      }
+
+      .selector-preview img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 0.75rem;
+        border: 3px solid var(--white);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .selector-preview .fish-name {
+        font-weight: 600;
+        color: var(--forest);
+        font-size: 1rem;
+      }
+
+      .selector-preview .fish-scientific {
+        font-size: 0.8rem;
+        font-style: italic;
+        color: var(--ink-tertiary);
+      }
+
+      .selector-preview .placeholder-text {
+        color: var(--ink-tertiary);
+        font-size: 0.9rem;
+      }
+
+      /* Compare Button */
+      .compare-section {
+        text-align: center;
+      }
+
+      .selection-status {
+        font-size: 0.9rem;
+        color: var(--ink-tertiary);
+        margin-bottom: 0.75rem;
+      }
+
+      .selection-status.ready {
+        color: var(--forest);
+        font-weight: 500;
+      }
+
+      .compare-btn {
+        background: var(--forest);
+        color: var(--white);
+        border: none;
+        padding: 1rem 3rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-family: var(--font-display);
+      }
+
+      .compare-btn:hover {
+        background: var(--forest-light);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 16px rgba(35, 74, 58, 0.3);
+      }
+
+      /* Info Box */
+      .info-box {
+        margin-top: 3rem;
+        padding: 1.5rem;
+        background: var(--white);
+        border-radius: 8px;
+        border-left: 4px solid var(--forest);
+      }
+
+      .info-box h3 {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+        color: var(--ink);
+      }
+
+      .info-box p {
+        color: var(--ink-secondary);
+        font-size: 0.9rem;
+        line-height: 1.6;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <a href="#" class="logo">Comparium</a>
+      <span class="preview-badge">Option B Preview</span>
+    </header>
+
+    <section class="compare-hero">
+      <h1>Compare Species</h1>
+      <p class="compare-hero-subtitle">Check compatibility at a glance</p>
+
+      <!-- The overlapping fish cards -->
+      <div class="hero-fish-stack">
+        <div class="hero-fish-card">
+          <img
+            src="https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FcardinalTetra.jpg?alt=media"
+            alt="Cardinal Tetra"
+          />
+          <span class="card-label">Cardinal Tetra</span>
+        </div>
+        <div class="hero-fish-card">
+          <img
+            src="https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FbettaFish.jpg?alt=media"
+            alt="Betta"
+          />
+          <span class="card-label">Betta</span>
+        </div>
+        <div class="hero-fish-card">
+          <img
+            src="https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FpearlGourami.jpg?alt=media"
+            alt="Pearl Gourami"
+          />
+          <span class="card-label">Pearl Gourami</span>
+        </div>
+      </div>
+
+      <p class="hero-cta">Select your species below</p>
+    </section>
+
+    <main class="main-content">
+      <div class="selector-grid">
+        <!-- Card 1 - Selected state -->
+        <div class="selector-card selected">
+          <div class="selector-label">Species 1</div>
+          <div class="selector-preview has-fish">
+            <img
+              src="https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FneonTetra.jpg?alt=media"
+              alt="Neon Tetra"
+            />
+            <div class="fish-name">Neon Tetra</div>
+            <div class="fish-scientific">Paracheirodon innesi</div>
+          </div>
+        </div>
+
+        <!-- Card 2 - Selected state -->
+        <div class="selector-card selected">
+          <div class="selector-label">Species 2</div>
+          <div class="selector-preview has-fish">
+            <img
+              src="https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FcherryBarb.jpg?alt=media"
+              alt="Cherry Barb"
+            />
+            <div class="fish-name">Cherry Barb</div>
+            <div class="fish-scientific">Puntius titteya</div>
+          </div>
+        </div>
+
+        <!-- Card 3 - Empty state -->
+        <div class="selector-card">
+          <div class="selector-label">Species 3 <span class="optional-tag">(optional)</span></div>
+          <div class="selector-preview">
+            <div class="placeholder-text">Click to add<br />a third species</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="compare-section">
+        <p class="selection-status ready">2 species selected - ready to compare</p>
+        <button class="compare-btn">Compare Species</button>
+      </div>
+
+      <div class="info-box">
+        <h3>Option B: Overlapping Fish Cards</h3>
+        <p>
+          This design uses actual fish imagery as the hero element. Three fish photos are stacked at
+          angles, creating a dynamic "pick your cards" feel. On hover, the cards spread apart with a
+          satisfying animation. The visual metaphor is clear: you're choosing fish to compare.
+        </p>
+      </div>
+    </main>
+  </body>
+</html>
