@@ -4457,14 +4457,21 @@ body.logged-in .favorite-star {
     padding: var(--space-xl) var(--space-md);
   }
 
-  .dashboard-greeting {
-    font-size: 1.5rem;
-    padding-right: 5rem; /* Make room for bell + settings icons */
+  .dashboard-hero-content {
+    display: flex;
+    flex-direction: column;
   }
 
   .dashboard-hero .dashboard-header-actions {
-    top: var(--space-md);
-    right: var(--space-md);
+    position: static; /* Remove absolute positioning on mobile */
+    order: -1; /* Move to top of flex container */
+    align-self: flex-end; /* Right-align the icons row */
+    margin-bottom: var(--space-sm);
+  }
+
+  .dashboard-greeting {
+    font-size: 1.5rem;
+    /* Full width now that icons are on their own row */
   }
 
   .dashboard-hero-stats {
