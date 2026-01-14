@@ -13,6 +13,7 @@
       "queryScope": "COLLECTION",
       "fields": [
         { "fieldPath": "userId", "order": "ASCENDING" },
+        { "fieldPath": "isPublic", "order": "ASCENDING" },
         { "fieldPath": "sharedAt", "order": "DESCENDING" }
       ]
     },

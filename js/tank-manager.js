@@ -812,9 +812,15 @@ window.tankManager = {
       // at the same storage path (images/tanks/{tankId}.jpg), so no deletion needed.
 
       // Handle public tank sync
-      await this.syncPublicTankState(uid, tank, isPublic);
+      const syncOk = await this.syncPublicTankState(uid, tank, isPublic);
 
-      authManager.showMessage('Tank saved successfully!', 'success');
+      if (syncOk) {
+        authManager.showMessage('Tank saved successfully!', 'success');
+      } else {
+        // Tank saved but public sync failed - still close form but warn user
+        authManager.showMessage('Tank saved, but sharing status may not be updated', 'warning');
+      }
+
       this.cancelForm();
       await this.loadTanks();
       this.updateDashboardStats();
@@ -823,6 +829,12 @@ window.tankManager = {
       if (newPhotoUploaded && coverPhotoUrl !== this.existingPhotoUrl) {
         await window.storageDeleteTankPhoto(finalTankId);
       }
+      // Also clean up blob URL to prevent memory leak
+      if (this.currentPhotoUrl && this.currentPhotoUrl.startsWith('blob:')) {
+        URL.revokeObjectURL(this.currentPhotoUrl);
+      }
+      this.currentPhotoFile = null;
+      this.currentPhotoUrl = null;
       authManager.showMessage('Failed to save tank', 'error');
     }
   },
@@ -832,32 +844,32 @@ window.tankManager = {
    * @param {string} uid - User ID
    * @param {object} tank - Tank object
    * @param {boolean} isPublic - Whether tank should be public
+   * @returns {Promise<boolean>} - true if sync succeeded or wasn't needed
    */
   async syncPublicTankState(uid, tank, isPublic) {
+    // If no change to public status and tank wasn't public, nothing to do
+    if (!isPublic && !this.wasPublicBefore) {
+      return true;
+    }
+
     // Get username for denormalization
     const profile = await window.firestoreGetProfile(uid);
     const username = profile?.username || 'Unknown';
 
+    let syncResult = { success: true };
+
     if (isPublic && !this.wasPublicBefore) {
       // Making public for the first time
-      const syncResult = await window.publicTankManager?.syncToPublic(uid, tank, username);
-      if (!syncResult?.success) {
-        console.warn('Failed to sync tank to public:', syncResult?.error);
-      }
+      syncResult = await window.publicTankManager?.syncToPublic(uid, tank, username);
     } else if (isPublic && this.wasPublicBefore) {
       // Updating an existing public tank
-      const updateResult = await window.publicTankManager?.updatePublicTank(uid, tank, username);
-      if (!updateResult?.success) {
-        console.warn('Failed to update public tank:', updateResult?.error);
-      }
+      syncResult = await window.publicTankManager?.updatePublicTank(uid, tank, username);
     } else if (!isPublic && this.wasPublicBefore) {
       // Making private (was public before)
-      const removeResult = await window.publicTankManager?.removeFromPublic(tank.id);
-      if (!removeResult?.success) {
-        console.warn('Failed to remove tank from public:', removeResult?.error);
-      }
+      syncResult = await window.publicTankManager?.removeFromPublic(tank.id);
     }
-    // If !isPublic && !wasPublicBefore, nothing to do
+
+    return syncResult?.success === true;
   },
 
   /**
@@ -1017,36 +1029,33 @@ window.tankManager = {
     const uid = authManager.getCurrentUid();
     if (!uid) return;
 
-    // Get tank to check for cover photo and public status before deleting
+    // Get tank info FIRST (for cleanup after successful delete)
     const tank = await storageService.getTank(uid, tankId);
 
-    // Delete cover photo from storage if exists
-    if (tank?.coverPhoto) {
-      const deleteResult = await window.storageDeleteTankPhoto(tankId);
-      if (!deleteResult.success) {
-        console.warn('Failed to delete tank photo:', deleteResult.error);
-        // Continue anyway - tank deletion is more important
-      }
+    // Delete from Firestore FIRST - this is the critical operation
+    // If this fails, we don't want to have deleted the photo already
+    const result = await storageService.deleteTank(uid, tankId);
+
+    if (!result.success) {
+      authManager.showMessage('Failed to delete tank', 'error');
+      return;
     }
+
+    // Firestore delete succeeded - now clean up related data (best effort)
 
     // Remove from publicTanks if it was public
     if (tank?.isPublic) {
-      const removeResult = await window.publicTankManager?.removeFromPublic(tankId);
-      if (!removeResult?.success) {
-        console.warn('Failed to remove tank from public:', removeResult?.error);
-        // Continue anyway - user tank deletion is more important
-      }
+      await window.publicTankManager?.removeFromPublic(tankId);
     }
 
-    const result = await storageService.deleteTank(uid, tankId);
-
-    if (result.success) {
-      authManager.showMessage('Tank deleted', 'success');
-      await this.loadTanks();
-      this.updateDashboardStats();
-    } else {
-      authManager.showMessage('Failed to delete tank', 'error');
+    // Delete cover photo from storage if exists
+    if (tank?.coverPhoto) {
+      await window.storageDeleteTankPhoto(tankId);
     }
+
+    authManager.showMessage('Tank deleted', 'success');
+    await this.loadTanks();
+    this.updateDashboardStats();
   },
 
   /**
