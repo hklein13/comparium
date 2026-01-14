@@ -6,6 +6,7 @@
 window.tankManager = {
   // State
   currentTankSpecies: [],
+  currentTankPlants: [],
   editingTankId: null,
   isInitialized: false,
   currentPhotoFile: null, // File object for new photo to upload
@@ -46,6 +47,20 @@ window.tankManager = {
    */
   getSpeciesList() {
     return document.getElementById('species-list');
+  },
+
+  /**
+   * Get the plant selector dropdown element
+   */
+  getPlantSelector() {
+    return document.getElementById('plant-selector');
+  },
+
+  /**
+   * Get the plants list element in the form
+   */
+  getPlantsList() {
+    return document.getElementById('plants-list');
   },
 
   /**
@@ -242,6 +257,16 @@ window.tankManager = {
     return li;
   },
 
+  /**
+   * Create an empty plants list item
+   */
+  createEmptyPlantsItem() {
+    const li = document.createElement('li');
+    li.className = 'species-list-empty';
+    li.textContent = 'No plants added yet';
+    return li;
+  },
+
   // ============================================
   // TANK PORTRAIT COMPONENT HELPERS
   // ============================================
@@ -305,9 +330,9 @@ window.tankManager = {
   },
 
   /**
-   * Create info overlay with tank name and species count
+   * Create info overlay with tank name, species count, and plant count
    */
-  createInfoOverlay(name, speciesCount) {
+  createInfoOverlay(name, speciesCount, plantCount = 0) {
     const overlay = document.createElement('div');
     overlay.className = 'tank-portrait-overlay';
 
@@ -318,7 +343,12 @@ window.tankManager = {
 
     const meta = document.createElement('span');
     meta.className = 'tank-portrait-meta';
-    meta.textContent = `${speciesCount} species`;
+    const parts = [];
+    parts.push(`${speciesCount} species`);
+    if (plantCount > 0) {
+      parts.push(`${plantCount} plants`);
+    }
+    meta.textContent = parts.join(' • ');
     overlay.appendChild(meta);
 
     return overlay;
@@ -336,6 +366,7 @@ window.tankManager = {
     if (this.isInitialized) return;
 
     this.populateSpeciesSelector();
+    this.populatePlantSelector();
     this.setupPhotoDragDrop();
     await this.loadTanks();
     this.checkPendingSpecies();
@@ -445,8 +476,10 @@ window.tankManager = {
     document.getElementById('tank-form').reset();
     document.getElementById('tank-id').value = '';
     this.currentTankSpecies = [];
+    this.currentTankPlants = [];
     this.editingTankId = null;
     this.updateSpeciesList();
+    this.updatePlantsList();
 
     // Reset photo state
     this.resetPhotoState();
@@ -456,6 +489,13 @@ window.tankManager = {
     if (searchInput) {
       searchInput.value = '';
       this.filterSpeciesSelector('');
+    }
+
+    // Reset plant search filter
+    const plantSearchInput = document.getElementById('plant-search');
+    if (plantSearchInput) {
+      plantSearchInput.value = '';
+      this.filterPlantSelector('');
     }
 
     // Scroll to tank section
@@ -479,6 +519,7 @@ window.tankManager = {
       formContainer.style.display = 'none';
     }
     this.currentTankSpecies = [];
+    this.currentTankPlants = [];
     this.editingTankId = null;
     this.currentPhotoFile = null;
     this.currentPhotoUrl = null;
@@ -550,6 +591,149 @@ window.tankManager = {
     this.updateSpeciesList();
   },
 
+  // ============================================
+  // PLANT SELECTOR METHODS
+  // ============================================
+
+  /**
+   * Populate the plant selector dropdown
+   */
+  populatePlantSelector() {
+    const selector = this.getPlantSelector();
+    if (!selector || typeof plantDatabase === 'undefined') return;
+
+    selector.innerHTML = '';
+
+    const defaultOpt = document.createElement('option');
+    defaultOpt.value = '';
+    defaultOpt.textContent = '-- Choose a plant to add --';
+    selector.appendChild(defaultOpt);
+
+    // Sort plants by common name for easier selection
+    const sortedKeys = Object.keys(plantDatabase).sort((a, b) => {
+      const nameA = plantDatabase[a]?.commonName || '';
+      const nameB = plantDatabase[b]?.commonName || '';
+      return nameA.localeCompare(nameB);
+    });
+
+    sortedKeys.forEach(key => {
+      const plant = plantDatabase[key];
+      if (!plant) return;
+      const opt = document.createElement('option');
+      opt.value = key;
+      opt.textContent = plant.commonName;
+      opt.dataset.searchable =
+        plant.commonName.toLowerCase() + ' ' + (plant.scientificName || '').toLowerCase();
+      selector.appendChild(opt);
+    });
+  },
+
+  /**
+   * Filter plant selector based on search input
+   */
+  filterPlantSelector(searchTerm) {
+    const selector = this.getPlantSelector();
+    if (!selector) return;
+
+    const term = (searchTerm || '').toLowerCase().trim();
+    const options = selector.querySelectorAll('option');
+
+    options.forEach(opt => {
+      if (!opt.value) {
+        // Always show the default option
+        opt.style.display = '';
+        return;
+      }
+
+      const searchable = opt.dataset.searchable || opt.textContent.toLowerCase();
+      if (!term || searchable.includes(term)) {
+        opt.style.display = '';
+      } else {
+        opt.style.display = 'none';
+      }
+    });
+  },
+
+  /**
+   * Add plant from dropdown to current tank
+   */
+  addPlantToTank() {
+    const selector = this.getPlantSelector();
+    const plantKey = selector?.value;
+
+    if (!plantKey) return;
+
+    this.addPlantToCurrentTank(plantKey);
+    selector.value = '';
+  },
+
+  /**
+   * Add a plant to the current tank being edited
+   */
+  addPlantToCurrentTank(plantKey) {
+    if (!plantKey || typeof plantDatabase === 'undefined' || !plantDatabase[plantKey]) return;
+
+    if (this.currentTankPlants.includes(plantKey)) {
+      authManager.showMessage('Plant already added to this tank', 'info');
+      return;
+    }
+
+    this.currentTankPlants.push(plantKey);
+    this.updatePlantsList();
+  },
+
+  /**
+   * Update the plants list display in the form
+   */
+  updatePlantsList() {
+    const list = this.getPlantsList();
+    if (!list) return;
+
+    list.innerHTML = '';
+
+    if (!this.hasItems(this.currentTankPlants)) {
+      list.appendChild(this.createEmptyPlantsItem());
+      return;
+    }
+
+    this.currentTankPlants.forEach(key => {
+      const plant = plantDatabase[key];
+      if (!plant) return;
+
+      const li = document.createElement('li');
+      li.className = 'fish-list-item';
+
+      const infoDiv = document.createElement('div');
+      const strong = document.createElement('strong');
+      strong.textContent = plant.commonName;
+      const br = document.createElement('br');
+      const small = document.createElement('small');
+      small.textContent = `${plant.position} • ${plant.difficulty}`;
+
+      infoDiv.appendChild(strong);
+      infoDiv.appendChild(br);
+      infoDiv.appendChild(small);
+
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'remove-fish-btn';
+      btn.textContent = 'Remove';
+      btn.onclick = () => this.removePlant(key);
+
+      li.appendChild(infoDiv);
+      li.appendChild(btn);
+      list.appendChild(li);
+    });
+  },
+
+  /**
+   * Remove a plant from current tank
+   */
+  removePlant(plantKey) {
+    this.currentTankPlants = this.currentTankPlants.filter(key => key !== plantKey);
+    this.updatePlantsList();
+  },
+
   /**
    * Save tank (create or update)
    */
@@ -600,6 +784,7 @@ window.tankManager = {
       size: parseInt(document.getElementById('tank-size')?.value, 10) || 0,
       notes: document.getElementById('tank-notes')?.value || '',
       species: this.currentTankSpecies,
+      plants: this.currentTankPlants,
       coverPhoto: coverPhotoUrl,
       updated: new Date().toISOString(),
     };
@@ -684,6 +869,7 @@ window.tankManager = {
    */
   renderTankPortrait(container, tank) {
     const speciesCount = tank.species ? tank.species.length : 0;
+    const plantCount = tank.plants ? tank.plants.length : 0;
 
     // Create portrait card
     const portrait = document.createElement('div');
@@ -713,7 +899,7 @@ window.tankManager = {
     }
 
     // Add info overlay
-    const overlay = this.createInfoOverlay(tank.name, speciesCount);
+    const overlay = this.createInfoOverlay(tank.name, speciesCount, plantCount);
     portrait.appendChild(overlay);
 
     container.appendChild(portrait);
@@ -744,8 +930,10 @@ window.tankManager = {
       document.getElementById('tank-size').value = tank.size || '';
       document.getElementById('tank-notes').value = tank.notes || '';
       this.currentTankSpecies = tank.species || [];
+      this.currentTankPlants = tank.plants || [];
       this.editingTankId = tank.id;
       this.updateSpeciesList();
+      this.updatePlantsList();
 
       // Handle existing photo
       this.resetPhotoState();
@@ -850,4 +1038,13 @@ function handlePhotoSelect(event) {
 
 function removePhotoSelection() {
   window.tankManager.removePhotoSelection();
+}
+
+function addPlantToTank() {
+  window.tankManager.addPlantToTank();
+}
+
+function filterPlantSelector() {
+  const searchInput = document.getElementById('plant-search');
+  window.tankManager.filterPlantSelector(searchInput ? searchInput.value : '');
 }

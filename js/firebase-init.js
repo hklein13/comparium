@@ -6,6 +6,7 @@ import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
   signOut,
+  sendPasswordResetEmail,
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { getAnalytics } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js';
@@ -109,6 +110,28 @@ window.firebaseSignIn = signInWithEmailAndPassword;
 window.firebaseSignUp = createUserWithEmailAndPassword;
 window.firebaseSignOut = signOut;
 window.firebaseAuthState = onAuthStateChanged;
+
+/**
+ * Send password reset email
+ * @param {string} email - User's email address
+ * @returns {Promise<{success: boolean, error?: string}>}
+ */
+window.firebaseSendPasswordReset = async email => {
+  try {
+    await sendPasswordResetEmail(auth, email);
+    return { success: true };
+  } catch (error) {
+    const errorMap = {
+      'auth/invalid-email': 'Please enter a valid email address',
+      'auth/too-many-requests': 'Too many attempts. Please try again later.',
+    };
+    // For security, don't reveal if email exists - return success for user-not-found
+    if (error.code === 'auth/user-not-found') {
+      return { success: true }; // Don't reveal email doesn't exist
+    }
+    return { success: false, error: errorMap[error.code] || 'Failed to send reset email' };
+  }
+};
 
 // Simple helper to get current user uid
 window.getFirebaseUid = () => (auth.currentUser ? auth.currentUser.uid : null);

@@ -2406,9 +2406,8 @@ p {
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-  z-index: 1000;
+  z-index: 9999;
   display: none;
-  overflow: hidden;
 }
 
 .header-dropdown.open {
@@ -2508,6 +2507,8 @@ p {
 
 .settings-dropdown-content {
   padding: var(--space-sm);
+  max-height: 300px;
+  overflow-y: auto;
 }
 
 .settings-dropdown-item {
@@ -3435,8 +3436,9 @@ p {
   border-radius: var(--radius-xl);
   padding: var(--space-2xl) var(--space-xl);
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   text-align: center;
+  z-index: 100;
 }
 
 /* Ambient caustic light effect */
@@ -3449,6 +3451,8 @@ p {
     radial-gradient(ellipse at 50% 80%, rgba(35, 74, 58, 0.03) 0%, transparent 45%);
   animation: caustic-drift 20s infinite ease-in-out;
   pointer-events: none;
+  overflow: hidden;
+  border-radius: var(--radius-xl);
 }
 
 @keyframes caustic-drift {
