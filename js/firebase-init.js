@@ -909,6 +909,43 @@ window.firestoreGetUserPosts = async (userId, maxResults = 20) => {
   }
 };
 
+/**
+ * Upload a post image to Firebase Storage
+ * @param {string} postId - Post ID (used in path)
+ * @param {File} file - Image file
+ * @param {number} index - Image index (0-3)
+ * @returns {Promise<{success: boolean, url?: string, error?: string}>}
+ */
+window.storageUploadPostImage = async (postId, file, index) => {
+  if (!storage || !postId || !file) {
+    return { success: false, error: 'Missing required parameters' };
+  }
+
+  // Validate file type
+  const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
+  if (!validTypes.includes(file.type)) {
+    return { success: false, error: 'Invalid file type. Use JPEG, PNG, or WebP.' };
+  }
+
+  // Validate file size (max 5MB)
+  const maxSize = 5 * 1024 * 1024;
+  if (file.size > maxSize) {
+    return { success: false, error: 'File too large. Maximum 5MB.' };
+  }
+
+  try {
+    const storageRef = ref(storage, `images/posts/${postId}/${index}.jpg`);
+    const snapshot = await uploadBytes(storageRef, file, {
+      contentType: file.type,
+      cacheControl: 'public, max-age=31536000',
+    });
+    const url = await getDownloadURL(snapshot.ref);
+    return { success: true, url };
+  } catch (e) {
+    return { success: false, error: e.message || 'Upload failed' };
+  }
+};
+
 // ============================================================================
 // FCM TOKEN MANAGEMENT (Phase 2 - Push Notifications)
 // ============================================================================
