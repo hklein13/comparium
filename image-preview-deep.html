@@ -1,0 +1,591 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Deep Search Results - iNaturalist</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        font-family: system-ui, sans-serif;
+        background: #1a1a2e;
+        color: #eee;
+        padding: 20px;
+        margin: 0;
+      }
+      h1 {
+        color: #4ecca3;
+        text-align: center;
+      }
+      .subtitle {
+        text-align: center;
+        color: #888;
+        margin-bottom: 30px;
+      }
+      .controls {
+        background: #16213e;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      .controls button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+      }
+      .btn-primary {
+        background: #4ecca3;
+        color: #1a1a2e;
+      }
+      .btn-export {
+        background: #e94560;
+        color: white;
+      }
+      .stats {
+        margin-left: auto;
+        color: #888;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 20px;
+      }
+      .card {
+        background: #16213e;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 3px solid transparent;
+      }
+      .card.selected {
+        border-color: #4ecca3;
+      }
+      .card.no-image {
+        opacity: 0.5;
+      }
+      .card-images {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2px;
+        background: #0f0f23;
+        min-height: 150px;
+      }
+      .card-images img {
+        width: calc(33.33% - 2px);
+        height: 120px;
+        object-fit: cover;
+        cursor: pointer;
+      }
+      .card-images img.selected-img {
+        outline: 3px solid #4ecca3;
+        outline-offset: -3px;
+      }
+      .card-placeholder {
+        width: 100%;
+        height: 150px;
+        background: #0f0f23;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #666;
+      }
+      .card-body {
+        padding: 15px;
+      }
+      .card-title {
+        font-weight: 600;
+        font-size: 18px;
+        color: #4ecca3;
+        margin: 0 0 5px;
+      }
+      .card-meta {
+        font-size: 13px;
+        color: #888;
+        margin-bottom: 10px;
+      }
+      .card-queries {
+        font-size: 11px;
+        color: #666;
+      }
+      .output-area {
+        background: #16213e;
+        padding: 20px;
+        border-radius: 8px;
+        margin-top: 20px;
+        display: none;
+      }
+      .output-area.visible {
+        display: block;
+      }
+      .output-area h3 {
+        color: #4ecca3;
+      }
+      .output-area textarea {
+        width: 100%;
+        height: 200px;
+        background: #0f0f23;
+        color: #4ecca3;
+        border: 1px solid #333;
+        border-radius: 4px;
+        padding: 10px;
+        font-family: monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Deep Search Results</h1>
+    <p class="subtitle">Found 7 of 9 species with CC-licensed photos</p>
+
+    <div class="controls">
+      <button class="btn-primary" onclick="selectAllFirst()">Select All (First)</button>
+      <button class="btn-primary" onclick="deselectAll()">Clear All</button>
+      <button class="btn-export" onclick="exportSelected()">Export Selected</button>
+      <div class="stats">Selected: <span id="count">0</span> / 9</div>
+    </div>
+
+    <div class="grid">
+      <div class="card" id="card-corydoras">
+        <div class="card-images">
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/463828136/medium.jpeg"
+            data-key="corydoras"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/463828136/large.jpeg"
+            onclick="selectImg(this)"
+            title="Corydoras"
+          />
+
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/463828130/medium.jpg"
+            data-key="corydoras"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/463828130/large.jpg"
+            onclick="selectImg(this)"
+            title="Corydoras"
+          />
+
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/454429281/medium.jpg"
+            data-key="corydoras"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/454429281/large.jpg"
+            onclick="selectImg(this)"
+            title="Corydoras"
+          />
+
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/454432763/medium.jpg"
+            data-key="corydoras"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/454432763/large.jpg"
+            onclick="selectImg(this)"
+            title="Corydoras"
+          />
+
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/454432457/medium.jpg"
+            data-key="corydoras"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/454432457/large.jpg"
+            onclick="selectImg(this)"
+            title="Corydoras"
+          />
+
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/454432566/medium.jpg"
+            data-key="corydoras"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/454432566/large.jpg"
+            onclick="selectImg(this)"
+            title="Corydoras"
+          />
+        </div>
+        <div class="card-body">
+          <div class="card-title">corydoras</div>
+          <div class="card-meta">6 photo(s) found</div>
+          <div class="card-queries">Searched: Corydoras</div>
+        </div>
+      </div>
+
+      <div class="card" id="card-otocinclus">
+        <div class="card-images">
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/1565327/medium.jpg"
+            data-key="otocinclus"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/1565327/large.jpg"
+            onclick="selectImg(this)"
+            title="Otocinclus"
+          />
+
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/345190822/medium.jpg"
+            data-key="otocinclus"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/345190822/large.jpg"
+            onclick="selectImg(this)"
+            title="Otocinclus"
+          />
+
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/345190828/medium.jpg"
+            data-key="otocinclus"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/345190828/large.jpg"
+            onclick="selectImg(this)"
+            title="Otocinclus"
+          />
+
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/345190836/medium.jpg"
+            data-key="otocinclus"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/345190836/large.jpg"
+            onclick="selectImg(this)"
+            title="Otocinclus"
+          />
+
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/63180832/medium.jpeg"
+            data-key="otocinclus"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/63180832/large.jpeg"
+            onclick="selectImg(this)"
+            title="Otocinclus"
+          />
+
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/459553750/medium.jpg"
+            data-key="otocinclus"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/459553750/large.jpg"
+            onclick="selectImg(this)"
+            title="Otocinclus"
+          />
+        </div>
+        <div class="card-body">
+          <div class="card-title">otocinclus</div>
+          <div class="card-meta">6 photo(s) found</div>
+          <div class="card-queries">Searched: Otocinclus</div>
+        </div>
+      </div>
+
+      <div class="card" id="card-marginatedTetra">
+        <div class="card-images">
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/312346648/medium.jpg"
+            data-key="marginatedTetra"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/312346648/large.jpg"
+            onclick="selectImg(this)"
+            title="Marginated tetra"
+          />
+
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/312347526/medium.jpg"
+            data-key="marginatedTetra"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/312347526/large.jpg"
+            onclick="selectImg(this)"
+            title="Marginated tetra"
+          />
+
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/312347540/medium.jpg"
+            data-key="marginatedTetra"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/312347540/large.jpg"
+            onclick="selectImg(this)"
+            title="Marginated tetra"
+          />
+
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/312347551/medium.jpg"
+            data-key="marginatedTetra"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/312347551/large.jpg"
+            onclick="selectImg(this)"
+            title="Marginated tetra"
+          />
+
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/312347559/medium.jpg"
+            data-key="marginatedTetra"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/312347559/large.jpg"
+            onclick="selectImg(this)"
+            title="Marginated tetra"
+          />
+
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/312361880/medium.jpg"
+            data-key="marginatedTetra"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/312361880/large.jpg"
+            onclick="selectImg(this)"
+            title="Marginated tetra"
+          />
+        </div>
+        <div class="card-body">
+          <div class="card-title">marginatedTetra</div>
+          <div class="card-meta">6 photo(s) found</div>
+          <div class="card-queries">Searched: Hyphessobrycon marginatus, Marginated tetra</div>
+        </div>
+      </div>
+
+      <div class="card" id="card-dawnTetra">
+        <div class="card-images">
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/127570970/medium.jpeg"
+            data-key="dawnTetra"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/127570970/large.jpeg"
+            onclick="selectImg(this)"
+            title="Aphyocharax paraguayensis"
+          />
+
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/127591238/medium.jpeg"
+            data-key="dawnTetra"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/127591238/large.jpeg"
+            onclick="selectImg(this)"
+            title="Aphyocharax paraguayensis"
+          />
+
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/310489118/medium.jpg"
+            data-key="dawnTetra"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/310489118/large.jpg"
+            onclick="selectImg(this)"
+            title="Aphyocharax paraguayensis"
+          />
+
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/310490238/medium.jpg"
+            data-key="dawnTetra"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/310490238/large.jpg"
+            onclick="selectImg(this)"
+            title="Aphyocharax paraguayensis"
+          />
+
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/310490243/medium.jpg"
+            data-key="dawnTetra"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/310490243/large.jpg"
+            onclick="selectImg(this)"
+            title="Aphyocharax paraguayensis"
+          />
+
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/127591238/medium.jpeg"
+            data-key="dawnTetra"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/127591238/large.jpeg"
+            onclick="selectImg(this)"
+            title="Aphyocharax paraguayensis"
+          />
+        </div>
+        <div class="card-body">
+          <div class="card-title">dawnTetra</div>
+          <div class="card-meta">6 photo(s) found</div>
+          <div class="card-queries">Searched: Aphyocharax paraguayensis</div>
+        </div>
+      </div>
+
+      <div class="card" id="card-tBarb">
+        <div class="card-images">
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/519345162/medium.jpg"
+            data-key="tBarb"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/519345162/large.jpg"
+            onclick="selectImg(this)"
+            title="Puntius lateristriga"
+          />
+
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/554602547/medium.jpg"
+            data-key="tBarb"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/554602547/large.jpg"
+            onclick="selectImg(this)"
+            title="Puntius lateristriga"
+          />
+
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/424383000/medium.jpeg"
+            data-key="tBarb"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/424383000/large.jpeg"
+            onclick="selectImg(this)"
+            title="Puntius lateristriga"
+          />
+
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/560294478/medium.jpg"
+            data-key="tBarb"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/560294478/large.jpg"
+            onclick="selectImg(this)"
+            title="Puntius lateristriga"
+          />
+
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/541659670/medium.jpg"
+            data-key="tBarb"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/541659670/large.jpg"
+            onclick="selectImg(this)"
+            title="Puntius lateristriga"
+          />
+
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/541659698/medium.jpg"
+            data-key="tBarb"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/541659698/large.jpg"
+            onclick="selectImg(this)"
+            title="Puntius lateristriga"
+          />
+        </div>
+        <div class="card-body">
+          <div class="card-title">tBarb</div>
+          <div class="card-meta">6 photo(s) found</div>
+          <div class="card-queries">Searched: Puntius lateristriga</div>
+        </div>
+      </div>
+
+      <div class="card no-image" id="card-cumingsBarb">
+        <div class="card-placeholder">No CC images found</div>
+        <div class="card-body">
+          <div class="card-title">cumingsBarb</div>
+          <div class="card-meta">0 photo(s) found</div>
+          <div class="card-queries">Searched: Pethia cumingii, Puntius cumingii, Cuming barb</div>
+        </div>
+      </div>
+
+      <div class="card" id="card-glowlightDanio">
+        <div class="card-images">
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/450828170/medium.jpeg"
+            data-key="glowlightDanio"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/450828170/large.jpeg"
+            onclick="selectImg(this)"
+            title="Danio choprae"
+          />
+
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/108000359/medium.jpg"
+            data-key="glowlightDanio"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/108000359/large.jpg"
+            onclick="selectImg(this)"
+            title="Danio choprae"
+          />
+        </div>
+        <div class="card-body">
+          <div class="card-title">glowlightDanio</div>
+          <div class="card-meta">2 photo(s) found</div>
+          <div class="card-queries">Searched: Danio choprae, Glowlight danio</div>
+        </div>
+      </div>
+
+      <div class="card no-image" id="card-axelrodiRainbowfish">
+        <div class="card-placeholder">No CC images found</div>
+        <div class="card-body">
+          <div class="card-title">axelrodiRainbowfish</div>
+          <div class="card-meta">0 photo(s) found</div>
+          <div class="card-queries">Searched: Chilatherina axelrodi, Axelrod rainbowfish</div>
+        </div>
+      </div>
+
+      <div class="card" id="card-banjoCatfish">
+        <div class="card-images">
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/316093529/medium.jpeg"
+            data-key="banjoCatfish"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/316093529/large.jpeg"
+            onclick="selectImg(this)"
+            title="Bunocephalus"
+          />
+
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/316095583/medium.jpeg"
+            data-key="banjoCatfish"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/316095583/large.jpeg"
+            onclick="selectImg(this)"
+            title="Bunocephalus"
+          />
+
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/316095671/medium.jpeg"
+            data-key="banjoCatfish"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/316095671/large.jpeg"
+            onclick="selectImg(this)"
+            title="Bunocephalus"
+          />
+
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/118219502/medium.jpg"
+            data-key="banjoCatfish"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/118219502/large.jpg"
+            onclick="selectImg(this)"
+            title="Bunocephalus"
+          />
+
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/118219523/medium.jpg"
+            data-key="banjoCatfish"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/118219523/large.jpg"
+            onclick="selectImg(this)"
+            title="Bunocephalus"
+          />
+
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/118219542/medium.jpg"
+            data-key="banjoCatfish"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/118219542/large.jpg"
+            onclick="selectImg(this)"
+            title="Bunocephalus"
+          />
+        </div>
+        <div class="card-body">
+          <div class="card-title">banjoCatfish</div>
+          <div class="card-meta">6 photo(s) found</div>
+          <div class="card-queries">Searched: Bunocephalus</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="output-area" id="output">
+      <h3>Export JSON</h3>
+      <textarea id="json" readonly></textarea>
+      <button class="btn-primary" style="margin-top: 10px" onclick="copy()">Copy & Close</button>
+    </div>
+
+    <script>
+      const sel = {};
+      function selectImg(img) {
+        const key = img.dataset.key;
+        const card = document.getElementById('card-' + key);
+        card.querySelectorAll('img').forEach(i => i.classList.remove('selected-img'));
+        img.classList.add('selected-img');
+        card.classList.add('selected');
+        sel[key] = img.dataset.url;
+        document.getElementById('count').textContent = Object.keys(sel).length;
+      }
+      function selectAllFirst() {
+        document.querySelectorAll('.card:not(.no-image)').forEach(card => {
+          const img = card.querySelector('img');
+          if (img) selectImg(img);
+        });
+      }
+      function deselectAll() {
+        document.querySelectorAll('.card').forEach(c => {
+          c.classList.remove('selected');
+          c.querySelectorAll('img').forEach(i => i.classList.remove('selected-img'));
+        });
+        Object.keys(sel).forEach(k => delete sel[k]);
+        document.getElementById('count').textContent = 0;
+      }
+      function exportSelected() {
+        const data = Object.entries(sel).map(([key, url]) => ({ key, url }));
+        if (data.length === 0) {
+          alert('Nothing selected!');
+          return;
+        }
+        document.getElementById('json').value = JSON.stringify(data, null, 2);
+        document.getElementById('output').classList.add('visible');
+      }
+      function copy() {
+        document.getElementById('json').select();
+        document.execCommand('copy');
+        alert('Copied! Run: npm run images:upload');
+        document.getElementById('output').classList.remove('visible');
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Species Image Preview - Alternative Sources</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: #1a1a2e;
+        color: #eee;
+        padding: 20px;
+        min-height: 100vh;
+      }
+      h1 {
+        text-align: center;
+        margin-bottom: 10px;
+        color: #4ecca3;
+      }
+      .subtitle {
+        text-align: center;
+        color: #888;
+        margin-bottom: 30px;
+      }
+      .controls {
+        position: sticky;
+        top: 0;
+        background: #1a1a2e;
+        padding: 15px;
+        border-bottom: 1px solid #333;
+        margin-bottom: 20px;
+        z-index: 100;
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        flex-wrap: wrap;
+      }
+      .controls button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 600;
+      }
+      .btn-select-all {
+        background: #4ecca3;
+        color: #1a1a2e;
+      }
+      .btn-deselect-all {
+        background: #666;
+        color: #fff;
+      }
+      .btn-export {
+        background: #e94560;
+        color: #fff;
+      }
+      .stats {
+        background: #2a2a4a;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-size: 14px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+      .card {
+        background: #16213e;
+        border-radius: 10px;
+        overflow: hidden;
+        border: 3px solid transparent;
+        transition: all 0.2s;
+        cursor: pointer;
+      }
+      .card:hover {
+        transform: translateY(-2px);
+      }
+      .card.selected {
+        border-color: #4ecca3;
+      }
+      .card.rejected {
+        border-color: #e94560;
+        opacity: 0.5;
+      }
+      .card-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        background: #0f0f23;
+      }
+      .card-image.error {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #e94560;
+        font-size: 14px;
+      }
+      .card-info {
+        padding: 15px;
+      }
+      .card-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #4ecca3;
+        margin-bottom: 5px;
+      }
+      .card-key {
+        font-size: 12px;
+        color: #888;
+        font-family: monospace;
+        margin-bottom: 10px;
+      }
+      .card-source {
+        font-size: 11px;
+        color: #666;
+        word-break: break-all;
+      }
+      .card-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+      }
+      .card-actions button {
+        flex: 1;
+        padding: 8px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: 600;
+      }
+      .btn-approve {
+        background: #4ecca3;
+        color: #1a1a2e;
+      }
+      .btn-reject {
+        background: #e94560;
+        color: #fff;
+      }
+      .btn-approve:disabled,
+      .btn-reject:disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+      }
+      .export-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.9);
+        z-index: 1000;
+        padding: 50px;
+        overflow: auto;
+      }
+      .export-modal.show {
+        display: block;
+      }
+      .export-content {
+        max-width: 800px;
+        margin: 0 auto;
+        background: #16213e;
+        padding: 30px;
+        border-radius: 10px;
+      }
+      .export-content h2 {
+        color: #4ecca3;
+        margin-bottom: 20px;
+      }
+      .export-content textarea {
+        width: 100%;
+        height: 400px;
+        background: #0f0f23;
+        color: #4ecca3;
+        border: 1px solid #333;
+        border-radius: 5px;
+        padding: 15px;
+        font-family: monospace;
+        font-size: 12px;
+      }
+      .export-content button {
+        margin-top: 15px;
+        padding: 10px 30px;
+        background: #4ecca3;
+        color: #1a1a2e;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: 600;
+      }
+      .note {
+        background: #2a2a4a;
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        max-width: 1400px;
+        margin: 0 auto 20px;
+        font-size: 14px;
+        line-height: 1.6;
+      }
+      .note strong {
+        color: #4ecca3;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Species Image Preview - Alternatives</h1>
+    <p class="subtitle">33 species needing images - Alternative Wikimedia sources</p>
+
+    <div class="note">
+      <strong>Instructions:</strong> Click a card or use Approve/Reject buttons to select images.
+      Green border = approved, Red border = rejected. When done, click "Export Selected" to get the
+      JSON for uploading. These are <strong>alternative images</strong> different from the first
+      batch.
+    </div>
+
+    <div class="controls">
+      <button class="btn-select-all" onclick="selectAll()">Select All</button>
+      <button class="btn-deselect-all" onclick="deselectAll()">Deselect All</button>
+      <button class="btn-export" onclick="exportSelected()">Export Selected</button>
+      <div class="stats">
+        Selected: <span id="selectedCount">0</span> / <span id="totalCount">0</span>
+      </div>
+    </div>
+
+    <div class="grid" id="grid"></div>
+
+    <div class="export-modal" id="exportModal">
+      <div class="export-content">
+        <h2>Export Selected Species</h2>
+        <p style="margin-bottom: 15px; color: #888">
+          Copy this JSON and paste it when running: <code>npm run images:upload</code>
+        </p>
+        <textarea id="exportJson" readonly></textarea>
+        <button onclick="copyAndClose()">Copy to Clipboard & Close</button>
+      </div>
+    </div>
+
+    <script>
+      // Alternative image sources for 33 remaining species
+      const species = [
+        {
+          key: 'angelfish',
+          commonName: 'Angelfish',
+          url: 'https://upload.wikimedia.org/wikipedia/commons/5/5b/Pterophyllum_scalare4.JPG',
+        },
+        {
+          key: 'bettaFish',
+          commonName: 'Betta Fish',
+          url: 'https://upload.wikimedia.org/wikipedia/commons/0/09/Betta_splendens02.JPG',
+        },
+        {
+          key: 'bristlenosePleco',
+          commonName: 'Bristlenose Pleco',
+          url: 'https://upload.wikimedia.org/wikipedia/commons/a/a5/Bristlenose_Catfish_700.jpg',
+        },
+        {
+          key: 'clownPleco',
+          commonName: 'Clown Pleco',
+          url: 'https://upload.wikimedia.org/wikipedia/commons/5/5c/Panaqolus_sp._L204.jpg',
+        },
+        {
+          key: 'blackNeonTetra',
+          commonName: 'Black Neon Tetra',
+          url: 'https://upload.wikimedia.org/wikipedia/commons/5/5e/Hyphessobrycon_herbertaxelrodi.jpg',
+        },
+        {
+          key: 'variatusPlaty',
+          commonName: 'Variatus Platy',
+          url: 'https://upload.wikimedia.org/wikipedia/commons/e/e7/Xiphophorus_variatus_La_laguna_%281%29.jpg',
+        },
+        {
+          key: 'leastKillifish',
+          commonName: 'Least Killifish',
+          url: 'https://upload.wikimedia.org/wikipedia/commons/4/4e/Heterandria_formosa_%282%29.jpg',
+        },
+        {
+          key: 'sailfinMolly',
+          commonName: 'Sailfin Molly',
+          url: 'https://upload.wikimedia.org/wikipedia/commons/5/5a/Poecilia_latipinna.jpg',
+        },
+        {
+          key: 'mosquitofish',
+          commonName: 'Mosquitofish',
+          url: 'https://upload.wikimedia.org/wikipedia/commons/3/33/Female_Gambusia_affinis.JPG',
+        },
+        {
+          key: 'blueGourami',
+          commonName: 'Blue Gourami',
+          url: 'https://upload.wikimedia.org/wikipedia/commons/6/6e/Trichopodus_trichopterus.jpg',
+        },
+        {
+          key: 'colombianTetra',
+          commonName: 'Colombian Tetra',
+          url: 'https://upload.wikimedia.org/wikipedia/commons/5/5e/Hyphessobrycon_colombianus.jpg',
+        },
+        {
+          key: 'goldenPencilfish',
+          commonName: 'Golden Pencilfish',
+          url: 'https://upload.wikimedia.org/wikipedia/commons/1/11/Nannostomus_eques.jpg',
+        },
+        {
+          key: 'flagTetra',
+          commonName: 'Flag Tetra (Flame Tetra)',
+          url: 'https://upload.wikimedia.org/wikipedia/commons/e/e1/Hyphessobrycon_flammeus_2.jpg',
+        },
+        {
+          key: 'costelloTetra',
+          commonName: 'Costello Tetra',
+          url: 'https://upload.wikimedia.org/wikipedia/commons/b/b4/Hemigrammus_hyanuary.jpg',
+        },
+        {
+          key: 'platinumTetra',
+          commonName: 'Platinum Tetra',
+          url: 'https://upload.wikimedia.org/wikipedia/commons/7/7a/Hemigrammus_vorderwinkleri.jpg',
+        },
+        {
+          key: 'blackLineTetra',
+          commonName: 'Black Line Tetra',
+          url: 'https://upload.wikimedia.org/wikipedia/commons/1/12/Hyphessobrycon_scholzei_%2831520%29.png',
+        },
+        {
+          key: 'kittyTetra',
+          commonName: 'Kitty Tetra',
+          url: 'https://upload.wikimedia.org/wikipedia/commons/3/30/Hyphessobrycon_heliacus.jpg',
+        },
+        {
+          key: 'glassBloodfin',
+          commonName: 'Glass Bloodfin',
+          url: 'https://upload.wikimedia.org/wikipedia/commons/3/3c/Prionobrama_filigera.jpg',
+        },
+        {
+          key: 'cumingsBarb',
+          commonName: "Cuming's Barb",
+          url: 'https://upload.wikimedia.org/wikipedia/commons/5/5d/Pethia_cumingii.jpg',
+        },
+        {
+          key: 'glowlightDanio',
+          commonName: 'Glowlight Danio',
+          url: 'https://upload.wikimedia.org/wikipedia/commons/c/c5/Glowlight_Danio_-_Danio_Choprae.JPG',
+        },
+        {
+          key: 'giantDanio',
+          commonName: 'Giant Danio',
+          url: 'https://upload.wikimedia.org/wikipedia/commons/8/81/Devario_aequipinnatus.JPG',
+        },
+        {
+          key: 'redZebra',
+          commonName: 'Red Zebra Cichlid',
+          url: 'https://upload.wikimedia.org/wikipedia/commons/2/26/Maylandia_estherae_couple2_PICT8591.jpg',
+        },
+        {
+          key: 'flowerhornCichlid',
+          commonName: 'Flowerhorn Cichlid',
+          url: 'https://upload.wikimedia.org/wikipedia/commons/4/4b/Flowerhorn_cichlid.jpg',
+        },
+        {
+          key: 'festivum',
+          commonName: 'Festivum Cichlid',
+          url: 'https://upload.wikimedia.org/wikipedia/commons/9/9d/Mesonauta_festivus.jpg',
+        },
+        {
+          key: 'agassiziCorydoras',
+          commonName: "Agassizi's Corydoras",
+          url: 'https://upload.wikimedia.org/wikipedia/commons/e/e3/Corydoras_agassizii.jpg',
+        },
+        {
+          key: 'threeStripeCorydoras',
+          commonName: 'Three-Stripe Corydoras',
+          url: 'https://upload.wikimedia.org/wikipedia/commons/a/a4/Corydoras_trilineatus_%282%29.JPG',
+        },
+        {
+          key: 'bengalLoach',
+          commonName: 'Bengal Loach',
+          url: 'https://upload.wikimedia.org/wikipedia/commons/0/05/Botia_dario.jpg',
+        },
+        {
+          key: 'spottedRafaelCatfish',
+          commonName: 'Spotted Rafael Catfish',
+          url: 'https://upload.wikimedia.org/wikipedia/commons/7/7e/Dornwels.JPG',
+        },
+        {
+          key: 'banjoCatfish',
+          commonName: 'Banjo Catfish',
+          url: 'https://upload.wikimedia.org/wikipedia/commons/b/b4/Bunocephalus_sp.jpg',
+        },
+        {
+          key: 'featherfinSqueaker',
+          commonName: 'Featherfin Squeaker',
+          url: 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Synodontis_Eupterus_3.JPG',
+        },
+        {
+          key: 'croakingGourami',
+          commonName: 'Croaking Gourami',
+          url: 'https://upload.wikimedia.org/wikipedia/commons/a/ac/Trichopsis_vittata.jpg',
+        },
+        {
+          key: 'giantGourami',
+          commonName: 'Giant Gourami',
+          url: 'https://upload.wikimedia.org/wikipedia/commons/4/4c/Osphronemus_goramy.jpg',
+        },
+        {
+          key: 'iridescentShark',
+          commonName: 'Iridescent Shark',
+          url: 'https://upload.wikimedia.org/wikipedia/commons/7/74/Hal_-_Pangasianodon_hypophthalmus_-_1.jpg',
+        },
+      ];
+
+      const state = {};
+      species.forEach(s => (state[s.key] = null)); // null = not decided, true = selected, false = rejected
+
+      function renderGrid() {
+        const grid = document.getElementById('grid');
+        grid.innerHTML = species
+          .map(
+            s => `
+        <div class="card ${state[s.key] === true ? 'selected' : state[s.key] === false ? 'rejected' : ''}"
+             data-key="${s.key}" onclick="toggleCard('${s.key}')">
+          <img class="card-image" src="${s.url}" alt="${s.commonName}"
+               onerror="this.outerHTML='<div class=\\'card-image error\\'>Image failed to load</div>'">
+          <div class="card-info">
+            <div class="card-title">${s.commonName}</div>
+            <div class="card-key">${s.key}</div>
+            <div class="card-source">${s.url.split('/').pop()}</div>
+            <div class="card-actions">
+              <button class="btn-approve" onclick="event.stopPropagation(); approve('${s.key}')"
+                      ${state[s.key] === true ? 'disabled' : ''}>Approve</button>
+              <button class="btn-reject" onclick="event.stopPropagation(); reject('${s.key}')"
+                      ${state[s.key] === false ? 'disabled' : ''}>Reject</button>
+            </div>
+          </div>
+        </div>
+      `
+          )
+          .join('');
+        updateStats();
+      }
+
+      function toggleCard(key) {
+        if (state[key] === true) {
+          state[key] = null;
+        } else {
+          state[key] = true;
+        }
+        renderGrid();
+      }
+
+      function approve(key) {
+        state[key] = true;
+        renderGrid();
+      }
+
+      function reject(key) {
+        state[key] = false;
+        renderGrid();
+      }
+
+      function selectAll() {
+        species.forEach(s => (state[s.key] = true));
+        renderGrid();
+      }
+
+      function deselectAll() {
+        species.forEach(s => (state[s.key] = null));
+        renderGrid();
+      }
+
+      function updateStats() {
+        const selected = Object.values(state).filter(v => v === true).length;
+        document.getElementById('selectedCount').textContent = selected;
+        document.getElementById('totalCount').textContent = species.length;
+      }
+
+      function exportSelected() {
+        const selected = species.filter(s => state[s.key] === true);
+        if (selected.length === 0) {
+          alert('No species selected! Click cards or use Approve buttons to select.');
+          return;
+        }
+        const json = JSON.stringify(
+          selected.map(s => ({ key: s.key, url: s.url })),
+          null,
+          2
+        );
+        document.getElementById('exportJson').value = json;
+        document.getElementById('exportModal').classList.add('show');
+      }
+
+      function copyAndClose() {
+        const textarea = document.getElementById('exportJson');
+        textarea.select();
+        document.execCommand('copy');
+        alert('Copied to clipboard! Now run: npm run images:upload');
+        document.getElementById('exportModal').classList.remove('show');
+      }
+
+      // Close modal on escape
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') {
+          document.getElementById('exportModal').classList.remove('show');
+        }
+      });
+
+      // Initial render
+      renderGrid();
+    </script>
+  </body>
+</html>

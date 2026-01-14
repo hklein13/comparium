@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- SEO Meta Tags (will be updated dynamically) -->
+    <title>User Profile | Comparium</title>
+    <meta name="description" content="View aquarium setups shared by a Comparium community member." />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/naturalist.css" />
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VNY458QF3"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', 'G-8VNY458QF3');
+    </script>
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="header">
+      <a href="index.html" class="logo">Comparium</a>
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="compare.html">Compare</a>
+        <a href="glossary.html">Glossary</a>
+        <a href="community.html">Community</a>
+        <a href="faq.html">FAQ</a>
+        <a href="dashboard.html">Dashboard</a>
+        <div id="auth-links">
+          <a href="login.html">Login</a>
+          <a href="signup.html" class="nav-cta">Sign Up</a>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="profile-main">
+      <!-- Loading State -->
+      <div id="profile-loading" class="profile-loading">
+        <p>Loading profile...</p>
+      </div>
+
+      <!-- Error State -->
+      <div id="profile-error" class="profile-error" style="display: none">
+        <h2>Profile Not Found</h2>
+        <p>This user may not exist or has no public tanks.</p>
+        <a href="community.html" class="btn btn-primary">Browse Community</a>
+      </div>
+
+      <!-- Profile Content (hidden until loaded) -->
+      <div id="profile-content" class="profile-content" style="display: none">
+        <!-- Profile Header -->
+        <div class="profile-header">
+          <div class="profile-avatar" id="profile-avatar">
+            <!-- Avatar placeholder -->
+          </div>
+          <div class="profile-info">
+            <h1 id="profile-username">@username</h1>
+            <p id="profile-member-since" class="profile-meta">Member since 2026</p>
+          </div>
+        </div>
+
+        <!-- Public Tanks Section -->
+        <section class="profile-tanks-section">
+          <h2>Public Tanks <span id="profile-tank-count" class="section-count">(0)</span></h2>
+          <div id="profile-tanks-grid" class="profile-tanks-grid">
+            <!-- Populated by JS -->
+          </div>
+          <div id="profile-no-tanks" class="profile-no-tanks" style="display: none">
+            <p>This user hasn't shared any tanks yet.</p>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>Comparium &copy; 2026 | Built for aquarium enthusiasts</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script type="module" src="js/firebase-init.js"></script>
+    <script src="js/storage-service.js"></script>
+    <script src="js/auth-manager.js"></script>
+    <script src="js/fish-data.js"></script>
+    <script src="js/public-tank-manager.js"></script>
+    <script src="js/profile.js"></script>
+  </body>
+</html>

@@ -12,6 +12,7 @@ window.tankManager = {
   currentPhotoFile: null, // File object for new photo to upload
   currentPhotoUrl: null, // Preview URL for display
   existingPhotoUrl: null, // URL of existing photo (for cleanup on replace)
+  wasPublicBefore: false, // Track if tank was public before editing
 
   // ============================================
   // HELPER FUNCTIONS
@@ -368,9 +369,49 @@ window.tankManager = {
     this.populateSpeciesSelector();
     this.populatePlantSelector();
     this.setupPhotoDragDrop();
+    this.setupPrivacyButtons();
     await this.loadTanks();
     this.checkPendingSpecies();
     this.isInitialized = true;
+  },
+
+  /**
+   * Set up Yes/No privacy button handlers
+   */
+  setupPrivacyButtons() {
+    const buttons = document.querySelectorAll('.privacy-btn');
+    const hiddenInput = document.getElementById('tank-public');
+
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        // Update selection state
+        buttons.forEach((b) => b.classList.remove('selected'));
+        btn.classList.add('selected');
+
+        // Update hidden input value
+        if (hiddenInput) {
+          hiddenInput.value = btn.dataset.value;
+        }
+      });
+    });
+  },
+
+  /**
+   * Set the privacy button state (Yes/No)
+   * @param {boolean} isPublic - Whether tank is public
+   */
+  setPrivacyButtonState(isPublic) {
+    const buttons = document.querySelectorAll('.privacy-btn');
+    const hiddenInput = document.getElementById('tank-public');
+
+    buttons.forEach((btn) => {
+      const btnValue = btn.dataset.value === 'true';
+      btn.classList.toggle('selected', btnValue === isPublic);
+    });
+
+    if (hiddenInput) {
+      hiddenInput.value = isPublic ? 'true' : 'false';
+    }
   },
 
   /**
@@ -478,8 +519,12 @@ window.tankManager = {
     this.currentTankSpecies = [];
     this.currentTankPlants = [];
     this.editingTankId = null;
+    this.wasPublicBefore = false;
     this.updateSpeciesList();
     this.updatePlantsList();
+
+    // Reset privacy buttons (private by default)
+    this.setPrivacyButtonState(false);
 
     // Reset photo state
     this.resetPhotoState();
@@ -524,6 +569,7 @@ window.tankManager = {
     this.currentPhotoFile = null;
     this.currentPhotoUrl = null;
     this.existingPhotoUrl = null;
+    this.wasPublicBefore = false;
   },
 
   /**
@@ -778,6 +824,9 @@ window.tankManager = {
       }
     }
 
+    // Get isPublic from hidden input (set by privacy buttons)
+    const isPublic = document.getElementById('tank-public')?.value === 'true';
+
     const tank = {
       id: isNewTank ? null : tankId,
       name: document.getElementById('tank-name')?.value || 'Untitled Tank',
@@ -786,6 +835,7 @@ window.tankManager = {
       species: this.currentTankSpecies,
       plants: this.currentTankPlants,
       coverPhoto: coverPhotoUrl,
+      isPublic: isPublic,
       updated: new Date().toISOString(),
     };
 
@@ -800,7 +850,16 @@ window.tankManager = {
       // Note: When replacing a photo, the new upload already overwrites the old file
       // at the same storage path (images/tanks/{tankId}.jpg), so no deletion needed.
 
-      authManager.showMessage('Tank saved successfully!', 'success');
+      // Handle public tank sync
+      const syncOk = await this.syncPublicTankState(uid, tank, isPublic);
+
+      if (syncOk) {
+        authManager.showMessage('Tank saved successfully!', 'success');
+      } else {
+        // Tank saved but public sync failed - still close form but warn user
+        authManager.showMessage('Tank saved, but sharing status may not be updated', 'warning');
+      }
+
       this.cancelForm();
       await this.loadTanks();
       this.updateDashboardStats();
@@ -809,8 +868,47 @@ window.tankManager = {
       if (newPhotoUploaded && coverPhotoUrl !== this.existingPhotoUrl) {
         await window.storageDeleteTankPhoto(finalTankId);
       }
+      // Also clean up blob URL to prevent memory leak
+      if (this.currentPhotoUrl && this.currentPhotoUrl.startsWith('blob:')) {
+        URL.revokeObjectURL(this.currentPhotoUrl);
+      }
+      this.currentPhotoFile = null;
+      this.currentPhotoUrl = null;
       authManager.showMessage('Failed to save tank', 'error');
     }
+  },
+
+  /**
+   * Sync public tank state with publicTanks collection
+   * @param {string} uid - User ID
+   * @param {object} tank - Tank object
+   * @param {boolean} isPublic - Whether tank should be public
+   * @returns {Promise<boolean>} - true if sync succeeded or wasn't needed
+   */
+  async syncPublicTankState(uid, tank, isPublic) {
+    // If no change to public status and tank wasn't public, nothing to do
+    if (!isPublic && !this.wasPublicBefore) {
+      return true;
+    }
+
+    // Get username for denormalization
+    const profile = await window.firestoreGetProfile(uid);
+    const username = profile?.username || 'Unknown';
+
+    let syncResult = { success: true };
+
+    if (isPublic && !this.wasPublicBefore) {
+      // Making public for the first time
+      syncResult = await window.publicTankManager?.syncToPublic(uid, tank, username);
+    } else if (isPublic && this.wasPublicBefore) {
+      // Updating an existing public tank
+      syncResult = await window.publicTankManager?.updatePublicTank(uid, tank, username);
+    } else if (!isPublic && this.wasPublicBefore) {
+      // Making private (was public before)
+      syncResult = await window.publicTankManager?.removeFromPublic(tank.id);
+    }
+
+    return syncResult?.success === true;
   },
 
   /**
@@ -932,8 +1030,12 @@ window.tankManager = {
       this.currentTankSpecies = tank.species || [];
       this.currentTankPlants = tank.plants || [];
       this.editingTankId = tank.id;
+      this.wasPublicBefore = tank.isPublic || false;
       this.updateSpeciesList();
       this.updatePlantsList();
+
+      // Set privacy button state
+      this.setPrivacyButtonState(tank.isPublic || false);
 
       // Handle existing photo
       this.resetPhotoState();
@@ -965,27 +1067,33 @@ window.tankManager = {
     const uid = authManager.getCurrentUid();
     if (!uid) return;
 
-    // Get tank to check for cover photo before deleting
+    // Get tank info FIRST (for cleanup after successful delete)
     const tank = await storageService.getTank(uid, tankId);
+
+    // Delete from Firestore FIRST - this is the critical operation
+    // If this fails, we don't want to have deleted the photo already
+    const result = await storageService.deleteTank(uid, tankId);
+
+    if (!result.success) {
+      authManager.showMessage('Failed to delete tank', 'error');
+      return;
+    }
+
+    // Firestore delete succeeded - now clean up related data (best effort)
+
+    // Remove from publicTanks if it was public
+    if (tank?.isPublic) {
+      await window.publicTankManager?.removeFromPublic(tankId);
+    }
 
     // Delete cover photo from storage if exists
     if (tank?.coverPhoto) {
-      const deleteResult = await window.storageDeleteTankPhoto(tankId);
-      if (!deleteResult.success) {
-        console.warn('Failed to delete tank photo:', deleteResult.error);
-        // Continue anyway - tank deletion is more important
-      }
+      await window.storageDeleteTankPhoto(tankId);
     }
 
-    const result = await storageService.deleteTank(uid, tankId);
-
-    if (result.success) {
-      authManager.showMessage('Tank deleted', 'success');
-      await this.loadTanks();
-      this.updateDashboardStats();
-    } else {
-      authManager.showMessage('Failed to delete tank', 'error');
-    }
+    authManager.showMessage('Tank deleted', 'success');
+    await this.loadTanks();
+    this.updateDashboardStats();
   },
 
   /**

@@ -1,0 +1,1120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Comparium - iNaturalist Image Selection</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: #1a1a2e;
+        color: #eee;
+        margin: 0;
+        padding: 20px;
+      }
+      .header {
+        background: linear-gradient(135deg, #4ecca3, #234a3a);
+        color: white;
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+      .header h1 {
+        margin: 0 0 10px 0;
+      }
+      .header p {
+        margin: 0;
+        opacity: 0.9;
+      }
+      .instructions {
+        background: #2a2a4a;
+        border-left: 4px solid #4ecca3;
+        padding: 15px 20px;
+        border-radius: 0 8px 8px 0;
+        margin-bottom: 20px;
+      }
+      .instructions h3 {
+        margin: 0 0 10px 0;
+        color: #4ecca3;
+      }
+      .instructions ol {
+        margin: 0;
+        padding-left: 20px;
+      }
+      .instructions li {
+        margin-bottom: 5px;
+      }
+      .instructions code {
+        background: #16213e;
+        padding: 2px 6px;
+        border-radius: 3px;
+      }
+      .controls {
+        background: #16213e;
+        padding: 15px 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      .controls button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 600;
+      }
+      .btn-primary {
+        background: #4ecca3;
+        color: #1a1a2e;
+      }
+      .btn-primary:hover {
+        background: #3db892;
+      }
+      .btn-secondary {
+        background: #444;
+        color: #eee;
+      }
+      .btn-secondary:hover {
+        background: #555;
+      }
+      .btn-export {
+        background: #e94560;
+        color: white;
+      }
+      .btn-export:hover {
+        background: #d63850;
+      }
+      .stats {
+        margin-left: auto;
+        font-size: 14px;
+        color: #888;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 20px;
+      }
+      .card {
+        background: #16213e;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 3px solid transparent;
+        transition: all 0.2s;
+      }
+      .card:hover {
+        transform: translateY(-2px);
+      }
+      .card.selected {
+        border-color: #4ecca3;
+      }
+      .card.no-image {
+        opacity: 0.5;
+      }
+      .card-images {
+        display: flex;
+        gap: 2px;
+        background: #0f0f23;
+        min-height: 180px;
+      }
+      .card-images img {
+        flex: 1;
+        height: 180px;
+        object-fit: cover;
+        cursor: pointer;
+        transition: opacity 0.2s;
+      }
+      .card-images img:hover {
+        opacity: 0.8;
+      }
+      .card-images img.selected-img {
+        outline: 3px solid #4ecca3;
+        outline-offset: -3px;
+      }
+      .card-placeholder {
+        width: 100%;
+        height: 180px;
+        background: #0f0f23;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #666;
+        font-size: 14px;
+      }
+      .card-body {
+        padding: 15px;
+      }
+      .card-title {
+        font-weight: 600;
+        font-size: 16px;
+        margin: 0 0 5px 0;
+        color: #4ecca3;
+      }
+      .card-scientific {
+        font-style: italic;
+        color: #888;
+        font-size: 14px;
+        margin: 0 0 8px 0;
+      }
+      .card-meta {
+        font-size: 12px;
+        color: #666;
+        margin-bottom: 10px;
+      }
+      .card-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+      }
+      .card-actions button {
+        flex: 1;
+        padding: 8px 12px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 500;
+      }
+      .btn-select {
+        background: #4ecca3;
+        color: #1a1a2e;
+      }
+      .btn-skip {
+        background: #444;
+        color: #aaa;
+      }
+      .output-area {
+        background: #16213e;
+        padding: 20px;
+        border-radius: 8px;
+        margin-top: 20px;
+        display: none;
+      }
+      .output-area.visible {
+        display: block;
+      }
+      .output-area h3 {
+        color: #4ecca3;
+        margin: 0 0 15px 0;
+      }
+      .output-area textarea {
+        width: 100%;
+        height: 200px;
+        font-family: monospace;
+        font-size: 12px;
+        background: #0f0f23;
+        color: #4ecca3;
+        border: 1px solid #333;
+        border-radius: 4px;
+        padding: 10px;
+      }
+      .legend {
+        display: flex;
+        gap: 20px;
+        font-size: 13px;
+        color: #888;
+        margin-bottom: 15px;
+      }
+      .legend span {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .legend .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+      }
+      .legend .dot.green {
+        background: #4ecca3;
+      }
+      .legend .dot.gray {
+        background: #666;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>iNaturalist Image Selection</h1>
+      <p>Found 25 of 33 species with CC-licensed photos</p>
+    </div>
+
+    <div class="instructions">
+      <h3>Instructions</h3>
+      <ol>
+        <li>Click on an image to select it (green border = selected)</li>
+        <li>If multiple images shown, pick the best quality one</li>
+        <li>Skip species with poor quality or wrong fish</li>
+        <li>Click "Export Selected" when done</li>
+        <li>Run: <code>npm run images:upload</code> and paste the JSON</li>
+      </ol>
+    </div>
+
+    <div class="controls">
+      <button class="btn-primary" onclick="selectAllFirst()">Select All (First Image)</button>
+      <button class="btn-secondary" onclick="deselectAll()">Deselect All</button>
+      <button class="btn-export" onclick="exportSelected()">Export Selected</button>
+      <div class="stats">Selected: <span id="selectedCount">0</span> / 33</div>
+    </div>
+
+    <div class="legend">
+      <span><span class="dot green"></span> Selected</span>
+      <span><span class="dot gray"></span> Not selected</span>
+    </div>
+
+    <div class="grid">
+      <div class="card no-image" data-key="corydoras" id="card-corydoras">
+        <div class="card-placeholder">No CC-licensed image found</div>
+        <div class="card-body">
+          <h3 class="card-title">Corydoras Catfish</h3>
+          <p class="card-scientific">Corydoras spp.</p>
+          <p class="card-meta">No suitable image found on iNaturalist</p>
+        </div>
+      </div>
+
+      <div class="card no-image" data-key="otocinclus" id="card-otocinclus">
+        <div class="card-placeholder">No CC-licensed image found</div>
+        <div class="card-body">
+          <h3 class="card-title">Otocinclus Catfish</h3>
+          <p class="card-scientific">Otocinclus spp.</p>
+          <p class="card-meta">No suitable image found on iNaturalist</p>
+        </div>
+      </div>
+
+      <div class="card" data-key="bristlenosePleco" id="card-bristlenosePleco">
+        <div class="card-images">
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/445545216/medium.jpeg"
+            alt="Bristlenose Pleco"
+            data-key="bristlenosePleco"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/445545216/original.jpeg"
+            data-index="0"
+            onclick="selectImage(this)"
+            title="Click to select"
+            loading="lazy"
+          />
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Bristlenose Pleco</h3>
+          <p class="card-scientific">Ancistrus spp.</p>
+          <p class="card-meta">License: cc-by-nc | 1 option</p>
+          <div class="card-actions">
+            <button class="btn-select" onclick="selectFirst('bristlenosePleco')">
+              Select Best
+            </button>
+            <button class="btn-skip" onclick="deselect('bristlenosePleco')">Skip</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="neriteSnail" id="card-neriteSnail">
+        <div class="card-images">
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/57498597/medium.jpg"
+            alt="Nerite Snail"
+            data-key="neriteSnail"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/57498597/original.jpg"
+            data-index="0"
+            onclick="selectImage(this)"
+            title="Click to select"
+            loading="lazy"
+          />
+
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/39283115/medium.jpeg"
+            alt="Nerite Snail"
+            data-key="neriteSnail"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/39283115/original.jpeg"
+            data-index="1"
+            onclick="selectImage(this)"
+            title="Click to select"
+            loading="lazy"
+          />
+
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/63112345/medium.jpeg"
+            alt="Nerite Snail"
+            data-key="neriteSnail"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/63112345/original.jpeg"
+            data-index="2"
+            onclick="selectImage(this)"
+            title="Click to select"
+            loading="lazy"
+          />
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Nerite Snail</h3>
+          <p class="card-scientific">Neritina spp.</p>
+          <p class="card-meta">License: cc-by-nc | 3 options</p>
+          <div class="card-actions">
+            <button class="btn-select" onclick="selectFirst('neriteSnail')">Select Best</button>
+            <button class="btn-skip" onclick="deselect('neriteSnail')">Skip</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="balloonMolly" id="card-balloonMolly">
+        <div class="card-images">
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/208075679/medium.jpg"
+            alt="Balloon Molly"
+            data-key="balloonMolly"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/208075679/original.jpg"
+            data-index="0"
+            onclick="selectImage(this)"
+            title="Click to select"
+            loading="lazy"
+          />
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Balloon Molly</h3>
+          <p class="card-scientific">Poecilia sphenops (balloon morph)</p>
+          <p class="card-meta">License: cc-by-nc | 1 option</p>
+          <div class="card-actions">
+            <button class="btn-select" onclick="selectFirst('balloonMolly')">Select Best</button>
+            <button class="btn-skip" onclick="deselect('balloonMolly')">Skip</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="blackMolly" id="card-blackMolly">
+        <div class="card-images">
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/171871704/medium.jpg"
+            alt="Black Molly"
+            data-key="blackMolly"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/171871704/original.jpg"
+            data-index="0"
+            onclick="selectImage(this)"
+            title="Click to select"
+            loading="lazy"
+          />
+
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/208075679/medium.jpg"
+            alt="Black Molly"
+            data-key="blackMolly"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/208075679/original.jpg"
+            data-index="1"
+            onclick="selectImage(this)"
+            title="Click to select"
+            loading="lazy"
+          />
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Black Molly</h3>
+          <p class="card-scientific">Poecilia sphenops (melanistic)</p>
+          <p class="card-meta">License: cc-by-nc | 2 options</p>
+          <div class="card-actions">
+            <button class="btn-select" onclick="selectFirst('blackMolly')">Select Best</button>
+            <button class="btn-skip" onclick="deselect('blackMolly')">Skip</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card no-image" data-key="goldWhiteCloud" id="card-goldWhiteCloud">
+        <div class="card-placeholder">No CC-licensed image found</div>
+        <div class="card-body">
+          <h3 class="card-title">Gold White Cloud</h3>
+          <p class="card-scientific">Tanichthys albonubes (Gold Morph)</p>
+          <p class="card-meta">No suitable image found on iNaturalist</p>
+        </div>
+      </div>
+
+      <div class="card" data-key="dalmatianMolly" id="card-dalmatianMolly">
+        <div class="card-images">
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/248665389/medium.jpg"
+            alt="Dalmatian Molly"
+            data-key="dalmatianMolly"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/248665389/original.jpg"
+            data-index="0"
+            onclick="selectImage(this)"
+            title="Click to select"
+            loading="lazy"
+          />
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Dalmatian Molly</h3>
+          <p class="card-scientific">Poecilia sphenops (Dalmatian)</p>
+          <p class="card-meta">License: cc-by-nc | 1 option</p>
+          <div class="card-actions">
+            <button class="btn-select" onclick="selectFirst('dalmatianMolly')">Select Best</button>
+            <button class="btn-skip" onclick="deselect('dalmatianMolly')">Skip</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="goldGourami" id="card-goldGourami">
+        <div class="card-images">
+          <img
+            src="https://static.inaturalist.org/photos/215211215/medium.jpg"
+            alt="Gold Gourami"
+            data-key="goldGourami"
+            data-url="https://static.inaturalist.org/photos/215211215/original.jpg"
+            data-index="0"
+            onclick="selectImage(this)"
+            title="Click to select"
+            loading="lazy"
+          />
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Gold Gourami</h3>
+          <p class="card-scientific">Trichopodus trichopterus (Gold)</p>
+          <p class="card-meta">License: Unknown | 1 option</p>
+          <div class="card-actions">
+            <button class="btn-select" onclick="selectFirst('goldGourami')">Select Best</button>
+            <button class="btn-skip" onclick="deselect('goldGourami')">Skip</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="headAndTailLightTetra" id="card-headAndTailLightTetra">
+        <div class="card-images">
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/379485613/medium.jpeg"
+            alt="Head and Tail Light Tetra"
+            data-key="headAndTailLightTetra"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/379485613/original.jpeg"
+            data-index="0"
+            onclick="selectImage(this)"
+            title="Click to select"
+            loading="lazy"
+          />
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Head and Tail Light Tetra</h3>
+          <p class="card-scientific">Hemigrammus ocellifer</p>
+          <p class="card-meta">License: cc-by-nc | 1 option</p>
+          <div class="card-actions">
+            <button class="btn-select" onclick="selectFirst('headAndTailLightTetra')">
+              Select Best
+            </button>
+            <button class="btn-skip" onclick="deselect('headAndTailLightTetra')">Skip</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="beckfordsPencilfish" id="card-beckfordsPencilfish">
+        <div class="card-images">
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/923588/medium.jpg"
+            alt="Beckford's Pencilfish"
+            data-key="beckfordsPencilfish"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/923588/original.jpg"
+            data-index="0"
+            onclick="selectImage(this)"
+            title="Click to select"
+            loading="lazy"
+          />
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Beckford's Pencilfish</h3>
+          <p class="card-scientific">Nannostomus beckfordi</p>
+          <p class="card-meta">License: cc-by-nc-sa | 1 option</p>
+          <div class="card-actions">
+            <button class="btn-select" onclick="selectFirst('beckfordsPencilfish')">
+              Select Best
+            </button>
+            <button class="btn-skip" onclick="deselect('beckfordsPencilfish')">Skip</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card no-image" data-key="marginatedTetra" id="card-marginatedTetra">
+        <div class="card-placeholder">No CC-licensed image found</div>
+        <div class="card-body">
+          <h3 class="card-title">Marginated Tetra</h3>
+          <p class="card-scientific">Hyphessobrycon marginatus</p>
+          <p class="card-meta">No suitable image found on iNaturalist</p>
+        </div>
+      </div>
+
+      <div class="card" data-key="flagTetra" id="card-flagTetra">
+        <div class="card-images">
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/346722537/medium.jpeg"
+            alt="Flag Tetra"
+            data-key="flagTetra"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/346722537/original.jpeg"
+            data-index="0"
+            onclick="selectImage(this)"
+            title="Click to select"
+            loading="lazy"
+          />
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Flag Tetra</h3>
+          <p class="card-scientific">Hyphessobrycon heterorhabdus</p>
+          <p class="card-meta">License: cc-by-nc | 1 option</p>
+          <div class="card-actions">
+            <button class="btn-select" onclick="selectFirst('flagTetra')">Select Best</button>
+            <button class="btn-skip" onclick="deselect('flagTetra')">Skip</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="costelloTetra" id="card-costelloTetra">
+        <div class="card-images">
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/130339889/medium.jpg"
+            alt="Costello Tetra"
+            data-key="costelloTetra"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/130339889/original.jpg"
+            data-index="0"
+            onclick="selectImage(this)"
+            title="Click to select"
+            loading="lazy"
+          />
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Costello Tetra</h3>
+          <p class="card-scientific">Hemigrammus costelloi</p>
+          <p class="card-meta">License: cc-by-sa | 1 option</p>
+          <div class="card-actions">
+            <button class="btn-select" onclick="selectFirst('costelloTetra')">Select Best</button>
+            <button class="btn-skip" onclick="deselect('costelloTetra')">Skip</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card no-image" data-key="platinumTetra" id="card-platinumTetra">
+        <div class="card-placeholder">No CC-licensed image found</div>
+        <div class="card-body">
+          <h3 class="card-title">Platinum Tetra</h3>
+          <p class="card-scientific">Hemigrammus vorderwinkleri</p>
+          <p class="card-meta">No suitable image found on iNaturalist</p>
+        </div>
+      </div>
+
+      <div class="card" data-key="dawnTetra" id="card-dawnTetra">
+        <div class="card-images">
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/127591238/medium.jpeg"
+            alt="Dawn Tetra"
+            data-key="dawnTetra"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/127591238/original.jpeg"
+            data-index="0"
+            onclick="selectImage(this)"
+            title="Click to select"
+            loading="lazy"
+          />
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Dawn Tetra</h3>
+          <p class="card-scientific">Aphyocharax paraguayensis</p>
+          <p class="card-meta">License: cc-by-nc | 1 option</p>
+          <div class="card-actions">
+            <button class="btn-select" onclick="selectFirst('dawnTetra')">Select Best</button>
+            <button class="btn-skip" onclick="deselect('dawnTetra')">Skip</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="rubyTetra" id="card-rubyTetra">
+        <div class="card-images">
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/97233490/medium.jpg"
+            alt="Ruby Tetra"
+            data-key="rubyTetra"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/97233490/original.jpg"
+            data-index="0"
+            onclick="selectImage(this)"
+            title="Click to select"
+            loading="lazy"
+          />
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Ruby Tetra</h3>
+          <p class="card-scientific">Axelrodia riesei</p>
+          <p class="card-meta">License: cc-by-nc-sa | 1 option</p>
+          <div class="card-actions">
+            <button class="btn-select" onclick="selectFirst('rubyTetra')">Select Best</button>
+            <button class="btn-skip" onclick="deselect('rubyTetra')">Skip</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="tBarb" id="card-tBarb">
+        <div class="card-images">
+          <img
+            src="https://static.inaturalist.org/photos/219192417/medium.jpg"
+            alt="T-Barb"
+            data-key="tBarb"
+            data-url="https://static.inaturalist.org/photos/219192417/original.jpg"
+            data-index="0"
+            onclick="selectImage(this)"
+            title="Click to select"
+            loading="lazy"
+          />
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">T-Barb</h3>
+          <p class="card-scientific">Puntigrus partipentazona</p>
+          <p class="card-meta">License: Unknown | 1 option</p>
+          <div class="card-actions">
+            <button class="btn-select" onclick="selectFirst('tBarb')">Select Best</button>
+            <button class="btn-skip" onclick="deselect('tBarb')">Skip</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="cumingsBarb" id="card-cumingsBarb">
+        <div class="card-images">
+          <img
+            src="https://static.inaturalist.org/photos/257438896/medium.jpg"
+            alt="Cuming's Barb"
+            data-key="cumingsBarb"
+            data-url="https://static.inaturalist.org/photos/257438896/original.jpg"
+            data-index="0"
+            onclick="selectImage(this)"
+            title="Click to select"
+            loading="lazy"
+          />
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Cuming's Barb</h3>
+          <p class="card-scientific">Pethia cumingii</p>
+          <p class="card-meta">License: Unknown | 1 option</p>
+          <div class="card-actions">
+            <button class="btn-select" onclick="selectFirst('cumingsBarb')">Select Best</button>
+            <button class="btn-skip" onclick="deselect('cumingsBarb')">Skip</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="glowlightDanio" id="card-glowlightDanio">
+        <div class="card-images">
+          <img
+            src="https://static.inaturalist.org/photos/489160021/medium.jpg"
+            alt="Glowlight Danio"
+            data-key="glowlightDanio"
+            data-url="https://static.inaturalist.org/photos/489160021/original.jpg"
+            data-index="0"
+            onclick="selectImage(this)"
+            title="Click to select"
+            loading="lazy"
+          />
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Glowlight Danio</h3>
+          <p class="card-scientific">Celestichthys choprae</p>
+          <p class="card-meta">License: Unknown | 1 option</p>
+          <div class="card-actions">
+            <button class="btn-select" onclick="selectFirst('glowlightDanio')">Select Best</button>
+            <button class="btn-skip" onclick="deselect('glowlightDanio')">Skip</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card no-image" data-key="axelrodiRainbowfish" id="card-axelrodiRainbowfish">
+        <div class="card-placeholder">No CC-licensed image found</div>
+        <div class="card-body">
+          <h3 class="card-title">Axelrodi Rainbowfish</h3>
+          <p class="card-scientific">Chilatherina axelrodi</p>
+          <p class="card-meta">No suitable image found on iNaturalist</p>
+        </div>
+      </div>
+
+      <div class="card no-image" data-key="bloodParrotCichlid" id="card-bloodParrotCichlid">
+        <div class="card-placeholder">No CC-licensed image found</div>
+        <div class="card-body">
+          <h3 class="card-title">Blood Parrot Cichlid</h3>
+          <p class="card-scientific">Amphilophus hybrid</p>
+          <p class="card-meta">No suitable image found on iNaturalist</p>
+        </div>
+      </div>
+
+      <div class="card no-image" data-key="flowerhornCichlid" id="card-flowerhornCichlid">
+        <div class="card-placeholder">No CC-licensed image found</div>
+        <div class="card-body">
+          <h3 class="card-title">Flowerhorn Cichlid</h3>
+          <p class="card-scientific">Amphilophus hybrid</p>
+          <p class="card-meta">No suitable image found on iNaturalist</p>
+        </div>
+      </div>
+
+      <div class="card" data-key="melanistiusCorydoras" id="card-melanistiusCorydoras">
+        <div class="card-images">
+          <img
+            src="https://static.inaturalist.org/photos/32268928/medium.jpg"
+            alt="Melanistius Corydoras"
+            data-key="melanistiusCorydoras"
+            data-url="https://static.inaturalist.org/photos/32268928/original.jpg"
+            data-index="0"
+            onclick="selectImage(this)"
+            title="Click to select"
+            loading="lazy"
+          />
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Melanistius Corydoras</h3>
+          <p class="card-scientific">Corydoras melanistius</p>
+          <p class="card-meta">License: Unknown | 1 option</p>
+          <div class="card-actions">
+            <button class="btn-select" onclick="selectFirst('melanistiusCorydoras')">
+              Select Best
+            </button>
+            <button class="btn-skip" onclick="deselect('melanistiusCorydoras')">Skip</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="agassiziCorydoras" id="card-agassiziCorydoras">
+        <div class="card-images">
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/94416938/medium.jpg"
+            alt="Agassizi Corydoras"
+            data-key="agassiziCorydoras"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/94416938/original.jpg"
+            data-index="0"
+            onclick="selectImage(this)"
+            title="Click to select"
+            loading="lazy"
+          />
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Agassizi Corydoras</h3>
+          <p class="card-scientific">Corydoras agassizii</p>
+          <p class="card-meta">License: cc-by-nc-sa | 1 option</p>
+          <div class="card-actions">
+            <button class="btn-select" onclick="selectFirst('agassiziCorydoras')">
+              Select Best
+            </button>
+            <button class="btn-skip" onclick="deselect('agassiziCorydoras')">Skip</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="skunkBotia" id="card-skunkBotia">
+        <div class="card-images">
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/64571719/medium.jpg"
+            alt="Skunk Botia"
+            data-key="skunkBotia"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/64571719/original.jpg"
+            data-index="0"
+            onclick="selectImage(this)"
+            title="Click to select"
+            loading="lazy"
+          />
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Skunk Botia</h3>
+          <p class="card-scientific">Yasuhikotakia morleti</p>
+          <p class="card-meta">License: cc-by-sa | 1 option</p>
+          <div class="card-actions">
+            <button class="btn-select" onclick="selectFirst('skunkBotia')">Select Best</button>
+            <button class="btn-skip" onclick="deselect('skunkBotia')">Skip</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="whiptailCatfish" id="card-whiptailCatfish">
+        <div class="card-images">
+          <img
+            src="https://static.inaturalist.org/photos/101790884/medium.jpg"
+            alt="Whiptail Catfish"
+            data-key="whiptailCatfish"
+            data-url="https://static.inaturalist.org/photos/101790884/original.jpg"
+            data-index="0"
+            onclick="selectImage(this)"
+            title="Click to select"
+            loading="lazy"
+          />
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Whiptail Catfish</h3>
+          <p class="card-scientific">Rineloricaria lanceolata</p>
+          <p class="card-meta">License: Unknown | 1 option</p>
+          <div class="card-actions">
+            <button class="btn-select" onclick="selectFirst('whiptailCatfish')">Select Best</button>
+            <button class="btn-skip" onclick="deselect('whiptailCatfish')">Skip</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="talkingCatfish" id="card-talkingCatfish">
+        <div class="card-images">
+          <img
+            src="https://static.inaturalist.org/photos/101741721/medium.jpg"
+            alt="Talking Catfish"
+            data-key="talkingCatfish"
+            data-url="https://static.inaturalist.org/photos/101741721/original.jpg"
+            data-index="0"
+            onclick="selectImage(this)"
+            title="Click to select"
+            loading="lazy"
+          />
+
+          <img
+            src="https://static.inaturalist.org/photos/101781101/medium.jpg"
+            alt="Talking Catfish"
+            data-key="talkingCatfish"
+            data-url="https://static.inaturalist.org/photos/101781101/original.jpg"
+            data-index="1"
+            onclick="selectImage(this)"
+            title="Click to select"
+            loading="lazy"
+          />
+
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/9246498/medium.jpeg"
+            alt="Talking Catfish"
+            data-key="talkingCatfish"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/9246498/original.jpeg"
+            data-index="2"
+            onclick="selectImage(this)"
+            title="Click to select"
+            loading="lazy"
+          />
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Talking Catfish</h3>
+          <p class="card-scientific">Acanthodoras spinosissimus</p>
+          <p class="card-meta">License: Unknown | 3 options</p>
+          <div class="card-actions">
+            <button class="btn-select" onclick="selectFirst('talkingCatfish')">Select Best</button>
+            <button class="btn-skip" onclick="deselect('talkingCatfish')">Skip</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="banjoCatfish" id="card-banjoCatfish">
+        <div class="card-images">
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/207884818/medium.jpeg"
+            alt="Banjo Catfish"
+            data-key="banjoCatfish"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/207884818/original.jpeg"
+            data-index="0"
+            onclick="selectImage(this)"
+            title="Click to select"
+            loading="lazy"
+          />
+
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/527564703/medium.jpg"
+            alt="Banjo Catfish"
+            data-key="banjoCatfish"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/527564703/original.jpg"
+            data-index="1"
+            onclick="selectImage(this)"
+            title="Click to select"
+            loading="lazy"
+          />
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Banjo Catfish</h3>
+          <p class="card-scientific">Bunocephalus coracoideus</p>
+          <p class="card-meta">License: cc-by-nc | 2 options</p>
+          <div class="card-actions">
+            <button class="btn-select" onclick="selectFirst('banjoCatfish')">Select Best</button>
+            <button class="btn-skip" onclick="deselect('banjoCatfish')">Skip</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="bandedGourami" id="card-bandedGourami">
+        <div class="card-images">
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/118550776/medium.jpg"
+            alt="Banded Gourami"
+            data-key="bandedGourami"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/118550776/original.jpg"
+            data-index="0"
+            onclick="selectImage(this)"
+            title="Click to select"
+            loading="lazy"
+          />
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Banded Gourami</h3>
+          <p class="card-scientific">Trichogaster fasciata</p>
+          <p class="card-meta">License: cc-by-nc | 1 option</p>
+          <div class="card-actions">
+            <button class="btn-select" onclick="selectFirst('bandedGourami')">Select Best</button>
+            <button class="btn-skip" onclick="deselect('bandedGourami')">Skip</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="licoriceGourami" id="card-licoriceGourami">
+        <div class="card-images">
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/170025871/medium.jpg"
+            alt="Licorice Gourami"
+            data-key="licoriceGourami"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/170025871/original.jpg"
+            data-index="0"
+            onclick="selectImage(this)"
+            title="Click to select"
+            loading="lazy"
+          />
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Licorice Gourami</h3>
+          <p class="card-scientific">Parosphromenus deissneri</p>
+          <p class="card-meta">License: cc-by-sa | 1 option</p>
+          <div class="card-actions">
+            <button class="btn-select" onclick="selectFirst('licoriceGourami')">Select Best</button>
+            <button class="btn-skip" onclick="deselect('licoriceGourami')">Skip</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="blackShark" id="card-blackShark">
+        <div class="card-images">
+          <img
+            src="https://static.inaturalist.org/photos/244214259/medium.jpg"
+            alt="Black Shark"
+            data-key="blackShark"
+            data-url="https://static.inaturalist.org/photos/244214259/original.jpg"
+            data-index="0"
+            onclick="selectImage(this)"
+            title="Click to select"
+            loading="lazy"
+          />
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Black Shark</h3>
+          <p class="card-scientific">Labeo chrysophekadion</p>
+          <p class="card-meta">License: Unknown | 1 option</p>
+          <div class="card-actions">
+            <button class="btn-select" onclick="selectFirst('blackShark')">Select Best</button>
+            <button class="btn-skip" onclick="deselect('blackShark')">Skip</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-key="goldenWonderKillifish" id="card-goldenWonderKillifish">
+        <div class="card-images">
+          <img
+            src="https://inaturalist-open-data.s3.amazonaws.com/photos/174813063/medium.jpg"
+            alt="Golden Wonder Killifish"
+            data-key="goldenWonderKillifish"
+            data-url="https://inaturalist-open-data.s3.amazonaws.com/photos/174813063/original.jpg"
+            data-index="0"
+            onclick="selectImage(this)"
+            title="Click to select"
+            loading="lazy"
+          />
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Golden Wonder Killifish</h3>
+          <p class="card-scientific">Aplocheilus lineatus</p>
+          <p class="card-meta">License: cc-by-nc | 1 option</p>
+          <div class="card-actions">
+            <button class="btn-select" onclick="selectFirst('goldenWonderKillifish')">
+              Select Best
+            </button>
+            <button class="btn-skip" onclick="deselect('goldenWonderKillifish')">Skip</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="output-area" id="outputArea">
+      <h3>Selected Species JSON</h3>
+      <textarea id="outputJson" readonly></textarea>
+      <p style="margin-top: 10px; font-size: 14px; color: #888">
+        Copy this JSON, then run: <code>npm run images:upload</code>
+      </p>
+      <button class="btn-primary" style="margin-top: 10px" onclick="copyToClipboard()">
+        Copy to Clipboard
+      </button>
+    </div>
+
+    <script>
+      const selections = {}; // key -> url
+
+      function selectImage(img) {
+        const key = img.dataset.key;
+        const url = img.dataset.url;
+        const card = document.getElementById('card-' + key);
+
+        // Deselect all images in this card
+        card.querySelectorAll('img').forEach(i => i.classList.remove('selected-img'));
+
+        // Select this image
+        img.classList.add('selected-img');
+        card.classList.add('selected');
+        selections[key] = url;
+
+        updateStats();
+      }
+
+      function selectFirst(key) {
+        const card = document.getElementById('card-' + key);
+        const firstImg = card.querySelector('img');
+        if (firstImg) {
+          selectImage(firstImg);
+        }
+      }
+
+      function deselect(key) {
+        const card = document.getElementById('card-' + key);
+        card.querySelectorAll('img').forEach(i => i.classList.remove('selected-img'));
+        card.classList.remove('selected');
+        delete selections[key];
+        updateStats();
+      }
+
+      function selectAllFirst() {
+        document.querySelectorAll('.card:not(.no-image)').forEach(card => {
+          const firstImg = card.querySelector('img');
+          if (firstImg) {
+            selectImage(firstImg);
+          }
+        });
+      }
+
+      function deselectAll() {
+        document.querySelectorAll('.card').forEach(card => {
+          card.querySelectorAll('img').forEach(i => i.classList.remove('selected-img'));
+          card.classList.remove('selected');
+        });
+        Object.keys(selections).forEach(k => delete selections[k]);
+        updateStats();
+      }
+
+      function updateStats() {
+        document.getElementById('selectedCount').textContent = Object.keys(selections).length;
+      }
+
+      function exportSelected() {
+        const selected = Object.entries(selections).map(([key, url]) => ({ key, url }));
+
+        if (selected.length === 0) {
+          alert('No images selected! Click on images to select them.');
+          return;
+        }
+
+        const json = JSON.stringify(selected, null, 2);
+        document.getElementById('outputJson').value = json;
+        document.getElementById('outputArea').classList.add('visible');
+        document.getElementById('outputArea').scrollIntoView({ behavior: 'smooth' });
+      }
+
+      function copyToClipboard() {
+        const textarea = document.getElementById('outputJson');
+        textarea.select();
+        document.execCommand('copy');
+        alert('Copied to clipboard! Now run: npm run images:upload');
+      }
+
+      // Initialize
+      updateStats();
+    </script>
+  </body>
+</html>
