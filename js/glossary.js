@@ -988,6 +988,7 @@ class GlossaryManager {
       this.renderCategories();
       this.renderOriginFilters();
       await this.renderContent();
+      this.setupModalFavoriteHandler();
     } catch (error) {
       console.error('Error initializing glossary:', error);
       this.showGlossaryError(
@@ -1529,8 +1530,10 @@ class GlossaryManager {
         : '';
     }
 
-    // Set title and scientific name
-    if (modalTitle) modalTitle.textContent = fish.commonName;
+    // Set title with favorite star and scientific name
+    if (modalTitle) {
+      modalTitle.innerHTML = `${fish.commonName} <span class="favorite-star" data-species="${fishKey}">★</span>`;
+    }
     if (modalScientific) modalScientific.textContent = fish.scientificName || '';
 
     // Set tags
@@ -1582,9 +1585,67 @@ class GlossaryManager {
       `;
     }
 
+    // Load favorite state and set up star click handler
+    this.loadModalFavoriteState(fishKey);
+
     // Show modal
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
+  }
+
+  /**
+   * Load favorite state for modal star
+   */
+  async loadModalFavoriteState(speciesKey) {
+    if (typeof authManager === 'undefined' || !authManager.isLoggedIn()) return;
+
+    const uid = authManager.getCurrentUid();
+    const isFav = await storageService.isFavorite(uid, speciesKey);
+    const star = document.querySelector(`#modalTitle .favorite-star[data-species="${speciesKey}"]`);
+    if (star && isFav) {
+      star.classList.add('active');
+    }
+  }
+
+  /**
+   * Set up click handler for modal favorite star
+   */
+  setupModalFavoriteHandler() {
+    // Attach to .species-modal (inner content), not #speciesModal (backdrop)
+    // because the inner div has stopPropagation on click
+    const modalContent = document.querySelector('#speciesModal .species-modal');
+    if (!modalContent) return;
+
+    modalContent.addEventListener('click', event => {
+      const star = event.target.closest('.favorite-star');
+      if (star && star.dataset.species) {
+        event.stopPropagation();
+        this.toggleModalFavorite(star.dataset.species, star);
+      }
+    });
+  }
+
+  /**
+   * Toggle favorite from modal star
+   */
+  async toggleModalFavorite(speciesKey, starElement) {
+    if (typeof authManager === 'undefined' || !authManager.isLoggedIn()) {
+      authManager?.showMessage('Please login to save favorites', 'info');
+      return;
+    }
+
+    const uid = authManager.getCurrentUid();
+    const isFavorite = await storageService.isFavorite(uid, speciesKey);
+
+    if (isFavorite) {
+      await storageService.removeFavorite(uid, speciesKey);
+      starElement.classList.remove('active');
+      authManager.showMessage('Removed from favorites', 'success');
+    } else {
+      await storageService.addFavorite(uid, speciesKey);
+      starElement.classList.add('active');
+      authManager.showMessage('Added to favorites!', 'success');
+    }
   }
 
   /**

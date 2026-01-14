@@ -42,6 +42,30 @@ window.maintenanceManager = {
   },
 
   /**
+   * Get local datetime string for datetime-local input (YYYY-MM-DDTHH:MM)
+   * Unlike toISOString() which returns UTC, this returns local time
+   */
+  getLocalDateTimeString(date = new Date()) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  },
+
+  /**
+   * Get local date string for date input (YYYY-MM-DD)
+   * Unlike toISOString().split('T')[0] which returns UTC date, this returns local date
+   */
+  getLocalDateString(date = new Date()) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  },
+
+  /**
    * Format date for display
    */
   formatDate(dateString) {
@@ -196,7 +220,7 @@ window.maintenanceManager = {
 
                         <div class="form-group">
                             <label for="event-date">Date</label>
-                            <input type="datetime-local" id="event-date" value="${new Date().toISOString().slice(0, 16)}">
+                            <input type="datetime-local" id="event-date" value="${this.getLocalDateTimeString()}">
                         </div>
 
                         <div class="form-group">
@@ -605,8 +629,8 @@ window.maintenanceManager = {
     const intervalDays =
       existingSchedule?.intervalDays || this.scheduleTypes[scheduleType]?.defaultDays || 7;
     const nextDue = existingSchedule?.nextDue
-      ? new Date(existingSchedule.nextDue).toISOString().split('T')[0]
-      : new Date().toISOString().split('T')[0];
+      ? this.getLocalDateString(new Date(existingSchedule.nextDue))
+      : this.getLocalDateString();
     const customLabel = existingSchedule?.customLabel || '';
     const enabled = existingSchedule?.enabled !== false;
 

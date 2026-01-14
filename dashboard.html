@@ -1006,10 +1006,16 @@
           notesEl.style.display = 'none';
         }
 
-        // Species mosaic
+        // Tank header image: show cover photo if available, otherwise species mosaic
         const mosaicEl = document.getElementById('tank-modal-mosaic');
         const speciesListEl = document.getElementById('tank-modal-species');
-        if (tank.species && tank.species.length > 0) {
+
+        if (tank.coverPhoto) {
+          // Show user-uploaded cover photo
+          mosaicEl.className = 'tank-modal-mosaic single-image';
+          mosaicEl.innerHTML = `<img src="${tank.coverPhoto}" alt="${escapeHTML(tank.name || 'Tank photo')}" />`;
+        } else if (tank.species && tank.species.length > 0) {
+          // Fallback to species mosaic
           const images = tank.species
             .slice(0, 6)
             .map(key => fishDatabase[key]?.imageUrl)
@@ -1022,8 +1028,12 @@
             mosaicEl.className = 'tank-modal-mosaic';
             mosaicEl.innerHTML = images.map(url => `<img src="${url}" alt="Species" />`).join('');
           }
+        } else {
+          mosaicEl.innerHTML = '<div class="tank-portrait-placeholder">No species added</div>';
+        }
 
-          // Species list
+        // Species list (always populated if species exist)
+        if (tank.species && tank.species.length > 0) {
           speciesListEl.innerHTML = tank.species
             .map(key => {
               const fish = fishDatabase[key];
@@ -1037,7 +1047,6 @@
             })
             .join('');
         } else {
-          mosaicEl.innerHTML = '<div class="tank-portrait-placeholder">No species added</div>';
           speciesListEl.innerHTML =
             '<li class="tank-modal-species-item"><span>No species added yet</span></li>';
         }
@@ -1111,10 +1120,22 @@
                   label: e.type,
                 };
                 const dateStr = window.maintenanceManager?.formatDate(e.date) || 'Unknown';
+
+                // Build event label - show species name for fish added/removed events
+                let eventLabel = typeInfo.label;
+                if ((e.type === 'fishAdded' || e.type === 'fishRemoved') && e.data?.speciesKey) {
+                  const fish = fishDatabase[e.data.speciesKey];
+                  if (fish) {
+                    const qty = e.data.quantity || 1;
+                    const action = e.type === 'fishAdded' ? 'Added' : 'Removed';
+                    eventLabel = `${action} ${qty}x ${fish.commonName}`;
+                  }
+                }
+
                 return `
                 <div class="event-item">
                   <div class="event-info">
-                    <span class="event-type">${escapeHTML(typeInfo.label)}</span>
+                    <span class="event-type">${escapeHTML(eventLabel)}</span>
                     <span class="event-date">${dateStr}</span>
                     ${e.notes ? `<span class="event-notes">${escapeHTML(e.notes)}</span>` : ''}
                   </div>
