@@ -180,20 +180,44 @@ service cloud.firestore {
     }
 
     // ========================================================================
-    // FUTURE: PUBLIC TANKS COLLECTION (Phase 2)
+    // PUBLIC TANKS COLLECTION (Phase 4 - Tank Sharing)
     // ========================================================================
-    // Uncomment when implementing community tank sharing feature
+    // Structure: publicTanks/{tankId}
+    //   - tankId: Same ID as in users.profile.tanks[]
+    //   - userId: Owner's Firebase Auth UID
+    //   - username: Denormalized for display
+    //   - isPublic: Always true (enforced by rules)
+    //   - name, size, sizeUnit, species, plants, coverPhoto, description
+    //   - owner: { username, bio, avatarUrl } - denormalized for Phase 4
+    //   - stats: { viewCount, likeCount } - ready for Phase 4
+    //   - created, sharedAt, updated: timestamps
     //
-    // match /publicTanks/{tankId} {
-    //   allow read: if true;
-    //
-    //   allow create: if isAuthenticated()
-    //                    && request.resource.data.ownerUid == request.auth.uid
-    //                    && request.resource.data.visibility == 'public';
-    //
-    //   allow update, delete: if isAuthenticated()
-    //                            && resource.data.ownerUid == request.auth.uid;
-    // }
+    // This collection stores denormalized copies of tanks marked as public.
+    // Updated by client-side publicTankManager when user toggles tank.isPublic.
+    // ========================================================================
+
+    match /publicTanks/{tankId} {
+      // READ: Anyone can view public tanks (no authentication required)
+      allow read: if true;
+
+      // CREATE: Must be authenticated and set userId to own UID
+      // isPublic must be true (enforced - no private tanks in this collection)
+      allow create: if isAuthenticated()
+                       && request.resource.data.userId == request.auth.uid
+                       && request.resource.data.isPublic == true
+                       && request.resource.data.tankId is string
+                       && request.resource.data.name is string;
+
+      // UPDATE: Only owner can update their own public tanks
+      // userId cannot be changed
+      allow update: if isAuthenticated()
+                       && resource.data.userId == request.auth.uid
+                       && request.resource.data.userId == request.auth.uid;
+
+      // DELETE: Only owner can remove their tank from public gallery
+      allow delete: if isAuthenticated()
+                       && resource.data.userId == request.auth.uid;
+    }
 
     // ========================================================================
     // SPECIES REFERENCE DATABASE (Phase 2)
