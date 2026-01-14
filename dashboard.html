@@ -271,6 +271,18 @@
                 <ul id="plants-list" class="plant-list"></ul>
               </div>
 
+              <!-- Share Tank Toggle -->
+              <div class="form-group share-toggle-group">
+                <label class="toggle-label" for="tank-public">
+                  <input type="checkbox" id="tank-public" />
+                  <span class="toggle-switch"></span>
+                  <span class="toggle-text">Share this tank publicly</span>
+                </label>
+                <small class="form-hint"
+                  >Public tanks appear in the Community gallery for others to see</small
+                >
+              </div>
+
               <div class="form-actions">
                 <button type="submit" class="btn btn-primary">Save Tank</button>
                 <button type="button" onclick="cancelForm()" class="btn btn-ghost">Cancel</button>
@@ -423,6 +435,7 @@
     <script src="js/auth-manager.js"></script>
     <script src="js/fish-data.js"></script>
     <script src="js/plant-data.js"></script>
+    <script src="js/public-tank-manager.js"></script>
     <script src="js/tank-manager.js"></script>
     <script src="js/maintenance-manager.js"></script>
     <script>
