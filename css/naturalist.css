@@ -7088,3 +7088,104 @@ body.logged-in .favorite-star {
     grid-template-columns: repeat(3, 1fr);
   }
 }
+
+/* ============================================
+   PROFILE PAGE
+   ============================================ */
+
+.profile-main {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg);
+}
+
+.profile-loading,
+.profile-error {
+  text-align: center;
+  padding: var(--space-2xl);
+}
+
+.profile-error h2 {
+  font-family: var(--font-serif);
+  color: var(--ink);
+  margin-bottom: var(--space-sm);
+}
+
+.profile-error p {
+  color: var(--ink-secondary);
+  margin-bottom: var(--space-lg);
+}
+
+/* Profile Header */
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  padding-bottom: var(--space-xl);
+  margin-bottom: var(--space-xl);
+  border-bottom: 1px solid var(--border);
+}
+
+.profile-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--forest);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.avatar-placeholder {
+  font-size: 2rem;
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
+}
+
+.profile-info h1 {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  color: var(--ink);
+  margin-bottom: var(--space-xs);
+}
+
+.profile-meta {
+  color: var(--ink-tertiary);
+  font-size: 0.9rem;
+}
+
+/* Tanks Section */
+.profile-tanks-section h2 {
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  color: var(--ink);
+  margin-bottom: var(--space-lg);
+}
+
+.profile-tanks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-lg);
+}
+
+.profile-no-tanks {
+  text-align: center;
+  padding: var(--space-xl);
+  color: var(--ink-secondary);
+  background: var(--stone);
+  border-radius: var(--radius-lg);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .profile-header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .profile-tanks-grid {
+    grid-template-columns: 1fr;
+  }
+}
