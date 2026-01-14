@@ -506,10 +506,8 @@ function loadMorePosts() {
   loadPosts(true);
 }
 
-function openPostComposer() {
-  // Will be implemented in Task 9
-  alert('Post composer coming soon!');
-}
+// Expose loadPosts for post-composer.js to call after creating a post
+window.loadPosts = loadPosts;
 
 // Initialize on DOM ready
 document.addEventListener('DOMContentLoaded', initCommunityGallery);
