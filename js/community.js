@@ -21,11 +21,14 @@ let allPostsLoaded = false;
 async function initCommunityGallery() {
   await waitForFirebase();
 
-  // Check if user is logged in to show new post button
-  const uid = window.getFirebaseUid();
-  const newPostContainer = document.getElementById('new-post-container');
-  if (newPostContainer && uid) {
-    newPostContainer.style.display = 'flex';
+  // Listen for auth state changes to show/hide new post button
+  if (window.firebaseAuthState && window.firebaseAuth) {
+    window.firebaseAuthState(window.firebaseAuth, (user) => {
+      const newPostContainer = document.getElementById('new-post-container');
+      if (newPostContainer) {
+        newPostContainer.style.display = user ? 'flex' : 'none';
+      }
+    });
   }
 
   // Load initial tanks (default view)
