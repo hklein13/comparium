@@ -63,13 +63,13 @@ If a phase is in progress (see "Current Phase" below), there should be a plan fi
 **Current Stats:** 244 fish species (235 with images), 15 aquarium plants (14 with images)
 
 **Recent Features (January 2026):**
+- Phase 4 MVP: Tank sharing with Community gallery
 - Plant selector for tanks (add plants alongside species)
 - Forgot password feature (login page)
-- Settings dropdown z-index fix (logout button visibility)
 
-**Current Phase:** Phase 3 In Progress (Content Expansion) - 3A-3D, 3G complete
+**Current Phase:** Phase 4 MVP complete on branch `claude/phase4-tank-sharing` (awaiting merge)
 
-**Active Branch:** `main`
+**Active Branch:** `claude/phase4-tank-sharing` (merge to main when ready)
 
 ## Commands
 
@@ -134,14 +134,11 @@ glossary-generator.js (transforms data)
 - `js/fish-descriptions.js` - Curated descriptions for all 244 fish species
 - `js/plant-data.js` - Plant database (15 entries with position, planting style, difficulty, lighting, water params)
 - `js/plant-descriptions.js` - Curated descriptions for all 15 plants
-- `js/plant-detail.js` - Plant detail page logic (similar to species-detail.js)
-- `js/glossary-generator.js` - Reusable logic for generating glossary entries (fish + plants)
-- `js/tank-manager.js` - Tank CRUD operations (used by dashboard) - **refactored January 2026**
+- `js/tank-manager.js` - Tank CRUD operations with privacy Yes/No buttons
+- `js/public-tank-manager.js` - Syncs tanks to/from publicTanks collection (Phase 4)
+- `js/community.js` - Community gallery page logic (Phase 4)
 - `js/maintenance-manager.js` - Event logging and schedule management for tanks
-- `js/faq.js` - FAQ accordion toggle and search functionality
 - `scripts/serviceAccountKey.json` - Firebase Admin credentials (gitignored, never commit)
-- `scripts/upload-plant-images.js` - Plant image upload script (separate from fish images)
-- `assets/hero-tank.mp4` - Homepage video background (bright planted aquarium, ~13MB)
 
 ### ⚠️ Critical: Glossary Entry Structure Sync
 The migration script (`scripts/migrate-glossary-to-firestore.js`) has a **duplicated copy** of `generateGlossaryEntry()` (lines 180-196) that must stay in sync with `js/glossary-generator.js`.
@@ -185,14 +182,16 @@ if (!missing.length && !orphaned.length) console.log('SUCCESS: All keys match!')
 - Wrong suffixes: `schwartzsCory` vs `schwartziCorydoras`
 
 ### Page Structure
-- **index.html** - Landing page (video hero with looping aquarium background, demo CTA, species showcase, origin note)
-- **compare.html** - Fish comparison tool (the main app functionality)
-- **dashboard.html** - User hub with stats, comparisons, tank management, maintenance tracking (full CRUD), and favorites
-- **glossary.html** - Encyclopedia with 5 categories: Species, Plants, Diseases, Equipment, Terminology
-- **species.html** - Fish species detail page (loaded via `?species=fishKey`)
-- **plant.html** - Plant detail page (loaded via `?plant=plantKey`)
-- **my-tanks.html** - Redirects to dashboard#my-tanks-section (backward compat)
-- **faq.html** - Static FAQ with accordion toggle and search (js/faq.js)
+- **index.html** - Landing page (video hero, demo CTA, species showcase)
+- **compare.html** - Fish comparison tool (main app functionality)
+- **dashboard.html** - User hub with tanks, maintenance, favorites
+- **glossary.html** - Encyclopedia (Species, Plants, Diseases, Equipment, Terminology)
+- **species.html** - Fish detail page (`?species=fishKey`)
+- **plant.html** - Plant detail page (`?plant=plantKey`)
+- **community.html** - Public tank gallery (Phase 4)
+- **tank.html** - Public tank detail view (`?id=tankId`) (Phase 4)
+- **profile.html** - User profile page (`?user=username`) (Phase 4)
+- **faq.html** - FAQ with accordion and search
 
 ### Module Systems
 - **Browser:** ES6 modules (import/export)
@@ -296,27 +295,26 @@ Development follows a phased approach. See `DATA-MODEL.md` for complete specific
 |-------|--------|-------------|
 | **Phase 1** | ✅ Complete | Tank management, maintenance events, schedules |
 | **Phase 2** | ✅ Complete | Notifications system + FCM push notifications |
-| **Phase 3** | 🔄 In Progress | Content expansion (species data, images, equipment) |
-| **Phase 4** | ⏳ Planned | Social features (follows, posts, comments) |
+| **Phase 3** | 🔄 In Progress | Content expansion (3A-3D, 3G done; 3E-3F pending) |
+| **Phase 4 MVP** | ✅ Code Complete | Tank sharing + Community gallery (branch ready for merge) |
+| **Phase 4 Full** | ⏳ Planned | Follows, posts, comments, likes |
 | **Phase 5** | ⏳ Planned | Diagnostic tool (fish health decision tree) |
-| **Phase 6** | ⏳ Long-term | **Native mobile app (iOS + Android)** - Ultimate goal |
+| **Phase 6** | ⏳ Long-term | Native mobile app (iOS + Android) |
 
-### Phase 3 In Progress (January 2026)
-**Branch:** `claude/phase3-content-expansion`
+### Phase 4 MVP - Tank Sharing (January 2026)
+**Branch:** `claude/phase4-tank-sharing`
 
-**Goal:** Transform Comparium into a comprehensive aquarium reference with real informational value.
+**What's Implemented:**
+- Users can share tanks publicly via Yes/No buttons in tank modal
+- Community gallery page (`community.html`) shows all public tanks
+- Public tank detail view (`tank.html?id=tankId`)
+- Minimal user profile page (`profile.html?user=username`)
+- `publicTanks` Firestore collection with denormalized tank data
+- Security rules deployed for public read, owner write
 
-| Sub-Phase | Status | Description |
-|-----------|--------|-------------|
-| **3A** | ✅ Complete | Added 3 new fields to all species (`tankSizeRecommended`, `breedingNeeds`, `genderDifferentiation`) |
-| **3B** | ✅ Complete | Initial 130 species images uploaded |
-| **3C** | ✅ Complete | Added 103 new species (143 → 246) + updated ALL 246 descriptions to full versions |
-| **3D** | ✅ Complete | 235/244 species have images (96.3%); 9 remaining need manual sourcing |
-| **3E** | ⏳ Pending | Add disease reference images |
-| **3F** | ⏳ Pending | Expand equipment entries (6 → 16) |
-| **3G** | ✅ Complete | Plants section with 15 aquarium plants, detail pages, and 14/15 images |
+**Key Files:** `js/public-tank-manager.js`, `js/community.js`, `js/tank-detail.js`, `js/profile.js`
 
-**9 species still need manual image sourcing:** balloonMolly, blackMolly, dalmatianMolly, goldWhiteCloud, platinumTetra, cumingsBarb, axelrodiRainbowfish, bloodParrotCichlid, flowerhornCichlid (aquarium morphs/hybrids not found on wildlife APIs)
+**After merging:** Set Active Branch back to `main`
 
 ## Git Workflow
 
@@ -361,14 +359,9 @@ Development follows a phased approach. See `DATA-MODEL.md` for complete specific
 - ✅ Security rules tests passing (25 checks)
 - ✅ Cloud Function tests available (dry-run simulation)
 - ✅ All 4 Cloud Functions deployed and operational
-- ✅ **Phase 2 complete and merged to main**
-- ✅ **Phase 3D complete** - 235/244 species have images (96.3%), 9 need manual sourcing
-- ✅ **Glossary UI redesign complete** - hero section, category cards, species modal, Add to Compare
-- ✅ **Code cleanup complete** - tank-manager.js refactored, ~220 lines unused code removed from glossary
-- ✅ **Dashboard maintenance features complete** - full event/schedule CRUD from timeline and tank modal
-
-### Dashboard Maintenance Key Functions
-`editScheduleFromTimeline()`, `deleteEventFromModal()`, `openScheduleForEdit()`, `showTankSelectorModal()` — all in dashboard.html
+- ✅ **Phase 2 complete** - Notifications + FCM push
+- ✅ **Phase 3D complete** - 235/244 species have images (96.3%)
+- ✅ **Phase 4 MVP complete** - Tank sharing + Community gallery (branch ready for merge)
 
 ### Claude Code Plugins (MCP Servers)
 The following plugins enhance development workflow:
@@ -415,11 +408,12 @@ allow write: if isAdmin();        // Admin-only writes
 ### Firestore Collections
 - `glossary` - Species data (public read, admin write)
 - `users` - User profiles, tanks, favorites (owner read/write)
-- `usernames` - Username → UID mapping for login (**IMMUTABLE** - security rules prevent updates/deletes)
+- `usernames` - Username → UID mapping for login (**IMMUTABLE**)
 - `tankEvents` - Maintenance event logs (owner read/write)
 - `tankSchedules` - Recurring maintenance schedules (owner read/write)
 - `notifications` - Maintenance notifications (owner read, Cloud Functions create)
-- `fcmTokens` - FCM push notification tokens (owner read/write, Cloud Functions read)
+- `fcmTokens` - FCM push notification tokens (owner read/write)
+- `publicTanks` - Shared tanks for community gallery (public read, owner write) - **Phase 4**
 
 ## Image System
 

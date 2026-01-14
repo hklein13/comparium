@@ -128,11 +128,19 @@ window.publicTankManager = {
     }
 
     try {
-      const { doc, updateDoc, Timestamp } = await import(
+      const { doc, setDoc, Timestamp } = await import(
         'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js'
       );
 
-      const updates = {
+      const now = Timestamp.now();
+
+      // Use setDoc with merge to handle both create and update
+      // This fixes the case where tank.isPublic was set before rules were deployed
+      const publicTankData = {
+        tankId: tank.id,
+        userId: uid,
+        username: username,
+        isPublic: true,
         name: tank.name || 'Unnamed Tank',
         size: tank.size || 0,
         sizeUnit: tank.sizeUnit || 'gallons',
@@ -140,19 +148,26 @@ window.publicTankManager = {
         plants: tank.plants || [],
         coverPhoto: tank.coverPhoto || null,
         description: tank.description || '',
-        'owner.username': username,
-        updated: Timestamp.now(),
+        owner: {
+          username: username,
+          bio: '',
+          avatarUrl: null,
+        },
+        stats: {
+          viewCount: 0,
+          likeCount: 0,
+        },
+        created: tank.created ? Timestamp.fromDate(new Date(tank.created)) : now,
+        sharedAt: now,
+        updated: now,
       };
 
+      // merge: true creates doc if missing, updates if exists
       const publicTankRef = doc(firestore, 'publicTanks', tank.id);
-      await updateDoc(publicTankRef, updates);
+      await setDoc(publicTankRef, publicTankData, { merge: true });
 
       return { success: true };
     } catch (error) {
-      // If document doesn't exist, sync it fresh
-      if (error.code === 'not-found') {
-        return await this.syncToPublic(uid, tank, username);
-      }
       return { success: false, error: error.message || 'Failed to update tank' };
     }
   },

@@ -369,9 +369,49 @@ window.tankManager = {
     this.populateSpeciesSelector();
     this.populatePlantSelector();
     this.setupPhotoDragDrop();
+    this.setupPrivacyButtons();
     await this.loadTanks();
     this.checkPendingSpecies();
     this.isInitialized = true;
+  },
+
+  /**
+   * Set up Yes/No privacy button handlers
+   */
+  setupPrivacyButtons() {
+    const buttons = document.querySelectorAll('.privacy-btn');
+    const hiddenInput = document.getElementById('tank-public');
+
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        // Update selection state
+        buttons.forEach((b) => b.classList.remove('selected'));
+        btn.classList.add('selected');
+
+        // Update hidden input value
+        if (hiddenInput) {
+          hiddenInput.value = btn.dataset.value;
+        }
+      });
+    });
+  },
+
+  /**
+   * Set the privacy button state (Yes/No)
+   * @param {boolean} isPublic - Whether tank is public
+   */
+  setPrivacyButtonState(isPublic) {
+    const buttons = document.querySelectorAll('.privacy-btn');
+    const hiddenInput = document.getElementById('tank-public');
+
+    buttons.forEach((btn) => {
+      const btnValue = btn.dataset.value === 'true';
+      btn.classList.toggle('selected', btnValue === isPublic);
+    });
+
+    if (hiddenInput) {
+      hiddenInput.value = isPublic ? 'true' : 'false';
+    }
   },
 
   /**
@@ -483,9 +523,8 @@ window.tankManager = {
     this.updateSpeciesList();
     this.updatePlantsList();
 
-    // Reset public toggle (private by default)
-    const publicCheckbox = document.getElementById('tank-public');
-    if (publicCheckbox) publicCheckbox.checked = false;
+    // Reset privacy buttons (private by default)
+    this.setPrivacyButtonState(false);
 
     // Reset photo state
     this.resetPhotoState();
@@ -785,8 +824,8 @@ window.tankManager = {
       }
     }
 
-    // Get isPublic from checkbox
-    const isPublic = document.getElementById('tank-public')?.checked || false;
+    // Get isPublic from hidden input (set by privacy buttons)
+    const isPublic = document.getElementById('tank-public')?.value === 'true';
 
     const tank = {
       id: isNewTank ? null : tankId,
@@ -995,9 +1034,8 @@ window.tankManager = {
       this.updateSpeciesList();
       this.updatePlantsList();
 
-      // Set public toggle state
-      const publicCheckbox = document.getElementById('tank-public');
-      if (publicCheckbox) publicCheckbox.checked = tank.isPublic || false;
+      // Set privacy button state
+      this.setPrivacyButtonState(tank.isPublic || false);
 
       // Handle existing photo
       this.resetPhotoState();

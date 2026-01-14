@@ -272,16 +272,17 @@
                 <ul id="plants-list" class="plant-list"></ul>
               </div>
 
-              <!-- Share Tank Toggle -->
+              <!-- Share Tank Public/Private -->
               <div class="form-group share-toggle-group">
-                <label class="toggle-label" for="tank-public">
-                  <input type="checkbox" id="tank-public" />
-                  <span class="toggle-switch"></span>
-                  <span class="toggle-text">Share this tank publicly</span>
-                </label>
-                <small class="form-hint"
-                  >Public tanks appear in the Community gallery for others to see</small
-                >
+                <input type="hidden" id="tank-public" value="false" />
+                <div class="privacy-selector">
+                  <div class="privacy-buttons">
+                    <button type="button" class="privacy-btn" data-value="true">Yes</button>
+                    <button type="button" class="privacy-btn selected" data-value="false">No</button>
+                  </div>
+                  <span class="privacy-label">Share this tank publicly</span>
+                </div>
+                <small class="form-hint">Public tanks appear in the Community gallery</small>
               </div>
 
               <div class="form-actions">
