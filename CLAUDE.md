@@ -67,9 +67,9 @@ If a phase is in progress (see "Current Phase" below), there should be a plan fi
 - Plant selector for tanks (add plants alongside species)
 - Forgot password feature (login page)
 
-**Current Phase:** Phase 4 MVP complete on branch `claude/phase4-tank-sharing` (awaiting merge)
+**Current Phase:** Phase 4 MVP merged ✅ (Next: Phase 3E-3F or Phase 4 Full)
 
-**Active Branch:** `claude/phase4-tank-sharing` (merge to main when ready)
+**Active Branch:** `main`
 
 ## Commands
 
@@ -313,8 +313,6 @@ Development follows a phased approach. See `DATA-MODEL.md` for complete specific
 - Security rules deployed for public read, owner write
 
 **Key Files:** `js/public-tank-manager.js`, `js/community.js`, `js/tank-detail.js`, `js/profile.js`
-
-**After merging:** Set Active Branch back to `main`
 
 ## Git Workflow
 
