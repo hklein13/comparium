@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- SEO Meta Tags -->
+    <title>Community Tanks | Comparium - Shared Aquarium Setups</title>
+    <meta
+      name="description"
+      content="Browse aquarium setups shared by the Comparium community. Get inspiration from real tanks with detailed species lists and care information."
+    />
+    <meta
+      name="keywords"
+      content="aquarium setups, community tanks, fish tank ideas, aquarium inspiration, shared tanks"
+    />
+    <meta name="author" content="Comparium" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://comparium.net/community.html" />
+    <meta property="og:title" content="Community Tanks | Comparium" />
+    <meta
+      property="og:description"
+      content="Browse aquarium setups shared by the Comparium community. Get inspiration from real tanks."
+    />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://comparium.net/community.html" />
+    <meta property="twitter:title" content="Community Tanks | Comparium" />
+    <meta
+      property="twitter:description"
+      content="Browse aquarium setups shared by the Comparium community. Get inspiration from real tanks."
+    />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/naturalist.css" />
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VNY458QF3"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', 'G-8VNY458QF3');
+    </script>
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="header">
+      <a href="index.html" class="logo">Comparium</a>
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="compare.html">Compare</a>
+        <a href="glossary.html">Glossary</a>
+        <a href="community.html" class="active">Community</a>
+        <a href="faq.html">FAQ</a>
+        <a href="dashboard.html">Dashboard</a>
+        <div id="auth-links">
+          <a href="login.html">Login</a>
+          <a href="signup.html" class="nav-cta">Sign Up</a>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Community Hero Section -->
+    <section class="community-hero">
+      <h1>Community Tanks</h1>
+      <p class="community-hero-subtitle">
+        Explore setups shared by fellow aquarists for inspiration and ideas
+      </p>
+    </section>
+
+    <!-- Main Content -->
+    <main class="community-main">
+      <!-- Filter/Sort Bar -->
+      <div class="community-toolbar">
+        <div class="community-sort">
+          <label for="sort-select">Sort by:</label>
+          <select id="sort-select" onchange="changeSortOrder()">
+            <option value="newest">Newest First</option>
+            <option value="size">Largest Tanks</option>
+          </select>
+        </div>
+        <div class="community-count">
+          <span id="tank-count">0</span> shared tanks
+        </div>
+      </div>
+
+      <!-- Tank Gallery Grid -->
+      <div id="community-gallery" class="community-gallery">
+        <div class="community-loading">
+          <p>Loading community tanks...</p>
+        </div>
+      </div>
+
+      <!-- Load More Button -->
+      <div id="load-more-container" class="load-more-container" style="display: none">
+        <button id="load-more-btn" class="btn btn-ghost" onclick="loadMoreTanks()">
+          Load More Tanks
+        </button>
+      </div>
+
+      <!-- Empty State -->
+      <div id="community-empty" class="community-empty" style="display: none">
+        <h3>No tanks shared yet</h3>
+        <p>Be the first to share your setup with the community!</p>
+        <a href="dashboard.html" class="btn btn-primary">Go to Dashboard</a>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>Comparium &copy; 2026 | Built for aquarium enthusiasts</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script type="module" src="js/firebase-init.js"></script>
+    <script src="js/storage-service.js"></script>
+    <script src="js/auth-manager.js"></script>
+    <script src="js/fish-data.js"></script>
+    <script src="js/public-tank-manager.js"></script>
+    <script src="js/community.js"></script>
+  </body>
+</html>
