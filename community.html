@@ -90,9 +90,7 @@
       <button class="community-tab active" data-view="tanks" onclick="switchView('tanks')">
         Tanks
       </button>
-      <button class="community-tab" data-view="posts" onclick="switchView('posts')">
-        Posts
-      </button>
+      <button class="community-tab" data-view="posts" onclick="switchView('posts')">Posts</button>
     </div>
 
     <!-- Main Content -->
@@ -108,9 +106,7 @@
               <option value="size">Largest Tanks</option>
             </select>
           </div>
-          <div class="community-count">
-            <span id="tank-count">0</span> shared tanks
-          </div>
+          <div class="community-count"><span id="tank-count">0</span> shared tanks</div>
         </div>
 
         <!-- Tank Gallery Grid -->
@@ -140,12 +136,36 @@
         <!-- Category Filter + Sort -->
         <div class="community-toolbar">
           <div class="post-categories">
-            <button class="category-btn active" data-category="" onclick="filterByCategory('')">All</button>
-            <button class="category-btn" data-category="help" onclick="filterByCategory('help')">Help</button>
-            <button class="category-btn" data-category="showcase" onclick="filterByCategory('showcase')">Showcase</button>
-            <button class="category-btn" data-category="tips" onclick="filterByCategory('tips')">Tips</button>
-            <button class="category-btn" data-category="fishid" onclick="filterByCategory('fishid')">Fish ID</button>
-            <button class="category-btn" data-category="milestone" onclick="filterByCategory('milestone')">Milestones</button>
+            <button class="category-btn active" data-category="" onclick="filterByCategory('')">
+              All
+            </button>
+            <button class="category-btn" data-category="help" onclick="filterByCategory('help')">
+              Help
+            </button>
+            <button
+              class="category-btn"
+              data-category="showcase"
+              onclick="filterByCategory('showcase')"
+            >
+              Showcase
+            </button>
+            <button class="category-btn" data-category="tips" onclick="filterByCategory('tips')">
+              Tips
+            </button>
+            <button
+              class="category-btn"
+              data-category="fishid"
+              onclick="filterByCategory('fishid')"
+            >
+              Fish ID
+            </button>
+            <button
+              class="category-btn"
+              data-category="milestone"
+              onclick="filterByCategory('milestone')"
+            >
+              Milestones
+            </button>
           </div>
           <div class="community-sort">
             <label for="post-sort-select">Sort:</label>
@@ -158,9 +178,7 @@
 
         <!-- New Post Button (logged in only) -->
         <div id="new-post-container" class="new-post-container" style="display: none">
-          <button class="btn btn-primary" onclick="openPostComposer()">
-            New Post
-          </button>
+          <button class="btn btn-primary" onclick="openPostComposer()">New Post</button>
         </div>
 
         <!-- Posts Feed -->
@@ -172,9 +190,7 @@
 
         <!-- Load More Posts -->
         <div id="load-more-posts-container" class="load-more-container" style="display: none">
-          <button class="btn btn-ghost" onclick="loadMorePosts()">
-            Load More Posts
-          </button>
+          <button class="btn btn-ghost" onclick="loadMorePosts()">Load More Posts</button>
         </div>
 
         <!-- Empty Posts State -->
@@ -197,6 +213,7 @@
     <script src="js/fish-data.js"></script>
     <script src="js/public-tank-manager.js"></script>
     <script src="js/post-manager.js"></script>
+    <script src="js/post-composer.js"></script>
     <script src="js/community.js"></script>
   </body>
 </html>
