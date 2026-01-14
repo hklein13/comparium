@@ -1,6 +1,7 @@
 /**
  * FAQ Page JavaScript
  * Accordion toggle, search, and tab indicator functionality
+ * Updated January 2026 for flat grid layout
  */
 
 // Toggle FAQ accordion item
@@ -8,7 +9,7 @@ function toggleFAQ(button) {
   const card = button.closest('.faq-card');
   const wasOpen = card.classList.contains('open');
 
-  // Close all other items (optional - remove these lines for multi-open)
+  // Close all other items (single-open behavior)
   document.querySelectorAll('.faq-card.open').forEach(openCard => {
     if (openCard !== card) {
       openCard.classList.remove('open');
@@ -18,16 +19,11 @@ function toggleFAQ(button) {
   });
 
   // Toggle clicked item
-  if (wasOpen) {
-    card.classList.remove('open');
-    button.setAttribute('aria-expanded', 'false');
-  } else {
-    card.classList.add('open');
-    button.setAttribute('aria-expanded', 'true');
-  }
+  card.classList.toggle('open', !wasOpen);
+  button.setAttribute('aria-expanded', !wasOpen ? 'true' : 'false');
 }
 
-// Filter by category
+// Filter by category - simplified for flat grid (no section wrappers)
 function filterCategory(category) {
   // Update active tab
   const tabs = document.querySelectorAll('.faq-nav__tab');
@@ -44,33 +40,28 @@ function filterCategory(category) {
   // Clear search when switching categories
   document.getElementById('faqSearch').value = '';
 
-  // Show/hide sections
-  const sections = document.querySelectorAll('.faq-section');
+  // Filter cards directly (flat grid, no sections)
   const cards = document.querySelectorAll('.faq-card');
+  let visibleCount = 0;
 
-  if (category === 'all') {
-    sections.forEach(section => (section.style.display = 'block'));
-    cards.forEach(card => card.classList.remove('hidden'));
-  } else {
-    sections.forEach(section => {
-      if (section.dataset.section === category) {
-        section.style.display = 'block';
-      } else {
-        section.style.display = 'none';
-      }
-    });
-    cards.forEach(card => card.classList.remove('hidden'));
-  }
+  cards.forEach(card => {
+    if (category === 'all' || card.dataset.category === category) {
+      card.classList.remove('hidden');
+      visibleCount++;
+    } else {
+      card.classList.add('hidden');
+    }
+  });
 
-  // Hide no results message
-  document.getElementById('faqNoResults').style.display = 'none';
+  // Show/hide no results message
+  const noResults = document.getElementById('faqNoResults');
+  noResults.style.display = visibleCount === 0 ? 'block' : 'none';
 }
 
-// Search FAQ
+// Search FAQ - simplified for flat grid
 function searchFAQ() {
   const searchTerm = document.getElementById('faqSearch').value.toLowerCase().trim();
   const cards = document.querySelectorAll('.faq-card');
-  const sections = document.querySelectorAll('.faq-section');
   let visibleCount = 0;
 
   // Reset category tabs when searching
@@ -82,9 +73,6 @@ function searchFAQ() {
       }
     });
     updateTabIndicator();
-
-    // Show all sections when searching
-    sections.forEach(section => (section.style.display = 'block'));
   }
 
   cards.forEach(card => {
@@ -106,21 +94,9 @@ function searchFAQ() {
     }
   });
 
-  // Hide sections with no visible items
-  sections.forEach(section => {
-    const visibleCards = section.querySelectorAll('.faq-card:not(.hidden)');
-    if (visibleCards.length === 0 && searchTerm) {
-      section.style.display = 'none';
-    }
-  });
-
   // Show/hide no results message
   const noResults = document.getElementById('faqNoResults');
-  if (visibleCount === 0 && searchTerm) {
-    noResults.style.display = 'block';
-  } else {
-    noResults.style.display = 'none';
-  }
+  noResults.style.display = visibleCount === 0 && searchTerm ? 'block' : 'none';
 }
 
 // Update tab indicator position
@@ -129,12 +105,19 @@ function updateTabIndicator() {
   const indicator = document.querySelector('.faq-nav__indicator');
 
   if (activeTab && indicator) {
-    const tabRect = activeTab.getBoundingClientRect();
-    const containerRect = activeTab.parentElement.getBoundingClientRect();
-
     indicator.style.left = activeTab.offsetLeft + 'px';
     indicator.style.width = activeTab.offsetWidth + 'px';
   }
+}
+
+// Placeholder for future contribution system
+function showContributionModal() {
+  // TODO: Implement Firebase question submission in Phase 4
+  // This will open a modal with a form for:
+  // - Question text
+  // - Category selection
+  // - Optional email for follow-up
+  // Submissions will go to Firestore 'faqSubmissions' collection
 }
 
 // Initialize on page load
@@ -160,4 +143,10 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
   });
+
+  // Attach contribution button handler (disabled for now)
+  const askBtn = document.getElementById('askQuestionBtn');
+  if (askBtn) {
+    askBtn.addEventListener('click', showContributionModal);
+  }
 });
