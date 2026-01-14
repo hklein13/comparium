@@ -62,9 +62,14 @@ If a phase is in progress (see "Current Phase" below), there should be a plan fi
 
 **Current Stats:** 244 fish species (235 with images), 15 aquarium plants (14 with images)
 
-**Current Phase:** Phase 3 In Progress (Content Expansion) - 3A-3D complete, 3G complete (Plants section deployed and live)
+**Recent Features (January 2026):**
+- Plant selector for tanks (add plants alongside species)
+- Forgot password feature (login page)
+- Settings dropdown z-index fix (logout button visibility)
 
-**Active Branch:** `main` (Phase 3G merged January 13, 2026)
+**Current Phase:** Phase 3 In Progress (Content Expansion) - 3A-3D, 3G complete
+
+**Active Branch:** `main`
 
 ## Commands
 
@@ -137,29 +142,6 @@ glossary-generator.js (transforms data)
 - `scripts/serviceAccountKey.json` - Firebase Admin credentials (gitignored, never commit)
 - `scripts/upload-plant-images.js` - Plant image upload script (separate from fish images)
 - `assets/hero-tank.mp4` - Homepage video background (bright planted aquarium, ~13MB)
-
-### tank-manager.js Architecture (Refactored January 2026)
-The tank manager was refactored for maintainability. Key patterns:
-
-**Helper Methods:**
-- `hasItems(arr)` - Consistent array empty check used throughout
-- `getFormContainer()`, `getSpeciesSelector()`, etc. - Cached element getters
-- `createEmptyState()`, `createErrorState()` - Centralized HTML templates
-
-**Modular Card Rendering:**
-```javascript
-renderTankCard(container, tank) {
-  const card = this.createCardElement(tank, speciesCount);
-  this.addNotesSection(card, tank);
-  this.addSpeciesPreview(card, tank, speciesCount);
-  this.addActionButtons(card, tank.id);
-  this.addMaintenanceSection(card, tank);
-}
-```
-
-**CSS Classes (in naturalist.css):**
-- `.empty-state-error` - Error state styling for empty states
-- `.species-list-empty` - Empty species list item styling
 
 ### ⚠️ Critical: Glossary Entry Structure Sync
 The migration script (`scripts/migrate-glossary-to-firestore.js`) has a **duplicated copy** of `generateGlossaryEntry()` (lines 180-196) that must stay in sync with `js/glossary-generator.js`.
@@ -297,39 +279,6 @@ functions/
 - `.btn-primary` / `.btn-ghost` - Button styles
 - `.header` / `.footer` - Site-wide navigation
 
-### Video Hero (index.html)
-The homepage uses a looping video background with:
-- **Video file:** `assets/hero-tank.mp4` (~13MB, bright planted aquarium)
-- **Overlay:** Forest green gradient (40% top → 85% bottom) for text contrast
-- **Mobile:** Reduced height (70vh) and smaller text (1rem paragraphs)
-- **Attributes:** `autoplay muted loop playsinline preload="metadata"`
-
-```html
-<section class="hero-video">
-  <video autoplay muted loop playsinline preload="metadata" class="hero-video__bg">
-    <source src="assets/hero-tank.mp4" type="video/mp4" />
-  </video>
-  <div class="hero-video__overlay"></div>
-  <div class="hero-video__content">
-    <h1>The place for all things aquarium.</h1>
-    <p>Research species. Check compatibility. Track maintenance.</p>
-    <a href="compare.html" class="btn btn-primary">Get Started</a>
-  </div>
-</section>
-```
-
-### Glass Edge Highlights
-Cards have subtle glass edge highlights mimicking aquarium glass:
-- **Effect:** Inset white shadow on top-left edge
-- **Applied to:** `.glossary-card`, `.tank-card`
-- **Implementation:** Integrated into original card definitions (not separate rules)
-
-```css
-box-shadow:
-  inset 1px 1px 0 rgba(255, 255, 255, 0.15),
-  0 2px 8px rgba(0, 0, 0, 0.04);
-```
-
 ### CSS Variables
 ```css
 --forest: #234a3a;        /* Primary brand color */
@@ -367,85 +316,12 @@ Development follows a phased approach. See `DATA-MODEL.md` for complete specific
 | **3F** | ⏳ Pending | Expand equipment entries (6 → 16) |
 | **3G** | ✅ Complete | Plants section with 15 aquarium plants, detail pages, and 14/15 images |
 
-**Sub-Phase 3C Completion Notes (January 8, 2026):**
-- Added 103 new species to fish-data.js (now 246 total)
-- Updated ALL 246 descriptions to full versions from source document
-- **Lesson learned:** Don't condense/summarize source content without asking - user preferred the full descriptions
-- All descriptions now include: size, native habitat, water conditions, behavior, and care requirements
-- Code-reviewed and validated with `npm run test:data` and `npm run lint`
-
-**Sub-Phase 3C Hotfix (January 9, 2026):**
-- **Problem discovered:** 13 typos in fish-descriptions.js keys caused descriptions not to display
-- **Root cause:** When adding 103 new species, description keys had typos that didn't match fish-data.js keys
-- **Fixed:** 13 typos corrected, 5 orphaned descriptions removed, 4 missing descriptions added
-- **Validation:** All 246 species now have matching descriptions (verified with key sync check)
-- **Lesson learned:** ALWAYS validate key sync after bulk additions (see "Critical: fish-data.js ↔ fish-descriptions.js Key Sync" above)
-
-**Sub-Phase 3D Progress (January 10, 2026):**
-- Uploaded 83 additional species images in single batch
-- **Total:** 213/246 species now have images (33 remaining)
-- 1 failure: melanistiusCorydoras (Wikimedia returned PDF, not image - needs different URL)
-- Previously failed species (sailfinMolly, yellowLabCichlid, banditCory, peaPuffer) now successfully uploaded
-- **Rate limiting solved:** Increased delay to 2.5s between requests - zero rate limit failures
-
-**Sub-Phase 3D Completion (January 12, 2026):**
-- Used iNaturalist as alternative source after Wikimedia returned same rejected images
-- Uploaded 22 additional images via iNaturalist search (17 initial + 5 deep search)
-- **Deleted 2 invalid species entries:**
-  - `corydoras` - Generic genus entry, redundant (replaced by specific species like bronzeCory, pandaCory)
-  - `marginatedTetra` - Not a valid species (Hyphessobrycon marginatus is not recognized in aquarium trade)
-- **Final count:** 244 species, 235 with images (96.3% coverage)
-- **9 species still need manual sourcing** (aquarium morphs/hybrids not found in nature):
-  1. balloonMolly, blackMolly, dalmatianMolly (captive-bred color morphs)
-  2. goldWhiteCloud (captive-bred variant)
-  3. platinumTetra (possibly captive variant)
-  4. cumingsBarb, axelrodiRainbowfish (natural but rare on image APIs)
-  5. bloodParrotCichlid, flowerhornCichlid (man-made hybrids)
-
-**Glossary UI Redesign (January 11, 2026):**
-- **Complete redesign** of glossary.html with visual gallery approach
-- **New features:** Hero section with stats, category cards, species modal with "Add to Compare"
-- **Bug fixes:** Fixed Add to Compare (now pre-populates species on compare page), simplified sorting to A-Z/Z-A
-- **Code cleanup:** Removed ~220 lines of unused code (origin groups, old CSS)
-- **Kept for future:** Toast notification system, contribute function, careLevel normalization
-- **Files modified:** glossary.html, css/naturalist.css, js/glossary.js, js/app.js, js/glossary-generator.js
-
-**Phase 3G: Plants Section (January 13, 2026):**
-- **Added 15 aquarium plants** with full data: position, planting style, difficulty, lighting, water params, growth rate, propagation
-- **Created plant detail pages** with `plant.html` and `plant-detail.js` (follows species-detail.js pattern)
-- **Glossary integration:** Plants appear as 5th category card, click opens modal, "View Full Profile" links to detail page
-- **Category cards grid:** Updated from 4 to 5 columns to accommodate new Plants category
-- **Uploaded 14/15 images** to Firebase Storage (duckweed pending due to Wikimedia rate limiting)
-- **XSS fixes:** Sanitized plant keys in onclick handlers and URL parameters (found by code-reviewer agent)
-- **Files created:** plant-data.js, plant-descriptions.js, plant-detail.js, plant.html, upload-plant-images.js
-- **Files modified:** glossary-generator.js, glossary.js, glossary.html, naturalist.css, eslint.config.js, migrate-glossary-to-firestore.js
-
-**Plant Image TODO (for later):**
-- Retry `duckweed` image (rate limited)
-- Replace `amazonSword`, `javaMoss`, `dwarfHairgrass` with better aquarium-context images
+**9 species still need manual image sourcing:** balloonMolly, blackMolly, dalmatianMolly, goldWhiteCloud, platinumTetra, cumingsBarb, axelrodiRainbowfish, bloodParrotCichlid, flowerhornCichlid (aquarium morphs/hybrids not found on wildlife APIs)
 
 ## Git Workflow
 
 ### CRITICAL RULE
 **NEVER push directly to main.** Always use a staging branch and let the user merge via PR.
-
-### Current State (January 2026)
-**Active branch:** `claude/phase3d-species-images` (Phase 3D images + Glossary UI redesign)
-
-**Main branch:** Up to date with Phase 2 + security audit merged (January 9, 2026)
-
-### Workflow for Phase 3
-```bash
-# Already on feature branch
-git checkout claude/phase3-content-expansion
-
-# After each sub-phase: commit with descriptive message
-git add <files>
-git commit -m "Phase 3X: Description of changes"
-
-# When sub-phases complete, push for user to merge
-git push -u origin claude/phase3-content-expansion
-```
 
 ### Deployment Flow
 1. Claude creates branch from main, commits/pushes changes
@@ -491,24 +367,8 @@ git push -u origin claude/phase3-content-expansion
 - ✅ **Code cleanup complete** - tank-manager.js refactored, ~220 lines unused code removed from glossary
 - ✅ **Dashboard maintenance features complete** - full event/schedule CRUD from timeline and tank modal
 
-### Dashboard Maintenance Features (January 2026)
-The dashboard now has full maintenance CRUD capabilities:
-
-**Timeline View (main dashboard):**
-- "+ Log Event" and "+ Add Schedule" buttons with tank selector for multi-tank users
-- Scheduled tasks show edit button (pencil icon) - clicking opens schedule modal for edit/delete
-- Task info is also clickable for quick editing
-
-**Tank Modal (click any tank card):**
-- Schedule pills are clickable - opens schedule modal for edit/delete
-- Logged events have × delete button with confirmation
-- "+ Log Event" and "+ Add Schedule" buttons in section headers
-
-**Key Functions (in dashboard.html):**
-- `editScheduleFromTimeline(schedule)` - Opens schedule modal from timeline tasks
-- `deleteEventFromModal(eventId, tankId)` - Deletes logged event with confirmation
-- `openScheduleForEdit(tankId, tankName, scheduleData)` - Opens schedule modal in edit mode
-- `showTankSelectorModal(actionType, tanks)` - Tank picker for multi-tank users
+### Dashboard Maintenance Key Functions
+`editScheduleFromTimeline()`, `deleteEventFromModal()`, `openScheduleForEdit()`, `showTankSelectorModal()` — all in dashboard.html
 
 ### Claude Code Plugins (MCP Servers)
 The following plugins enhance development workflow:
@@ -521,16 +381,6 @@ The following plugins enhance development workflow:
 | **feature-dev** | Guided feature development | Planning new features with architecture focus |
 
 **Note:** The `.claude/` folder is gitignored (contains local settings and hooks). Hooks are already configured and working.
-
-### Context7 Integration (MANDATORY - READ THIS FIRST)
-**ALWAYS use Context7 MCP tools to fetch current documentation before writing code that uses external libraries.**
-
-This is NOT optional. Before writing or modifying code that uses Firebase SDK, Playwright, or any npm package:
-1. Call `resolve-library-id` to find the library
-2. Call `query-docs` to fetch current docs
-3. Then write code using the fetched documentation
-
-This prevents outdated API usage and ensures correct, working code on the first attempt.
 
 ### Automated Quality Hooks
 The following run automatically (configured in `.claude/settings.json`):
@@ -565,7 +415,7 @@ allow write: if isAdmin();        // Admin-only writes
 ### Firestore Collections
 - `glossary` - Species data (public read, admin write)
 - `users` - User profiles, tanks, favorites (owner read/write)
-- `usernames` - Username → UID mapping for login
+- `usernames` - Username → UID mapping for login (**IMMUTABLE** - security rules prevent updates/deletes)
 - `tankEvents` - Maintenance event logs (owner read/write)
 - `tankSchedules` - Recurring maintenance schedules (owner read/write)
 - `notifications` - Maintenance notifications (owner read, Cloud Functions create)
@@ -588,111 +438,14 @@ Images are stored in Firebase Storage:
 
 **CRITICAL:** Steps 4-6 must ALL be completed. If interrupted, images won't appear on live site.
 
-### Alternative: iNaturalist Image Source
-When Wikimedia returns poor quality or duplicate images, use iNaturalist as an alternative:
+### Alternative: iNaturalist
+Use `npm run images:inaturalist` when Wikimedia returns poor quality. Note: Aquarium morphs/hybrids (balloonMolly, bloodParrotCichlid, etc.) won't be found - need manual sourcing.
 
-1. `npm run images:inaturalist` - Generates `image-preview-inaturalist.html`
-2. Open preview in browser, select quality images, click "Export Selected"
-3. Same upload workflow as above (steps 3-6)
+### Plant Images
+Run `node scripts/upload-plant-images.js scripts/plant-selection.json` with JSON array of `{key, url}` objects from Wikimedia Commons.
 
-**When to use iNaturalist:**
-- Wikimedia search returns same images that were previously rejected
-- Species is rare or not well-represented on Wikimedia
-- Need higher quality wildlife photography
-
-**Limitations:**
-- **Aquarium morphs/hybrids won't be found** - iNaturalist only has wild species observations
-- Examples: balloonMolly, bloodParrotCichlid, flowerhornCichlid (man-made varieties)
-- For these, user must manually source images from other licensed sources
-
-**Scripts:**
-- `scripts/generate-inaturalist-preview.js` - Primary iNaturalist search (uses scientificName)
-- `scripts/deep-inaturalist-search.js` - Deeper search using observations API + multiple query strategies
-
-### Image URLs in fish-data.js
-```javascript
-fishKey: {
-    commonName: "Fish Name",
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FfishKey.jpg?alt=media",
-    // ... other attributes
-}
-```
-
-### Plant Images Workflow
-Plant images use a separate upload script that stores to `images/plants/`:
-
-1. User provides Wikimedia Commons URLs (copy from search results)
-2. Save URLs to `scripts/plant-selection.json`:
-```json
-[
-  {"key": "javaFern", "url": "https://upload.wikimedia.org/..."},
-  {"key": "javaMoss", "url": "https://upload.wikimedia.org/..."}
-]
-```
-3. Run: `node scripts/upload-plant-images.js scripts/plant-selection.json`
-4. Run: `npm run migrate:glossary`
-5. Commit and push
-
-**Plant Image URLs in plant-data.js:**
-```javascript
-javaFern: {
-    commonName: "Java Fern",
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fplants%2FjavaFern.jpg?alt=media",
-    // ... other attributes
-}
-```
-
-**Wikimedia Search Links for Plants:**
-Use direct Wikimedia Commons search: `https://commons.wikimedia.org/w/index.php?search={scientificName}&title=Special:MediaSearch&type=image`
-
-### User Tank Photo Uploads (January 2026)
-Users can upload a single cover photo per tank that replaces the species mosaic on portrait cards.
-
-**Storage Path:** `images/tanks/{tankId}.jpg`
-- Matches species images pattern
-- One photo per tank (overwrites on replace)
-- Deleted automatically when tank is deleted
-
-**Tank Schema with Photo:**
-```javascript
-{
-  id: "tank_1736261234567",
-  name: "Community Tank",
-  size: 55,
-  notes: "...",
-  species: ["neonTetra", "cardinalTetra"],
-  coverPhoto: "https://firebasestorage.../images%2Ftanks%2Ftank_1736261234567.jpg?alt=media",
-  created: "2026-01-12T...",
-  updated: "2026-01-12T..."
-}
-```
-
-**Key Files:**
-| File | What It Does |
-|------|--------------|
-| `js/firebase-init.js` | `storageUploadTankPhoto()`, `storageDeleteTankPhoto()` helpers |
-| `js/tank-manager.js` | Photo state, upload on save, display logic |
-| `dashboard.html` | File input UI with drag-drop zone |
-| `css/naturalist.css` | `.photo-upload-zone`, `.tank-portrait-cover` styles |
-
-**⚠️ Important:** Photo replacement uses Firebase overwrite (same path). No manual deletion needed - the new upload automatically replaces the old file.
-
-### Wikimedia Rate Limiting - SOLVED
-Wikimedia Commons returns HTML error pages instead of images when rate limited.
-
-**Symptoms:**
-- Upload script reports: `FAILED: Invalid response: expected image, got text/html`
-- `scripts/temp-images/` contains small HTML files instead of JPG images
-
-**Solution (January 2026):**
-The upload script was improved with proper rate limiting:
-- **Delay between requests:** 2.5 seconds (was 500ms)
-- **Batch size:** 80+ images work fine with proper delays
-- **Retry logic:** 3 attempts with exponential backoff (1s, 2s, 3s)
-- **Failure tracking:** Failures saved to `scripts/failed-uploads.json` for easy retry
-- **File argument:** Can now run `node scripts/upload-selected-images.js path/to/file.json`
-
-**Result:** 83 images uploaded in single batch with zero rate limit failures.
+### User Tank Photos
+Tank cover photos stored at `images/tanks/{tankId}.jpg`. Key functions: `storageUploadTankPhoto()`, `storageDeleteTankPhoto()` in firebase-init.js. Tank schema includes `coverPhoto` URL field.
 
 ## Decision-Making
 
@@ -740,61 +493,16 @@ The upload script was improved with proper rate limiting:
 - Ensure `npm run migrate:glossary` was run after updating fish-data.js
 - Ensure changes were committed and pushed
 
-## Lessons Learned (Phase 3)
+## Key Behavioral Lessons
 
-### What Worked Well
-- Code-reviewer agent catches issues before merge
-- Validation scripts (`npm run test:data`, `npm run lint`) catch problems early
-- Saving selections to `temp-selection.json` allows retry after failures
-- Key sync validation script catches description/data mismatches immediately
-- **Code-simplifier plugin** makes refactoring safe - run before UI changes to make edits easier
-- **2.5s delay between Wikimedia requests** - eliminated rate limiting entirely, 83 images uploaded in one batch
-- **iNaturalist as alternative source** - Found 22 additional images when Wikimedia returned duplicates (Jan 12)
-- **Code-reviewer + code-simplifier combo** - Running both after completing work catches orphaned references
-
-### What Went Wrong & Fixes
-| Issue | What Happened | Fix |
-|-------|---------------|-----|
-| **Descriptions condensed** | Claude summarized source content without asking | Always use FULL source content unless user explicitly asks to condense |
-| **Images not showing** | Upload workflow interrupted - temp-selection.json created but upload never run | Complete ALL steps: upload → migrate → commit → push |
-| **Wikimedia rate limits** | 500ms delay too aggressive, caused HTML error responses | **FIXED:** Increased delay to 2.5s - now supports 80+ image batches |
-| **Description key typos** | 13 typos in fish-descriptions.js keys caused descriptions not to display (e.g., `betaImbellis` vs `bettaImbellis`) | ALWAYS run key sync validation after bulk additions to fish-descriptions.js |
-| **Wikimedia same images** | Re-running `npm run images:preview` returned identical images that were already rejected for poor quality | **FIXED:** Use iNaturalist as alternative source (`npm run images:inaturalist`) |
-| **Wrong species list** | Manual regex to find species without images returned incorrect results | Use existing script patterns: `new Function(code + '; return fishDatabase;')()` |
-| **Invalid species in database** | `corydoras` (generic genus) and `marginatedTetra` (invalid species name) were in database | Deleted both; always verify species validity before adding |
-| **Orphaned references** | Deleted species were still referenced in app.js categories and image-pipeline.js | ALWAYS run code-reviewer after deletions to find orphaned references |
-| **Wikipedia API 403** | Wikipedia REST API blocked automated requests with 403 Forbidden (Jan 13) | Use Wikimedia Commons search instead, or provide user with direct search links for manual selection |
-| **Batch rate limiting** | After uploading 14 plant images, Wikimedia returned HTTP 429 for remaining requests | Wait ~1 hour for rate limit reset, or manually retry with `node scripts/upload-plant-images.js scripts/duckweed-retry.json` |
-| **XSS in plant code** | Plant keys interpolated directly into onclick handlers; URL params used unsanitized | Sanitize keys with `.replace(/[^a-zA-Z0-9]/g, '')` and use data attributes for onclick handlers |
-| **Deployment debugging rabbit hole** | Spent hours on wrong diagnosis. Claude insisted "merge succeeded, only deploy failed" when user kept questioning. Trusted `git log` over user's observation that GitHub showed no plant PR. Led user through manual Firebase deploy which didn't help. **Actual fix:** Re-run GitHub Actions (took seconds). | **CRITICAL:** When user repeatedly questions Claude's explanation, STOP and verify more thoroughly. User confusion is often a signal Claude's mental model is wrong. Don't conflate local git state with remote GitHub state. Simple solutions (re-run CI) should be tried before complex debugging. |
-
-### Key Takeaways
 1. **Don't modify source content without asking** - preserving original text is usually better
-2. **Verify each step completed** - especially multi-step workflows like image upload
-3. **Ask questions when uncertain** - collaborative decision-making prevents rework
-4. **Validate key sync after bulk additions** - typos in description keys silently break the site
-5. **Respect external API rate limits** - 2.5s delays for Wikimedia; batch sizes of 80+ work fine with proper delays
-6. **Use alternative image sources** - When one source fails, try iNaturalist before manual sourcing
-7. **Run code-reviewer after deletions** - Catches orphaned references in category arrays, priority lists, etc.
-8. **Aquarium morphs won't be on wildlife APIs** - balloonMolly, bloodParrotCichlid, flowerhornCichlid need manual sourcing
-9. **Run code-reviewer + code-simplifier before merging** - Catches XSS vulnerabilities and redundant code patterns
-10. **Wikipedia API may block requests** - Use Wikimedia Commons API or provide direct search links for manual selection
-11. **Batch uploads can hit rate limits mid-batch** - Save progress; use retry JSON files for failed items
-12. **User pushback = verification signal** - When user repeatedly questions Claude's diagnosis, that's a sign to STOP and verify assumptions more carefully, not double down
-13. **Try simple solutions first** - Re-running GitHub Actions should be tried before complex debugging like manual Firebase deployments
-14. **Local git ≠ remote GitHub** - `git log` showing commits doesn't guarantee remote is in expected state; verify on GitHub directly when debugging deploy issues
+2. **Validate key sync after bulk additions** - typos in fish-data ↔ fish-descriptions keys silently break the site
+3. **User pushback = verification signal** - when user questions your diagnosis, STOP and re-verify assumptions
+4. **Try simple solutions first** - re-running CI should be tried before complex debugging
+5. **Local git ≠ remote GitHub** - verify on GitHub directly when debugging deploy issues
+6. **Sanitize user inputs in dynamic HTML** - use `.replace(/[^a-zA-Z0-9]/g, '')` for keys in onclick handlers
 
-### Image Sourcing Decision Tree
-```
-Need species image?
-├── Run npm run images:preview (Wikimedia)
-│   ├── Good quality images found → Select and upload
-│   └── Poor quality OR same as rejected images
-│       └── Run npm run images:inaturalist (iNaturalist)
-│           ├── Found CC-licensed images → Select and upload
-│           └── No results (likely aquarium morph/hybrid)
-│               └── Manual sourcing required
-```
+**Image uploads:** Use 2.5s delay between Wikimedia requests. Use iNaturalist as alternative when Wikimedia fails.
 
 ## Security Notes
 
