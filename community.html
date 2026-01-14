@@ -85,41 +85,103 @@
       </p>
     </section>
 
+    <!-- View Toggle Tabs -->
+    <div class="community-tabs">
+      <button class="community-tab active" data-view="tanks" onclick="switchView('tanks')">
+        Tanks
+      </button>
+      <button class="community-tab" data-view="posts" onclick="switchView('posts')">
+        Posts
+      </button>
+    </div>
+
     <!-- Main Content -->
     <main class="community-main">
-      <!-- Filter/Sort Bar -->
-      <div class="community-toolbar">
-        <div class="community-sort">
-          <label for="sort-select">Sort by:</label>
-          <select id="sort-select" onchange="changeSortOrder()">
-            <option value="newest">Newest First</option>
-            <option value="size">Largest Tanks</option>
-          </select>
+      <!-- Tanks View -->
+      <div id="tanks-view" class="community-view">
+        <!-- Filter/Sort Bar -->
+        <div class="community-toolbar">
+          <div class="community-sort">
+            <label for="tank-sort-select">Sort by:</label>
+            <select id="tank-sort-select" onchange="changeTankSortOrder()">
+              <option value="newest">Newest First</option>
+              <option value="size">Largest Tanks</option>
+            </select>
+          </div>
+          <div class="community-count">
+            <span id="tank-count">0</span> shared tanks
+          </div>
         </div>
-        <div class="community-count">
-          <span id="tank-count">0</span> shared tanks
+
+        <!-- Tank Gallery Grid -->
+        <div id="community-gallery" class="community-gallery">
+          <div class="community-loading">
+            <p>Loading community tanks...</p>
+          </div>
+        </div>
+
+        <!-- Load More Button -->
+        <div id="load-more-container" class="load-more-container" style="display: none">
+          <button id="load-more-btn" class="btn btn-ghost" onclick="loadMoreTanks()">
+            Load More Tanks
+          </button>
+        </div>
+
+        <!-- Empty State -->
+        <div id="community-empty" class="community-empty" style="display: none">
+          <h3>No tanks shared yet</h3>
+          <p>Be the first to share your setup with the community!</p>
+          <a href="dashboard.html" class="btn btn-primary">Go to Dashboard</a>
         </div>
       </div>
 
-      <!-- Tank Gallery Grid -->
-      <div id="community-gallery" class="community-gallery">
-        <div class="community-loading">
-          <p>Loading community tanks...</p>
+      <!-- Posts View -->
+      <div id="posts-view" class="community-view" style="display: none">
+        <!-- Category Filter + Sort -->
+        <div class="community-toolbar">
+          <div class="post-categories">
+            <button class="category-btn active" data-category="" onclick="filterByCategory('')">All</button>
+            <button class="category-btn" data-category="help" onclick="filterByCategory('help')">Help</button>
+            <button class="category-btn" data-category="showcase" onclick="filterByCategory('showcase')">Showcase</button>
+            <button class="category-btn" data-category="tips" onclick="filterByCategory('tips')">Tips</button>
+            <button class="category-btn" data-category="fishid" onclick="filterByCategory('fishid')">Fish ID</button>
+            <button class="category-btn" data-category="milestone" onclick="filterByCategory('milestone')">Milestones</button>
+          </div>
+          <div class="community-sort">
+            <label for="post-sort-select">Sort:</label>
+            <select id="post-sort-select" onchange="changePostSortOrder()">
+              <option value="newest">Newest</option>
+              <option value="top">Top</option>
+            </select>
+          </div>
         </div>
-      </div>
 
-      <!-- Load More Button -->
-      <div id="load-more-container" class="load-more-container" style="display: none">
-        <button id="load-more-btn" class="btn btn-ghost" onclick="loadMoreTanks()">
-          Load More Tanks
-        </button>
-      </div>
+        <!-- New Post Button (logged in only) -->
+        <div id="new-post-container" class="new-post-container" style="display: none">
+          <button class="btn btn-primary" onclick="openPostComposer()">
+            New Post
+          </button>
+        </div>
 
-      <!-- Empty State -->
-      <div id="community-empty" class="community-empty" style="display: none">
-        <h3>No tanks shared yet</h3>
-        <p>Be the first to share your setup with the community!</p>
-        <a href="dashboard.html" class="btn btn-primary">Go to Dashboard</a>
+        <!-- Posts Feed -->
+        <div id="posts-feed" class="posts-feed">
+          <div class="community-loading">
+            <p>Loading posts...</p>
+          </div>
+        </div>
+
+        <!-- Load More Posts -->
+        <div id="load-more-posts-container" class="load-more-container" style="display: none">
+          <button class="btn btn-ghost" onclick="loadMorePosts()">
+            Load More Posts
+          </button>
+        </div>
+
+        <!-- Empty Posts State -->
+        <div id="posts-empty" class="community-empty" style="display: none">
+          <h3>No posts yet</h3>
+          <p>Be the first to share with the community!</p>
+        </div>
       </div>
     </main>
 
@@ -134,6 +196,7 @@
     <script src="js/auth-manager.js"></script>
     <script src="js/fish-data.js"></script>
     <script src="js/public-tank-manager.js"></script>
+    <script src="js/post-manager.js"></script>
     <script src="js/community.js"></script>
   </body>
 </html>
