@@ -192,6 +192,9 @@ class AuthManager {
    * Update UI elements for logged-in state
    */
   updateUIForLoggedInUser() {
+    // Add logged-in class to body for CSS-based auth UI (e.g., favorite stars)
+    document.body.classList.add('logged-in');
+
     // Update navigation
     const authLinks = document.getElementById('auth-links');
     if (authLinks) {
@@ -217,6 +220,9 @@ class AuthManager {
    * Update UI elements for logged-out state
    */
   updateUIForLoggedOutUser() {
+    // Remove logged-in class from body
+    document.body.classList.remove('logged-in');
+
     // Update navigation
     const authLinks = document.getElementById('auth-links');
     if (authLinks) {

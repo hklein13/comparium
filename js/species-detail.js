@@ -96,6 +96,12 @@ function loadSpeciesDetail() {
   // Get related species from same origin
   const relatedSpecies = getRelatedSpeciesByOrigin(fishKey, fish.origin, 4);
 
+  // Get description from fish-descriptions.js if available
+  const description =
+    typeof fishDescriptions !== 'undefined' && fishDescriptions[fishKey]
+      ? fishDescriptions[fishKey]
+      : '';
+
   // Generate content
   const content = `
         <div class="species-detail">
@@ -114,6 +120,16 @@ function loadSpeciesDetail() {
                     }
                 </div>
             </div>
+
+            ${
+              description
+                ? `
+            <div class="species-description">
+                <p>${description}</p>
+            </div>
+            `
+                : ''
+            }
 
             <div class="species-info-grid">
                 <div class="info-card">
@@ -287,12 +303,9 @@ function loadSpeciesDetail() {
 /**
  * Generate favorite star for species detail page
  * Uses data-species attribute instead of inline onclick for XSS safety
+ * Always renders the star - CSS uses body.logged-in to show/hide
  */
 function generateFavoriteStar(speciesKey) {
-  if (!authManager || !authManager.isLoggedIn()) {
-    return '';
-  }
-
   return `<span class="favorite-star" data-species="${speciesKey}">★</span>`;
 }
 
@@ -321,6 +334,29 @@ function getAggressionBadge(level) {
     Aggressive: '<span class="badge badge-danger">Aggressive</span>',
   };
   return badges[level] || level;
+}
+
+/**
+ * Toggle favorite status for a species
+ */
+async function toggleFavorite(speciesKey, element) {
+  if (!authManager || !authManager.isLoggedIn()) {
+    authManager?.showMessage('Please login to save favorites', 'info');
+    return;
+  }
+
+  const uid = authManager.getCurrentUid();
+  const isFavorite = await storageService.isFavorite(uid, speciesKey);
+
+  if (isFavorite) {
+    await storageService.removeFavorite(uid, speciesKey);
+    element.classList.remove('active');
+    authManager.showMessage('Removed from favorites', 'success');
+  } else {
+    await storageService.addFavorite(uid, speciesKey);
+    element.classList.add('active');
+    authManager.showMessage('Added to favorites!', 'success');
+  }
 }
 
 /**

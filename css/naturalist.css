@@ -4361,6 +4361,28 @@ p {
   color: var(--danger);
 }
 
+/* Favorite star (compare page, species page, glossary modal) */
+.favorite-star {
+  cursor: pointer;
+  transition: color 0.2s ease;
+  font-size: 1.2em;
+  margin-left: 0.5rem;
+  display: none; /* Hidden by default until auth confirmed */
+}
+
+/* Show stars when user is logged in */
+body.logged-in .favorite-star {
+  display: inline;
+}
+
+.favorite-star:hover {
+  color: var(--warning);
+}
+
+.favorite-star.active {
+  color: var(--warning);
+}
+
 /* Empty activity state */
 .activity-empty {
   text-align: center;
@@ -4437,6 +4459,12 @@ p {
 
   .dashboard-greeting {
     font-size: 1.5rem;
+    padding-right: 5rem; /* Make room for bell + settings icons */
+  }
+
+  .dashboard-hero .dashboard-header-actions {
+    top: var(--space-md);
+    right: var(--space-md);
   }
 
   .dashboard-hero-stats {
@@ -5468,6 +5496,19 @@ p {
   max-width: 900px;
   margin: 0 auto;
   padding: var(--space-xl);
+}
+
+.species-description {
+  background: var(--ivory);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  margin-bottom: var(--space-xl);
+  line-height: 1.7;
+  color: var(--ink-secondary);
+}
+
+.species-description p {
+  margin: 0;
 }
 
 .species-hero {
