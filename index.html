@@ -78,7 +78,7 @@
 
     <!-- Hero Section (Video Background) -->
     <section class="hero-video">
-      <video autoplay muted loop playsinline preload="metadata" class="hero-video__bg">
+      <video autoplay muted loop playsinline preload="auto" class="hero-video__bg" id="hero-video">
         <source src="assets/hero-tank.mp4" type="video/mp4" />
       </video>
       <div class="hero-video__overlay"></div>
@@ -209,5 +209,25 @@
     <script src="js/storage-service.js"></script>
     <script src="js/auth-manager.js"></script>
     <script src="js/scroll-animations.js"></script>
+
+    <!-- Force video autoplay on iOS Safari -->
+    <script>
+      (function() {
+        var video = document.getElementById('hero-video');
+        if (!video) return;
+
+        // Try to play immediately
+        var playPromise = video.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(function() {
+            // Autoplay blocked - play on first user interaction
+            document.addEventListener('touchstart', function playOnTouch() {
+              video.play();
+              document.removeEventListener('touchstart', playOnTouch);
+            }, { once: true });
+          });
+        }
+      })();
+    </script>
   </body>
 </html>

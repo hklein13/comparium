@@ -6249,6 +6249,16 @@ body.logged-in .favorite-star {
   z-index: -1;
 }
 
+/* Hide Safari's native video controls and play button */
+.hero-video__bg::-webkit-media-controls {
+  display: none !important;
+}
+
+.hero-video__bg::-webkit-media-controls-start-playback-button {
+  display: none !important;
+  -webkit-appearance: none;
+}
+
 .hero-video__overlay {
   position: absolute;
   inset: 0;
