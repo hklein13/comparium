@@ -85,7 +85,32 @@
           <button type="submit" class="btn btn-primary" style="width: 100%">Login</button>
         </form>
 
+        <!-- Forgot Password Form (hidden by default) -->
+        <form id="forgot-password-form" style="display: none" onsubmit="handleForgotPassword(event)">
+          <p style="margin-bottom: var(--space-lg); color: var(--ink-secondary)">
+            Enter your email address and we'll send you a link to reset your password.
+          </p>
+          <div class="form-group">
+            <label for="reset-email">Email Address</label>
+            <input
+              type="email"
+              id="reset-email"
+              name="reset-email"
+              placeholder="Enter your email"
+              required
+              autocomplete="email"
+            />
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%">Send Reset Link</button>
+        </form>
+
+        <!-- Back to Login link (hidden by default) -->
+        <div id="back-to-login" class="auth-links" style="display: none">
+          <p><a href="#" onclick="showLoginForm(event)">Back to Login</a></p>
+        </div>
+
         <div class="auth-links">
+          <p><a href="#" onclick="showForgotPassword(event)">Forgot Password?</a></p>
           <p>Don't have an account? <a href="signup.html">Sign up here</a></p>
           <p><a href="index.html">Continue without logging in</a></p>
         </div>
@@ -189,6 +214,84 @@
           document.getElementById('login-form').dispatchEvent(new Event('submit'));
         }
       });
+
+      // ============================================
+      // Forgot Password Functions
+      // ============================================
+
+      function showForgotPassword(event) {
+        event.preventDefault();
+
+        // Hide login form and its auth-links
+        document.getElementById('login-form').style.display = 'none';
+        document.querySelector('.auth-links').style.display = 'none';
+
+        // Show forgot password form and back link
+        document.getElementById('forgot-password-form').style.display = 'block';
+        document.getElementById('back-to-login').style.display = 'block';
+
+        // Clear any previous messages
+        document.getElementById('message-display').innerHTML = '';
+
+        // Focus email input
+        document.getElementById('reset-email').focus();
+      }
+
+      function showLoginForm(event) {
+        event.preventDefault();
+
+        // Hide forgot password form and back link
+        document.getElementById('forgot-password-form').style.display = 'none';
+        document.getElementById('back-to-login').style.display = 'none';
+
+        // Show login form and its auth-links
+        document.getElementById('login-form').style.display = 'block';
+        document.querySelector('.auth-links').style.display = 'block';
+
+        // Clear any previous messages
+        document.getElementById('message-display').innerHTML = '';
+      }
+
+      async function handleForgotPassword(event) {
+        event.preventDefault();
+
+        const messageDisplay = document.getElementById('message-display');
+        const submitButton = event.target.querySelector('button[type="submit"]');
+        const email = document.getElementById('reset-email').value.trim();
+
+        // Clear previous messages
+        messageDisplay.innerHTML = '';
+
+        if (!email) {
+          messageDisplay.innerHTML =
+            '<div class="error-message">Please enter your email address</div>';
+          return;
+        }
+
+        // Disable button while processing
+        submitButton.disabled = true;
+        submitButton.textContent = 'Sending...';
+
+        try {
+          const result = await window.firebaseSendPasswordReset(email);
+
+          if (result.success) {
+            // Always show generic success (security: don't reveal if email exists)
+            messageDisplay.innerHTML =
+              '<div class="success-message">If an account exists with that email, a password reset link has been sent. Check your inbox.</div>';
+            // Clear the input
+            document.getElementById('reset-email').value = '';
+          } else {
+            messageDisplay.innerHTML = `<div class="error-message">${result.error}</div>`;
+          }
+        } catch (error) {
+          messageDisplay.innerHTML =
+            '<div class="error-message">Something went wrong. Please try again.</div>';
+        } finally {
+          submitButton.disabled = false;
+          submitButton.textContent = 'Send Reset Link';
+        }
+      }
     </script>
   </body>
 </html>

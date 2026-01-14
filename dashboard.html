@@ -251,6 +251,26 @@
                 <ul id="species-list" class="fish-list"></ul>
               </div>
 
+              <!-- Plant Selector -->
+              <div class="form-group">
+                <label>Add Plants (Optional)</label>
+                <input
+                  type="text"
+                  id="plant-search"
+                  placeholder="Search plants..."
+                  oninput="filterPlantSelector()"
+                />
+                <select id="plant-selector" onchange="addPlantToTank()" size="5">
+                  <option value="">-- Choose a plant to add --</option>
+                </select>
+                <small class="form-hint">Type to filter, click to add</small>
+              </div>
+
+              <div id="selected-plants-list" class="selected-plants">
+                <strong>Selected Plants:</strong>
+                <ul id="plants-list" class="plant-list"></ul>
+              </div>
+
               <div class="form-actions">
                 <button type="submit" class="btn btn-primary">Save Tank</button>
                 <button type="button" onclick="cancelForm()" class="btn btn-ghost">Cancel</button>
@@ -336,6 +356,11 @@
             <ul class="tank-modal-species-list" id="tank-modal-species"></ul>
           </div>
 
+          <div class="tank-modal-section">
+            <h3>Plants</h3>
+            <ul class="tank-modal-species-list" id="tank-modal-plants"></ul>
+          </div>
+
           <div class="tank-modal-section tank-modal-quicklog">
             <div class="section-header-with-action">
               <h3>Quick Log</h3>
@@ -349,7 +374,9 @@
           <div class="tank-modal-section">
             <div class="section-header-with-action">
               <h3>Maintenance Schedules</h3>
-              <button class="btn-small btn-text" id="tank-modal-add-schedule-btn">+ Add Schedule</button>
+              <button class="btn-small btn-text" id="tank-modal-add-schedule-btn">
+                + Add Schedule
+              </button>
             </div>
             <div id="tank-modal-schedules">
               <!-- Populated by JS -->
@@ -395,6 +422,7 @@
     <script src="js/storage-service.js"></script>
     <script src="js/auth-manager.js"></script>
     <script src="js/fish-data.js"></script>
+    <script src="js/plant-data.js"></script>
     <script src="js/tank-manager.js"></script>
     <script src="js/maintenance-manager.js"></script>
     <script>
@@ -706,8 +734,10 @@
         actionsSection.style.display = 'flex';
 
         // Wire up action buttons
-        document.getElementById('timeline-log-event-btn').onclick = () => openEventModalWithTankSelector();
-        document.getElementById('timeline-add-schedule-btn').onclick = () => openScheduleModalWithTankSelector();
+        document.getElementById('timeline-log-event-btn').onclick = () =>
+          openEventModalWithTankSelector();
+        document.getElementById('timeline-add-schedule-btn').onclick = () =>
+          openScheduleModalWithTankSelector();
 
         if (allSchedules.length === 0) {
           return;
@@ -911,12 +941,16 @@
               <div class="form-group">
                 <label>Select Tank</label>
                 <div class="tank-selector-grid">
-                  ${tanks.map(tank => `
+                  ${tanks
+                    .map(
+                      tank => `
                     <button class="tank-selector-btn" onclick="selectTankForAction('${tank.id}', '${tank.name.replace(/'/g, "\\'")}', '${actionType}')">
                       <span class="tank-selector-name">${escapeHTML(tank.name)}</span>
                       <span class="tank-selector-meta">${tank.size} gal · ${tank.species?.length || 0} species</span>
                     </button>
-                  `).join('')}
+                  `
+                    )
+                    .join('')}
                 </div>
               </div>
             </div>
@@ -994,8 +1028,11 @@
 
         // Set tank info
         document.getElementById('tank-modal-name').textContent = tank.name || 'Untitled Tank';
-        document.getElementById('tank-modal-meta').textContent =
-          `${tank.size} gallons · ${tank.species?.length || 0} species`;
+        const metaParts = [`${tank.size} gallons`, `${tank.species?.length || 0} species`];
+        if (tank.plants && tank.plants.length > 0) {
+          metaParts.push(`${tank.plants.length} plants`);
+        }
+        document.getElementById('tank-modal-meta').textContent = metaParts.join(' · ');
 
         // Notes
         const notesEl = document.getElementById('tank-modal-notes');
@@ -1049,6 +1086,26 @@
         } else {
           speciesListEl.innerHTML =
             '<li class="tank-modal-species-item"><span>No species added yet</span></li>';
+        }
+
+        // Plants list
+        const plantsListEl = document.getElementById('tank-modal-plants');
+        if (tank.plants && tank.plants.length > 0 && typeof plantDatabase !== 'undefined') {
+          plantsListEl.innerHTML = tank.plants
+            .map(key => {
+              const plant = plantDatabase[key];
+              if (!plant) return '';
+              return `
+              <li class="tank-modal-species-item">
+                ${plant.imageUrl ? `<img src="${plant.imageUrl}" alt="${escapeHTML(plant.commonName)}" />` : ''}
+                <span>${escapeHTML(plant.commonName)}</span>
+              </li>
+            `;
+            })
+            .join('');
+        } else {
+          plantsListEl.innerHTML =
+            '<li class="tank-modal-species-item"><span>No plants added yet</span></li>';
         }
 
         // Quick log buttons
