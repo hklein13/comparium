@@ -101,10 +101,7 @@ function renderPost(post) {
     `;
   }
 
-  const safeUsername = (post.author?.username || '').replace(
-    /[^a-zA-Z0-9_]/g,
-    ''
-  );
+  const safeUsername = (post.author?.username || '').replace(/[^a-zA-Z0-9_]/g, '');
 
   container.innerHTML = `
     <article class="post-detail">

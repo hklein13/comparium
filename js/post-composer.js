@@ -56,7 +56,7 @@ function createComposerModal() {
   composerModal = document.createElement('div');
   composerModal.className = 'modal-overlay';
   composerModal.id = 'post-composer-modal';
-  composerModal.onclick = (e) => {
+  composerModal.onclick = e => {
     if (e.target === composerModal) closePostComposer();
   };
 
@@ -163,7 +163,7 @@ function handleImageSelect(event) {
   }
 
   // Validate and add each file
-  files.forEach((file) => {
+  files.forEach(file => {
     if (selectedImages.length >= 4) return;
 
     // Validate type
@@ -220,7 +220,7 @@ function removeImage(index) {
   // Rebuild previews
   const container = document.getElementById('image-preview-container');
   container.innerHTML = '';
-  selectedImages.forEach((file) => {
+  selectedImages.forEach(file => {
     addImagePreview(file);
   });
 
@@ -253,16 +253,11 @@ async function submitPost() {
 
     if (selectedImages.length > 0) {
       // Generate a temporary post ID for image paths
-      const tempPostId =
-        'post_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+      const tempPostId = 'post_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
 
       // Upload images
       for (let i = 0; i < selectedImages.length; i++) {
-        const result = await window.storageUploadPostImage(
-          tempPostId,
-          selectedImages[i],
-          i
-        );
+        const result = await window.storageUploadPostImage(tempPostId, selectedImages[i], i);
         if (result.success) {
           imageUrls.push(result.url);
         } else {
