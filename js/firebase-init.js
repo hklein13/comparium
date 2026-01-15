@@ -1269,6 +1269,61 @@ window.firestoreGetFollowingCount = async function (userId) {
   }
 };
 
+/**
+ * Get list of user IDs that a user follows
+ * @param {string} userId - User ID
+ * @param {number} maxResults - Max results (default 30, Firestore 'in' query limit)
+ * @returns {Promise<{success: boolean, userIds?: string[], error?: string}>}
+ */
+window.firestoreGetFollowingUserIds = async function (userId, maxResults = 30) {
+  try {
+    const snapshot = await getDocs(
+      query(
+        collection(firestore, 'follows'),
+        where('followerId', '==', userId),
+        limit(maxResults)
+      )
+    );
+    const userIds = snapshot.docs.map(doc => doc.data().followingId);
+    return { success: true, userIds };
+  } catch (error) {
+    console.error('Error getting following user IDs:', error);
+    return { success: false, error: error.message };
+  }
+};
+
+/**
+ * Get posts from a list of user IDs (for following feed)
+ * @param {string[]} userIds - Array of user IDs to get posts from
+ * @param {number} maxResults - Max results
+ * @returns {Promise<{success: boolean, posts?: array, error?: string}>}
+ */
+window.firestoreGetPostsByUserIds = async function (userIds, maxResults = 10) {
+  if (!userIds || userIds.length === 0) {
+    return { success: true, posts: [] };
+  }
+
+  try {
+    const q = query(
+      collection(firestore, 'posts'),
+      where('userId', 'in', userIds),
+      where('visibility', '==', 'public'),
+      orderBy('created', 'desc'),
+      limit(maxResults)
+    );
+    const snapshot = await getDocs(q);
+    const posts = snapshot.docs.map(d => ({
+      id: d.id,
+      ...d.data(),
+      created: d.data().created?.toDate?.()?.toISOString() || d.data().created,
+    }));
+    return { success: true, posts };
+  } catch (error) {
+    console.error('Error getting posts by user IDs:', error);
+    return { success: false, error: error.message };
+  }
+};
+
 // ============================================================================
 // BOOKMARKS - Firestore Operations (Phase 4.3)
 // ============================================================================

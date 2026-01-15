@@ -86,6 +86,30 @@ window.socialManager = {
     return result.success ? result.count : 0;
   },
 
+  /**
+   * Get list of user IDs that current user follows
+   * @param {number} maxResults - Max results (default 30)
+   * @returns {Promise<string[]>}
+   */
+  async getFollowingUserIds(maxResults = 30) {
+    const uid = window.getFirebaseUid();
+    if (!uid) return [];
+    const result = await window.firestoreGetFollowingUserIds(uid, maxResults);
+    return result.success ? result.userIds : [];
+  },
+
+  /**
+   * Get posts from users the current user follows
+   * @param {number} maxResults - Max results
+   * @returns {Promise<array>}
+   */
+  async getFollowingFeedPosts(maxResults = 10) {
+    const userIds = await this.getFollowingUserIds(30);
+    if (userIds.length === 0) return [];
+    const result = await window.firestoreGetPostsByUserIds(userIds, maxResults);
+    return result.success ? result.posts : [];
+  },
+
   // ===== BOOKMARKS =====
 
   /**

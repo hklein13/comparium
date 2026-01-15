@@ -87,14 +87,8 @@
           </div>
         </div>
 
-        <!-- Profile Tabs (only shown on own profile) -->
-        <div id="profile-tabs" class="profile-tabs" style="display: none">
-          <button class="profile-tab active" data-tab="tanks">Tanks</button>
-          <button class="profile-tab" data-tab="bookmarks">Bookmarks</button>
-        </div>
-
-        <!-- Tanks Tab -->
-        <section id="tanks-tab" class="profile-tab-panel active">
+        <!-- Public Tanks Section -->
+        <section id="profile-tanks-section">
           <h2>Public Tanks <span id="profile-tank-count" class="section-count">(0)</span></h2>
           <div id="profile-tanks-grid" class="profile-tanks-grid">
             <!-- Populated by JS -->
@@ -102,15 +96,6 @@
           <div id="profile-no-tanks" class="profile-no-tanks" style="display: none">
             <p>This user hasn't shared any tanks yet.</p>
           </div>
-        </section>
-
-        <!-- Bookmarks Tab (only on own profile) -->
-        <section id="bookmarks-tab" class="profile-tab-panel" style="display: none">
-          <div id="bookmarks-loading" class="loading-spinner" style="display: none"></div>
-          <div id="bookmarks-grid" class="community-grid"></div>
-          <p id="bookmarks-empty" class="empty-state" style="display: none">
-            No bookmarked posts yet
-          </p>
         </section>
       </div>
     </main>
