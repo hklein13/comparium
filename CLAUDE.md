@@ -69,7 +69,7 @@ If a phase is in progress (see "Current Phase" below), there should be a plan fi
 - Plant selector for tanks (add plants alongside species)
 - Forgot password feature (login page)
 
-**Current Phase:** Phase 4.2 Comments & Likes complete (branch ready for merge)
+**Current Phase:** Phase 4.3 Follows & Bookmarks (starting)
 
 **Active Branch:** `main`
 
