@@ -507,6 +507,66 @@ service cloud.firestore {
     }
 
     // ========================================================================
+    // FOLLOWS COLLECTION (Phase 4.3 - Social Follows)
+    // ========================================================================
+    // Structure: follows/{followId}
+    //   - followId format: {followerId}_{followingId}
+    //   - followerId: User who is following
+    //   - followingId: User being followed
+    //   - created: Timestamp when followed
+    //
+    // Anyone can read follow relationships (to display follower counts)
+    // Users can only create/delete their own follows
+    // ========================================================================
+
+    match /follows/{followId} {
+      // Anyone can read follows (for follower counts and lists)
+      allow read: if true;
+
+      // User can only create follows where they are the follower
+      allow create: if request.auth != null
+                    && followId.matches(request.auth.uid + '_.*')
+                    && request.resource.data.followerId == request.auth.uid;
+
+      // User can only delete their own follows
+      allow delete: if request.auth != null
+                    && followId.matches(request.auth.uid + '_.*');
+
+      // No updates allowed (follows are create/delete only)
+      allow update: if false;
+    }
+
+    // ========================================================================
+    // BOOKMARKS COLLECTION (Phase 4.3 - Post Bookmarks)
+    // ========================================================================
+    // Structure: bookmarks/{bookmarkId}
+    //   - bookmarkId format: {userId}_{postId}
+    //   - userId: User who bookmarked
+    //   - postId: Post being bookmarked
+    //   - created: Timestamp when bookmarked
+    //
+    // Bookmarks are private - only the owner can read their own bookmarks
+    // ========================================================================
+
+    match /bookmarks/{bookmarkId} {
+      // Only owner can read their bookmarks (bookmarks are private)
+      // Uses userId field to support collection queries with where('userId', '==', uid)
+      allow read: if request.auth != null
+                  && resource.data.userId == request.auth.uid;
+
+      // User can only create bookmarks for themselves
+      allow create: if request.auth != null
+                    && request.resource.data.userId == request.auth.uid;
+
+      // User can only delete their own bookmarks
+      allow delete: if request.auth != null
+                    && resource.data.userId == request.auth.uid;
+
+      // No updates allowed (bookmarks are create/delete only)
+      allow update: if false;
+    }
+
+    // ========================================================================
     // DEFAULT: DENY ALL ACCESS
     // ========================================================================
     // Any collection not explicitly defined above is denied by default

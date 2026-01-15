@@ -78,11 +78,17 @@
           <div class="profile-info">
             <h1 id="profile-username">@username</h1>
             <p id="profile-member-since" class="profile-meta">Member since 2026</p>
+            <div id="profile-stats" class="profile-stats" style="display: none">
+              <span id="profile-followers">0 followers</span>
+              <span class="profile-stats__divider">·</span>
+              <span id="profile-following">0 following</span>
+            </div>
+            <div id="profile-follow-btn" class="profile-follow-btn" style="display: none"></div>
           </div>
         </div>
 
         <!-- Public Tanks Section -->
-        <section class="profile-tanks-section">
+        <section id="profile-tanks-section">
           <h2>Public Tanks <span id="profile-tank-count" class="section-count">(0)</span></h2>
           <div id="profile-tanks-grid" class="profile-tanks-grid">
             <!-- Populated by JS -->
@@ -105,6 +111,7 @@
     <script src="js/auth-manager.js"></script>
     <script src="js/fish-data.js"></script>
     <script src="js/public-tank-manager.js"></script>
+    <script src="js/social-manager.js"></script>
     <script src="js/profile.js"></script>
   </body>
 </html>

@@ -7149,6 +7149,37 @@ body.logged-in .favorite-star {
   font-size: 0.9rem;
 }
 
+/* Profile Follow Stats & Button */
+.profile-stats {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  color: var(--ink-secondary);
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.profile-stats__divider {
+  color: var(--border);
+}
+
+.profile-follow-btn {
+  margin-top: 1rem;
+}
+
+.profile-follow-btn .btn {
+  min-width: 100px;
+}
+
+.profile-follow-btn .btn--following {
+  background: var(--forest);
+  color: white;
+}
+
+.profile-follow-btn .btn--following:hover {
+  background: #c0392b;
+}
+
 /* Tanks Section */
 .profile-tanks-section h2 {
   font-family: var(--font-serif);
@@ -7169,6 +7200,43 @@ body.logged-in .favorite-star {
   color: var(--ink-secondary);
   background: var(--stone);
   border-radius: var(--radius-lg);
+}
+
+/* Profile Tabs (own profile only) */
+.profile-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2rem;
+}
+
+.profile-tab {
+  background: none;
+  border: none;
+  padding: 1rem 1.5rem;
+  font-family: inherit;
+  font-size: 1rem;
+  color: var(--ink-secondary);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.profile-tab:hover {
+  color: var(--ink);
+}
+
+.profile-tab.active {
+  color: var(--forest);
+  border-bottom-color: var(--forest);
+}
+
+.profile-tab-panel {
+  display: none;
+}
+
+.profile-tab-panel.active {
+  display: block;
 }
 
 /* Responsive */
@@ -7472,6 +7540,36 @@ body.logged-in .favorite-star {
   color: #e74c3c;
 }
 
+/* ===== Bookmark Button ===== */
+.post-card__bookmark {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  color: var(--ink-secondary);
+  transition: color 0.2s;
+}
+
+.post-card__bookmark:hover {
+  color: var(--forest);
+}
+
+.post-card__bookmark.bookmarked {
+  color: var(--forest);
+}
+
+.bookmark-icon {
+  display: inline-block;
+  width: 1.25rem;
+  height: 1.25rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z'/%3E%3C/svg%3E");
+  background-size: contain;
+}
+
+.post-card__bookmark.bookmarked .bookmark-icon {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='currentColor' viewBox='0 0 24 24'%3E%3Cpath d='M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z'/%3E%3C/svg%3E");
+}
+
 /* Mobile Responsive */
 @media (max-width: 768px) {
   .community-tabs {
@@ -7686,6 +7784,84 @@ body.logged-in .favorite-star {
   cursor: pointer;
 }
 
+/* Tank preview in post detail (for tank-linked posts) */
+.post-detail__tank-preview {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  background: var(--ivory);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.post-detail__tank-preview:hover {
+  border-color: var(--forest);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.post-detail__tank-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 6px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.post-detail__tank-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.post-detail__tank-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--forest);
+  color: white;
+  font-family: 'Libre Baskerville', serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.post-detail__tank-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.post-detail__tank-name {
+  font-family: 'Libre Baskerville', serif;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.post-detail__tank-stats {
+  font-size: 0.9rem;
+  color: var(--ink-secondary);
+}
+
+.post-detail__tank-link {
+  color: var(--forest);
+  font-size: 0.9rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
 .post-detail__actions {
   display: flex;
   gap: 2rem;
@@ -7716,12 +7892,19 @@ body.logged-in .favorite-star {
 .back-link {
   display: inline-block;
   margin-top: 1.5rem;
+  padding: 0.75rem 1.25rem;
   color: var(--forest);
+  font-weight: 600;
   text-decoration: none;
+  border: 2px solid var(--forest);
+  border-radius: 6px;
+  transition: all 0.2s ease;
 }
 
 .back-link:hover {
-  text-decoration: underline;
+  background: var(--forest);
+  color: white;
+  text-decoration: none;
 }
 
 /* ============================================================================

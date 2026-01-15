@@ -63,13 +63,14 @@ If a phase is in progress (see "Current Phase" below), there should be a plan fi
 **Current Stats:** 244 fish species (235 with images), 15 aquarium plants (14 with images)
 
 **Recent Features (January 2026):**
+- Phase 4.3: Follows & bookmarks on community
 - Phase 4.2: Comments & likes on community posts
 - Phase 4.1: Core posts - community feed with categories
 - Phase 4 MVP: Tank sharing with Community gallery
 - Plant selector for tanks (add plants alongside species)
 - Forgot password feature (login page)
 
-**Current Phase:** Phase 4.2 Comments & Likes complete (branch ready for merge)
+**Current Phase:** Phase 4.3 Follows & Bookmarks (complete)
 
 **Active Branch:** `main`
 
@@ -142,7 +143,7 @@ glossary-generator.js (transforms data)
 - `js/post-composer.js` - New post modal component (Phase 4.1)
 - `js/post-detail.js` - Post detail page with comments (Phase 4.1)
 - `js/comment-manager.js` - Comment CRUD and threading (Phase 4.2)
-- `js/social-manager.js` - Likes/follows/bookmarks (Phase 4.2+)
+- `js/social-manager.js` - Likes, follows, bookmarks API (Phase 4.2-4.3)
 - `js/community.js` - Community posts feed with category filtering (Phase 4)
 - `js/maintenance-manager.js` - Event logging and schedule management for tanks
 - `scripts/serviceAccountKey.json` - Firebase Admin credentials (gitignored, never commit)
@@ -343,6 +344,19 @@ Development follows a phased approach. See `DATA-MODEL.md` for complete specific
 
 **Tests:** `tests/community-posts.spec.js` (5 tests for page structure, filtering, post cards)
 
+### Phase 4.3 - Follows & Bookmarks (January 2026)
+**Branch:** `claude/phase4-3-follows-bookmarks`
+
+**What's Implemented:**
+- Follow/unfollow users from their profile page
+- Follower and following counts displayed on profiles
+- Bookmark posts for later viewing
+- Bookmarks tab on own profile (private to owner)
+- `follows` and `bookmarks` Firestore collections with compound IDs
+- Security rules for follows (public read, owner create/delete) and bookmarks (private)
+
+**Key Files:** `js/social-manager.js`, `js/profile.js`, `js/community.js`
+
 ## Git Workflow
 
 ### CRITICAL RULE
@@ -445,6 +459,8 @@ allow write: if isAdmin();        // Admin-only writes
 - `posts` - Community posts with categories (public read, owner write) - **Phase 4.1**
 - `comments` - Comments on posts with threading (public read, owner write) - **Phase 4.2**
 - `likes` - User likes on posts/comments (public read, owner create/delete) - **Phase 4.2**
+- `follows` - User follow relationships (public read, owner create/delete) - **Phase 4.3**
+- `bookmarks` - User bookmarked posts (private to owner) - **Phase 4.3**
 
 ## Image System
 

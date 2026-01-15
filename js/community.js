@@ -9,6 +9,7 @@ let postCategory = '';
 let postLastDoc = null;
 let isPostsLoading = false;
 let allPostsLoaded = false;
+let followingMode = false;
 
 /**
  * Initialize community page on load
@@ -16,12 +17,17 @@ let allPostsLoaded = false;
 async function initCommunityPage() {
   await waitForFirebase();
 
-  // Listen for auth state changes to show/hide new post button
+  // Listen for auth state changes to show/hide new post button and Following filter
   if (window.firebaseAuthState && window.firebaseAuth) {
     window.firebaseAuthState(window.firebaseAuth, user => {
       const newPostContainer = document.getElementById('new-post-container');
       if (newPostContainer) {
         newPostContainer.style.display = user ? 'flex' : 'none';
+      }
+      // Show/hide Following filter button (only for logged-in users)
+      const followingBtn = document.getElementById('following-filter-btn');
+      if (followingBtn) {
+        followingBtn.style.display = user ? 'inline-flex' : 'none';
       }
     });
   }
@@ -72,22 +78,32 @@ async function loadPosts(append = false) {
   }
 
   try {
-    const result = await window.postManager.getFeedPosts({
-      category: postCategory || null,
-      sortBy: postSortBy,
-      limit: 20,
-      lastDoc: append ? postLastDoc : null,
-    });
+    let posts;
 
-    if (!result.success) {
-      throw new Error(result.error || 'Failed to load posts');
-    }
+    if (followingMode) {
+      // Following mode: get posts from followed users only
+      posts = await window.socialManager.getFollowingFeedPosts(50);
+      allPostsLoaded = true; // Following feed doesn't support pagination
+      postLastDoc = null;
+    } else {
+      // Normal mode: get posts from feed
+      const result = await window.postManager.getFeedPosts({
+        category: postCategory || null,
+        sortBy: postSortBy,
+        limit: 20,
+        lastDoc: append ? postLastDoc : null,
+      });
 
-    const posts = result.posts;
-    postLastDoc = result.lastDoc;
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to load posts');
+      }
 
-    if (posts.length < 20) {
-      allPostsLoaded = true;
+      posts = result.posts;
+      postLastDoc = result.lastDoc;
+
+      if (posts.length < 20) {
+        allPostsLoaded = true;
+      }
     }
 
     if (!append) {
@@ -196,9 +212,15 @@ function createPostCard(post) {
       img.alt = post.linkedTank.name;
       img.loading = 'lazy';
       tankImage.appendChild(img);
+
+      // Fetch fresh tank data to get updated cover photo
+      fetchFreshTankPhoto(post.linkedTank.tankId, img);
     } else {
       tankImage.classList.add('placeholder');
       tankImage.textContent = post.linkedTank.name.charAt(0).toUpperCase();
+
+      // Try to fetch fresh photo in case tank was updated
+      fetchFreshTankPhoto(post.linkedTank.tankId, tankImage);
     }
     tankPreview.appendChild(tankImage);
 
@@ -308,12 +330,78 @@ function createPostCard(post) {
   };
   actions.appendChild(commentBtn);
 
+  // Bookmark button (only for logged-in users)
+  if (window.firebaseAuth?.currentUser) {
+    const bookmarkBtn = document.createElement('button');
+    bookmarkBtn.className = 'post-card__action post-card__bookmark';
+    bookmarkBtn.setAttribute('aria-label', 'Bookmark post');
+    bookmarkBtn.innerHTML = '<span class="bookmark-icon"></span>';
+    bookmarkBtn.onclick = async e => {
+      e.stopPropagation();
+      const result = await window.socialManager.toggleBookmark(post.id);
+      if (result.success) {
+        bookmarkBtn.classList.toggle('bookmarked', result.bookmarked);
+      }
+    };
+
+    // Check initial bookmark state
+    window.socialManager.isBookmarked(post.id).then(isBookmarked => {
+      if (isBookmarked) {
+        bookmarkBtn.classList.add('bookmarked');
+      }
+    });
+
+    actions.appendChild(bookmarkBtn);
+  }
+
   card.appendChild(actions);
 
   // Click card to view detail
   card.onclick = () => viewPostDetail(post.id);
 
   return card;
+}
+
+/**
+ * Fetch fresh tank photo from publicTanks collection
+ * Updates the image element if a newer photo is available
+ */
+async function fetchFreshTankPhoto(tankId, imageElement) {
+  if (!tankId || !window.firebaseFirestore) return;
+
+  try {
+    // Use modular Firebase SDK (v9+)
+    const { doc, getDoc } =
+      await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+
+    const tankRef = doc(window.firebaseFirestore, 'publicTanks', tankId);
+    const tankDoc = await getDoc(tankRef);
+
+    if (tankDoc.exists()) {
+      const tankData = tankDoc.data();
+      if (tankData.coverPhoto) {
+        // Update the image element with fresh photo
+        if (imageElement.tagName === 'IMG') {
+          // If it's already an img element, just update src
+          if (imageElement.src !== tankData.coverPhoto) {
+            imageElement.src = tankData.coverPhoto;
+          }
+        } else {
+          // It's a placeholder div - replace with img
+          imageElement.classList.remove('placeholder');
+          imageElement.textContent = '';
+          const img = document.createElement('img');
+          img.src = tankData.coverPhoto;
+          img.alt = tankData.name || 'Tank';
+          img.loading = 'lazy';
+          imageElement.appendChild(img);
+        }
+      }
+    }
+  } catch (error) {
+    // Silently fail - cached photo will be shown
+    console.error('Error fetching fresh tank photo:', error);
+  }
 }
 
 /**
@@ -341,10 +429,26 @@ function viewPostDetail(postId) {
 
 function filterByCategory(category) {
   postCategory = category;
+  followingMode = false;
 
   // Update button states
   document.querySelectorAll('.category-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.category === category);
+  });
+
+  loadPosts(false);
+}
+
+/**
+ * Filter to show only posts from followed users
+ */
+function filterByFollowing() {
+  followingMode = true;
+  postCategory = '';
+
+  // Update button states
+  document.querySelectorAll('.category-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.category === 'following');
   });
 
   loadPosts(false);

@@ -140,6 +140,10 @@
                     </button>
                   </div>
                   <div class="settings-dropdown-divider"></div>
+                  <button onclick="viewMyProfile()" class="settings-dropdown-btn">
+                    View My Profile
+                  </button>
+                  <div class="settings-dropdown-divider"></div>
                   <button onclick="authManager.logout()" class="settings-dropdown-btn">
                     Log Out
                   </button>
@@ -162,6 +166,10 @@
             <span class="hero-stat"><span id="species-total-count">0</span> species</span>
             <span class="hero-stat-divider">·</span>
             <span class="hero-stat"><span id="favorite-count">0</span> favorites</span>
+            <span class="hero-stat-divider">·</span>
+            <span class="hero-stat"><span id="follower-count">0</span> followers</span>
+            <span class="hero-stat-divider">·</span>
+            <span class="hero-stat"><span id="following-count">0</span> following</span>
           </div>
 
           <!-- Hero Actions -->
@@ -352,6 +360,18 @@
       </div>
     </div>
 
+    <!-- Bookmarked Posts Section -->
+    <section class="dashboard-bookmarks-section dashboard-section-animate">
+      <div class="activity-section-header">
+        <h2>Bookmarked Posts</h2>
+      </div>
+      <div id="dashboard-bookmarks" class="dashboard-bookmarks">
+        <div class="activity-empty">
+          <p>Loading...</p>
+        </div>
+      </div>
+    </section>
+
     <!-- Tank Detail Modal -->
     <div class="tank-modal-backdrop" id="tank-modal-backdrop">
       <div class="tank-modal">
@@ -442,6 +462,8 @@
     <script src="js/public-tank-manager.js"></script>
     <script src="js/tank-manager.js"></script>
     <script src="js/maintenance-manager.js"></script>
+    <script src="js/social-manager.js"></script>
+    <script src="js/post-manager.js"></script>
     <script>
       // ============================================
       // Dashboard Initialization
@@ -568,6 +590,19 @@
 
             // Load maintenance timeline
             await loadMaintenanceTimeline();
+
+            // Load social stats (follower/following counts)
+            if (window.socialManager) {
+              const [followerCount, followingCount] = await Promise.all([
+                window.socialManager.getFollowerCount(user.uid),
+                window.socialManager.getFollowingCount(user.uid),
+              ]);
+              document.getElementById('follower-count').textContent = followerCount;
+              document.getElementById('following-count').textContent = followingCount;
+
+              // Load bookmarks
+              await loadDashboardBookmarks();
+            }
           }
         } catch (error) {
           console.error('Error loading dashboard data:', error);
@@ -584,6 +619,112 @@
         } else {
           btn.textContent = '+ Add New Tank';
         }
+      }
+
+      // ============================================
+      // Bookmarked Posts (Real-time Listener)
+      // ============================================
+
+      let bookmarksUnsubscribe = null;
+
+      async function loadDashboardBookmarks() {
+        const container = document.getElementById('dashboard-bookmarks');
+        if (!container) return;
+
+        const userId = window.getFirebaseUid();
+        if (!userId) {
+          container.innerHTML = `
+            <div class="activity-empty">
+              <p>Log in to see your bookmarks.</p>
+            </div>
+          `;
+          return;
+        }
+
+        // Import Firestore functions
+        const { collection, query, where, orderBy, limit, onSnapshot, doc, getDoc } =
+          await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+
+        // Unsubscribe from previous listener if exists
+        if (bookmarksUnsubscribe) {
+          bookmarksUnsubscribe();
+        }
+
+        // Set up real-time listener for bookmarks
+        const bookmarksQuery = query(
+          collection(window.firebaseFirestore, 'bookmarks'),
+          where('userId', '==', userId),
+          orderBy('created', 'desc'),
+          limit(5)
+        );
+
+        bookmarksUnsubscribe = onSnapshot(
+          bookmarksQuery,
+          async snapshot => {
+            const bookmarks = snapshot.docs.map(d => ({
+              id: d.id,
+              ...d.data(),
+            }));
+
+            if (bookmarks.length === 0) {
+              container.innerHTML = `
+                <div class="activity-empty">
+                  <p>No bookmarked posts yet. Save posts from the <a href="community.html">Community</a>!</p>
+                </div>
+              `;
+              return;
+            }
+
+            // Fetch post details for each bookmark
+            const postPromises = bookmarks.map(async bookmark => {
+              const postRef = doc(window.firebaseFirestore, 'posts', bookmark.postId);
+              const postDoc = await getDoc(postRef);
+              if (postDoc.exists()) {
+                return { id: postDoc.id, ...postDoc.data() };
+              }
+              return null;
+            });
+
+            const posts = (await Promise.all(postPromises)).filter(Boolean);
+
+            if (posts.length === 0) {
+              container.innerHTML = `
+                <div class="activity-empty">
+                  <p>No bookmarked posts found.</p>
+                </div>
+              `;
+              return;
+            }
+
+            container.innerHTML = posts
+              .map(post => {
+                const timeAgo = formatTimeAgo(
+                  post.created?.toDate?.() || new Date(post.created)
+                );
+                return `
+                <a href="post.html?id=${encodeURIComponent(post.id)}" class="activity-item activity-item--clickable">
+                  <div class="activity-item__avatar">
+                    <span class="avatar-placeholder">${(post.username || 'U').charAt(0).toUpperCase()}</span>
+                  </div>
+                  <div class="activity-item__content">
+                    <span class="activity-item__author">@${escapeHtml(post.username || 'Unknown')}</span>
+                    <span class="activity-item__title">${escapeHtml(post.title || 'Untitled')}</span>
+                    <span class="activity-item__meta">${escapeHtml(post.category || 'General')} · ${timeAgo}</span>
+                  </div>
+                </a>
+              `;
+              })
+              .join('');
+          },
+          error => {
+            console.error('Error listening to bookmarks:', error);
+            container.innerHTML = `
+              <div class="activity-empty">
+                <p>Failed to load bookmarks.</p>
+              </div>
+            `;
+          }
+        );
       }
 
       // ============================================
@@ -1318,6 +1459,13 @@
         settingsDropdown.classList.toggle('open');
       }
 
+      function viewMyProfile() {
+        const username = document.getElementById('settings-username')?.textContent;
+        if (username) {
+          window.location.href = `profile.html?user=${encodeURIComponent(username)}`;
+        }
+      }
+
       async function markAllRead() {
         const uid = window.getFirebaseUid?.();
         if (!uid) return;
@@ -1526,6 +1674,13 @@
         if (diffHours < 24) return `${diffHours}h ago`;
         if (diffDays < 7) return `${diffDays}d ago`;
         return date.toLocaleDateString();
+      }
+
+      function escapeHtml(text) {
+        if (!text) return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
       }
 
       // Badge starts hidden, updated when notifications load
