@@ -360,19 +360,6 @@
       </div>
     </div>
 
-    <!-- Following Feed Section -->
-    <section class="dashboard-following-section dashboard-section-animate">
-      <div class="activity-section-header">
-        <h2>Following Feed</h2>
-        <a href="community.html" class="section-link">View all</a>
-      </div>
-      <div id="following-feed" class="following-feed">
-        <div class="activity-empty">
-          <p>Loading...</p>
-        </div>
-      </div>
-    </section>
-
     <!-- Bookmarked Posts Section -->
     <section class="dashboard-bookmarks-section dashboard-section-animate">
       <div class="activity-section-header">
@@ -613,8 +600,7 @@
               document.getElementById('follower-count').textContent = followerCount;
               document.getElementById('following-count').textContent = followingCount;
 
-              // Load following feed and bookmarks
-              await loadFollowingFeed();
+              // Load bookmarks
               await loadDashboardBookmarks();
             }
           }
@@ -636,124 +622,109 @@
       }
 
       // ============================================
-      // Following Feed
+      // Bookmarked Posts (Real-time Listener)
       // ============================================
 
-      async function loadFollowingFeed() {
-        const container = document.getElementById('following-feed');
-        if (!container) return;
-
-        try {
-          const posts = await window.socialManager.getFollowingFeedPosts(5);
-
-          if (posts.length === 0) {
-            container.innerHTML = `
-              <div class="activity-empty">
-                <p>No posts from people you follow. <a href="community.html">Discover new users!</a></p>
-              </div>
-            `;
-            return;
-          }
-
-          container.innerHTML = posts
-            .map(post => {
-              const timeAgo = formatTimeAgo(new Date(post.created));
-              return `
-              <a href="post.html?id=${encodeURIComponent(post.id)}" class="activity-item activity-item--clickable">
-                <div class="activity-item__avatar">
-                  <span class="avatar-placeholder">${(post.username || 'U').charAt(0).toUpperCase()}</span>
-                </div>
-                <div class="activity-item__content">
-                  <span class="activity-item__author">@${escapeHtml(post.username || 'Unknown')}</span>
-                  <span class="activity-item__title">${escapeHtml(post.title || 'Untitled')}</span>
-                  <span class="activity-item__meta">${escapeHtml(post.category || 'General')} · ${timeAgo}</span>
-                </div>
-              </a>
-            `;
-            })
-            .join('');
-        } catch (error) {
-          console.error('Error loading following feed:', error);
-          container.innerHTML = `
-            <div class="activity-empty">
-              <p>Failed to load feed.</p>
-            </div>
-          `;
-        }
-      }
-
-      // ============================================
-      // Bookmarked Posts
-      // ============================================
+      let bookmarksUnsubscribe = null;
 
       async function loadDashboardBookmarks() {
         const container = document.getElementById('dashboard-bookmarks');
         if (!container) return;
 
-        try {
-          const bookmarks = await window.socialManager.getBookmarks();
-
-          if (bookmarks.length === 0) {
-            container.innerHTML = `
-              <div class="activity-empty">
-                <p>No bookmarked posts yet. Save posts from the <a href="community.html">Community</a>!</p>
-              </div>
-            `;
-            return;
-          }
-
-          // Fetch post details for each bookmark (max 5)
-          const { doc, getDoc } = await import(
-            'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js'
-          );
-
-          const postPromises = bookmarks.slice(0, 5).map(async bookmark => {
-            const postRef = doc(window.firebaseFirestore, 'posts', bookmark.postId);
-            const postDoc = await getDoc(postRef);
-            if (postDoc.exists()) {
-              return { id: postDoc.id, ...postDoc.data() };
-            }
-            return null;
-          });
-
-          const posts = (await Promise.all(postPromises)).filter(Boolean);
-
-          if (posts.length === 0) {
-            container.innerHTML = `
-              <div class="activity-empty">
-                <p>No bookmarked posts found.</p>
-              </div>
-            `;
-            return;
-          }
-
-          container.innerHTML = posts
-            .map(post => {
-              const timeAgo = formatTimeAgo(
-                post.created?.toDate?.() || new Date(post.created)
-              );
-              return `
-              <a href="post.html?id=${encodeURIComponent(post.id)}" class="activity-item activity-item--clickable">
-                <div class="activity-item__avatar">
-                  <span class="avatar-placeholder">${(post.username || 'U').charAt(0).toUpperCase()}</span>
-                </div>
-                <div class="activity-item__content">
-                  <span class="activity-item__author">@${escapeHtml(post.username || 'Unknown')}</span>
-                  <span class="activity-item__title">${escapeHtml(post.title || 'Untitled')}</span>
-                  <span class="activity-item__meta">${escapeHtml(post.category || 'General')} · ${timeAgo}</span>
-                </div>
-              </a>
-            `;
-            })
-            .join('');
-        } catch (error) {
-          console.error('Error loading bookmarks:', error);
+        const userId = window.getFirebaseUid();
+        if (!userId) {
           container.innerHTML = `
             <div class="activity-empty">
-              <p>Failed to load bookmarks.</p>
+              <p>Log in to see your bookmarks.</p>
             </div>
           `;
+          return;
         }
+
+        // Import Firestore functions
+        const { collection, query, where, orderBy, limit, onSnapshot, doc, getDoc } =
+          await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+
+        // Unsubscribe from previous listener if exists
+        if (bookmarksUnsubscribe) {
+          bookmarksUnsubscribe();
+        }
+
+        // Set up real-time listener for bookmarks
+        const bookmarksQuery = query(
+          collection(window.firebaseFirestore, 'bookmarks'),
+          where('userId', '==', userId),
+          orderBy('created', 'desc'),
+          limit(5)
+        );
+
+        bookmarksUnsubscribe = onSnapshot(
+          bookmarksQuery,
+          async snapshot => {
+            const bookmarks = snapshot.docs.map(d => ({
+              id: d.id,
+              ...d.data(),
+            }));
+
+            if (bookmarks.length === 0) {
+              container.innerHTML = `
+                <div class="activity-empty">
+                  <p>No bookmarked posts yet. Save posts from the <a href="community.html">Community</a>!</p>
+                </div>
+              `;
+              return;
+            }
+
+            // Fetch post details for each bookmark
+            const postPromises = bookmarks.map(async bookmark => {
+              const postRef = doc(window.firebaseFirestore, 'posts', bookmark.postId);
+              const postDoc = await getDoc(postRef);
+              if (postDoc.exists()) {
+                return { id: postDoc.id, ...postDoc.data() };
+              }
+              return null;
+            });
+
+            const posts = (await Promise.all(postPromises)).filter(Boolean);
+
+            if (posts.length === 0) {
+              container.innerHTML = `
+                <div class="activity-empty">
+                  <p>No bookmarked posts found.</p>
+                </div>
+              `;
+              return;
+            }
+
+            container.innerHTML = posts
+              .map(post => {
+                const timeAgo = formatTimeAgo(
+                  post.created?.toDate?.() || new Date(post.created)
+                );
+                return `
+                <a href="post.html?id=${encodeURIComponent(post.id)}" class="activity-item activity-item--clickable">
+                  <div class="activity-item__avatar">
+                    <span class="avatar-placeholder">${(post.username || 'U').charAt(0).toUpperCase()}</span>
+                  </div>
+                  <div class="activity-item__content">
+                    <span class="activity-item__author">@${escapeHtml(post.username || 'Unknown')}</span>
+                    <span class="activity-item__title">${escapeHtml(post.title || 'Untitled')}</span>
+                    <span class="activity-item__meta">${escapeHtml(post.category || 'General')} · ${timeAgo}</span>
+                  </div>
+                </a>
+              `;
+              })
+              .join('');
+          },
+          error => {
+            console.error('Error listening to bookmarks:', error);
+            container.innerHTML = `
+              <div class="activity-empty">
+                <p>Failed to load bookmarks.</p>
+              </div>
+            `;
+          }
+        );
       }
 
       // ============================================

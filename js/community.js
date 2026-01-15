@@ -9,6 +9,7 @@ let postCategory = '';
 let postLastDoc = null;
 let isPostsLoading = false;
 let allPostsLoaded = false;
+let followingMode = false;
 
 /**
  * Initialize community page on load
@@ -16,12 +17,17 @@ let allPostsLoaded = false;
 async function initCommunityPage() {
   await waitForFirebase();
 
-  // Listen for auth state changes to show/hide new post button
+  // Listen for auth state changes to show/hide new post button and Following filter
   if (window.firebaseAuthState && window.firebaseAuth) {
     window.firebaseAuthState(window.firebaseAuth, user => {
       const newPostContainer = document.getElementById('new-post-container');
       if (newPostContainer) {
         newPostContainer.style.display = user ? 'flex' : 'none';
+      }
+      // Show/hide Following filter button (only for logged-in users)
+      const followingBtn = document.getElementById('following-filter-btn');
+      if (followingBtn) {
+        followingBtn.style.display = user ? 'inline-flex' : 'none';
       }
     });
   }
@@ -72,22 +78,32 @@ async function loadPosts(append = false) {
   }
 
   try {
-    const result = await window.postManager.getFeedPosts({
-      category: postCategory || null,
-      sortBy: postSortBy,
-      limit: 20,
-      lastDoc: append ? postLastDoc : null,
-    });
+    let posts;
 
-    if (!result.success) {
-      throw new Error(result.error || 'Failed to load posts');
-    }
+    if (followingMode) {
+      // Following mode: get posts from followed users only
+      posts = await window.socialManager.getFollowingFeedPosts(50);
+      allPostsLoaded = true; // Following feed doesn't support pagination
+      postLastDoc = null;
+    } else {
+      // Normal mode: get posts from feed
+      const result = await window.postManager.getFeedPosts({
+        category: postCategory || null,
+        sortBy: postSortBy,
+        limit: 20,
+        lastDoc: append ? postLastDoc : null,
+      });
 
-    const posts = result.posts;
-    postLastDoc = result.lastDoc;
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to load posts');
+      }
 
-    if (posts.length < 20) {
-      allPostsLoaded = true;
+      posts = result.posts;
+      postLastDoc = result.lastDoc;
+
+      if (posts.length < 20) {
+        allPostsLoaded = true;
+      }
     }
 
     if (!append) {
@@ -413,10 +429,26 @@ function viewPostDetail(postId) {
 
 function filterByCategory(category) {
   postCategory = category;
+  followingMode = false;
 
   // Update button states
   document.querySelectorAll('.category-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.category === category);
+  });
+
+  loadPosts(false);
+}
+
+/**
+ * Filter to show only posts from followed users
+ */
+function filterByFollowing() {
+  followingMode = true;
+  postCategory = '';
+
+  // Update button states
+  document.querySelectorAll('.category-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.category === 'following');
   });
 
   loadPosts(false);
