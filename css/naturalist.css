@@ -4492,6 +4492,89 @@ body.logged-in .favorite-star {
   }
 }
 
+/* ============================================
+   Dashboard Tabs (Phase 4.4)
+   ============================================ */
+
+.dashboard-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+  margin: 0 2rem;
+  padding: 0;
+}
+
+.dashboard-tab {
+  padding: 1rem 1.5rem;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--ink-secondary);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dashboard-tab:hover {
+  color: var(--ink);
+}
+
+.dashboard-tab.active {
+  color: var(--forest);
+  border-bottom-color: var(--forest);
+}
+
+.dashboard-tab-content {
+  padding: 2rem;
+}
+
+.dashboard-tab-panel {
+  display: none;
+}
+
+.dashboard-tab-panel.active {
+  display: block;
+}
+
+/* Profile Sub-tabs */
+.dashboard-subtabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.dashboard-subtab {
+  padding: 0.5rem 1rem;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 2rem;
+  color: var(--ink-secondary);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dashboard-subtab:hover {
+  border-color: var(--ink-secondary);
+}
+
+.dashboard-subtab.active {
+  background: var(--forest);
+  border-color: var(--forest);
+  color: white;
+}
+
+.dashboard-subtab-panel {
+  display: none;
+}
+
+.dashboard-subtab-panel.active {
+  display: block;
+}
+
 /* ----------------------------------------
    Dashboard Responsive
    ---------------------------------------- */
