@@ -114,7 +114,7 @@ async function loadProfile(userId) {
       // No public tanks - still show profile but with empty state
       loadingEl.style.display = 'none';
       contentEl.style.display = 'block';
-      renderEmptyProfile(userId);
+      await renderEmptyProfile(userId);
       return;
     }
 
@@ -129,7 +129,7 @@ async function loadProfile(userId) {
     contentEl.style.display = 'block';
 
     // Render profile
-    renderProfileHeader(username, tanks[0]);
+    await renderProfileHeader(username, tanks[0], userId);
     renderTanks(tanks);
 
     // Store userId for follow functionality
@@ -147,9 +147,9 @@ async function loadProfile(userId) {
 }
 
 /**
- * Render profile header
+ * Render profile header with bio, experience, and location
  */
-function renderProfileHeader(username, firstTank) {
+async function renderProfileHeader(username, firstTank, userId) {
   // Username
   document.getElementById('profile-username').textContent = `@${username}`;
 
@@ -161,26 +161,108 @@ function renderProfileHeader(username, firstTank) {
   avatarPlaceholder.textContent = username.charAt(0).toUpperCase();
   avatarEl.appendChild(avatarPlaceholder);
 
-  // Member since (from first tank's created date if available)
+  // Try to get full profile data for bio/experience/location
+  let profileData = {};
+  if (userId && window.firestoreGetProfile) {
+    const fullProfile = await window.firestoreGetProfile(userId);
+    profileData = fullProfile?.profile || {};
+  }
+
+  // Build member info with experience and location
   const memberEl = document.getElementById('profile-member-since');
-  if (firstTank?.created) {
+  const details = [];
+
+  if (profileData.experience) {
+    details.push(profileData.experience.charAt(0).toUpperCase() + profileData.experience.slice(1));
+  }
+  if (profileData.location) {
+    details.push(profileData.location);
+  }
+
+  if (details.length > 0) {
+    memberEl.textContent = details.join(' · ');
+  } else if (firstTank?.created) {
     const date = new Date(firstTank.created);
-    const year = date.getFullYear();
-    memberEl.textContent = `Member since ${year}`;
+    memberEl.textContent = `Member since ${date.getFullYear()}`;
   } else {
     memberEl.textContent = 'Community member';
+  }
+
+  // Add bio element if it doesn't exist
+  let bioEl = document.getElementById('profile-bio');
+  if (!bioEl) {
+    bioEl = document.createElement('p');
+    bioEl.id = 'profile-bio';
+    bioEl.className = 'profile-bio';
+    memberEl.parentNode.insertBefore(bioEl, memberEl.nextSibling);
+  }
+
+  if (profileData.bio) {
+    bioEl.textContent = profileData.bio;
+    bioEl.style.display = 'block';
+  } else {
+    bioEl.style.display = 'none';
   }
 }
 
 /**
  * Render empty profile (no public tanks)
  */
-function renderEmptyProfile(userId) {
-  document.getElementById('profile-username').textContent = 'User';
-  document.getElementById('profile-member-since').textContent = 'Community member';
+async function renderEmptyProfile(userId) {
+  // Try to get full profile data including username, bio, experience, location
+  let profileData = {};
+  let username = 'User';
+  if (userId && window.firestoreGetProfile) {
+    const fullProfile = await window.firestoreGetProfile(userId);
+    username = fullProfile?.username || 'User';
+    profileData = fullProfile?.profile || {};
+  }
 
+  document.getElementById('profile-username').textContent = `@${username}`;
+
+  // Avatar
   const avatarEl = document.getElementById('profile-avatar');
-  avatarEl.innerHTML = '<span class="avatar-placeholder">?</span>';
+  avatarEl.innerHTML = '';
+  const avatarPlaceholder = document.createElement('span');
+  avatarPlaceholder.className = 'avatar-placeholder';
+  avatarPlaceholder.textContent = username.charAt(0).toUpperCase();
+  avatarEl.appendChild(avatarPlaceholder);
+
+  // Build member info with experience and location
+  const memberEl = document.getElementById('profile-member-since');
+  const details = [];
+
+  if (profileData.experience) {
+    details.push(profileData.experience.charAt(0).toUpperCase() + profileData.experience.slice(1));
+  }
+  if (profileData.location) {
+    details.push(profileData.location);
+  }
+
+  if (details.length > 0) {
+    memberEl.textContent = details.join(' · ');
+  } else {
+    memberEl.textContent = 'Community member';
+  }
+
+  // Add bio element if it doesn't exist
+  let bioEl = document.getElementById('profile-bio');
+  if (!bioEl) {
+    bioEl = document.createElement('p');
+    bioEl.id = 'profile-bio';
+    bioEl.className = 'profile-bio';
+    memberEl.parentNode.insertBefore(bioEl, memberEl.nextSibling);
+  }
+
+  if (profileData.bio) {
+    bioEl.textContent = profileData.bio;
+    bioEl.style.display = 'block';
+  } else {
+    bioEl.style.display = 'none';
+  }
+
+  // Update page title
+  document.title = `@${username} | Comparium Community`;
 
   document.getElementById('profile-tank-count').textContent = '(0)';
   document.getElementById('profile-tanks-grid').style.display = 'none';
