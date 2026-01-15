@@ -947,6 +947,119 @@ window.storageUploadPostImage = async (postId, file, index) => {
 };
 
 // ============================================================================
+// COMMENTS - Firestore Operations (Phase 4.2)
+// ============================================================================
+
+/**
+ * Create a new comment on a post
+ * @param {string} postId - Post to comment on
+ * @param {string} content - Comment text (1-1000 chars)
+ * @param {string|null} replyTo - Parent comment ID for replies (null for top-level)
+ * @returns {Promise<{success: boolean, commentId?: string, error?: string}>}
+ */
+window.firestoreCreateComment = async (postId, content, replyTo = null) => {
+  if (!firestore) return { success: false, error: 'Database not initialized' };
+
+  const user = auth?.currentUser;
+  if (!user) return { success: false, error: 'Must be logged in to comment' };
+
+  if (!postId) return { success: false, error: 'Post ID required' };
+  if (!content || content.trim().length === 0) return { success: false, error: 'Comment cannot be empty' };
+  if (content.length > 1000) return { success: false, error: 'Comment too long (max 1000 characters)' };
+
+  try {
+    // Get user profile for author info
+    const profile = await window.firestoreGetProfile(user.uid);
+    const username = profile?.profile?.username || 'anonymous';
+    const avatarUrl = profile?.profile?.avatarUrl || null;
+
+    const now = Timestamp.now();
+    const commentData = {
+      postId: postId,
+      userId: user.uid,
+      content: content.trim(),
+      replyTo: replyTo,
+      replyCount: 0,
+      stats: {
+        likeCount: 0,
+      },
+      author: {
+        username: username,
+        avatarUrl: avatarUrl,
+      },
+      created: now,
+      updated: now,
+    };
+
+    const docRef = await addDoc(collection(firestore, 'comments'), commentData);
+    return { success: true, commentId: docRef.id };
+  } catch (e) {
+    return { success: false, error: e.message || 'Failed to create comment' };
+  }
+};
+
+/**
+ * Get comments for a post
+ * @param {string} postId - Post ID
+ * @returns {Promise<{success: boolean, comments?: Array, error?: string}>}
+ */
+window.firestoreGetPostComments = async postId => {
+  if (!firestore) return { success: false, error: 'Database not initialized' };
+  if (!postId) return { success: false, error: 'Post ID required' };
+
+  try {
+    const q = query(
+      collection(firestore, 'comments'),
+      where('postId', '==', postId),
+      orderBy('created', 'asc')
+    );
+
+    const snapshot = await getDocs(q);
+    const comments = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+      created: doc.data().created?.toDate?.()?.toISOString() || null,
+      updated: doc.data().updated?.toDate?.()?.toISOString() || null,
+    }));
+
+    return { success: true, comments };
+  } catch (e) {
+    return { success: false, error: e.message || 'Failed to load comments' };
+  }
+};
+
+/**
+ * Delete a comment (owner only)
+ * @param {string} commentId - Comment ID to delete
+ * @returns {Promise<{success: boolean, error?: string}>}
+ */
+window.firestoreDeleteComment = async commentId => {
+  if (!firestore) return { success: false, error: 'Database not initialized' };
+
+  const user = auth?.currentUser;
+  if (!user) return { success: false, error: 'Must be logged in' };
+  if (!commentId) return { success: false, error: 'Comment ID required' };
+
+  try {
+    const commentRef = doc(firestore, 'comments', commentId);
+    const commentSnap = await getDoc(commentRef);
+
+    if (!commentSnap.exists()) {
+      return { success: false, error: 'Comment not found' };
+    }
+
+    if (commentSnap.data().userId !== user.uid) {
+      return { success: false, error: 'Not authorized to delete this comment' };
+    }
+
+    await deleteDoc(commentRef);
+    return { success: true };
+  } catch (e) {
+    return { success: false, error: e.message || 'Failed to delete comment' };
+  }
+};
+
+// ============================================================================
 // FCM TOKEN MANAGEMENT (Phase 2 - Push Notifications)
 // ============================================================================
 
