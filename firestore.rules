@@ -312,43 +312,6 @@ service cloud.firestore {
     }
 
     // ========================================================================
-    // FOLLOWS COLLECTION (Phase 4.3 - Follows & Bookmarks)
-    // ========================================================================
-    // Structure: follows/{followId}
-    //   - followId format: {followerId}_{followingId}
-    //   - followerId: User who is following
-    //   - followingId: User being followed
-    //   - created: Timestamp when followed
-    //
-    // Anyone can read follows (public social graph), users can only
-    // create/delete their own follows via compound ID validation
-    // ========================================================================
-
-    // Follows collection - compound ID: {followerId}_{followingId}
-    match /follows/{followId} {
-      allow read: if true;
-      allow create: if isAuthenticated() && followId.matches(request.auth.uid + '_.*');
-      allow delete: if isAuthenticated() && followId.matches(request.auth.uid + '_.*');
-    }
-
-    // ========================================================================
-    // BOOKMARKS COLLECTION (Phase 4.3 - Follows & Bookmarks)
-    // ========================================================================
-    // Structure: bookmarks/{bookmarkId}
-    //   - bookmarkId format: {userId}_{postId}
-    //   - userId: User who bookmarked
-    //   - postId: Post being bookmarked
-    //   - created: Timestamp when bookmarked
-    //
-    // Bookmarks are private - only the owner can read and write their bookmarks
-    // ========================================================================
-
-    // Bookmarks collection - compound ID: {userId}_{postId}
-    match /bookmarks/{bookmarkId} {
-      allow read, write: if isAuthenticated() && bookmarkId.matches(request.auth.uid + '_.*');
-    }
-
-    // ========================================================================
     // SPECIES REFERENCE DATABASE (Phase 2)
     // ========================================================================
     // Fish species data - public read, admin-only write
@@ -541,6 +504,66 @@ service cloud.firestore {
       // Cloud Functions can also delete via Admin SDK (bypasses rules)
       allow delete: if isAuthenticated()
                        && resource.data.userId == request.auth.uid;
+    }
+
+    // ========================================================================
+    // FOLLOWS COLLECTION (Phase 4.3 - Social Follows)
+    // ========================================================================
+    // Structure: follows/{followId}
+    //   - followId format: {followerId}_{followingId}
+    //   - followerId: User who is following
+    //   - followingId: User being followed
+    //   - created: Timestamp when followed
+    //
+    // Anyone can read follow relationships (to display follower counts)
+    // Users can only create/delete their own follows
+    // ========================================================================
+
+    match /follows/{followId} {
+      // Anyone can read follows (for follower counts and lists)
+      allow read: if true;
+
+      // User can only create follows where they are the follower
+      allow create: if request.auth != null
+                    && followId.matches(request.auth.uid + '_.*')
+                    && request.resource.data.followerId == request.auth.uid;
+
+      // User can only delete their own follows
+      allow delete: if request.auth != null
+                    && followId.matches(request.auth.uid + '_.*');
+
+      // No updates allowed (follows are create/delete only)
+      allow update: if false;
+    }
+
+    // ========================================================================
+    // BOOKMARKS COLLECTION (Phase 4.3 - Post Bookmarks)
+    // ========================================================================
+    // Structure: bookmarks/{bookmarkId}
+    //   - bookmarkId format: {userId}_{postId}
+    //   - userId: User who bookmarked
+    //   - postId: Post being bookmarked
+    //   - created: Timestamp when bookmarked
+    //
+    // Bookmarks are private - only the owner can read their own bookmarks
+    // ========================================================================
+
+    match /bookmarks/{bookmarkId} {
+      // Only owner can read their bookmarks (bookmarks are private)
+      allow read: if request.auth != null
+                  && bookmarkId.matches(request.auth.uid + '_.*');
+
+      // User can only create bookmarks for themselves
+      allow create: if request.auth != null
+                    && bookmarkId.matches(request.auth.uid + '_.*')
+                    && request.resource.data.userId == request.auth.uid;
+
+      // User can only delete their own bookmarks
+      allow delete: if request.auth != null
+                    && bookmarkId.matches(request.auth.uid + '_.*');
+
+      // No updates allowed (bookmarks are create/delete only)
+      allow update: if false;
     }
 
     // ========================================================================
