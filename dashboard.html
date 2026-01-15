@@ -350,6 +350,64 @@
           </div>
         </div>
         <!-- End My Tanks Tab -->
+
+        <!-- My Profile Tab -->
+        <div id="tab-profile" class="dashboard-tab-panel" style="display: none;">
+          <!-- Profile Sub-tabs -->
+          <nav class="dashboard-subtabs">
+            <button class="dashboard-subtab active" data-subtab="overview" onclick="switchProfileSubtab('overview')">
+              Overview
+            </button>
+            <button class="dashboard-subtab" data-subtab="posts" onclick="switchProfileSubtab('posts')">
+              My Posts
+            </button>
+            <button class="dashboard-subtab" data-subtab="bookmarks" onclick="switchProfileSubtab('bookmarks')">
+              Bookmarks
+            </button>
+          </nav>
+
+          <!-- Overview Sub-tab -->
+          <div id="subtab-overview" class="dashboard-subtab-panel active">
+            <div class="profile-card">
+              <div class="profile-card__avatar">
+                <span id="profile-avatar-letter">U</span>
+              </div>
+              <div class="profile-card__info">
+                <h2 id="profile-card-username">@username</h2>
+                <p id="profile-card-details" class="profile-card__details">
+                  <!-- Experience · Location -->
+                </p>
+                <p id="profile-card-bio" class="profile-card__bio">
+                  <!-- Bio text -->
+                </p>
+                <div id="profile-card-stats" class="profile-card__stats">
+                  <span><strong id="profile-post-count">0</strong> posts</span>
+                  <span><strong id="profile-follower-count">0</strong> followers</span>
+                  <span><strong id="profile-following-count">0</strong> following</span>
+                </div>
+                <div class="profile-card__actions">
+                  <button class="btn btn-primary" onclick="openProfileEditModal()">Edit Profile</button>
+                  <button class="btn btn-ghost" onclick="viewMyProfile()">View Public Profile</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- My Posts Sub-tab -->
+          <div id="subtab-posts" class="dashboard-subtab-panel" style="display: none;">
+            <div id="my-posts-list" class="my-posts-list">
+              <p>Loading your posts...</p>
+            </div>
+          </div>
+
+          <!-- Bookmarks Sub-tab -->
+          <div id="subtab-bookmarks" class="dashboard-subtab-panel" style="display: none;">
+            <div id="my-bookmarks-list" class="my-bookmarks-list">
+              <p>Loading bookmarks...</p>
+            </div>
+          </div>
+        </div>
+        <!-- End My Profile Tab -->
       </div>
       <!-- End Tab Content Container -->
     </div>
