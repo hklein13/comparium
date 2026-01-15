@@ -1676,6 +1676,13 @@
         return date.toLocaleDateString();
       }
 
+      function escapeHtml(text) {
+        if (!text) return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+      }
+
       // Badge starts hidden, updated when notifications load
       updateNotificationBadge(0);
     </script>
