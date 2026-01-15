@@ -59,7 +59,7 @@ async function createPost(postData) {
       },
       author: {
         username: username,
-        avatarUrl: profile?.profile?.avatarUrl || null,
+        avatarUrl: profile?.avatarUrl || null,
       },
       created: new Date().toISOString(),
       updated: new Date().toISOString(),

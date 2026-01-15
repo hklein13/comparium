@@ -97,7 +97,7 @@ async function renderPost(post) {
         ${post.imageUrls
           .map(
             (url, i) => `
-          <img src="${url}" alt="Post image ${i + 1}" onclick="window.open('${url}', '_blank')">
+          <img src="${url}" alt="Post image ${i + 1}" onclick="window.open('${url.replace(/'/g, "\\'")}', '_blank')">
         `
           )
           .join('')}

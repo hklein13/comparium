@@ -71,7 +71,7 @@ window.publicTankManager = {
         },
         author: {
           username: username,
-          avatarUrl: profile?.profile?.avatarUrl || null,
+          avatarUrl: profile?.avatarUrl || null,
         },
         // Link to the tank for rich display
         linkedTank: {
@@ -112,7 +112,7 @@ window.publicTankManager = {
         owner: {
           username: username,
           bio: '',
-          avatarUrl: profile?.profile?.avatarUrl || null,
+          avatarUrl: profile?.avatarUrl || null,
         },
 
         // Stats (ready for Phase 4D likes/views)
