@@ -63,11 +63,13 @@ If a phase is in progress (see "Current Phase" below), there should be a plan fi
 **Current Stats:** 244 fish species (235 with images), 15 aquarium plants (14 with images)
 
 **Recent Features (January 2026):**
+- Phase 4.2: Comments & likes on community posts
+- Phase 4.1: Core posts - community feed with categories
 - Phase 4 MVP: Tank sharing with Community gallery
 - Plant selector for tanks (add plants alongside species)
 - Forgot password feature (login page)
 
-**Current Phase:** Phase 4.1 Core Posts complete (branch ready for merge)
+**Current Phase:** Phase 4.2 Comments & Likes complete (branch ready for merge)
 
 **Active Branch:** `main`
 
@@ -138,7 +140,9 @@ glossary-generator.js (transforms data)
 - `js/public-tank-manager.js` - Syncs tanks to/from publicTanks collection, creates posts when sharing (Phase 4)
 - `js/post-manager.js` - Post CRUD operations and feed queries (Phase 4.1)
 - `js/post-composer.js` - New post modal component (Phase 4.1)
-- `js/post-detail.js` - Post detail page with comments placeholder (Phase 4.1)
+- `js/post-detail.js` - Post detail page with comments (Phase 4.1)
+- `js/comment-manager.js` - Comment CRUD and threading (Phase 4.2)
+- `js/social-manager.js` - Likes/follows/bookmarks (Phase 4.2+)
 - `js/community.js` - Community posts feed with category filtering (Phase 4)
 - `js/maintenance-manager.js` - Event logging and schedule management for tanks
 - `scripts/serviceAccountKey.json` - Firebase Admin credentials (gitignored, never commit)
@@ -249,7 +253,7 @@ Separate Node.js project using CommonJS (not ES6 modules).
 ```
 functions/
 ├── package.json     # Dependencies: firebase-admin, firebase-functions, firebase-messaging
-├── index.js         # All function definitions (4 functions)
+├── index.js         # All function definitions (8 functions)
 └── .gitignore       # Ignores node_modules, secrets
 ```
 
@@ -260,6 +264,10 @@ functions/
 | `checkDueSchedules` | Schedule (8 AM UTC daily) | Creates notifications for due maintenance |
 | `sendPushNotification` | Firestore onCreate (notifications) | Sends FCM push to user's devices |
 | `cleanupExpiredNotifications` | Schedule (Sunday 2 AM UTC) | Deletes old notifications and invalid tokens |
+| `onCommentCreated` | Firestore onCreate (comments) | Increment post/comment counts |
+| `onCommentDeleted` | Firestore onDelete (comments) | Decrement post/comment counts |
+| `onLikeCreated` | Firestore onCreate (likes) | Increment like counts |
+| `onLikeDeleted` | Firestore onDelete (likes) | Decrement like counts |
 
 **Deployment:** `firebase deploy --only functions` (takes ~2 min)
 
@@ -300,8 +308,9 @@ Development follows a phased approach. See `DATA-MODEL.md` for complete specific
 | **Phase 2** | ✅ Complete | Notifications system + FCM push notifications |
 | **Phase 3** | 🔄 In Progress | Content expansion (3A-3D, 3G done; 3E-3F pending) |
 | **Phase 4 MVP** | ✅ Complete | Tank sharing + Community gallery |
-| **Phase 4.1** | ✅ Complete | Core posts - community feed with categories (branch ready for merge) |
-| **Phase 4 Full** | ⏳ Planned | Follows, comments, likes |
+| **Phase 4.1** | ✅ Complete | Core posts - community feed with categories |
+| **Phase 4.2** | ✅ Complete | Comments & likes on posts |
+| **Phase 4 Full** | ⏳ Planned | Follows, bookmarks, enhanced profiles |
 | **Phase 5** | ⏳ Planned | Diagnostic tool (fish health decision tree) |
 | **Phase 6** | ⏳ Long-term | Native mobile app (iOS + Android) |
 
@@ -434,6 +443,8 @@ allow write: if isAdmin();        // Admin-only writes
 - `fcmTokens` - FCM push notification tokens (owner read/write)
 - `publicTanks` - Shared tanks for community gallery (public read, owner write) - **Phase 4**
 - `posts` - Community posts with categories (public read, owner write) - **Phase 4.1**
+- `comments` - Comments on posts with threading (public read, owner write) - **Phase 4.2**
+- `likes` - User likes on posts/comments (public read, owner create/delete) - **Phase 4.2**
 
 ## Image System
 
