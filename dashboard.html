@@ -595,6 +595,62 @@
     <script src="js/post-manager.js"></script>
     <script>
       // ============================================
+      // Dashboard Tab Navigation
+      // ============================================
+
+      function switchDashboardTab(tabName) {
+        // Update tab buttons
+        document.querySelectorAll('.dashboard-tab').forEach(tab => {
+          tab.classList.toggle('active', tab.dataset.tab === tabName);
+        });
+
+        // Update tab panels
+        document.querySelectorAll('.dashboard-tab-panel').forEach(panel => {
+          panel.classList.remove('active');
+          panel.style.display = 'none';
+        });
+
+        const activePanel = document.getElementById(`tab-${tabName}`);
+        if (activePanel) {
+          activePanel.classList.add('active');
+          activePanel.style.display = 'block';
+        }
+
+        // Load tab-specific data
+        if (tabName === 'profile') {
+          loadProfileTab();
+        } else if (tabName === 'settings') {
+          loadSettingsTab();
+        }
+      }
+
+      function switchProfileSubtab(subtabName) {
+        // Update subtab buttons
+        document.querySelectorAll('.dashboard-subtab').forEach(tab => {
+          tab.classList.toggle('active', tab.dataset.subtab === subtabName);
+        });
+
+        // Update subtab panels
+        document.querySelectorAll('.dashboard-subtab-panel').forEach(panel => {
+          panel.classList.remove('active');
+          panel.style.display = 'none';
+        });
+
+        const activePanel = document.getElementById(`subtab-${subtabName}`);
+        if (activePanel) {
+          activePanel.classList.add('active');
+          activePanel.style.display = 'block';
+        }
+
+        // Load subtab-specific data
+        if (subtabName === 'posts') {
+          loadMyPosts();
+        } else if (subtabName === 'bookmarks') {
+          loadMyBookmarks();
+        }
+      }
+
+      // ============================================
       // Dashboard Initialization
       // ============================================
 
