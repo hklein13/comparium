@@ -269,10 +269,33 @@ function createPostCard(post) {
 
   const likeBtn = document.createElement('button');
   likeBtn.className = 'post-card__action';
-  likeBtn.innerHTML = `<span>&#9825;</span> ${post.stats?.likeCount || 0}`;
-  likeBtn.onclick = e => {
+  likeBtn.innerHTML = `<span class="like-icon">&#9825;</span> <span class="like-count">${post.stats?.likeCount || 0}</span>`;
+  likeBtn.onclick = async e => {
     e.stopPropagation();
-    // Like functionality will be added in Phase 4.2
+
+    if (!window.firebaseAuth?.currentUser) {
+      window.location.href = 'login.html';
+      return;
+    }
+
+    const result = await window.socialManager.togglePostLike(post.id);
+    if (result.success) {
+      const countSpan = likeBtn.querySelector('.like-count');
+      const iconSpan = likeBtn.querySelector('.like-icon');
+      let count = parseInt(countSpan.textContent) || 0;
+
+      if (result.liked) {
+        count++;
+        iconSpan.innerHTML = '&#9829;';
+        likeBtn.classList.add('liked');
+      } else {
+        count = Math.max(0, count - 1);
+        iconSpan.innerHTML = '&#9825;';
+        likeBtn.classList.remove('liked');
+      }
+
+      countSpan.textContent = count;
+    }
   };
   actions.appendChild(likeBtn);
 
