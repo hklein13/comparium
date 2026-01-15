@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Post | Comparium</title>
+    <meta name="description" content="View community post on Comparium" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/naturalist.css" />
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="header">
+      <a href="index.html" class="logo">Comparium</a>
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="compare.html">Compare</a>
+        <a href="glossary.html">Glossary</a>
+        <a href="community.html">Community</a>
+        <a href="faq.html">FAQ</a>
+        <a href="dashboard.html">Dashboard</a>
+        <div id="auth-links">
+          <a href="login.html">Login</a>
+          <a href="signup.html" class="nav-cta">Sign Up</a>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="post-detail-main">
+      <div id="post-container" class="post-detail-container">
+        <div class="community-loading">
+          <p>Loading post...</p>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>Comparium &copy; 2026 | Built for aquarium enthusiasts</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script type="module" src="js/firebase-init.js"></script>
+    <script src="js/storage-service.js"></script>
+    <script src="js/auth-manager.js"></script>
+    <script src="js/post-manager.js"></script>
+    <script src="js/post-detail.js"></script>
+  </body>
+</html>

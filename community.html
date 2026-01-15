@@ -5,33 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- SEO Meta Tags -->
-    <title>Community Tanks | Comparium - Shared Aquarium Setups</title>
+    <title>Community | Comparium - Aquarium Community</title>
     <meta
       name="description"
-      content="Browse aquarium setups shared by the Comparium community. Get inspiration from real tanks with detailed species lists and care information."
+      content="Join the Comparium community. Share your tanks, ask questions, get tips, and connect with fellow aquarists."
     />
     <meta
       name="keywords"
-      content="aquarium setups, community tanks, fish tank ideas, aquarium inspiration, shared tanks"
+      content="aquarium community, fish tank forum, aquarium help, tank sharing, fishkeeping tips"
     />
     <meta name="author" content="Comparium" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://comparium.net/community.html" />
-    <meta property="og:title" content="Community Tanks | Comparium" />
+    <meta property="og:title" content="Community | Comparium" />
     <meta
       property="og:description"
-      content="Browse aquarium setups shared by the Comparium community. Get inspiration from real tanks."
+      content="Join the Comparium community. Share your tanks and connect with fellow aquarists."
     />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content="https://comparium.net/community.html" />
-    <meta property="twitter:title" content="Community Tanks | Comparium" />
+    <meta property="twitter:title" content="Community | Comparium" />
     <meta
       property="twitter:description"
-      content="Browse aquarium setups shared by the Comparium community. Get inspiration from real tanks."
+      content="Join the Comparium community. Share your tanks and connect with fellow aquarists."
     />
 
     <!-- Favicon -->
@@ -79,47 +79,70 @@
 
     <!-- Community Hero Section -->
     <section class="community-hero">
-      <h1>Community Tanks</h1>
+      <h1>Community</h1>
       <p class="community-hero-subtitle">
-        Explore setups shared by fellow aquarists for inspiration and ideas
+        Share your tanks, ask questions, and connect with fellow aquarists
       </p>
     </section>
 
     <!-- Main Content -->
     <main class="community-main">
-      <!-- Filter/Sort Bar -->
+      <!-- Category Filter + Sort -->
       <div class="community-toolbar">
+        <div class="post-categories">
+          <button class="category-btn active" data-category="" onclick="filterByCategory('')">
+            All
+          </button>
+          <button class="category-btn" data-category="tanks" onclick="filterByCategory('tanks')">
+            Tanks
+          </button>
+          <button class="category-btn" data-category="help" onclick="filterByCategory('help')">
+            Help
+          </button>
+          <button class="category-btn" data-category="tips" onclick="filterByCategory('tips')">
+            Tips
+          </button>
+          <button class="category-btn" data-category="fishid" onclick="filterByCategory('fishid')">
+            Fish ID
+          </button>
+          <button
+            class="category-btn"
+            data-category="milestone"
+            onclick="filterByCategory('milestone')"
+          >
+            Milestones
+          </button>
+        </div>
         <div class="community-sort">
-          <label for="sort-select">Sort by:</label>
-          <select id="sort-select" onchange="changeSortOrder()">
-            <option value="newest">Newest First</option>
-            <option value="size">Largest Tanks</option>
+          <label for="post-sort-select">Sort:</label>
+          <select id="post-sort-select" onchange="changePostSortOrder()">
+            <option value="newest">Newest</option>
+            <option value="top">Top</option>
           </select>
         </div>
-        <div class="community-count">
-          <span id="tank-count">0</span> shared tanks
-        </div>
       </div>
 
-      <!-- Tank Gallery Grid -->
-      <div id="community-gallery" class="community-gallery">
+      <!-- New Post Button (logged in only) -->
+      <div id="new-post-container" class="new-post-container" style="display: none">
+        <button class="btn btn-primary" onclick="openPostComposer()">New Post</button>
+      </div>
+
+      <!-- Posts Feed -->
+      <div id="posts-feed" class="posts-feed">
         <div class="community-loading">
-          <p>Loading community tanks...</p>
+          <p>Loading posts...</p>
         </div>
       </div>
 
-      <!-- Load More Button -->
-      <div id="load-more-container" class="load-more-container" style="display: none">
-        <button id="load-more-btn" class="btn btn-ghost" onclick="loadMoreTanks()">
-          Load More Tanks
-        </button>
+      <!-- Load More Posts -->
+      <div id="load-more-posts-container" class="load-more-container" style="display: none">
+        <button class="btn btn-ghost" onclick="loadMorePosts()">Load More</button>
       </div>
 
-      <!-- Empty State -->
-      <div id="community-empty" class="community-empty" style="display: none">
-        <h3>No tanks shared yet</h3>
-        <p>Be the first to share your setup with the community!</p>
-        <a href="dashboard.html" class="btn btn-primary">Go to Dashboard</a>
+      <!-- Empty Posts State -->
+      <div id="posts-empty" class="community-empty" style="display: none">
+        <h3>No posts yet</h3>
+        <p>Be the first to share with the community!</p>
       </div>
     </main>
 
@@ -132,8 +155,8 @@
     <script type="module" src="js/firebase-init.js"></script>
     <script src="js/storage-service.js"></script>
     <script src="js/auth-manager.js"></script>
-    <script src="js/fish-data.js"></script>
-    <script src="js/public-tank-manager.js"></script>
+    <script src="js/post-manager.js"></script>
+    <script src="js/post-composer.js"></script>
     <script src="js/community.js"></script>
   </body>
 </html>

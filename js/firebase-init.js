@@ -153,6 +153,7 @@ import {
   orderBy,
   Timestamp,
   limit,
+  startAfter,
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
 window.firestoreGetProfile = async uid => {
@@ -748,6 +749,200 @@ window.firestoreMarkNotificationRead = async notificationId => {
     return true;
   } catch (e) {
     return false;
+  }
+};
+
+// ============================================================================
+// POSTS (Phase 4 Full - Social Features)
+// ============================================================================
+
+/**
+ * Create a new post
+ * @param {object} postData - Post data object
+ * @returns {Promise<{success: boolean, postId?: string}>}
+ */
+window.firestoreCreatePost = async postData => {
+  if (!firestore) return { success: false, error: 'Firestore not initialized' };
+  try {
+    const post = {
+      ...postData,
+      created: Timestamp.now(),
+      updated: Timestamp.now(),
+    };
+    const ref = await addDoc(collection(firestore, 'posts'), post);
+    return { success: true, postId: ref.id };
+  } catch (e) {
+    return { success: false, error: e.message };
+  }
+};
+
+/**
+ * Get posts for community feed
+ * @param {object} options - { category, sortBy, limit, lastDoc }
+ * @returns {Promise<{success: boolean, posts: array, lastDoc: any}>}
+ */
+window.firestoreGetPosts = async (options = {}) => {
+  if (!firestore) return { success: false, posts: [] };
+
+  const {
+    category = null,
+    sortBy = 'newest',
+    limit: maxResults = 20,
+    lastDoc = null,
+  } = options;
+
+  try {
+    let constraints = [where('visibility', '==', 'public')];
+
+    // Add category filter if specified
+    if (category) {
+      constraints.push(where('category', '==', category));
+    }
+
+    // Add sort order
+    if (sortBy === 'top') {
+      constraints.push(orderBy('stats.likeCount', 'desc'));
+    } else {
+      constraints.push(orderBy('created', 'desc'));
+    }
+
+    // Add limit
+    constraints.push(limit(maxResults));
+
+    // Add pagination cursor
+    if (lastDoc) {
+      constraints.push(startAfter(lastDoc));
+    }
+
+    const q = query(collection(firestore, 'posts'), ...constraints);
+    const snap = await getDocs(q);
+
+    const posts = snap.docs.map(d => ({
+      id: d.id,
+      ...d.data(),
+      created: d.data().created?.toDate?.()?.toISOString() || d.data().created,
+      updated: d.data().updated?.toDate?.()?.toISOString() || d.data().updated,
+    }));
+
+    const newLastDoc = snap.docs.length > 0 ? snap.docs[snap.docs.length - 1] : null;
+
+    return { success: true, posts, lastDoc: newLastDoc };
+  } catch (e) {
+    return { success: false, posts: [], error: e.message };
+  }
+};
+
+/**
+ * Get a single post by ID
+ * @param {string} postId
+ * @returns {Promise<{success: boolean, post?: object}>}
+ */
+window.firestoreGetPost = async postId => {
+  if (!firestore || !postId) return { success: false };
+  try {
+    const ref = doc(firestore, 'posts', postId);
+    const snap = await getDoc(ref);
+    if (!snap.exists()) {
+      return { success: false, error: 'Post not found' };
+    }
+    const data = snap.data();
+    return {
+      success: true,
+      post: {
+        id: snap.id,
+        ...data,
+        created: data.created?.toDate?.()?.toISOString() || data.created,
+        updated: data.updated?.toDate?.()?.toISOString() || data.updated,
+      },
+    };
+  } catch (e) {
+    return { success: false, error: e.message };
+  }
+};
+
+/**
+ * Delete a post (verifies ownership)
+ * @param {string} uid - User's UID
+ * @param {string} postId - Post ID
+ * @returns {Promise<{success: boolean}>}
+ */
+window.firestoreDeletePost = async (uid, postId) => {
+  if (!firestore || !uid || !postId) return { success: false };
+  try {
+    const ref = doc(firestore, 'posts', postId);
+    const snap = await getDoc(ref);
+    if (!snap.exists() || snap.data().userId !== uid) {
+      return { success: false, error: 'Not authorized' };
+    }
+    await deleteDoc(ref);
+    return { success: true };
+  } catch (e) {
+    return { success: false, error: e.message };
+  }
+};
+
+/**
+ * Get posts by a specific user
+ * @param {string} userId
+ * @param {number} maxResults
+ * @returns {Promise<{success: boolean, posts: array}>}
+ */
+window.firestoreGetUserPosts = async (userId, maxResults = 20) => {
+  if (!firestore || !userId) return { success: false, posts: [] };
+  try {
+    const q = query(
+      collection(firestore, 'posts'),
+      where('userId', '==', userId),
+      orderBy('created', 'desc'),
+      limit(maxResults)
+    );
+    const snap = await getDocs(q);
+    const posts = snap.docs.map(d => ({
+      id: d.id,
+      ...d.data(),
+      created: d.data().created?.toDate?.()?.toISOString() || d.data().created,
+      updated: d.data().updated?.toDate?.()?.toISOString() || d.data().updated,
+    }));
+    return { success: true, posts };
+  } catch (e) {
+    return { success: false, posts: [], error: e.message };
+  }
+};
+
+/**
+ * Upload a post image to Firebase Storage
+ * @param {string} postId - Post ID (used in path)
+ * @param {File} file - Image file
+ * @param {number} index - Image index (0-3)
+ * @returns {Promise<{success: boolean, url?: string, error?: string}>}
+ */
+window.storageUploadPostImage = async (postId, file, index) => {
+  if (!storage || !postId || !file) {
+    return { success: false, error: 'Missing required parameters' };
+  }
+
+  // Validate file type
+  const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
+  if (!validTypes.includes(file.type)) {
+    return { success: false, error: 'Invalid file type. Use JPEG, PNG, or WebP.' };
+  }
+
+  // Validate file size (max 5MB)
+  const maxSize = 5 * 1024 * 1024;
+  if (file.size > maxSize) {
+    return { success: false, error: 'File too large. Maximum 5MB.' };
+  }
+
+  try {
+    const storageRef = ref(storage, `images/posts/${postId}/${index}.jpg`);
+    const snapshot = await uploadBytes(storageRef, file, {
+      contentType: file.type,
+      cacheControl: 'public, max-age=31536000',
+    });
+    const url = await getDownloadURL(snapshot.ref);
+    return { success: true, url };
+  } catch (e) {
+    return { success: false, error: e.message || 'Upload failed' };
   }
 };
 

@@ -1,23 +1,33 @@
 /**
- * Community Gallery - Public Tank Browsing
- * Phase 4 MVP: Display and browse community-shared tanks
+ * Community Page - Posts Feed
+ * Phase 4 Full: Social features
  */
 
 // State
-let currentSortBy = 'newest';
-let lastDoc = null;
-let isLoading = false;
-let allTanksLoaded = false;
+let postSortBy = 'newest';
+let postCategory = '';
+let postLastDoc = null;
+let isPostsLoading = false;
+let allPostsLoaded = false;
 
 /**
- * Initialize community gallery on page load
+ * Initialize community page on load
  */
-async function initCommunityGallery() {
-  // Wait for Firebase to be ready
+async function initCommunityPage() {
   await waitForFirebase();
 
-  // Load initial tanks
-  await loadPublicTanks();
+  // Listen for auth state changes to show/hide new post button
+  if (window.firebaseAuthState && window.firebaseAuth) {
+    window.firebaseAuthState(window.firebaseAuth, user => {
+      const newPostContainer = document.getElementById('new-post-container');
+      if (newPostContainer) {
+        newPostContainer.style.display = user ? 'flex' : 'none';
+      }
+    });
+  }
+
+  // Load initial posts
+  await loadPosts();
 }
 
 /**
@@ -45,220 +55,290 @@ function waitForFirebase() {
 }
 
 /**
- * Load public tanks from Firestore
+ * Load posts for the feed
  */
-async function loadPublicTanks(append = false) {
-  if (isLoading || (allTanksLoaded && append)) return;
+async function loadPosts(append = false) {
+  if (isPostsLoading || (allPostsLoaded && append)) return;
 
-  isLoading = true;
-  const gallery = document.getElementById('community-gallery');
-  const loadMoreBtn = document.getElementById('load-more-container');
-  const emptyState = document.getElementById('community-empty');
+  isPostsLoading = true;
+  const feed = document.getElementById('posts-feed');
+  const loadMoreBtn = document.getElementById('load-more-posts-container');
+  const emptyState = document.getElementById('posts-empty');
 
   if (!append) {
-    gallery.innerHTML = '<div class="community-loading"><p>Loading community tanks...</p></div>';
-    lastDoc = null;
-    allTanksLoaded = false;
+    feed.innerHTML = '<div class="community-loading"><p>Loading posts...</p></div>';
+    postLastDoc = null;
+    allPostsLoaded = false;
   }
 
   try {
-    const result = await window.publicTankManager.getPublicTanks({
-      limit: 12,
-      sortBy: currentSortBy,
-      lastDoc: append ? lastDoc : null,
+    const result = await window.postManager.getFeedPosts({
+      category: postCategory || null,
+      sortBy: postSortBy,
+      limit: 20,
+      lastDoc: append ? postLastDoc : null,
     });
 
     if (!result.success) {
-      throw new Error(result.error || 'Failed to load tanks');
+      throw new Error(result.error || 'Failed to load posts');
     }
 
-    const tanks = result.tanks;
-    lastDoc = result.lastDoc;
+    const posts = result.posts;
+    postLastDoc = result.lastDoc;
 
-    // Check if we've loaded all tanks
-    if (tanks.length < 12) {
-      allTanksLoaded = true;
+    if (posts.length < 20) {
+      allPostsLoaded = true;
     }
 
     if (!append) {
-      gallery.innerHTML = '';
+      feed.innerHTML = '';
     }
 
-    if (tanks.length === 0 && !append) {
-      // Show empty state
-      gallery.style.display = 'none';
+    if (posts.length === 0 && !append) {
+      feed.style.display = 'none';
       emptyState.style.display = 'block';
       loadMoreBtn.style.display = 'none';
-      updateTankCount(0);
     } else {
-      gallery.style.display = '';
+      feed.style.display = '';
       emptyState.style.display = 'none';
 
-      // Render tank cards
-      tanks.forEach(tank => {
-        const card = createTankCard(tank);
-        gallery.appendChild(card);
+      posts.forEach(post => {
+        const card = createPostCard(post);
+        feed.appendChild(card);
       });
 
-      // Show/hide load more button
-      loadMoreBtn.style.display = allTanksLoaded ? 'none' : 'flex';
-
-      // Update count (approximate since we're paginating)
-      updateTankCount(gallery.querySelectorAll('.community-card').length);
+      loadMoreBtn.style.display = allPostsLoaded ? 'none' : 'flex';
     }
   } catch (error) {
-    console.error('Error loading community tanks:', error);
     if (!append) {
-      gallery.innerHTML = `
+      feed.innerHTML = `
         <div class="community-error">
-          <p>Unable to load community tanks.</p>
-          <button class="btn btn-ghost" onclick="loadPublicTanks()">Try Again</button>
+          <p>Unable to load posts.</p>
+          <button class="btn btn-ghost" onclick="loadPosts()">Try Again</button>
         </div>
       `;
     }
   } finally {
-    isLoading = false;
+    isPostsLoading = false;
   }
 }
 
 /**
- * Create a tank card element
+ * Create a post card element
  */
-function createTankCard(tank) {
+function createPostCard(post) {
   const card = document.createElement('article');
-  card.className = 'community-card';
-  card.onclick = () => viewTankDetail(tank.id);
+  card.className = 'post-card';
+  card.dataset.postId = post.id;
 
-  // Create card image/mosaic
-  const imageSection = document.createElement('div');
-  imageSection.className = 'community-card__image';
+  // Header with avatar and meta
+  const header = document.createElement('div');
+  header.className = 'post-card__header';
 
-  if (tank.coverPhoto) {
+  const avatar = document.createElement('div');
+  avatar.className = 'post-card__avatar';
+  if (post.author?.avatarUrl) {
     const img = document.createElement('img');
-    img.src = tank.coverPhoto;
-    img.alt = tank.name || 'Tank photo';
-    img.loading = 'lazy';
-    imageSection.appendChild(img);
+    img.src = post.author.avatarUrl;
+    img.alt = post.author.username;
+    avatar.appendChild(img);
   } else {
-    // Create species mosaic
-    const mosaic = createSpeciesMosaic(tank.species || []);
-    imageSection.appendChild(mosaic);
+    avatar.textContent = (post.author?.username || 'A').charAt(0).toUpperCase();
   }
-
-  // Size badge
-  if (tank.size) {
-    const badge = document.createElement('span');
-    badge.className = 'community-card__badge';
-    badge.textContent = `${tank.size}${tank.sizeUnit === 'liters' ? 'L' : 'g'}`;
-    imageSection.appendChild(badge);
-  }
-
-  card.appendChild(imageSection);
-
-  // Card content
-  const content = document.createElement('div');
-  content.className = 'community-card__content';
-
-  const title = document.createElement('h3');
-  title.className = 'community-card__title';
-  title.textContent = tank.name || 'Unnamed Tank';
-  content.appendChild(title);
+  header.appendChild(avatar);
 
   const meta = document.createElement('div');
-  meta.className = 'community-card__meta';
+  meta.className = 'post-card__meta';
 
-  const owner = document.createElement('span');
-  owner.className = 'community-card__owner';
-  owner.textContent = `by ${tank.username || 'Anonymous'}`;
-  meta.appendChild(owner);
+  const author = document.createElement('span');
+  author.className = 'post-card__author';
+  author.textContent = '@' + (post.author?.username || 'anonymous');
+  meta.appendChild(author);
 
-  const stats = document.createElement('span');
-  stats.className = 'community-card__stats';
-  const speciesCount = tank.species?.length || 0;
-  const plantCount = tank.plants?.length || 0;
-  const parts = [`${speciesCount} species`];
-  if (plantCount > 0) parts.push(`${plantCount} plants`);
-  stats.textContent = parts.join(' · ');
-  meta.appendChild(stats);
+  const info = document.createElement('div');
+  info.className = 'post-card__info';
 
-  content.appendChild(meta);
+  const categoryLabel = window.postManager.POST_CATEGORIES[post.category]?.label || post.category;
+  const categorySpan = document.createElement('span');
+  categorySpan.className = 'post-card__category';
+  categorySpan.textContent = categoryLabel;
+  info.appendChild(categorySpan);
+
+  const timeSpan = document.createElement('span');
+  timeSpan.textContent = formatTimeAgo(post.created);
+  info.appendChild(timeSpan);
+
+  meta.appendChild(info);
+  header.appendChild(meta);
+  card.appendChild(header);
+
+  // Content
+  const content = document.createElement('div');
+  content.className = 'post-card__content';
+  content.textContent = post.content;
   card.appendChild(content);
+
+  // Linked tank preview (for tanks category posts)
+  if (post.linkedTank) {
+    const tankPreview = document.createElement('div');
+    tankPreview.className = 'post-card__tank-preview';
+    tankPreview.onclick = e => {
+      e.stopPropagation();
+      window.location.href = `tank.html?id=${encodeURIComponent(post.linkedTank.tankId)}`;
+    };
+
+    // Tank photo or placeholder
+    const tankImage = document.createElement('div');
+    tankImage.className = 'post-card__tank-image';
+    if (post.linkedTank.coverPhoto) {
+      const img = document.createElement('img');
+      img.src = post.linkedTank.coverPhoto;
+      img.alt = post.linkedTank.name;
+      img.loading = 'lazy';
+      tankImage.appendChild(img);
+    } else {
+      tankImage.classList.add('placeholder');
+      tankImage.textContent = post.linkedTank.name.charAt(0).toUpperCase();
+    }
+    tankPreview.appendChild(tankImage);
+
+    // Tank info
+    const tankInfo = document.createElement('div');
+    tankInfo.className = 'post-card__tank-info';
+
+    const tankName = document.createElement('span');
+    tankName.className = 'post-card__tank-name';
+    tankName.textContent = post.linkedTank.name;
+    tankInfo.appendChild(tankName);
+
+    const tankStats = document.createElement('span');
+    tankStats.className = 'post-card__tank-stats';
+    const parts = [];
+    if (post.linkedTank.size) {
+      const unit = post.linkedTank.sizeUnit === 'liters' ? 'L' : 'gal';
+      parts.push(`${post.linkedTank.size}${unit}`);
+    }
+    if (post.linkedTank.speciesCount > 0) {
+      parts.push(`${post.linkedTank.speciesCount} species`);
+    }
+    if (post.linkedTank.plantCount > 0) {
+      parts.push(`${post.linkedTank.plantCount} plants`);
+    }
+    tankStats.textContent = parts.join(' · ');
+    tankInfo.appendChild(tankStats);
+
+    tankPreview.appendChild(tankInfo);
+
+    const viewLink = document.createElement('span');
+    viewLink.className = 'post-card__tank-link';
+    viewLink.textContent = 'View Tank →';
+    tankPreview.appendChild(viewLink);
+
+    card.appendChild(tankPreview);
+  }
+
+  // Images (if any) - skip for tank posts since we show the tank preview
+  if (post.imageUrls && post.imageUrls.length > 0 && !post.linkedTank) {
+    const images = document.createElement('div');
+    images.className = 'post-card__images';
+
+    const count = post.imageUrls.length;
+    if (count === 1) images.classList.add('single');
+    else if (count === 2) images.classList.add('double');
+    else if (count === 3) images.classList.add('triple');
+    else images.classList.add('quad');
+
+    post.imageUrls.forEach((url, idx) => {
+      const img = document.createElement('img');
+      img.src = url;
+      img.alt = `Post image ${idx + 1}`;
+      img.loading = 'lazy';
+      img.onclick = e => {
+        e.stopPropagation();
+        window.open(url, '_blank');
+      };
+      images.appendChild(img);
+    });
+
+    card.appendChild(images);
+  }
+
+  // Actions
+  const actions = document.createElement('div');
+  actions.className = 'post-card__actions';
+
+  const likeBtn = document.createElement('button');
+  likeBtn.className = 'post-card__action';
+  likeBtn.innerHTML = `<span>&#9825;</span> ${post.stats?.likeCount || 0}`;
+  likeBtn.onclick = e => {
+    e.stopPropagation();
+    // Like functionality will be added in Phase 4.2
+  };
+  actions.appendChild(likeBtn);
+
+  const commentBtn = document.createElement('button');
+  commentBtn.className = 'post-card__action';
+  commentBtn.innerHTML = `<span>&#128172;</span> ${post.stats?.commentCount || 0}`;
+  commentBtn.onclick = e => {
+    e.stopPropagation();
+    viewPostDetail(post.id);
+  };
+  actions.appendChild(commentBtn);
+
+  card.appendChild(actions);
+
+  // Click card to view detail
+  card.onclick = () => viewPostDetail(post.id);
 
   return card;
 }
 
 /**
- * Create a species mosaic for tanks without cover photos
+ * Format timestamp as relative time
  */
-function createSpeciesMosaic(speciesKeys) {
-  const mosaic = document.createElement('div');
-  mosaic.className = 'community-card__mosaic';
+function formatTimeAgo(dateStr) {
+  const date = new Date(dateStr);
+  const now = new Date();
+  const diffMs = now - date;
+  const diffMins = Math.floor(diffMs / 60000);
+  const diffHours = Math.floor(diffMs / 3600000);
+  const diffDays = Math.floor(diffMs / 86400000);
 
-  if (!speciesKeys || speciesKeys.length === 0) {
-    mosaic.classList.add('empty');
-    const placeholder = document.createElement('span');
-    placeholder.textContent = 'No species';
-    mosaic.appendChild(placeholder);
-    return mosaic;
-  }
+  if (diffMins < 1) return 'just now';
+  if (diffMins < 60) return `${diffMins}m ago`;
+  if (diffHours < 24) return `${diffHours}h ago`;
+  if (diffDays < 7) return `${diffDays}d ago`;
 
-  // Get up to 4 species images
-  const images = speciesKeys
-    .slice(0, 4)
-    .map(key => window.fishDatabase?.[key]?.imageUrl)
-    .filter(url => url);
+  return date.toLocaleDateString();
+}
 
-  if (images.length === 0) {
-    mosaic.classList.add('empty');
-    const placeholder = document.createElement('span');
-    placeholder.textContent = `${speciesKeys.length} species`;
-    mosaic.appendChild(placeholder);
-    return mosaic;
-  }
+function viewPostDetail(postId) {
+  window.location.href = `post.html?id=${encodeURIComponent(postId)}`;
+}
 
-  images.forEach(url => {
-    const img = document.createElement('img');
-    img.src = url;
-    img.alt = 'Species';
-    img.loading = 'lazy';
-    mosaic.appendChild(img);
+function filterByCategory(category) {
+  postCategory = category;
+
+  // Update button states
+  document.querySelectorAll('.category-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.category === category);
   });
 
-  return mosaic;
+  loadPosts(false);
 }
 
-/**
- * Navigate to tank detail page
- */
-function viewTankDetail(tankId) {
-  window.location.href = `tank.html?id=${encodeURIComponent(tankId)}`;
+function changePostSortOrder() {
+  const select = document.getElementById('post-sort-select');
+  postSortBy = select.value;
+  loadPosts(false);
 }
 
-/**
- * Change sort order and reload
- */
-function changeSortOrder() {
-  const select = document.getElementById('sort-select');
-  currentSortBy = select.value;
-  loadPublicTanks(false);
+function loadMorePosts() {
+  loadPosts(true);
 }
 
-/**
- * Load more tanks (pagination)
- */
-function loadMoreTanks() {
-  loadPublicTanks(true);
-}
-
-/**
- * Update the displayed tank count
- */
-function updateTankCount(count) {
-  const countEl = document.getElementById('tank-count');
-  if (countEl) {
-    countEl.textContent = count;
-  }
-}
+// Expose loadPosts for post-composer.js to call after creating a post
+window.loadPosts = loadPosts;
 
 // Initialize on DOM ready
-document.addEventListener('DOMContentLoaded', initCommunityGallery);
+document.addEventListener('DOMContentLoaded', initCommunityPage);

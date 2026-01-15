@@ -220,6 +220,34 @@ service cloud.firestore {
     }
 
     // ========================================================================
+    // POSTS COLLECTION (Phase 4 Full - Community Social)
+    // ========================================================================
+    // Structure: posts/{postId}
+    //   - userId: Author's Firebase Auth UID
+    //   - username: Denormalized for display
+    //   - visibility: 'public' or 'private'
+    //   - type: Post type (text, photo, tank-share, etc.)
+    //   - content: Post text content
+    //   - created: Timestamp when created
+    //   - updated: Timestamp when last modified
+    //
+    // Public posts are readable by anyone, owner can create/update/delete
+    // ========================================================================
+
+    match /posts/{postId} {
+      // READ: Only public posts are visible to everyone
+      allow read: if resource.data.visibility == 'public';
+
+      // CREATE: Must be authenticated and set userId to own UID
+      allow create: if request.auth != null &&
+                       request.resource.data.userId == request.auth.uid;
+
+      // UPDATE/DELETE: Only owner can modify their own posts
+      allow update, delete: if request.auth != null &&
+                               request.auth.uid == resource.data.userId;
+    }
+
+    // ========================================================================
     // SPECIES REFERENCE DATABASE (Phase 2)
     // ========================================================================
     // Fish species data - public read, admin-only write
