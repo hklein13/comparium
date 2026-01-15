@@ -280,6 +280,38 @@ service cloud.firestore {
     }
 
     // ========================================================================
+    // LIKES COLLECTION (Phase 4.2 - Comments & Likes)
+    // ========================================================================
+    // Structure: likes/{likeId}
+    //   - likeId format: {userId}_{targetId}_{targetType}
+    //   - userId: User who liked
+    //   - targetId: ID of post or comment being liked
+    //   - targetType: 'post' or 'comment'
+    //   - created: Timestamp when liked
+    //
+    // Anyone can read likes, users can only create/delete their own likes
+    // Likes are immutable (no updates allowed)
+    // ========================================================================
+
+    // Likes on posts and comments
+    // Document ID format: {userId}_{targetId}_{targetType}
+    match /likes/{likeId} {
+      // Anyone can read likes
+      allow read: if true;
+
+      // User can only create likes with their own userId prefix
+      allow create: if request.auth != null
+                    && likeId.matches(request.auth.uid + '_.*');
+
+      // User can only delete their own likes
+      allow delete: if request.auth != null
+                    && likeId.matches(request.auth.uid + '_.*');
+
+      // No updates allowed (likes are create/delete only)
+      allow update: if false;
+    }
+
+    // ========================================================================
     // SPECIES REFERENCE DATABASE (Phase 2)
     // ========================================================================
     // Fish species data - public read, admin-only write
