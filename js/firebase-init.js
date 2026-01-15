@@ -1168,6 +1168,108 @@ window.firestoreToggleLike = async (targetId, targetType) => {
 };
 
 // ============================================================================
+// FOLLOWS - Firestore Operations (Phase 4.3)
+// ============================================================================
+
+/**
+ * Toggle follow on a user
+ * @param {string} targetUserId - User ID to follow/unfollow
+ * @returns {Promise<{success: boolean, following?: boolean, error?: string}>}
+ */
+window.firestoreToggleFollow = async function (targetUserId) {
+  if (!auth.currentUser) {
+    return { success: false, error: 'Must be logged in to follow' };
+  }
+
+  const currentUserId = auth.currentUser.uid;
+
+  // Can't follow yourself
+  if (currentUserId === targetUserId) {
+    return { success: false, error: 'Cannot follow yourself' };
+  }
+
+  const followId = `${currentUserId}_${targetUserId}`;
+  const followRef = doc(firestore, 'follows', followId);
+
+  try {
+    const docSnap = await getDoc(followRef);
+
+    if (docSnap.exists()) {
+      // Unfollow
+      await deleteDoc(followRef);
+      return { success: true, following: false };
+    } else {
+      // Follow
+      await setDoc(followRef, {
+        followerId: currentUserId,
+        followingId: targetUserId,
+        created: Timestamp.now(),
+      });
+      return { success: true, following: true };
+    }
+  } catch (error) {
+    console.error('Error toggling follow:', error);
+    return { success: false, error: error.message };
+  }
+};
+
+/**
+ * Check if current user is following a user
+ * @param {string} targetUserId - User ID to check
+ * @returns {Promise<{success: boolean, following?: boolean, error?: string}>}
+ */
+window.firestoreIsFollowing = async function (targetUserId) {
+  if (!auth.currentUser) {
+    return { success: true, following: false };
+  }
+
+  const currentUserId = auth.currentUser.uid;
+  const followId = `${currentUserId}_${targetUserId}`;
+
+  try {
+    const docSnap = await getDoc(doc(firestore, 'follows', followId));
+    return { success: true, following: docSnap.exists() };
+  } catch (error) {
+    console.error('Error checking follow status:', error);
+    return { success: false, error: error.message };
+  }
+};
+
+/**
+ * Get follower count for a user
+ * @param {string} userId - User ID
+ * @returns {Promise<{success: boolean, count?: number, error?: string}>}
+ */
+window.firestoreGetFollowerCount = async function (userId) {
+  try {
+    const snapshot = await getDocs(
+      query(collection(firestore, 'follows'), where('followingId', '==', userId))
+    );
+    return { success: true, count: snapshot.size };
+  } catch (error) {
+    console.error('Error getting follower count:', error);
+    return { success: false, error: error.message };
+  }
+};
+
+/**
+ * Get following count for a user
+ * @param {string} userId - User ID
+ * @returns {Promise<{success: boolean, count?: number, error?: string}>}
+ */
+window.firestoreGetFollowingCount = async function (userId) {
+  try {
+    const snapshot = await getDocs(
+      query(collection(firestore, 'follows'), where('followerId', '==', userId))
+    );
+    return { success: true, count: snapshot.size };
+  } catch (error) {
+    console.error('Error getting following count:', error);
+    return { success: false, error: error.message };
+  }
+};
+
+// ============================================================================
 // FCM TOKEN MANAGEMENT (Phase 2 - Push Notifications)
 // ============================================================================
 
