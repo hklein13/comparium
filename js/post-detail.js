@@ -61,7 +61,7 @@ async function loadPost(postId) {
     }
 
     currentPost = result.post;
-    renderPost(currentPost);
+    await renderPost(currentPost);
 
     // Update page title
     document.title = `Post by @${currentPost.author?.username || 'anonymous'} | Comparium`;
@@ -76,7 +76,7 @@ async function loadPost(postId) {
 /**
  * Render post content
  */
-function renderPost(post) {
+async function renderPost(post) {
   const container = document.getElementById('post-container');
   const categoryLabel =
     window.postManager?.POST_CATEGORIES?.[post.category]?.label || post.category;
@@ -113,6 +113,14 @@ function renderPost(post) {
     ? `<button class="post-detail__delete" onclick="deleteCurrentPost('${post.id}')" title="Delete post">Delete</button>`
     : '';
 
+  // Check if current user has liked this post
+  let hasLiked = false;
+  if (currentUserId && window.socialManager) {
+    hasLiked = await window.socialManager.hasLikedPost(post.id);
+  }
+  const likeIcon = hasLiked ? '&#9829;' : '&#9825;';
+  const likedClass = hasLiked ? 'liked' : '';
+
   container.innerHTML = `
     <article class="post-detail">
       <div class="post-detail__header">
@@ -142,8 +150,8 @@ function renderPost(post) {
       ${imagesHTML}
 
       <div class="post-detail__actions">
-        <button class="post-detail__action" onclick="togglePostLike('${post.id}', this)">
-          <span class="like-icon">&#9825;</span> <span class="like-count">${post.stats?.likeCount || 0}</span> likes
+        <button class="post-detail__action ${likedClass}" onclick="togglePostLike('${post.id}', this)">
+          <span class="like-icon">${likeIcon}</span> <span class="like-count">${post.stats?.likeCount || 0}</span> likes
         </button>
         <span class="post-detail__action">
           <span>&#128172;</span> ${post.stats?.commentCount || 0} comments
@@ -211,14 +219,15 @@ async function loadComments(postId) {
     return;
   }
 
-  renderComments(result.comments, postId);
+  await renderComments(result.comments, postId);
 }
 
 /**
  * Render comments list
  */
-function renderComments(comments, postId) {
+async function renderComments(comments, postId) {
   const commentsSection = document.getElementById('comments-section');
+  const currentUserId = window.firebaseAuth?.currentUser?.uid;
 
   const commentCount = comments.reduce((sum, c) => sum + 1 + (c.replies?.length || 0), 0);
 
@@ -240,16 +249,16 @@ function renderComments(comments, postId) {
     html += '<p class="comments-empty">No comments yet. Be the first!</p>';
   } else {
     html += '<div class="comments-list">';
-    comments.forEach(comment => {
-      html += renderComment(comment, postId);
-    });
+    for (const comment of comments) {
+      html += await renderComment(comment, postId, false, currentUserId);
+    }
     html += '</div>';
   }
 
   commentsSection.innerHTML = html;
 
   // Show comment input if logged in
-  if (window.firebaseAuth?.currentUser) {
+  if (currentUserId) {
     document.getElementById('comment-input-container').style.display = 'flex';
   }
 }
@@ -257,10 +266,25 @@ function renderComments(comments, postId) {
 /**
  * Render a single comment with its replies
  */
-function renderComment(comment, postId, isReply = false) {
+async function renderComment(comment, postId, isReply = false, currentUserId = null) {
   const safeUsername = (comment.author?.username || 'anonymous').replace(/[^a-zA-Z0-9_]/g, '');
+  const encodedUsername = encodeURIComponent(comment.author?.username || 'anonymous');
   const timeAgo = window.commentManager.formatTimeAgo(comment.created);
   const likeCount = comment.stats?.likeCount || 0;
+
+  // Check if current user has liked this comment
+  let hasLiked = false;
+  if (currentUserId && window.socialManager) {
+    hasLiked = await window.socialManager.hasLikedComment(comment.id);
+  }
+  const likeIcon = hasLiked ? '&#9829;' : '&#9825;';
+  const likedClass = hasLiked ? 'liked' : '';
+
+  // Check if current user is the comment owner
+  const isOwner = currentUserId && currentUserId === comment.userId;
+  const deleteButtonHTML = isOwner
+    ? `<button class="comment__action comment__action--delete" onclick="deleteComment('${comment.id}')">Delete</button>`
+    : '';
 
   let html = `
     <div class="comment ${isReply ? 'comment--reply' : ''}" data-comment-id="${comment.id}">
@@ -273,16 +297,17 @@ function renderComment(comment, postId, isReply = false) {
           }
         </div>
         <div class="comment__meta">
-          <a href="profile.html?user=${safeUsername}" class="comment__author">@${safeUsername}</a>
+          <a href="profile.html?user=${encodedUsername}" class="comment__author">@${safeUsername}</a>
           <span class="comment__time">${timeAgo}</span>
         </div>
       </div>
       <div class="comment__content">${escapeHtml(comment.content)}</div>
       <div class="comment__actions">
-        <button class="comment__action" onclick="toggleCommentLike('${comment.id}', this)">
-          <span class="like-icon">&#9825;</span> <span class="like-count">${likeCount}</span>
+        <button class="comment__action ${likedClass}" onclick="toggleCommentLike('${comment.id}', this)">
+          <span class="like-icon">${likeIcon}</span> <span class="like-count">${likeCount}</span>
         </button>
         ${!isReply ? `<button class="comment__action" onclick="showReplyInput('${comment.id}')">Reply</button>` : ''}
+        ${deleteButtonHTML}
       </div>
       <div id="reply-input-${comment.id}" class="reply-input-container" style="display: none;">
         <textarea class="comment-input comment-input--reply" placeholder="Write a reply..." maxlength="1000"></textarea>
@@ -293,9 +318,9 @@ function renderComment(comment, postId, isReply = false) {
   // Render replies
   if (comment.replies && comment.replies.length > 0) {
     html += '<div class="comment__replies">';
-    comment.replies.forEach(reply => {
-      html += renderComment(reply, postId, true);
-    });
+    for (const reply of comment.replies) {
+      html += await renderComment(reply, postId, true, currentUserId);
+    }
     html += '</div>';
   }
 
@@ -374,24 +399,32 @@ async function submitReply(postId, parentCommentId) {
  * Toggle like on a comment
  */
 async function toggleCommentLike(commentId, buttonElement) {
-  const result = await window.socialManager.toggleCommentLike(commentId);
+  // Prevent race conditions - disable button during async operation
+  if (buttonElement.disabled) return;
+  buttonElement.disabled = true;
 
-  if (result.success) {
-    const countSpan = buttonElement.querySelector('.like-count');
-    const iconSpan = buttonElement.querySelector('.like-icon');
-    let count = parseInt(countSpan.textContent) || 0;
+  try {
+    const result = await window.socialManager.toggleCommentLike(commentId);
 
-    if (result.liked) {
-      count++;
-      iconSpan.innerHTML = '&#9829;'; // Filled heart
-      buttonElement.classList.add('liked');
-    } else {
-      count = Math.max(0, count - 1);
-      iconSpan.innerHTML = '&#9825;'; // Empty heart
-      buttonElement.classList.remove('liked');
+    if (result.success) {
+      const countSpan = buttonElement.querySelector('.like-count');
+      const iconSpan = buttonElement.querySelector('.like-icon');
+      let count = parseInt(countSpan.textContent) || 0;
+
+      if (result.liked) {
+        count++;
+        iconSpan.innerHTML = '&#9829;'; // Filled heart
+        buttonElement.classList.add('liked');
+      } else {
+        count = Math.max(0, count - 1);
+        iconSpan.innerHTML = '&#9825;'; // Empty heart
+        buttonElement.classList.remove('liked');
+      }
+
+      countSpan.textContent = count;
     }
-
-    countSpan.textContent = count;
+  } finally {
+    buttonElement.disabled = false;
   }
 }
 
@@ -399,24 +432,32 @@ async function toggleCommentLike(commentId, buttonElement) {
  * Toggle like on the current post
  */
 async function togglePostLike(postId, buttonElement) {
-  const result = await window.socialManager.togglePostLike(postId);
+  // Prevent race conditions - disable button during async operation
+  if (buttonElement.disabled) return;
+  buttonElement.disabled = true;
 
-  if (result.success) {
-    const countSpan = buttonElement.querySelector('.like-count');
-    const iconSpan = buttonElement.querySelector('.like-icon');
-    let count = parseInt(countSpan.textContent) || 0;
+  try {
+    const result = await window.socialManager.togglePostLike(postId);
 
-    if (result.liked) {
-      count++;
-      iconSpan.innerHTML = '&#9829;'; // Filled heart
-      buttonElement.classList.add('liked');
-    } else {
-      count = Math.max(0, count - 1);
-      iconSpan.innerHTML = '&#9825;'; // Empty heart
-      buttonElement.classList.remove('liked');
+    if (result.success) {
+      const countSpan = buttonElement.querySelector('.like-count');
+      const iconSpan = buttonElement.querySelector('.like-icon');
+      let count = parseInt(countSpan.textContent) || 0;
+
+      if (result.liked) {
+        count++;
+        iconSpan.innerHTML = '&#9829;'; // Filled heart
+        buttonElement.classList.add('liked');
+      } else {
+        count = Math.max(0, count - 1);
+        iconSpan.innerHTML = '&#9825;'; // Empty heart
+        buttonElement.classList.remove('liked');
+      }
+
+      countSpan.textContent = count;
     }
-
-    countSpan.textContent = count;
+  } finally {
+    buttonElement.disabled = false;
   }
 }
 
@@ -435,6 +476,28 @@ async function deleteCurrentPost(postId) {
     window.location.href = 'community.html';
   } else {
     alert(result.error || 'Failed to delete post');
+  }
+}
+
+/**
+ * Delete a comment (owner only)
+ */
+async function deleteComment(commentId) {
+  if (!confirm('Are you sure you want to delete this comment?')) {
+    return;
+  }
+
+  const result = await window.commentManager.deleteComment(commentId);
+
+  if (result.success) {
+    // Reload comments to reflect the deletion
+    const params = new URLSearchParams(window.location.search);
+    const postId = params.get('id');
+    if (postId) {
+      await loadComments(postId);
+    }
+  } else {
+    alert(result.error || 'Failed to delete comment');
   }
 }
 

@@ -7884,6 +7884,15 @@ body.logged-in .favorite-star {
   color: #e74c3c;
 }
 
+.comment__action--delete {
+  color: #999;
+  margin-left: auto;
+}
+
+.comment__action--delete:hover {
+  color: #e74c3c;
+}
+
 .comment__replies {
   margin-top: 0.75rem;
   display: flex;

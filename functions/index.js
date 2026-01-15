@@ -474,12 +474,14 @@ exports.onCommentCreated = onDocumentCreated(
 /**
  * onCommentDeleted
  *
- * Purpose: Update comment counts when a comment is deleted
+ * Purpose: Update comment counts and cascade delete replies when a comment is deleted
  * Trigger: Firestore onDelete on comments collection
  *
  * How it works:
  * 1. When a comment is deleted, decrement commentCount on the parent post
  * 2. If the comment was a reply, also decrement replyCount on parent comment
+ * 3. Delete all replies to this comment (cascade delete)
+ * 4. Delete all likes on this comment
  */
 exports.onCommentDeleted = onDocumentDeleted(
   {
@@ -493,6 +495,7 @@ exports.onCommentDeleted = onDocumentDeleted(
       return;
     }
 
+    const commentId = event.params.commentId;
     const comment = snapshot.data();
     const postId = comment.postId;
 
@@ -501,7 +504,7 @@ exports.onCommentDeleted = onDocumentDeleted(
       return;
     }
 
-    console.log(`onCommentDeleted: Decrementing commentCount for post ${postId}`);
+    console.log(`onCommentDeleted: Processing deletion of comment ${commentId}`);
 
     // Decrement comment count on the post
     try {
@@ -532,6 +535,27 @@ exports.onCommentDeleted = onDocumentDeleted(
           `onCommentDeleted: Could not update parent comment ${comment.replyTo} - may be deleted`
         );
       }
+    }
+
+    // Cascade delete: Find and delete all replies to this comment
+    const repliesSnap = await db.collection('comments').where('replyTo', '==', commentId).get();
+
+    // Also delete likes on this comment
+    const likesSnap = await db
+      .collection('likes')
+      .where('targetId', '==', commentId)
+      .where('targetType', '==', 'comment')
+      .get();
+
+    const docsToDelete = [...repliesSnap.docs, ...likesSnap.docs];
+
+    if (docsToDelete.length > 0) {
+      console.log(
+        `onCommentDeleted: Cascade deleting ${repliesSnap.docs.length} replies and ${likesSnap.docs.length} likes`
+      );
+      const batch = db.batch();
+      docsToDelete.forEach(doc => batch.delete(doc.ref));
+      await batch.commit();
     }
 
     console.log('onCommentDeleted: Complete');
@@ -632,6 +656,84 @@ exports.onLikeDeleted = onDocumentDeleted(
     }
 
     console.log('onLikeDeleted: Complete');
+  }
+);
+
+/**
+ * onPostDeleted
+ *
+ * Purpose: Cascade delete all comments and likes when a post is deleted
+ * Trigger: Firestore onDelete on posts collection
+ *
+ * How it works:
+ * 1. Delete all comments associated with this post
+ * 2. Delete all likes on this post
+ * 3. Note: Likes on comments will be orphaned but cleaned up separately
+ */
+exports.onPostDeleted = onDocumentDeleted(
+  {
+    document: 'posts/{postId}',
+    region: 'us-central1',
+  },
+  async event => {
+    const postId = event.params.postId;
+
+    if (!postId) {
+      console.log('onPostDeleted: No postId in event');
+      return;
+    }
+
+    console.log(`onPostDeleted: Cascade deleting comments and likes for post ${postId}`);
+
+    // Get all comments for this post
+    const commentsSnap = await db.collection('comments').where('postId', '==', postId).get();
+
+    // Get all likes for this post
+    const postLikesSnap = await db
+      .collection('likes')
+      .where('targetId', '==', postId)
+      .where('targetType', '==', 'post')
+      .get();
+
+    // Collect all comment IDs to also delete their likes
+    const commentIds = commentsSnap.docs.map(doc => doc.id);
+
+    // Get likes on all comments of this post
+    let commentLikesDocs = [];
+    if (commentIds.length > 0) {
+      // Firestore 'in' queries limited to 30 items, so batch if needed
+      for (let i = 0; i < commentIds.length; i += 30) {
+        const batch = commentIds.slice(i, i + 30);
+        const likesSnap = await db
+          .collection('likes')
+          .where('targetId', 'in', batch)
+          .where('targetType', '==', 'comment')
+          .get();
+        commentLikesDocs = commentLikesDocs.concat(likesSnap.docs);
+      }
+    }
+
+    // Delete everything in batches (Firestore batch limit is 500)
+    const allDocs = [...commentsSnap.docs, ...postLikesSnap.docs, ...commentLikesDocs];
+
+    if (allDocs.length === 0) {
+      console.log('onPostDeleted: No associated data to delete');
+      return;
+    }
+
+    console.log(
+      `onPostDeleted: Deleting ${commentsSnap.docs.length} comments, ${postLikesSnap.docs.length} post likes, ${commentLikesDocs.length} comment likes`
+    );
+
+    // Process in batches of 500
+    for (let i = 0; i < allDocs.length; i += 500) {
+      const batchDocs = allDocs.slice(i, i + 500);
+      const batch = db.batch();
+      batchDocs.forEach(doc => batch.delete(doc.ref));
+      await batch.commit();
+    }
+
+    console.log('onPostDeleted: Complete');
   }
 );
 
