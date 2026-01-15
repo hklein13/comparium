@@ -7814,12 +7814,19 @@ body.logged-in .favorite-star {
 .back-link {
   display: inline-block;
   margin-top: 1.5rem;
+  padding: 0.75rem 1.25rem;
   color: var(--forest);
+  font-weight: 600;
   text-decoration: none;
+  border: 2px solid var(--forest);
+  border-radius: 6px;
+  transition: all 0.2s ease;
 }
 
 .back-link:hover {
-  text-decoration: underline;
+  background: var(--forest);
+  color: white;
+  text-decoration: none;
 }
 
 /* ============================================================================

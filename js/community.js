@@ -196,9 +196,15 @@ function createPostCard(post) {
       img.alt = post.linkedTank.name;
       img.loading = 'lazy';
       tankImage.appendChild(img);
+
+      // Fetch fresh tank data to get updated cover photo
+      fetchFreshTankPhoto(post.linkedTank.tankId, img);
     } else {
       tankImage.classList.add('placeholder');
       tankImage.textContent = post.linkedTank.name.charAt(0).toUpperCase();
+
+      // Try to fetch fresh photo in case tank was updated
+      fetchFreshTankPhoto(post.linkedTank.tankId, tankImage);
     }
     tankPreview.appendChild(tankImage);
 
@@ -338,6 +344,44 @@ function createPostCard(post) {
   card.onclick = () => viewPostDetail(post.id);
 
   return card;
+}
+
+/**
+ * Fetch fresh tank photo from publicTanks collection
+ * Updates the image element if a newer photo is available
+ */
+async function fetchFreshTankPhoto(tankId, imageElement) {
+  if (!tankId || !window.firebaseFirestore) return;
+
+  try {
+    const db = window.firebaseFirestore;
+    const tankDoc = await db.collection('publicTanks').doc(tankId).get();
+
+    if (tankDoc.exists) {
+      const tankData = tankDoc.data();
+      if (tankData.coverPhoto) {
+        // Update the image element with fresh photo
+        if (imageElement.tagName === 'IMG') {
+          // If it's already an img element, just update src
+          if (imageElement.src !== tankData.coverPhoto) {
+            imageElement.src = tankData.coverPhoto;
+          }
+        } else {
+          // It's a placeholder div - replace with img
+          imageElement.classList.remove('placeholder');
+          imageElement.textContent = '';
+          const img = document.createElement('img');
+          img.src = tankData.coverPhoto;
+          img.alt = tankData.name || 'Tank';
+          img.loading = 'lazy';
+          imageElement.appendChild(img);
+        }
+      }
+    }
+  } catch (error) {
+    // Silently fail - cached photo will be shown
+    console.error('Error fetching fresh tank photo:', error);
+  }
 }
 
 /**

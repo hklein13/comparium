@@ -164,7 +164,7 @@ async function renderPost(post) {
       </section>
     </article>
 
-    <a href="community.html" class="back-link">&larr; Back to Community</a>
+    <a href="community.html" class="back-link">&larr; Back to feed</a>
   `;
 }
 
@@ -198,7 +198,7 @@ function showError(message) {
     <div class="community-error">
       <h3>Error</h3>
       <p>${message}</p>
-      <a href="community.html" class="btn btn-primary">Back to Community</a>
+      <a href="community.html" class="btn btn-primary">Back to feed</a>
     </div>
   `;
 }

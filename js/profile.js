@@ -10,11 +10,11 @@ let profileUserId = null;
  * Initialize profile page
  */
 async function initProfile() {
-  // Get user ID from URL
+  // Get user parameter from URL (could be username or userId)
   const urlParams = new URLSearchParams(window.location.search);
-  const userId = urlParams.get('user');
+  const userParam = urlParams.get('user');
 
-  if (!userId) {
+  if (!userParam) {
     showError();
     return;
   }
@@ -22,8 +22,49 @@ async function initProfile() {
   // Wait for Firebase
   await waitForFirebase();
 
+  // Resolve username to userId if needed
+  const userId = await resolveUserId(userParam);
+
+  if (!userId) {
+    showError();
+    return;
+  }
+
   // Load profile and tanks
   await loadProfile(userId);
+}
+
+/**
+ * Resolve a username or userId to an actual userId
+ * @param {string} userParam - Could be a username or userId
+ * @returns {Promise<string|null>} - The resolved userId or null
+ */
+async function resolveUserId(userParam) {
+  const db = window.firebaseFirestore;
+
+  // Firebase UIDs are typically 28 characters and alphanumeric
+  // Usernames are typically shorter and may contain different characters
+  const looksLikeUid = /^[a-zA-Z0-9]{20,}$/.test(userParam);
+
+  if (looksLikeUid) {
+    // Assume it's already a userId
+    return userParam;
+  }
+
+  // It's likely a username - look it up in the usernames collection
+  try {
+    const usernameDoc = await db.collection('usernames').doc(userParam.toLowerCase()).get();
+
+    if (usernameDoc.exists) {
+      return usernameDoc.data().uid;
+    }
+
+    // Username not found
+    return null;
+  } catch (error) {
+    console.error('Error resolving username:', error);
+    return null;
+  }
 }
 
 /**
