@@ -7369,6 +7369,81 @@ body.logged-in .favorite-star {
   cursor: pointer;
 }
 
+/* Tank Preview in Post Cards */
+.post-card__tank-preview {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background: var(--ivory);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.post-card__tank-preview:hover {
+  border-color: var(--forest);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.post-card__tank-image {
+  width: 60px;
+  height: 60px;
+  border-radius: 6px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.post-card__tank-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.post-card__tank-image.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--forest);
+  color: white;
+  font-family: 'Libre Baskerville', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.post-card__tank-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.post-card__tank-name {
+  font-family: 'Libre Baskerville', serif;
+  font-weight: 600;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.post-card__tank-stats {
+  font-size: 0.85rem;
+  color: var(--ink-secondary);
+}
+
+.post-card__tank-link {
+  color: var(--forest);
+  font-size: 0.875rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
 .post-card__actions {
   display: flex;
   gap: 1.5rem;

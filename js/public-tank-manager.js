@@ -14,7 +14,7 @@
 
 window.publicTankManager = {
   /**
-   * Sync a tank to the publicTanks collection
+   * Sync a tank to the publicTanks collection and create a community post
    * Call this when user sets tank.isPublic = true
    *
    * @param {string} uid - Owner's user ID
@@ -30,11 +30,67 @@ window.publicTankManager = {
 
     try {
       // Import Firestore functions dynamically (ES6 module)
-      const { doc, setDoc, Timestamp } = await import(
-        'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js'
-      );
+      const { doc, setDoc, addDoc, collection, Timestamp } =
+        await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
 
       const now = Timestamp.now();
+      const nowISO = new Date().toISOString();
+
+      // Create a community post for the shared tank
+      const tankName = tank.name || 'Unnamed Tank';
+      const speciesCount = tank.species?.length || 0;
+      const plantCount = tank.plants?.length || 0;
+
+      let postContent = `Shared my tank: ${tankName}`;
+      if (tank.size) {
+        const unit = tank.sizeUnit === 'liters' ? 'L' : 'gal';
+        postContent += ` (${tank.size}${unit})`;
+      }
+      if (speciesCount > 0 || plantCount > 0) {
+        const parts = [];
+        if (speciesCount > 0) parts.push(`${speciesCount} species`);
+        if (plantCount > 0) parts.push(`${plantCount} plants`);
+        postContent += ` - ${parts.join(', ')}`;
+      }
+      if (tank.description) {
+        postContent += `\n\n${tank.description}`;
+      }
+
+      // Get user profile for avatar
+      const profile = await window.firestoreGetProfile(uid);
+
+      const postData = {
+        userId: uid,
+        content: postContent,
+        category: 'tanks',
+        imageUrls: tank.coverPhoto ? [tank.coverPhoto] : [],
+        visibility: 'public',
+        stats: {
+          likeCount: 0,
+          commentCount: 0,
+        },
+        author: {
+          username: username,
+          avatarUrl: profile?.profile?.avatarUrl || null,
+        },
+        // Link to the tank for rich display
+        linkedTank: {
+          tankId: tank.id,
+          name: tankName,
+          size: tank.size || 0,
+          sizeUnit: tank.sizeUnit || 'gallons',
+          speciesCount: speciesCount,
+          plantCount: plantCount,
+          coverPhoto: tank.coverPhoto || null,
+        },
+        created: nowISO,
+        updated: nowISO,
+      };
+
+      // Create the post
+      const postsRef = collection(firestore, 'posts');
+      const postDoc = await addDoc(postsRef, postData);
+      const postId = postDoc.id;
 
       // Build the public tank document with denormalized data
       const publicTankData = {
@@ -44,7 +100,7 @@ window.publicTankManager = {
         isPublic: true,
 
         // Tank details
-        name: tank.name || 'Unnamed Tank',
+        name: tankName,
         size: tank.size || 0,
         sizeUnit: tank.sizeUnit || 'gallons',
         species: tank.species || [],
@@ -55,8 +111,8 @@ window.publicTankManager = {
         // Owner profile (denormalized for future Phase 4 features)
         owner: {
           username: username,
-          bio: '', // Will be populated from user profile in Phase 4A
-          avatarUrl: null, // Will be populated in Phase 4A
+          bio: '',
+          avatarUrl: profile?.profile?.avatarUrl || null,
         },
 
         // Stats (ready for Phase 4D likes/views)
@@ -64,6 +120,9 @@ window.publicTankManager = {
           viewCount: 0,
           likeCount: 0,
         },
+
+        // Reference to the community post
+        linkedPostId: postId,
 
         // Timestamps
         created: tank.created ? Timestamp.fromDate(new Date(tank.created)) : now,
@@ -82,7 +141,7 @@ window.publicTankManager = {
   },
 
   /**
-   * Remove a tank from the publicTanks collection
+   * Remove a tank from the publicTanks collection and delete linked post
    * Call this when user sets tank.isPublic = false or deletes tank
    *
    * @param {string} tankId - Tank ID to remove
@@ -95,12 +154,25 @@ window.publicTankManager = {
     }
 
     try {
-      const { doc, deleteDoc } = await import(
-        'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js'
-      );
+      const { doc, getDoc, deleteDoc } =
+        await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
 
       const publicTankRef = doc(firestore, 'publicTanks', tankId);
+
+      // Get the linked post ID before deleting
+      const tankDoc = await getDoc(publicTankRef);
+      const linkedPostId = tankDoc.data()?.linkedPostId;
+
+      // Delete the publicTank document
       await deleteDoc(publicTankRef);
+
+      // Delete the linked post if it exists
+      if (linkedPostId) {
+        const postRef = doc(firestore, 'posts', linkedPostId);
+        await deleteDoc(postRef).catch(() => {
+          // Ignore errors if post doesn't exist
+        });
+      }
 
       return { success: true };
     } catch (error) {
@@ -128,9 +200,8 @@ window.publicTankManager = {
     }
 
     try {
-      const { doc, setDoc, Timestamp } = await import(
-        'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js'
-      );
+      const { doc, setDoc, Timestamp } =
+        await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
 
       const now = Timestamp.now();
 
@@ -188,9 +259,8 @@ window.publicTankManager = {
     }
 
     try {
-      const { collection, query, where, orderBy, limit, getDocs, startAfter } = await import(
-        'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js'
-      );
+      const { collection, query, where, orderBy, limit, getDocs, startAfter } =
+        await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
 
       const maxResults = options.limit || 24;
       const sortField = options.sortBy === 'size' ? 'size' : 'sharedAt';
@@ -247,9 +317,8 @@ window.publicTankManager = {
     }
 
     try {
-      const { doc, getDoc } = await import(
-        'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js'
-      );
+      const { doc, getDoc } =
+        await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
 
       const publicTankRef = doc(firestore, 'publicTanks', tankId);
       const snapshot = await getDoc(publicTankRef);
@@ -287,9 +356,8 @@ window.publicTankManager = {
     }
 
     try {
-      const { collection, query, where, orderBy, getDocs } = await import(
-        'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js'
-      );
+      const { collection, query, where, orderBy, getDocs } =
+        await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
 
       const q = query(
         collection(firestore, 'publicTanks'),
@@ -323,9 +391,8 @@ window.publicTankManager = {
     if (!tankId) return false;
 
     try {
-      const { doc, getDoc } = await import(
-        'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js'
-      );
+      const { doc, getDoc } =
+        await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
 
       const firestore = window.firebaseFirestore;
       if (!firestore) return false;

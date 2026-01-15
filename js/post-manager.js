@@ -6,7 +6,7 @@
 // Post categories
 const POST_CATEGORIES = {
   help: { label: 'Help / Questions', icon: '?' },
-  showcase: { label: 'Tank Showcase', icon: '' },
+  tanks: { label: 'Tanks', icon: '' },
   tips: { label: 'Tips & Guides', icon: '' },
   fishid: { label: 'Fish ID', icon: '' },
   milestone: { label: 'Milestones', icon: '' },
@@ -78,12 +78,7 @@ async function createPost(postData) {
  * @returns {Promise<{success: boolean, posts: array, lastDoc: any}>}
  */
 async function getFeedPosts(options = {}) {
-  const {
-    category = null,
-    sortBy = 'newest',
-    limit = 20,
-    lastDoc = null,
-  } = options;
+  const { category = null, sortBy = 'newest', limit = 20, lastDoc = null } = options;
 
   try {
     const result = await window.firestoreGetPosts({
