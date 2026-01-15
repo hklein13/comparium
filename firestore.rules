@@ -312,6 +312,43 @@ service cloud.firestore {
     }
 
     // ========================================================================
+    // FOLLOWS COLLECTION (Phase 4.3 - Follows & Bookmarks)
+    // ========================================================================
+    // Structure: follows/{followId}
+    //   - followId format: {followerId}_{followingId}
+    //   - followerId: User who is following
+    //   - followingId: User being followed
+    //   - created: Timestamp when followed
+    //
+    // Anyone can read follows (public social graph), users can only
+    // create/delete their own follows via compound ID validation
+    // ========================================================================
+
+    // Follows collection - compound ID: {followerId}_{followingId}
+    match /follows/{followId} {
+      allow read: if true;
+      allow create: if isAuthenticated() && followId.matches(request.auth.uid + '_.*');
+      allow delete: if isAuthenticated() && followId.matches(request.auth.uid + '_.*');
+    }
+
+    // ========================================================================
+    // BOOKMARKS COLLECTION (Phase 4.3 - Follows & Bookmarks)
+    // ========================================================================
+    // Structure: bookmarks/{bookmarkId}
+    //   - bookmarkId format: {userId}_{postId}
+    //   - userId: User who bookmarked
+    //   - postId: Post being bookmarked
+    //   - created: Timestamp when bookmarked
+    //
+    // Bookmarks are private - only the owner can read and write their bookmarks
+    // ========================================================================
+
+    // Bookmarks collection - compound ID: {userId}_{postId}
+    match /bookmarks/{bookmarkId} {
+      allow read, write: if isAuthenticated() && bookmarkId.matches(request.auth.uid + '_.*');
+    }
+
+    // ========================================================================
     // SPECIES REFERENCE DATABASE (Phase 2)
     // ========================================================================
     // Fish species data - public read, admin-only write
