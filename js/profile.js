@@ -1,7 +1,10 @@
 /**
  * Profile Page - Public User Profile
  * Phase 4 MVP: Display user's public tanks
+ * Phase 4.3: Follow button and stats
  */
+
+let profileUserId = null;
 
 /**
  * Initialize profile page
@@ -89,6 +92,15 @@ async function loadProfile(userId) {
     // Render profile
     renderProfileHeader(username, tanks[0]);
     renderTanks(tanks);
+
+    // Store userId for follow functionality
+    profileUserId = userId;
+
+    // Load and display follow stats
+    await loadFollowStats(userId);
+
+    // Show follow button if not own profile
+    await renderFollowButton(userId);
   } catch (error) {
     console.error('Error loading profile:', error);
     showError();
@@ -134,6 +146,88 @@ function renderEmptyProfile(userId) {
   document.getElementById('profile-tank-count').textContent = '(0)';
   document.getElementById('profile-tanks-grid').style.display = 'none';
   document.getElementById('profile-no-tanks').style.display = 'block';
+
+  // Store userId and load follow functionality
+  profileUserId = userId;
+  loadFollowStats(userId);
+  renderFollowButton(userId);
+}
+
+/**
+ * Load and display follower/following counts
+ */
+async function loadFollowStats(userId) {
+  const statsEl = document.getElementById('profile-stats');
+  const followersEl = document.getElementById('profile-followers');
+  const followingEl = document.getElementById('profile-following');
+
+  if (!statsEl || !followersEl || !followingEl) return;
+
+  const [followerCount, followingCount] = await Promise.all([
+    window.socialManager.getFollowerCount(userId),
+    window.socialManager.getFollowingCount(userId),
+  ]);
+
+  followersEl.textContent = `${followerCount} follower${followerCount !== 1 ? 's' : ''}`;
+  followingEl.textContent = `${followingCount} following`;
+  statsEl.style.display = 'flex';
+}
+
+/**
+ * Render follow button if viewing another user's profile
+ */
+async function renderFollowButton(userId) {
+  const btnContainer = document.getElementById('profile-follow-btn');
+  if (!btnContainer) return;
+
+  const auth = window.firebaseAuth;
+
+  // Don't show follow button if not logged in or viewing own profile
+  if (!auth.currentUser || auth.currentUser.uid === userId) {
+    btnContainer.style.display = 'none';
+    return;
+  }
+
+  // Check if already following
+  const isFollowing = await window.socialManager.isFollowing(userId);
+
+  // Create button
+  const btn = document.createElement('button');
+  btn.className = `btn ${isFollowing ? 'btn--following' : 'btn-primary'}`;
+  btn.textContent = isFollowing ? 'Following' : 'Follow';
+  btn.onclick = handleFollowClick;
+
+  btnContainer.innerHTML = '';
+  btnContainer.appendChild(btn);
+  btnContainer.style.display = 'block';
+}
+
+/**
+ * Handle follow button click
+ */
+async function handleFollowClick(event) {
+  const btn = event.target;
+  btn.disabled = true;
+
+  const result = await window.socialManager.toggleFollow(profileUserId);
+
+  if (result.success) {
+    // Update button state
+    if (result.following) {
+      btn.className = 'btn btn--following';
+      btn.textContent = 'Following';
+    } else {
+      btn.className = 'btn btn-primary';
+      btn.textContent = 'Follow';
+    }
+
+    // Refresh follower count
+    await loadFollowStats(profileUserId);
+  } else {
+    alert(result.error || 'Failed to update follow status');
+  }
+
+  btn.disabled = false;
 }
 
 /**

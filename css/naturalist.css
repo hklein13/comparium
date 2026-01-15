@@ -7149,6 +7149,37 @@ body.logged-in .favorite-star {
   font-size: 0.9rem;
 }
 
+/* Profile Follow Stats & Button */
+.profile-stats {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  color: var(--ink-secondary);
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.profile-stats__divider {
+  color: var(--border);
+}
+
+.profile-follow-btn {
+  margin-top: 1rem;
+}
+
+.profile-follow-btn .btn {
+  min-width: 100px;
+}
+
+.profile-follow-btn .btn--following {
+  background: var(--forest);
+  color: white;
+}
+
+.profile-follow-btn .btn--following:hover {
+  background: #c0392b;
+}
+
 /* Tanks Section */
 .profile-tanks-section h2 {
   font-family: var(--font-serif);
