@@ -109,6 +109,23 @@ async function renderPost(post) {
   let linkedTankHTML = '';
   if (post.linkedTank) {
     const tank = post.linkedTank;
+
+    // Fetch fresh tank data BEFORE rendering to avoid photo flash
+    let freshCoverPhoto = tank.coverPhoto;
+    if (tank.tankId && window.firebaseFirestore) {
+      try {
+        const { doc, getDoc } = await import(
+          'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js'
+        );
+        const tankDoc = await getDoc(doc(window.firebaseFirestore, 'publicTanks', tank.tankId));
+        if (tankDoc.exists() && tankDoc.data().coverPhoto) {
+          freshCoverPhoto = tankDoc.data().coverPhoto;
+        }
+      } catch (error) {
+        console.error('Error fetching fresh tank photo:', error);
+      }
+    }
+
     const tankStats = [];
     if (tank.size) {
       const unit = tank.sizeUnit === 'liters' ? 'L' : 'gal';
@@ -121,8 +138,8 @@ async function renderPost(post) {
       <div class="post-detail__tank-preview" onclick="window.location.href='tank.html?id=${encodeURIComponent(tank.tankId)}'">
         <div class="post-detail__tank-image">
           ${
-            tank.coverPhoto
-              ? `<img id="linked-tank-photo" src="${tank.coverPhoto}" alt="${escapeHtml(tank.name || 'Tank')}">`
+            freshCoverPhoto
+              ? `<img src="${freshCoverPhoto}" alt="${escapeHtml(tank.name || 'Tank')}">`
               : `<div class="post-detail__tank-placeholder">${(tank.name || 'T').charAt(0).toUpperCase()}</div>`
           }
         </div>
@@ -200,13 +217,6 @@ async function renderPost(post) {
     <a href="community.html" class="back-link">&larr; Back to feed</a>
   `;
 
-  // Fetch fresh tank photo if this is a tank post
-  if (post.linkedTank?.tankId) {
-    const tankImg = document.getElementById('linked-tank-photo');
-    if (tankImg) {
-      fetchFreshTankPhoto(post.linkedTank.tankId, tankImg);
-    }
-  }
 }
 
 /**
@@ -539,33 +549,6 @@ async function deleteComment(commentId) {
     }
   } else {
     alert(result.error || 'Failed to delete comment');
-  }
-}
-
-/**
- * Fetch fresh tank photo from publicTanks collection
- * Updates the image element if a newer photo is available
- */
-async function fetchFreshTankPhoto(tankId, imageElement) {
-  if (!tankId || !window.firebaseFirestore) return;
-
-  try {
-    // Use modular Firebase SDK (v9+)
-    const { doc, getDoc } = await import(
-      'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js'
-    );
-
-    const tankRef = doc(window.firebaseFirestore, 'publicTanks', tankId);
-    const tankDoc = await getDoc(tankRef);
-
-    if (tankDoc.exists()) {
-      const tankData = tankDoc.data();
-      if (tankData.coverPhoto && imageElement.src !== tankData.coverPhoto) {
-        imageElement.src = tankData.coverPhoto;
-      }
-    }
-  } catch (error) {
-    console.error('Error fetching fresh tank photo:', error);
   }
 }
 
