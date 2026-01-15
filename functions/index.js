@@ -12,9 +12,9 @@
 
 const { onRequest } = require('firebase-functions/v2/https');
 const { onSchedule } = require('firebase-functions/v2/scheduler');
-const { onDocumentCreated } = require('firebase-functions/v2/firestore');
+const { onDocumentCreated, onDocumentDeleted } = require('firebase-functions/v2/firestore');
 const { initializeApp } = require('firebase-admin/app');
-const { getFirestore, Timestamp } = require('firebase-admin/firestore');
+const { getFirestore, Timestamp, FieldValue } = require('firebase-admin/firestore');
 const { getMessaging } = require('firebase-admin/messaging');
 
 // Initialize Firebase Admin SDK
@@ -409,6 +409,213 @@ exports.cleanupExpiredNotifications = onSchedule(
     }
 
     console.log('cleanupExpiredNotifications: Complete');
+  }
+);
+
+// ============================================================
+// PHASE 4.2: COMMENT & LIKE COUNT FUNCTIONS
+// ============================================================
+
+/**
+ * onCommentCreated
+ *
+ * Purpose: Update comment counts when a new comment is created
+ * Trigger: Firestore onCreate on comments collection
+ *
+ * How it works:
+ * 1. When a comment is created, increment commentCount on the parent post
+ * 2. If the comment is a reply (has replyTo), also increment replyCount on parent comment
+ */
+exports.onCommentCreated = onDocumentCreated(
+  {
+    document: 'comments/{commentId}',
+    region: 'us-central1',
+  },
+  async event => {
+    const snapshot = event.data;
+    if (!snapshot) {
+      console.log('onCommentCreated: No data in event');
+      return;
+    }
+
+    const comment = snapshot.data();
+    const postId = comment.postId;
+
+    if (!postId) {
+      console.log('onCommentCreated: No postId in comment');
+      return;
+    }
+
+    console.log(`onCommentCreated: Incrementing commentCount for post ${postId}`);
+
+    // Increment comment count on the post
+    await db.collection('posts').doc(postId).update({
+      'stats.commentCount': FieldValue.increment(1),
+    });
+
+    // If this is a reply, also increment replyCount on the parent comment
+    if (comment.replyTo) {
+      console.log(`onCommentCreated: Incrementing replyCount for comment ${comment.replyTo}`);
+      await db.collection('comments').doc(comment.replyTo).update({
+        replyCount: FieldValue.increment(1),
+      });
+    }
+
+    console.log('onCommentCreated: Complete');
+  }
+);
+
+/**
+ * onCommentDeleted
+ *
+ * Purpose: Update comment counts when a comment is deleted
+ * Trigger: Firestore onDelete on comments collection
+ *
+ * How it works:
+ * 1. When a comment is deleted, decrement commentCount on the parent post
+ * 2. If the comment was a reply, also decrement replyCount on parent comment
+ */
+exports.onCommentDeleted = onDocumentDeleted(
+  {
+    document: 'comments/{commentId}',
+    region: 'us-central1',
+  },
+  async event => {
+    const snapshot = event.data;
+    if (!snapshot) {
+      console.log('onCommentDeleted: No data in event');
+      return;
+    }
+
+    const comment = snapshot.data();
+    const postId = comment.postId;
+
+    if (!postId) {
+      console.log('onCommentDeleted: No postId in comment');
+      return;
+    }
+
+    console.log(`onCommentDeleted: Decrementing commentCount for post ${postId}`);
+
+    // Decrement comment count on the post
+    try {
+      await db.collection('posts').doc(postId).update({
+        'stats.commentCount': FieldValue.increment(-1),
+      });
+    } catch (error) {
+      // Post may have been deleted already
+      console.log(`onCommentDeleted: Could not update post ${postId} - may be deleted`);
+    }
+
+    // If this was a reply, also decrement replyCount on the parent comment
+    if (comment.replyTo) {
+      console.log(`onCommentDeleted: Decrementing replyCount for comment ${comment.replyTo}`);
+      try {
+        await db.collection('comments').doc(comment.replyTo).update({
+          replyCount: FieldValue.increment(-1),
+        });
+      } catch (error) {
+        // Parent comment may have been deleted already
+        console.log(
+          `onCommentDeleted: Could not update parent comment ${comment.replyTo} - may be deleted`
+        );
+      }
+    }
+
+    console.log('onCommentDeleted: Complete');
+  }
+);
+
+/**
+ * onLikeCreated
+ *
+ * Purpose: Update like counts when a new like is created
+ * Trigger: Firestore onCreate on likes collection
+ *
+ * How it works:
+ * 1. Determine the target collection (posts or comments) from targetType
+ * 2. Increment likeCount on the target document
+ */
+exports.onLikeCreated = onDocumentCreated(
+  {
+    document: 'likes/{likeId}',
+    region: 'us-central1',
+  },
+  async event => {
+    const snapshot = event.data;
+    if (!snapshot) {
+      console.log('onLikeCreated: No data in event');
+      return;
+    }
+
+    const like = snapshot.data();
+    const { targetId, targetType } = like;
+
+    if (!targetId || !targetType) {
+      console.log('onLikeCreated: Missing targetId or targetType');
+      return;
+    }
+
+    // Determine collection based on targetType
+    const collectionName = targetType === 'post' ? 'posts' : 'comments';
+
+    console.log(`onLikeCreated: Incrementing likeCount for ${collectionName}/${targetId}`);
+
+    await db.collection(collectionName).doc(targetId).update({
+      'stats.likeCount': FieldValue.increment(1),
+    });
+
+    console.log('onLikeCreated: Complete');
+  }
+);
+
+/**
+ * onLikeDeleted
+ *
+ * Purpose: Update like counts when a like is deleted
+ * Trigger: Firestore onDelete on likes collection
+ *
+ * How it works:
+ * 1. Determine the target collection (posts or comments) from targetType
+ * 2. Decrement likeCount on the target document
+ */
+exports.onLikeDeleted = onDocumentDeleted(
+  {
+    document: 'likes/{likeId}',
+    region: 'us-central1',
+  },
+  async event => {
+    const snapshot = event.data;
+    if (!snapshot) {
+      console.log('onLikeDeleted: No data in event');
+      return;
+    }
+
+    const like = snapshot.data();
+    const { targetId, targetType } = like;
+
+    if (!targetId || !targetType) {
+      console.log('onLikeDeleted: Missing targetId or targetType');
+      return;
+    }
+
+    // Determine collection based on targetType
+    const collectionName = targetType === 'post' ? 'posts' : 'comments';
+
+    console.log(`onLikeDeleted: Decrementing likeCount for ${collectionName}/${targetId}`);
+
+    try {
+      await db.collection(collectionName).doc(targetId).update({
+        'stats.likeCount': FieldValue.increment(-1),
+      });
+    } catch (error) {
+      // Target may have been deleted already
+      console.log(
+        `onLikeDeleted: Could not update ${collectionName}/${targetId} - may be deleted`
+      );
+    }
+
+    console.log('onLikeDeleted: Complete');
   }
 );
 
