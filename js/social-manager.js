@@ -139,4 +139,46 @@ window.socialManager = {
     const result = await window.firestoreGetUserBookmarks();
     return result.success ? result.bookmarks : [];
   },
+
+  /**
+   * Get all bookmarked posts for current user (with full post data)
+   * @returns {Promise<array>} - Array of post objects
+   */
+  async getBookmarkedPosts() {
+    const uid = window.getFirebaseUid?.();
+    if (!uid) return [];
+
+    try {
+      const { collection, query, where, orderBy, getDocs, doc, getDoc } =
+        await import(
+          'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js'
+        );
+
+      // Get user's bookmarks
+      const bookmarksRef = collection(window.firebaseFirestore, 'bookmarks');
+      const q = query(
+        bookmarksRef,
+        where('userId', '==', uid),
+        orderBy('created', 'desc')
+      );
+
+      const snapshot = await getDocs(q);
+      const bookmarks = snapshot.docs.map(d => d.data());
+
+      // Fetch full post data for each bookmark
+      const posts = [];
+      for (const bookmark of bookmarks) {
+        const postRef = doc(window.firebaseFirestore, 'posts', bookmark.postId);
+        const postDoc = await getDoc(postRef);
+        if (postDoc.exists()) {
+          posts.push({ id: postDoc.id, ...postDoc.data() });
+        }
+      }
+
+      return posts;
+    } catch (error) {
+      console.error('Error getting bookmarked posts:', error);
+      return [];
+    }
+  },
 };
