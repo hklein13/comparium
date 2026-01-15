@@ -65,6 +65,9 @@ async function loadPost(postId) {
 
     // Update page title
     document.title = `Post by @${currentPost.author?.username || 'anonymous'} | Comparium`;
+
+    // Load comments after post loads
+    loadComments(postId);
   } catch (error) {
     showError('Failed to load post');
   }
@@ -131,18 +134,18 @@ function renderPost(post) {
       ${imagesHTML}
 
       <div class="post-detail__actions">
-        <button class="post-card__action" onclick="handleLike()">
-          <span>&#9825;</span> ${post.stats?.likeCount || 0} likes
+        <button class="post-detail__action" onclick="togglePostLike('${post.id}', this)">
+          <span class="like-icon">&#9825;</span> <span class="like-count">${post.stats?.likeCount || 0}</span> likes
         </button>
-        <span class="post-card__action">
+        <span class="post-detail__action">
           <span>&#128172;</span> ${post.stats?.commentCount || 0} comments
         </span>
       </div>
 
-      <div class="post-detail__comments">
-        <h3>Comments</h3>
-        <p class="comments-placeholder">Comments coming in Phase 4.2</p>
-      </div>
+      <!-- Comments Section -->
+      <section id="comments-section" class="comments-section">
+        <p class="comments-loading">Loading comments...</p>
+      </section>
     </article>
 
     <a href="community.html" class="back-link">&larr; Back to Community</a>
@@ -171,13 +174,6 @@ function escapeHtml(text) {
 }
 
 /**
- * Handle like button click (placeholder)
- */
-function handleLike() {
-  alert('Likes coming in Phase 4.2!');
-}
-
-/**
  * Show error message
  */
 function showError(message) {
@@ -189,6 +185,231 @@ function showError(message) {
       <a href="community.html" class="btn btn-primary">Back to Community</a>
     </div>
   `;
+}
+
+/**
+ * Load and render comments for the current post
+ */
+async function loadComments(postId) {
+  const commentsSection = document.getElementById('comments-section');
+  if (!commentsSection) return;
+
+  commentsSection.innerHTML = '<p class="comments-loading">Loading comments...</p>';
+
+  const result = await window.commentManager.getComments(postId);
+
+  if (!result.success) {
+    commentsSection.innerHTML = '<p class="comments-error">Failed to load comments.</p>';
+    return;
+  }
+
+  renderComments(result.comments, postId);
+}
+
+/**
+ * Render comments list
+ */
+function renderComments(comments, postId) {
+  const commentsSection = document.getElementById('comments-section');
+
+  const commentCount = comments.reduce((sum, c) => sum + 1 + (c.replies?.length || 0), 0);
+
+  let html = `
+    <div class="comments-header">
+      <h3>Comments (${commentCount})</h3>
+    </div>
+  `;
+
+  // Comment input (only for logged-in users)
+  html += `
+    <div id="comment-input-container" class="comment-input-container" style="display: none;">
+      <textarea id="comment-input" class="comment-input" placeholder="Add a comment..." maxlength="1000"></textarea>
+      <button id="submit-comment-btn" class="btn btn-primary btn-small" onclick="submitComment('${postId}')">Post</button>
+    </div>
+  `;
+
+  if (comments.length === 0) {
+    html += '<p class="comments-empty">No comments yet. Be the first!</p>';
+  } else {
+    html += '<div class="comments-list">';
+    comments.forEach(comment => {
+      html += renderComment(comment, postId);
+    });
+    html += '</div>';
+  }
+
+  commentsSection.innerHTML = html;
+
+  // Show comment input if logged in
+  if (window.firebaseAuth?.currentUser) {
+    document.getElementById('comment-input-container').style.display = 'flex';
+  }
+}
+
+/**
+ * Render a single comment with its replies
+ */
+function renderComment(comment, postId, isReply = false) {
+  const safeUsername = (comment.author?.username || 'anonymous').replace(/[^a-zA-Z0-9_]/g, '');
+  const timeAgo = window.commentManager.formatTimeAgo(comment.created);
+  const likeCount = comment.stats?.likeCount || 0;
+
+  let html = `
+    <div class="comment ${isReply ? 'comment--reply' : ''}" data-comment-id="${comment.id}">
+      <div class="comment__header">
+        <div class="comment__avatar">
+          ${
+            comment.author?.avatarUrl
+              ? `<img src="${comment.author.avatarUrl}" alt="${safeUsername}">`
+              : safeUsername.charAt(0).toUpperCase()
+          }
+        </div>
+        <div class="comment__meta">
+          <a href="profile.html?user=${safeUsername}" class="comment__author">@${safeUsername}</a>
+          <span class="comment__time">${timeAgo}</span>
+        </div>
+      </div>
+      <div class="comment__content">${escapeHtml(comment.content)}</div>
+      <div class="comment__actions">
+        <button class="comment__action" onclick="toggleCommentLike('${comment.id}', this)">
+          <span class="like-icon">&#9825;</span> <span class="like-count">${likeCount}</span>
+        </button>
+        ${!isReply ? `<button class="comment__action" onclick="showReplyInput('${comment.id}')">Reply</button>` : ''}
+      </div>
+      <div id="reply-input-${comment.id}" class="reply-input-container" style="display: none;">
+        <textarea class="comment-input comment-input--reply" placeholder="Write a reply..." maxlength="1000"></textarea>
+        <button class="btn btn-ghost btn-small" onclick="submitReply('${postId}', '${comment.id}')">Reply</button>
+      </div>
+  `;
+
+  // Render replies
+  if (comment.replies && comment.replies.length > 0) {
+    html += '<div class="comment__replies">';
+    comment.replies.forEach(reply => {
+      html += renderComment(reply, postId, true);
+    });
+    html += '</div>';
+  }
+
+  html += '</div>';
+  return html;
+}
+
+/**
+ * Submit a new top-level comment
+ */
+async function submitComment(postId) {
+  const input = document.getElementById('comment-input');
+  const content = input.value.trim();
+
+  if (!content) return;
+
+  const btn = document.getElementById('submit-comment-btn');
+  btn.disabled = true;
+  btn.textContent = 'Posting...';
+
+  const result = await window.commentManager.createComment(postId, content);
+
+  if (result.success) {
+    input.value = '';
+    await loadComments(postId);
+  } else {
+    alert(result.error || 'Failed to post comment');
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Post';
+}
+
+/**
+ * Show reply input for a comment
+ */
+function showReplyInput(commentId) {
+  const container = document.getElementById(`reply-input-${commentId}`);
+  if (container) {
+    container.style.display = container.style.display === 'none' ? 'flex' : 'none';
+    if (container.style.display === 'flex') {
+      container.querySelector('textarea').focus();
+    }
+  }
+}
+
+/**
+ * Submit a reply to a comment
+ */
+async function submitReply(postId, parentCommentId) {
+  const container = document.getElementById(`reply-input-${parentCommentId}`);
+  const textarea = container.querySelector('textarea');
+  const content = textarea.value.trim();
+
+  if (!content) return;
+
+  const btn = container.querySelector('button');
+  btn.disabled = true;
+  btn.textContent = 'Posting...';
+
+  const result = await window.commentManager.createComment(postId, content, parentCommentId);
+
+  if (result.success) {
+    textarea.value = '';
+    container.style.display = 'none';
+    await loadComments(postId);
+  } else {
+    alert(result.error || 'Failed to post reply');
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Reply';
+}
+
+/**
+ * Toggle like on a comment
+ */
+async function toggleCommentLike(commentId, buttonElement) {
+  const result = await window.socialManager.toggleCommentLike(commentId);
+
+  if (result.success) {
+    const countSpan = buttonElement.querySelector('.like-count');
+    const iconSpan = buttonElement.querySelector('.like-icon');
+    let count = parseInt(countSpan.textContent) || 0;
+
+    if (result.liked) {
+      count++;
+      iconSpan.innerHTML = '&#9829;'; // Filled heart
+      buttonElement.classList.add('liked');
+    } else {
+      count = Math.max(0, count - 1);
+      iconSpan.innerHTML = '&#9825;'; // Empty heart
+      buttonElement.classList.remove('liked');
+    }
+
+    countSpan.textContent = count;
+  }
+}
+
+/**
+ * Toggle like on the current post
+ */
+async function togglePostLike(postId, buttonElement) {
+  const result = await window.socialManager.togglePostLike(postId);
+
+  if (result.success) {
+    const countSpan = buttonElement.querySelector('.like-count');
+    const iconSpan = buttonElement.querySelector('.like-icon');
+    let count = parseInt(countSpan.textContent) || 0;
+
+    if (result.liked) {
+      count++;
+      iconSpan.innerHTML = '&#9829;'; // Filled heart
+      buttonElement.classList.add('liked');
+    } else {
+      count = Math.max(0, count - 1);
+      iconSpan.innerHTML = '&#9825;'; // Empty heart
+      buttonElement.classList.remove('liked');
+    }
+
+    countSpan.textContent = count;
+  }
 }
 
 // Initialize on DOM ready
