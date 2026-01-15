@@ -184,10 +184,27 @@
         </div>
       </section>
 
-      <!-- Main Row: Tanks + Maintenance -->
-      <div class="dashboard-main-row">
-        <!-- Tank Gallery Section -->
-        <section class="tank-gallery-section dashboard-section-animate" id="my-tanks-section">
+      <!-- Dashboard Tabs -->
+      <nav class="dashboard-tabs">
+        <button class="dashboard-tab active" data-tab="tanks" onclick="switchDashboardTab('tanks')">
+          My Tanks
+        </button>
+        <button class="dashboard-tab" data-tab="profile" onclick="switchDashboardTab('profile')">
+          My Profile
+        </button>
+        <button class="dashboard-tab" data-tab="settings" onclick="switchDashboardTab('settings')">
+          Settings
+        </button>
+      </nav>
+
+      <!-- Tab Content Container -->
+      <div class="dashboard-tab-content">
+        <!-- My Tanks Tab -->
+        <div id="tab-tanks" class="dashboard-tab-panel active">
+          <!-- Main Row: Tanks + Maintenance -->
+          <div class="dashboard-main-row">
+            <!-- Tank Gallery Section -->
+            <section class="tank-gallery-section dashboard-section-animate" id="my-tanks-section">
           <div class="tank-gallery-header">
             <h2>My Tanks</h2>
           </div>
@@ -329,48 +346,13 @@
             <button class="btn btn-primary" id="timeline-log-event-btn">+ Log Event</button>
             <button class="btn btn-ghost" id="timeline-add-schedule-btn">+ Add Schedule</button>
           </div>
-        </section>
-      </div>
-
-      <!-- Activity Row: Comparisons + Favorites -->
-      <div class="dashboard-activity-row">
-        <!-- Recent Comparisons -->
-        <section class="activity-section dashboard-section-animate">
-          <div class="activity-section-header">
-            <h2>Recent Comparisons</h2>
+            </section>
           </div>
-          <div id="recent-comparisons" class="activity-list">
-            <div class="activity-empty">
-              <p>No comparisons yet. <a href="compare.html">Start comparing fish!</a></p>
-            </div>
-          </div>
-        </section>
-
-        <!-- Favorite Species -->
-        <section class="activity-section dashboard-section-animate">
-          <div class="activity-section-header">
-            <h2>Favorite Species</h2>
-          </div>
-          <div id="favorite-species" class="activity-list">
-            <div class="activity-empty">
-              <p>No favorites yet. Click the star on species to save them!</p>
-            </div>
-          </div>
-        </section>
-      </div>
-    </div>
-
-    <!-- Bookmarked Posts Section -->
-    <section class="dashboard-bookmarks-section dashboard-section-animate">
-      <div class="activity-section-header">
-        <h2>Bookmarked Posts</h2>
-      </div>
-      <div id="dashboard-bookmarks" class="dashboard-bookmarks">
-        <div class="activity-empty">
-          <p>Loading...</p>
         </div>
+        <!-- End My Tanks Tab -->
       </div>
-    </section>
+      <!-- End Tab Content Container -->
+    </div>
 
     <!-- Tank Detail Modal -->
     <div class="tank-modal-backdrop" id="tank-modal-backdrop">
