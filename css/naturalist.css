@@ -7202,6 +7202,43 @@ body.logged-in .favorite-star {
   border-radius: var(--radius-lg);
 }
 
+/* Profile Tabs (own profile only) */
+.profile-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2rem;
+}
+
+.profile-tab {
+  background: none;
+  border: none;
+  padding: 1rem 1.5rem;
+  font-family: inherit;
+  font-size: 1rem;
+  color: var(--ink-secondary);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.profile-tab:hover {
+  color: var(--ink);
+}
+
+.profile-tab.active {
+  color: var(--forest);
+  border-bottom-color: var(--forest);
+}
+
+.profile-tab-panel {
+  display: none;
+}
+
+.profile-tab-panel.active {
+  display: block;
+}
+
 /* Responsive */
 @media (max-width: 600px) {
   .profile-header {

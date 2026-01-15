@@ -101,6 +101,11 @@ async function loadProfile(userId) {
 
     // Show follow button if not own profile
     await renderFollowButton(userId);
+
+    // Initialize tabs (only shown on own profile)
+    const auth = window.firebaseAuth;
+    const isOwnProfile = auth.currentUser && auth.currentUser.uid === userId;
+    initProfileTabs(isOwnProfile);
   } catch (error) {
     console.error('Error loading profile:', error);
     showError();
@@ -151,6 +156,11 @@ function renderEmptyProfile(userId) {
   profileUserId = userId;
   loadFollowStats(userId);
   renderFollowButton(userId);
+
+  // Initialize tabs (only shown on own profile)
+  const auth = window.firebaseAuth;
+  const isOwnProfile = auth.currentUser && auth.currentUser.uid === userId;
+  initProfileTabs(isOwnProfile);
 }
 
 /**
@@ -360,6 +370,138 @@ function showError() {
   document.getElementById('profile-loading').style.display = 'none';
   document.getElementById('profile-content').style.display = 'none';
   document.getElementById('profile-error').style.display = 'block';
+}
+
+// ===== TAB FUNCTIONALITY =====
+
+/**
+ * Initialize profile tabs (only for own profile)
+ */
+function initProfileTabs(isOwnProfile) {
+  const tabsEl = document.getElementById('profile-tabs');
+  if (!tabsEl) return;
+
+  // Only show tabs on own profile (bookmarks are private)
+  if (!isOwnProfile) {
+    tabsEl.style.display = 'none';
+    return;
+  }
+
+  tabsEl.style.display = 'flex';
+
+  // Add click handlers
+  const tabs = tabsEl.querySelectorAll('.profile-tab');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => switchTab(tab.dataset.tab));
+  });
+}
+
+/**
+ * Switch between tabs
+ */
+function switchTab(tabName) {
+  // Update tab buttons
+  document.querySelectorAll('.profile-tab').forEach(tab => {
+    tab.classList.toggle('active', tab.dataset.tab === tabName);
+  });
+
+  // Update tab panels
+  document.querySelectorAll('.profile-tab-panel').forEach(panel => {
+    panel.classList.toggle('active', panel.id === `${tabName}-tab`);
+  });
+
+  // Load bookmarks if switching to bookmarks tab
+  if (tabName === 'bookmarks') {
+    loadBookmarks();
+  }
+}
+
+/**
+ * Load and display user's bookmarked posts
+ */
+async function loadBookmarks() {
+  const loadingEl = document.getElementById('bookmarks-loading');
+  const gridEl = document.getElementById('bookmarks-grid');
+  const emptyEl = document.getElementById('bookmarks-empty');
+
+  if (!gridEl) return;
+
+  loadingEl.style.display = 'block';
+  gridEl.innerHTML = '';
+  emptyEl.style.display = 'none';
+
+  try {
+    const bookmarks = await window.socialManager.getBookmarks();
+
+    loadingEl.style.display = 'none';
+
+    if (bookmarks.length === 0) {
+      emptyEl.style.display = 'block';
+      return;
+    }
+
+    // Load the actual posts for each bookmark
+    const db = window.firebaseFirestore;
+    for (const bookmark of bookmarks) {
+      const postDoc = await db.collection('posts').doc(bookmark.postId).get();
+      if (postDoc.exists) {
+        const post = { id: postDoc.id, ...postDoc.data() };
+        const card = createBookmarkCard(post);
+        gridEl.appendChild(card);
+      }
+    }
+  } catch (error) {
+    console.error('Error loading bookmarks:', error);
+    loadingEl.style.display = 'none';
+    emptyEl.textContent = 'Error loading bookmarks';
+    emptyEl.style.display = 'block';
+  }
+}
+
+/**
+ * Create a card for a bookmarked post
+ */
+function createBookmarkCard(post) {
+  const card = document.createElement('article');
+  card.className = 'community-card';
+  card.onclick = () => {
+    window.location.href = `post.html?id=${encodeURIComponent(post.id)}`;
+  };
+
+  // Image section
+  const imageSection = document.createElement('div');
+  imageSection.className = 'community-card__image';
+
+  if (post.imageUrl) {
+    const img = document.createElement('img');
+    img.src = post.imageUrl;
+    img.alt = post.title || 'Post image';
+    img.loading = 'lazy';
+    imageSection.appendChild(img);
+  } else {
+    imageSection.classList.add('empty');
+    imageSection.innerHTML = '<span>No image</span>';
+  }
+
+  card.appendChild(imageSection);
+
+  // Content section
+  const content = document.createElement('div');
+  content.className = 'community-card__content';
+
+  const title = document.createElement('h3');
+  title.className = 'community-card__title';
+  title.textContent = post.title || 'Untitled Post';
+  content.appendChild(title);
+
+  const meta = document.createElement('div');
+  meta.className = 'community-card__meta';
+  meta.innerHTML = `<span>@${post.username || 'Unknown'}</span>`;
+  content.appendChild(meta);
+
+  card.appendChild(content);
+
+  return card;
 }
 
 // Initialize on DOM ready
