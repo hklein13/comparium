@@ -1060,6 +1060,117 @@ window.firestoreDeleteComment = async commentId => {
 };
 
 // ============================================================================
+// LIKES - Firestore Operations (Phase 4.2)
+// ============================================================================
+
+/**
+ * Like a post or comment
+ * @param {string} targetId - Post or comment ID
+ * @param {string} targetType - "post" or "comment"
+ * @returns {Promise<{success: boolean, error?: string}>}
+ */
+window.firestoreLike = async (targetId, targetType) => {
+  if (!firestore) return { success: false, error: 'Database not initialized' };
+
+  const user = auth?.currentUser;
+  if (!user) return { success: false, error: 'Must be logged in to like' };
+
+  if (!targetId) return { success: false, error: 'Target ID required' };
+  if (!['post', 'comment'].includes(targetType)) {
+    return { success: false, error: 'Invalid target type' };
+  }
+
+  try {
+    // Compound ID prevents duplicate likes
+    const likeId = `${user.uid}_${targetId}_${targetType}`;
+    const likeRef = doc(firestore, 'likes', likeId);
+
+    await setDoc(likeRef, {
+      userId: user.uid,
+      targetId: targetId,
+      targetType: targetType,
+      created: Timestamp.now(),
+    });
+
+    return { success: true };
+  } catch (e) {
+    return { success: false, error: e.message || 'Failed to like' };
+  }
+};
+
+/**
+ * Unlike a post or comment
+ * @param {string} targetId - Post or comment ID
+ * @param {string} targetType - "post" or "comment"
+ * @returns {Promise<{success: boolean, error?: string}>}
+ */
+window.firestoreUnlike = async (targetId, targetType) => {
+  if (!firestore) return { success: false, error: 'Database not initialized' };
+
+  const user = auth?.currentUser;
+  if (!user) return { success: false, error: 'Must be logged in' };
+
+  if (!targetId) return { success: false, error: 'Target ID required' };
+  if (!['post', 'comment'].includes(targetType)) {
+    return { success: false, error: 'Invalid target type' };
+  }
+
+  try {
+    const likeId = `${user.uid}_${targetId}_${targetType}`;
+    const likeRef = doc(firestore, 'likes', likeId);
+
+    await deleteDoc(likeRef);
+    return { success: true };
+  } catch (e) {
+    return { success: false, error: e.message || 'Failed to unlike' };
+  }
+};
+
+/**
+ * Check if current user has liked a target
+ * @param {string} targetId - Post or comment ID
+ * @param {string} targetType - "post" or "comment"
+ * @returns {Promise<{success: boolean, liked?: boolean, error?: string}>}
+ */
+window.firestoreHasLiked = async (targetId, targetType) => {
+  if (!firestore) return { success: false, error: 'Database not initialized' };
+
+  const user = auth?.currentUser;
+  if (!user) return { success: true, liked: false }; // Not logged in = not liked
+
+  if (!targetId || !targetType) return { success: true, liked: false };
+
+  try {
+    const likeId = `${user.uid}_${targetId}_${targetType}`;
+    const likeRef = doc(firestore, 'likes', likeId);
+    const likeSnap = await getDoc(likeRef);
+
+    return { success: true, liked: likeSnap.exists() };
+  } catch (e) {
+    return { success: false, error: e.message || 'Failed to check like status' };
+  }
+};
+
+/**
+ * Toggle like on a post or comment
+ * @param {string} targetId - Post or comment ID
+ * @param {string} targetType - "post" or "comment"
+ * @returns {Promise<{success: boolean, liked?: boolean, error?: string}>}
+ */
+window.firestoreToggleLike = async (targetId, targetType) => {
+  const hasLiked = await window.firestoreHasLiked(targetId, targetType);
+  if (!hasLiked.success) return hasLiked;
+
+  if (hasLiked.liked) {
+    const result = await window.firestoreUnlike(targetId, targetType);
+    return { ...result, liked: false };
+  } else {
+    const result = await window.firestoreLike(targetId, targetType);
+    return { ...result, liked: true };
+  }
+};
+
+// ============================================================================
 // FCM TOKEN MANAGEMENT (Phase 2 - Push Notifications)
 // ============================================================================
 
