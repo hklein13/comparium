@@ -12,9 +12,9 @@
 
 const { onRequest } = require('firebase-functions/v2/https');
 const { onSchedule } = require('firebase-functions/v2/scheduler');
-const { onDocumentCreated } = require('firebase-functions/v2/firestore');
+const { onDocumentCreated, onDocumentDeleted } = require('firebase-functions/v2/firestore');
 const { initializeApp } = require('firebase-admin/app');
-const { getFirestore, Timestamp } = require('firebase-admin/firestore');
+const { getFirestore, Timestamp, FieldValue } = require('firebase-admin/firestore');
 const { getMessaging } = require('firebase-admin/messaging');
 
 // Initialize Firebase Admin SDK
@@ -409,6 +409,331 @@ exports.cleanupExpiredNotifications = onSchedule(
     }
 
     console.log('cleanupExpiredNotifications: Complete');
+  }
+);
+
+// ============================================================
+// PHASE 4.2: COMMENT & LIKE COUNT FUNCTIONS
+// ============================================================
+
+/**
+ * onCommentCreated
+ *
+ * Purpose: Update comment counts when a new comment is created
+ * Trigger: Firestore onCreate on comments collection
+ *
+ * How it works:
+ * 1. When a comment is created, increment commentCount on the parent post
+ * 2. If the comment is a reply (has replyTo), also increment replyCount on parent comment
+ */
+exports.onCommentCreated = onDocumentCreated(
+  {
+    document: 'comments/{commentId}',
+    region: 'us-central1',
+  },
+  async event => {
+    const snapshot = event.data;
+    if (!snapshot) {
+      console.log('onCommentCreated: No data in event');
+      return;
+    }
+
+    const comment = snapshot.data();
+    const postId = comment.postId;
+
+    if (!postId) {
+      console.log('onCommentCreated: No postId in comment');
+      return;
+    }
+
+    console.log(`onCommentCreated: Incrementing commentCount for post ${postId}`);
+
+    // Increment comment count on the post
+    await db
+      .collection('posts')
+      .doc(postId)
+      .update({
+        'stats.commentCount': FieldValue.increment(1),
+      });
+
+    // If this is a reply, also increment replyCount on the parent comment
+    if (comment.replyTo) {
+      console.log(`onCommentCreated: Incrementing replyCount for comment ${comment.replyTo}`);
+      await db
+        .collection('comments')
+        .doc(comment.replyTo)
+        .update({
+          replyCount: FieldValue.increment(1),
+        });
+    }
+
+    console.log('onCommentCreated: Complete');
+  }
+);
+
+/**
+ * onCommentDeleted
+ *
+ * Purpose: Update comment counts and cascade delete replies when a comment is deleted
+ * Trigger: Firestore onDelete on comments collection
+ *
+ * How it works:
+ * 1. When a comment is deleted, decrement commentCount on the parent post
+ * 2. If the comment was a reply, also decrement replyCount on parent comment
+ * 3. Delete all replies to this comment (cascade delete)
+ * 4. Delete all likes on this comment
+ */
+exports.onCommentDeleted = onDocumentDeleted(
+  {
+    document: 'comments/{commentId}',
+    region: 'us-central1',
+  },
+  async event => {
+    const snapshot = event.data;
+    if (!snapshot) {
+      console.log('onCommentDeleted: No data in event');
+      return;
+    }
+
+    const commentId = event.params.commentId;
+    const comment = snapshot.data();
+    const postId = comment.postId;
+
+    if (!postId) {
+      console.log('onCommentDeleted: No postId in comment');
+      return;
+    }
+
+    console.log(`onCommentDeleted: Processing deletion of comment ${commentId}`);
+
+    // Decrement comment count on the post
+    try {
+      await db
+        .collection('posts')
+        .doc(postId)
+        .update({
+          'stats.commentCount': FieldValue.increment(-1),
+        });
+    } catch (error) {
+      // Post may have been deleted already
+      console.log(`onCommentDeleted: Could not update post ${postId} - may be deleted`);
+    }
+
+    // If this was a reply, also decrement replyCount on the parent comment
+    if (comment.replyTo) {
+      console.log(`onCommentDeleted: Decrementing replyCount for comment ${comment.replyTo}`);
+      try {
+        await db
+          .collection('comments')
+          .doc(comment.replyTo)
+          .update({
+            replyCount: FieldValue.increment(-1),
+          });
+      } catch (error) {
+        // Parent comment may have been deleted already
+        console.log(
+          `onCommentDeleted: Could not update parent comment ${comment.replyTo} - may be deleted`
+        );
+      }
+    }
+
+    // Cascade delete: Find and delete all replies to this comment
+    const repliesSnap = await db.collection('comments').where('replyTo', '==', commentId).get();
+
+    // Also delete likes on this comment
+    const likesSnap = await db
+      .collection('likes')
+      .where('targetId', '==', commentId)
+      .where('targetType', '==', 'comment')
+      .get();
+
+    const docsToDelete = [...repliesSnap.docs, ...likesSnap.docs];
+
+    if (docsToDelete.length > 0) {
+      console.log(
+        `onCommentDeleted: Cascade deleting ${repliesSnap.docs.length} replies and ${likesSnap.docs.length} likes`
+      );
+      const batch = db.batch();
+      docsToDelete.forEach(doc => batch.delete(doc.ref));
+      await batch.commit();
+    }
+
+    console.log('onCommentDeleted: Complete');
+  }
+);
+
+/**
+ * onLikeCreated
+ *
+ * Purpose: Update like counts when a new like is created
+ * Trigger: Firestore onCreate on likes collection
+ *
+ * How it works:
+ * 1. Determine the target collection (posts or comments) from targetType
+ * 2. Increment likeCount on the target document
+ */
+exports.onLikeCreated = onDocumentCreated(
+  {
+    document: 'likes/{likeId}',
+    region: 'us-central1',
+  },
+  async event => {
+    const snapshot = event.data;
+    if (!snapshot) {
+      console.log('onLikeCreated: No data in event');
+      return;
+    }
+
+    const like = snapshot.data();
+    const { targetId, targetType } = like;
+
+    if (!targetId || !targetType) {
+      console.log('onLikeCreated: Missing targetId or targetType');
+      return;
+    }
+
+    // Determine collection based on targetType
+    const collectionName = targetType === 'post' ? 'posts' : 'comments';
+
+    console.log(`onLikeCreated: Incrementing likeCount for ${collectionName}/${targetId}`);
+
+    await db
+      .collection(collectionName)
+      .doc(targetId)
+      .update({
+        'stats.likeCount': FieldValue.increment(1),
+      });
+
+    console.log('onLikeCreated: Complete');
+  }
+);
+
+/**
+ * onLikeDeleted
+ *
+ * Purpose: Update like counts when a like is deleted
+ * Trigger: Firestore onDelete on likes collection
+ *
+ * How it works:
+ * 1. Determine the target collection (posts or comments) from targetType
+ * 2. Decrement likeCount on the target document
+ */
+exports.onLikeDeleted = onDocumentDeleted(
+  {
+    document: 'likes/{likeId}',
+    region: 'us-central1',
+  },
+  async event => {
+    const snapshot = event.data;
+    if (!snapshot) {
+      console.log('onLikeDeleted: No data in event');
+      return;
+    }
+
+    const like = snapshot.data();
+    const { targetId, targetType } = like;
+
+    if (!targetId || !targetType) {
+      console.log('onLikeDeleted: Missing targetId or targetType');
+      return;
+    }
+
+    // Determine collection based on targetType
+    const collectionName = targetType === 'post' ? 'posts' : 'comments';
+
+    console.log(`onLikeDeleted: Decrementing likeCount for ${collectionName}/${targetId}`);
+
+    try {
+      await db
+        .collection(collectionName)
+        .doc(targetId)
+        .update({
+          'stats.likeCount': FieldValue.increment(-1),
+        });
+    } catch (error) {
+      // Target may have been deleted already
+      console.log(`onLikeDeleted: Could not update ${collectionName}/${targetId} - may be deleted`);
+    }
+
+    console.log('onLikeDeleted: Complete');
+  }
+);
+
+/**
+ * onPostDeleted
+ *
+ * Purpose: Cascade delete all comments and likes when a post is deleted
+ * Trigger: Firestore onDelete on posts collection
+ *
+ * How it works:
+ * 1. Delete all comments associated with this post
+ * 2. Delete all likes on this post
+ * 3. Note: Likes on comments will be orphaned but cleaned up separately
+ */
+exports.onPostDeleted = onDocumentDeleted(
+  {
+    document: 'posts/{postId}',
+    region: 'us-central1',
+  },
+  async event => {
+    const postId = event.params.postId;
+
+    if (!postId) {
+      console.log('onPostDeleted: No postId in event');
+      return;
+    }
+
+    console.log(`onPostDeleted: Cascade deleting comments and likes for post ${postId}`);
+
+    // Get all comments for this post
+    const commentsSnap = await db.collection('comments').where('postId', '==', postId).get();
+
+    // Get all likes for this post
+    const postLikesSnap = await db
+      .collection('likes')
+      .where('targetId', '==', postId)
+      .where('targetType', '==', 'post')
+      .get();
+
+    // Collect all comment IDs to also delete their likes
+    const commentIds = commentsSnap.docs.map(doc => doc.id);
+
+    // Get likes on all comments of this post
+    let commentLikesDocs = [];
+    if (commentIds.length > 0) {
+      // Firestore 'in' queries limited to 30 items, so batch if needed
+      for (let i = 0; i < commentIds.length; i += 30) {
+        const batch = commentIds.slice(i, i + 30);
+        const likesSnap = await db
+          .collection('likes')
+          .where('targetId', 'in', batch)
+          .where('targetType', '==', 'comment')
+          .get();
+        commentLikesDocs = commentLikesDocs.concat(likesSnap.docs);
+      }
+    }
+
+    // Delete everything in batches (Firestore batch limit is 500)
+    const allDocs = [...commentsSnap.docs, ...postLikesSnap.docs, ...commentLikesDocs];
+
+    if (allDocs.length === 0) {
+      console.log('onPostDeleted: No associated data to delete');
+      return;
+    }
+
+    console.log(
+      `onPostDeleted: Deleting ${commentsSnap.docs.length} comments, ${postLikesSnap.docs.length} post likes, ${commentLikesDocs.length} comment likes`
+    );
+
+    // Process in batches of 500
+    for (let i = 0; i < allDocs.length; i += 500) {
+      const batchDocs = allDocs.slice(i, i + 500);
+      const batch = db.batch();
+      batchDocs.forEach(doc => batch.delete(doc.ref));
+      await batch.commit();
+    }
+
+    console.log('onPostDeleted: Complete');
   }
 );
 

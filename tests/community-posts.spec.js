@@ -258,3 +258,104 @@ test.describe('Post Card Structure', () => {
     console.log('\n✅ Tank preview tests passed\n');
   });
 });
+
+test.describe('Comments', () => {
+  test('comment section should display on post detail', async ({ page }) => {
+    // Navigate to community page
+    await page.goto('/community.html');
+    await page.waitForFunction(() => window.firebaseFirestore !== undefined, { timeout: 10000 });
+    await page.waitForSelector('.post-card, .community-empty', { timeout: 15000 });
+
+    const postCount = await page.locator('.post-card').count();
+    if (postCount === 0) {
+      console.log('⚠ No posts to test comments - skipping');
+      return;
+    }
+
+    // Click the comment button on the first post (this always goes to post.html)
+    // Using comment button avoids the issue where tank preview click goes to tank.html
+    const firstPost = page.locator('.post-card').first();
+    const commentBtn = firstPost.locator('.post-card__action').nth(1); // Second action button is comment
+
+    await Promise.all([page.waitForURL(/post\.html\?id=/, { timeout: 30000 }), commentBtn.click()]);
+
+    // Wait for Firebase on the new page
+    await page.waitForFunction(() => window.firebaseFirestore !== undefined, { timeout: 10000 });
+
+    // Wait for the post to load (loading state to disappear)
+    await page.waitForSelector('.post-detail', { timeout: 15000 });
+
+    await test.step('Verify comments section exists', async () => {
+      // Look for comments section by ID or by comments header class
+      const commentsSection = page.locator('#comments-section, .comments-section');
+      const commentsHeader = page.locator('.comments-header, h3:has-text("Comments")');
+
+      // Either the #comments-section with header, or just a Comments heading should exist
+      const hasCommentsSection = (await commentsSection.count()) > 0;
+      const hasCommentsHeader = (await commentsHeader.count()) > 0;
+
+      if (hasCommentsSection) {
+        await expect(commentsSection.first()).toBeVisible({ timeout: 10000 });
+        console.log('✓ Comments section element found');
+      }
+
+      if (hasCommentsHeader) {
+        await expect(commentsHeader.first()).toBeVisible({ timeout: 10000 });
+        console.log('✓ Comments header visible');
+      }
+
+      // At least one should be true
+      expect(hasCommentsSection || hasCommentsHeader).toBe(true);
+
+      console.log('✓ Comments section visible');
+    });
+
+    console.log('\n✅ Comment display tests passed\n');
+  });
+});
+
+test.describe('Like Buttons', () => {
+  test('like button should be present on post cards', async ({ page }) => {
+    await page.goto('/community.html');
+    await page.waitForFunction(() => window.firebaseFirestore !== undefined, { timeout: 10000 });
+    await page.waitForSelector('.post-card, .community-empty', { timeout: 15000 });
+
+    const postCount = await page.locator('.post-card').count();
+    if (postCount === 0) {
+      console.log('⚠ No posts to test likes - skipping');
+      return;
+    }
+
+    await test.step('Verify like button exists', async () => {
+      const firstPost = page.locator('.post-card').first();
+      const actions = firstPost.locator('.post-card__actions');
+      await expect(actions).toBeVisible({ timeout: 10000 });
+
+      // First action button should be the like button
+      const likeBtn = firstPost.locator('.post-card__action').first();
+      await expect(likeBtn).toBeVisible();
+
+      // Verify button contains a heart character (like icon)
+      // The like button has innerHTML: <span class="like-icon">♡</span> <span class="like-count">0</span>
+      const buttonText = await likeBtn.textContent();
+      expect(buttonText).toMatch(/[♡♥\d]/); // Heart or number (like count)
+
+      // Check if like-icon span exists (may need to wait for render)
+      const likeIcon = likeBtn.locator('.like-icon');
+      const hasLikeIcon = (await likeIcon.count()) > 0;
+
+      if (hasLikeIcon) {
+        await expect(likeIcon).toBeVisible();
+        console.log('✓ Like icon span found');
+      } else {
+        // If no .like-icon class, just verify the button has heart content
+        expect(buttonText).toMatch(/[♡♥]/);
+        console.log('✓ Like button has heart character');
+      }
+
+      console.log('✓ Like button present on post cards');
+    });
+
+    console.log('\n✅ Like button tests passed\n');
+  });
+});

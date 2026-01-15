@@ -271,7 +271,9 @@ function generatePlantDescription(key, plant, descriptions) {
     difficultyDesc = 'challenging to grow and requires attention';
   }
 
-  const co2Desc = plant.co2Required ? ' CO2 supplementation recommended.' : ' Does not require CO2 supplementation.';
+  const co2Desc = plant.co2Required
+    ? ' CO2 supplementation recommended.'
+    : ' Does not require CO2 supplementation.';
 
   return `A ${plant.position} plant that is ${difficultyDesc}. Grows to ${plant.maxHeight} ${plant.heightUnit} with ${plant.growthRate.toLowerCase()} growth rate. Thrives in ${tempRange} water with pH ${phRange}. Requires ${plant.lightNeeds.toLowerCase()} lighting.${co2Desc}`.replace(
     /\s+/g,

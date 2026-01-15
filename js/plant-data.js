@@ -8,7 +8,8 @@ var plantDatabase = {
     commonName: 'Java Fern',
     scientificName: 'Microsorum pteropus',
     origin: 'asia',
-    imageUrl: 'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fplants%2FjavaFern.jpg?alt=media',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fplants%2FjavaFern.jpg?alt=media',
     position: 'midground',
     plantingStyle: 'attachToWood',
     difficulty: 'Easy',
@@ -29,7 +30,8 @@ var plantDatabase = {
     commonName: 'Java Moss',
     scientificName: 'Taxiphyllum barbieri',
     origin: 'asia',
-    imageUrl: 'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fplants%2FjavaMoss.jpg?alt=media',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fplants%2FjavaMoss.jpg?alt=media',
     position: 'foreground',
     plantingStyle: 'attachToWood',
     difficulty: 'Easy',
@@ -50,7 +52,8 @@ var plantDatabase = {
     commonName: 'Amazon Sword',
     scientificName: 'Echinodorus amazonicus',
     origin: 'southAmerica',
-    imageUrl: 'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fplants%2FamazonSword.jpg?alt=media',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fplants%2FamazonSword.jpg?alt=media',
     position: 'background',
     plantingStyle: 'substrate',
     difficulty: 'Easy',
@@ -71,7 +74,8 @@ var plantDatabase = {
     commonName: 'Anubias',
     scientificName: 'Anubias barteri',
     origin: 'africa',
-    imageUrl: 'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fplants%2Fanubias.jpg?alt=media',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fplants%2Fanubias.jpg?alt=media',
     position: 'foreground',
     plantingStyle: 'attachToWood',
     difficulty: 'Easy',
@@ -92,7 +96,8 @@ var plantDatabase = {
     commonName: 'Vallisneria',
     scientificName: 'Vallisneria spiralis',
     origin: 'asia',
-    imageUrl: 'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fplants%2Fvallisneria.jpg?alt=media',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fplants%2Fvallisneria.jpg?alt=media',
     position: 'background',
     plantingStyle: 'substrate',
     difficulty: 'Easy',
@@ -113,7 +118,8 @@ var plantDatabase = {
     commonName: 'Cryptocoryne',
     scientificName: 'Cryptocoryne wendtii',
     origin: 'asia',
-    imageUrl: 'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fplants%2Fcryptocoryne.jpg?alt=media',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fplants%2Fcryptocoryne.jpg?alt=media',
     position: 'midground',
     plantingStyle: 'substrate',
     difficulty: 'Easy',
@@ -134,7 +140,8 @@ var plantDatabase = {
     commonName: 'Dwarf Sagittaria',
     scientificName: 'Sagittaria subulata',
     origin: 'northCentralAmerica',
-    imageUrl: 'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fplants%2FdwarfSagittaria.jpg?alt=media',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fplants%2FdwarfSagittaria.jpg?alt=media',
     position: 'foreground',
     plantingStyle: 'substrate',
     difficulty: 'Easy',
@@ -155,7 +162,8 @@ var plantDatabase = {
     commonName: 'Hornwort',
     scientificName: 'Ceratophyllum demersum',
     origin: 'northCentralAmerica',
-    imageUrl: 'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fplants%2Fhornwort.jpg?alt=media',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fplants%2Fhornwort.jpg?alt=media',
     position: 'background',
     plantingStyle: 'floating',
     difficulty: 'Easy',
@@ -176,7 +184,8 @@ var plantDatabase = {
     commonName: 'Water Wisteria',
     scientificName: 'Hygrophila difformis',
     origin: 'asia',
-    imageUrl: 'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fplants%2FwaterWisteria.jpg?alt=media',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fplants%2FwaterWisteria.jpg?alt=media',
     position: 'midground',
     plantingStyle: 'substrate',
     difficulty: 'Easy',
@@ -218,7 +227,8 @@ var plantDatabase = {
     commonName: 'Amazon Frogbit',
     scientificName: 'Limnobium laevigatum',
     origin: 'southAmerica',
-    imageUrl: 'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fplants%2FamazonFrogbit.jpg?alt=media',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fplants%2FamazonFrogbit.jpg?alt=media',
     position: 'surface',
     plantingStyle: 'floating',
     difficulty: 'Easy',
@@ -239,7 +249,8 @@ var plantDatabase = {
     commonName: 'Marimo Moss Ball',
     scientificName: 'Aegagropila linnaei',
     origin: 'asia',
-    imageUrl: 'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fplants%2Fmarimo.jpg?alt=media',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fplants%2Fmarimo.jpg?alt=media',
     position: 'foreground',
     plantingStyle: 'substrate',
     difficulty: 'Easy',
@@ -260,7 +271,8 @@ var plantDatabase = {
     commonName: 'Bacopa',
     scientificName: 'Bacopa caroliniana',
     origin: 'northCentralAmerica',
-    imageUrl: 'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fplants%2Fbacopa.jpg?alt=media',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fplants%2Fbacopa.jpg?alt=media',
     position: 'midground',
     plantingStyle: 'substrate',
     difficulty: 'Moderate',
@@ -281,7 +293,8 @@ var plantDatabase = {
     commonName: 'Rotala',
     scientificName: 'Rotala rotundifolia',
     origin: 'asia',
-    imageUrl: 'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fplants%2Frotala.jpg?alt=media',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fplants%2Frotala.jpg?alt=media',
     position: 'background',
     plantingStyle: 'substrate',
     difficulty: 'Moderate',
@@ -302,7 +315,8 @@ var plantDatabase = {
     commonName: 'Dwarf Hairgrass',
     scientificName: 'Eleocharis parvula',
     origin: 'northCentralAmerica',
-    imageUrl: 'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fplants%2FdwarfHairgrass.jpg?alt=media',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fplants%2FdwarfHairgrass.jpg?alt=media',
     position: 'foreground',
     plantingStyle: 'substrate',
     difficulty: 'Moderate',

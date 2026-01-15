@@ -784,12 +784,7 @@ window.firestoreCreatePost = async postData => {
 window.firestoreGetPosts = async (options = {}) => {
   if (!firestore) return { success: false, posts: [] };
 
-  const {
-    category = null,
-    sortBy = 'newest',
-    limit: maxResults = 20,
-    lastDoc = null,
-  } = options;
+  const { category = null, sortBy = 'newest', limit: maxResults = 20, lastDoc = null } = options;
 
   try {
     let constraints = [where('visibility', '==', 'public')];
@@ -943,6 +938,232 @@ window.storageUploadPostImage = async (postId, file, index) => {
     return { success: true, url };
   } catch (e) {
     return { success: false, error: e.message || 'Upload failed' };
+  }
+};
+
+// ============================================================================
+// COMMENTS - Firestore Operations (Phase 4.2)
+// ============================================================================
+
+/**
+ * Create a new comment on a post
+ * @param {string} postId - Post to comment on
+ * @param {string} content - Comment text (1-1000 chars)
+ * @param {string|null} replyTo - Parent comment ID for replies (null for top-level)
+ * @returns {Promise<{success: boolean, commentId?: string, error?: string}>}
+ */
+window.firestoreCreateComment = async (postId, content, replyTo = null) => {
+  if (!firestore) return { success: false, error: 'Database not initialized' };
+
+  const user = auth?.currentUser;
+  if (!user) return { success: false, error: 'Must be logged in to comment' };
+
+  if (!postId) return { success: false, error: 'Post ID required' };
+  if (!content || content.trim().length === 0)
+    return { success: false, error: 'Comment cannot be empty' };
+  if (content.length > 1000)
+    return { success: false, error: 'Comment too long (max 1000 characters)' };
+
+  try {
+    // Get user profile for author info
+    const profile = await window.firestoreGetProfile(user.uid);
+    const username = profile?.username || 'anonymous';
+    const avatarUrl = profile?.avatarUrl || null;
+
+    const now = Timestamp.now();
+    const commentData = {
+      postId: postId,
+      userId: user.uid,
+      content: content.trim(),
+      replyTo: replyTo,
+      replyCount: 0,
+      stats: {
+        likeCount: 0,
+      },
+      author: {
+        username: username,
+        avatarUrl: avatarUrl,
+      },
+      created: now,
+      updated: now,
+    };
+
+    const docRef = await addDoc(collection(firestore, 'comments'), commentData);
+    return { success: true, commentId: docRef.id };
+  } catch (e) {
+    return { success: false, error: e.message || 'Failed to create comment' };
+  }
+};
+
+/**
+ * Get comments for a post
+ * @param {string} postId - Post ID
+ * @returns {Promise<{success: boolean, comments?: Array, error?: string}>}
+ */
+window.firestoreGetPostComments = async postId => {
+  if (!firestore) return { success: false, error: 'Database not initialized' };
+  if (!postId) return { success: false, error: 'Post ID required' };
+
+  try {
+    const q = query(
+      collection(firestore, 'comments'),
+      where('postId', '==', postId),
+      orderBy('created', 'asc')
+    );
+
+    const snapshot = await getDocs(q);
+    const comments = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+      created: doc.data().created?.toDate?.()?.toISOString() || null,
+      updated: doc.data().updated?.toDate?.()?.toISOString() || null,
+    }));
+
+    return { success: true, comments };
+  } catch (e) {
+    return { success: false, error: e.message || 'Failed to load comments' };
+  }
+};
+
+/**
+ * Delete a comment (owner only)
+ * @param {string} commentId - Comment ID to delete
+ * @returns {Promise<{success: boolean, error?: string}>}
+ */
+window.firestoreDeleteComment = async commentId => {
+  if (!firestore) return { success: false, error: 'Database not initialized' };
+
+  const user = auth?.currentUser;
+  if (!user) return { success: false, error: 'Must be logged in' };
+  if (!commentId) return { success: false, error: 'Comment ID required' };
+
+  try {
+    const commentRef = doc(firestore, 'comments', commentId);
+    const commentSnap = await getDoc(commentRef);
+
+    if (!commentSnap.exists()) {
+      return { success: false, error: 'Comment not found' };
+    }
+
+    if (commentSnap.data().userId !== user.uid) {
+      return { success: false, error: 'Not authorized to delete this comment' };
+    }
+
+    await deleteDoc(commentRef);
+    return { success: true };
+  } catch (e) {
+    return { success: false, error: e.message || 'Failed to delete comment' };
+  }
+};
+
+// ============================================================================
+// LIKES - Firestore Operations (Phase 4.2)
+// ============================================================================
+
+/**
+ * Like a post or comment
+ * @param {string} targetId - Post or comment ID
+ * @param {string} targetType - "post" or "comment"
+ * @returns {Promise<{success: boolean, error?: string}>}
+ */
+window.firestoreLike = async (targetId, targetType) => {
+  if (!firestore) return { success: false, error: 'Database not initialized' };
+
+  const user = auth?.currentUser;
+  if (!user) return { success: false, error: 'Must be logged in to like' };
+
+  if (!targetId) return { success: false, error: 'Target ID required' };
+  if (!['post', 'comment'].includes(targetType)) {
+    return { success: false, error: 'Invalid target type' };
+  }
+
+  try {
+    // Compound ID prevents duplicate likes
+    const likeId = `${user.uid}_${targetId}_${targetType}`;
+    const likeRef = doc(firestore, 'likes', likeId);
+
+    await setDoc(likeRef, {
+      userId: user.uid,
+      targetId: targetId,
+      targetType: targetType,
+      created: Timestamp.now(),
+    });
+
+    return { success: true };
+  } catch (e) {
+    return { success: false, error: e.message || 'Failed to like' };
+  }
+};
+
+/**
+ * Unlike a post or comment
+ * @param {string} targetId - Post or comment ID
+ * @param {string} targetType - "post" or "comment"
+ * @returns {Promise<{success: boolean, error?: string}>}
+ */
+window.firestoreUnlike = async (targetId, targetType) => {
+  if (!firestore) return { success: false, error: 'Database not initialized' };
+
+  const user = auth?.currentUser;
+  if (!user) return { success: false, error: 'Must be logged in' };
+
+  if (!targetId) return { success: false, error: 'Target ID required' };
+  if (!['post', 'comment'].includes(targetType)) {
+    return { success: false, error: 'Invalid target type' };
+  }
+
+  try {
+    const likeId = `${user.uid}_${targetId}_${targetType}`;
+    const likeRef = doc(firestore, 'likes', likeId);
+
+    await deleteDoc(likeRef);
+    return { success: true };
+  } catch (e) {
+    return { success: false, error: e.message || 'Failed to unlike' };
+  }
+};
+
+/**
+ * Check if current user has liked a target
+ * @param {string} targetId - Post or comment ID
+ * @param {string} targetType - "post" or "comment"
+ * @returns {Promise<{success: boolean, liked?: boolean, error?: string}>}
+ */
+window.firestoreHasLiked = async (targetId, targetType) => {
+  if (!firestore) return { success: false, error: 'Database not initialized' };
+
+  const user = auth?.currentUser;
+  if (!user) return { success: true, liked: false }; // Not logged in = not liked
+
+  if (!targetId || !targetType) return { success: true, liked: false };
+
+  try {
+    const likeId = `${user.uid}_${targetId}_${targetType}`;
+    const likeRef = doc(firestore, 'likes', likeId);
+    const likeSnap = await getDoc(likeRef);
+
+    return { success: true, liked: likeSnap.exists() };
+  } catch (e) {
+    return { success: false, error: e.message || 'Failed to check like status' };
+  }
+};
+
+/**
+ * Toggle like on a post or comment
+ * @param {string} targetId - Post or comment ID
+ * @param {string} targetType - "post" or "comment"
+ * @returns {Promise<{success: boolean, liked?: boolean, error?: string}>}
+ */
+window.firestoreToggleLike = async (targetId, targetType) => {
+  const hasLiked = await window.firestoreHasLiked(targetId, targetType);
+  if (!hasLiked.success) return hasLiked;
+
+  if (hasLiked.liked) {
+    const result = await window.firestoreUnlike(targetId, targetType);
+    return { ...result, liked: false };
+  } else {
+    const result = await window.firestoreLike(targetId, targetType);
+    return { ...result, liked: true };
   }
 };
 

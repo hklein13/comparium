@@ -213,19 +213,23 @@
 
     <!-- Force video autoplay on iOS Safari -->
     <script>
-      (function() {
+      (function () {
         var video = document.getElementById('hero-video');
         if (!video) return;
 
         // Try to play immediately
         var playPromise = video.play();
         if (playPromise !== undefined) {
-          playPromise.catch(function() {
+          playPromise.catch(function () {
             // Autoplay blocked - play on first user interaction
-            document.addEventListener('touchstart', function playOnTouch() {
-              video.play();
-              document.removeEventListener('touchstart', playOnTouch);
-            }, { once: true });
+            document.addEventListener(
+              'touchstart',
+              function playOnTouch() {
+                video.play();
+                document.removeEventListener('touchstart', playOnTouch);
+              },
+              { once: true }
+            );
           });
         }
       })();

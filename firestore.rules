@@ -248,6 +248,70 @@ service cloud.firestore {
     }
 
     // ========================================================================
+    // COMMENTS COLLECTION (Phase 4.2 - Comments & Likes)
+    // ========================================================================
+    // Structure: comments/{commentId}
+    //   - userId: Author's Firebase Auth UID
+    //   - postId: Reference to parent post
+    //   - content: Comment text (1-1000 chars)
+    //   - created: Timestamp when created
+    //   - replyTo: Optional parent comment ID for nested replies
+    //
+    // Anyone can read comments, authenticated users can create,
+    // only owner can update/delete their own comments
+    // ========================================================================
+
+    // Comments on posts
+    match /comments/{commentId} {
+      // Anyone can read comments on public posts
+      allow read: if true;
+
+      // Authenticated users can create comments
+      allow create: if request.auth != null
+                    && request.resource.data.userId == request.auth.uid
+                    && request.resource.data.postId is string
+                    && request.resource.data.content is string
+                    && request.resource.data.content.size() > 0
+                    && request.resource.data.content.size() <= 1000;
+
+      // Only owner can update/delete their comments
+      allow update, delete: if request.auth != null
+                            && resource.data.userId == request.auth.uid;
+    }
+
+    // ========================================================================
+    // LIKES COLLECTION (Phase 4.2 - Comments & Likes)
+    // ========================================================================
+    // Structure: likes/{likeId}
+    //   - likeId format: {userId}_{targetId}_{targetType}
+    //   - userId: User who liked
+    //   - targetId: ID of post or comment being liked
+    //   - targetType: 'post' or 'comment'
+    //   - created: Timestamp when liked
+    //
+    // Anyone can read likes, users can only create/delete their own likes
+    // Likes are immutable (no updates allowed)
+    // ========================================================================
+
+    // Likes on posts and comments
+    // Document ID format: {userId}_{targetId}_{targetType}
+    match /likes/{likeId} {
+      // Anyone can read likes
+      allow read: if true;
+
+      // User can only create likes with their own userId prefix
+      allow create: if request.auth != null
+                    && likeId.matches(request.auth.uid + '_.*');
+
+      // User can only delete their own likes
+      allow delete: if request.auth != null
+                    && likeId.matches(request.auth.uid + '_.*');
+
+      // No updates allowed (likes are create/delete only)
+      allow update: if false;
+    }
+
+    // ========================================================================
     // SPECIES REFERENCE DATABASE (Phase 2)
     // ========================================================================
     // Fish species data - public read, admin-only write

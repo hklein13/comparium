@@ -13,9 +13,15 @@ const __dirname = dirname(__filename);
 
 // Species to search (natural species only, not morphs/hybrids)
 const SPECIES_TO_SEARCH = [
-  { key: 'otocinclus', queries: ['Otocinclus', 'Otocinclus affinis', 'Otocinclus vittatus', 'Oto catfish'] },
+  {
+    key: 'otocinclus',
+    queries: ['Otocinclus', 'Otocinclus affinis', 'Otocinclus vittatus', 'Oto catfish'],
+  },
   { key: 'dawnTetra', queries: ['Aphyocharax paraguayensis', 'Dawn tetra'] },
-  { key: 'tBarb', queries: ['Puntius lateristriga', 'Striuntius lateristriga', 'T-barb', 'Spanner barb'] },
+  {
+    key: 'tBarb',
+    queries: ['Puntius lateristriga', 'Striuntius lateristriga', 'T-barb', 'Spanner barb'],
+  },
   { key: 'cumingsBarb', queries: ['Pethia cumingii', 'Puntius cumingii', 'Cuming barb'] },
   { key: 'glowlightDanio', queries: ['Danio choprae', 'Glowlight danio'] },
   { key: 'axelrodiRainbowfish', queries: ['Chilatherina axelrodi', 'Axelrod rainbowfish'] },
@@ -36,7 +42,7 @@ async function searchObservations(query) {
     const response = await fetch(url, {
       headers: {
         'User-Agent': 'Comparium/1.0 (https://comparium.net) Node.js',
-        'Accept': 'application/json',
+        Accept: 'application/json',
       },
     });
 
@@ -79,7 +85,7 @@ async function searchTaxaPhotos(query) {
     const response = await fetch(url, {
       headers: {
         'User-Agent': 'Comparium/1.0 (https://comparium.net) Node.js',
-        'Accept': 'application/json',
+        Accept: 'application/json',
       },
     });
 
@@ -206,13 +212,21 @@ function generateHTML(results) {
     </div>
 
     <div class="grid">
-        ${results.map(species => `
+        ${results
+          .map(
+            species => `
             <div class="card ${species.photos.length === 0 ? 'no-image' : ''}" id="card-${species.key}">
-                ${species.photos.length > 0
+                ${
+                  species.photos.length > 0
                     ? `<div class="card-images">
-                        ${species.photos.slice(0, 6).map((p, i) => `
+                        ${species.photos
+                          .slice(0, 6)
+                          .map(
+                            (p, i) => `
                             <img src="${p.thumbUrl}" data-key="${species.key}" data-url="${p.fullUrl}" onclick="selectImg(this)" title="${p.query}">
-                        `).join('')}
+                        `
+                          )
+                          .join('')}
                        </div>`
                     : `<div class="card-placeholder">No CC images found</div>`
                 }
@@ -222,7 +236,9 @@ function generateHTML(results) {
                     <div class="card-queries">Searched: ${species.queriesSearched.join(', ')}</div>
                 </div>
             </div>
-        `).join('')}
+        `
+          )
+          .join('')}
     </div>
 
     <div class="output-area" id="output">
@@ -295,7 +311,9 @@ async function main() {
       ]);
 
       const combined = [...obsPhotos, ...taxaPhotos];
-      const newPhotos = combined.filter(p => !allPhotos.find(existing => existing.thumbUrl === p.thumbUrl));
+      const newPhotos = combined.filter(
+        p => !allPhotos.find(existing => existing.thumbUrl === p.thumbUrl)
+      );
       allPhotos.push(...newPhotos);
 
       console.log(`${newPhotos.length} new photos`);

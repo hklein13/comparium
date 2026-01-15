@@ -130,9 +130,7 @@ function renderTankInfo(tank) {
   document.getElementById('tank-name').textContent = tank.name || 'Unnamed Tank';
 
   const sizeEl = document.getElementById('tank-size');
-  sizeEl.textContent = tank.size
-    ? `${tank.size}${tank.sizeUnit === 'liters' ? 'L' : 'g'}`
-    : '';
+  sizeEl.textContent = tank.size ? `${tank.size}${tank.sizeUnit === 'liters' ? 'L' : 'g'}` : '';
 
   const ownerLink = document.getElementById('tank-owner-link');
   ownerLink.textContent = `@${tank.username || 'Anonymous'}`;
@@ -167,7 +165,7 @@ function renderSpecies(speciesKeys) {
     if (!fish) return;
 
     const card = document.createElement('a');
-    card.href = `species.html?species=${encodeURIComponent(key)}`;
+    card.href = `species.html?fish=${encodeURIComponent(key)}`;
     card.className = 'species-mini-card';
 
     const imgWrapper = document.createElement('div');
