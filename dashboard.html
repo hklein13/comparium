@@ -165,8 +165,6 @@
             <span class="hero-stat-divider">·</span>
             <span class="hero-stat"><span id="species-total-count">0</span> species</span>
             <span class="hero-stat-divider">·</span>
-            <span class="hero-stat"><span id="favorite-count">0</span> favorites</span>
-            <span class="hero-stat-divider">·</span>
             <span class="hero-stat"><span id="follower-count">0</span> followers</span>
             <span class="hero-stat-divider">·</span>
             <span class="hero-stat"><span id="following-count">0</span> following</span>
@@ -1010,11 +1008,9 @@
             // Update stats
             const comparisons = profile.profile.comparisonHistory || [];
             const tanks = profile.profile.tanks || [];
-            const favorites = profile.profile.favoriteSpecies || [];
 
             document.getElementById('comparison-count').textContent = comparisons.length;
             document.getElementById('tank-count').textContent = tanks.length;
-            document.getElementById('favorite-count').textContent = favorites.length;
 
             // Calculate total species across all tanks
             const totalSpecies = tanks.reduce((sum, tank) => sum + (tank.species?.length || 0), 0);
