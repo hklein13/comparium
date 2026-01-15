@@ -193,14 +193,48 @@ window.firestoreSetProfile = async (uid, data) => {
   }
 };
 
+/**
+ * Update user profile fields
+ * @param {string} uid - User ID
+ * @param {object} updates - Fields to update (profile, social, notificationPreferences)
+ * @returns {Promise<{success: boolean, error?: string}>}
+ */
 window.firestoreUpdateProfile = async (uid, updates) => {
-  if (!firestore) return false;
+  if (!firestore || !uid) {
+    return { success: false, error: 'Not initialized' };
+  }
+
   try {
-    const ref = doc(firestore, 'users', uid);
-    await updateDoc(ref, updates);
-    return true;
-  } catch (e) {
-    return false;
+    const userRef = doc(firestore, 'users', uid);
+
+    // Build update object with dot notation for nested fields
+    const updateData = {};
+
+    if (updates.profile) {
+      if (updates.profile.bio !== undefined) updateData['profile.bio'] = updates.profile.bio;
+      if (updates.profile.experience !== undefined)
+        updateData['profile.experience'] = updates.profile.experience;
+      if (updates.profile.location !== undefined)
+        updateData['profile.location'] = updates.profile.location;
+    }
+
+    if (updates.social) {
+      if (updates.social.postCount !== undefined)
+        updateData['social.postCount'] = updates.social.postCount;
+      if (updates.social.followerCount !== undefined)
+        updateData['social.followerCount'] = updates.social.followerCount;
+      if (updates.social.followingCount !== undefined)
+        updateData['social.followingCount'] = updates.social.followingCount;
+    }
+
+    if (updates.notificationPreferences) {
+      updateData['notificationPreferences'] = updates.notificationPreferences;
+    }
+
+    await updateDoc(userRef, updateData);
+    return { success: true };
+  } catch (error) {
+    return { success: false, error: error.message };
   }
 };
 
