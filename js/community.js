@@ -308,6 +308,30 @@ function createPostCard(post) {
   };
   actions.appendChild(commentBtn);
 
+  // Bookmark button (only for logged-in users)
+  if (window.firebaseAuth?.currentUser) {
+    const bookmarkBtn = document.createElement('button');
+    bookmarkBtn.className = 'post-card__action post-card__bookmark';
+    bookmarkBtn.setAttribute('aria-label', 'Bookmark post');
+    bookmarkBtn.innerHTML = '<span class="bookmark-icon"></span>';
+    bookmarkBtn.onclick = async e => {
+      e.stopPropagation();
+      const result = await window.socialManager.toggleBookmark(post.id);
+      if (result.success) {
+        bookmarkBtn.classList.toggle('bookmarked', result.bookmarked);
+      }
+    };
+
+    // Check initial bookmark state
+    window.socialManager.isBookmarked(post.id).then(isBookmarked => {
+      if (isBookmarked) {
+        bookmarkBtn.classList.add('bookmarked');
+      }
+    });
+
+    actions.appendChild(bookmarkBtn);
+  }
+
   card.appendChild(actions);
 
   // Click card to view detail

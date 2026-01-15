@@ -7503,6 +7503,36 @@ body.logged-in .favorite-star {
   color: #e74c3c;
 }
 
+/* ===== Bookmark Button ===== */
+.post-card__bookmark {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  color: var(--ink-secondary);
+  transition: color 0.2s;
+}
+
+.post-card__bookmark:hover {
+  color: var(--forest);
+}
+
+.post-card__bookmark.bookmarked {
+  color: var(--forest);
+}
+
+.bookmark-icon {
+  display: inline-block;
+  width: 1.25rem;
+  height: 1.25rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z'/%3E%3C/svg%3E");
+  background-size: contain;
+}
+
+.post-card__bookmark.bookmarked .bookmark-icon {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='currentColor' viewBox='0 0 24 24'%3E%3Cpath d='M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z'/%3E%3C/svg%3E");
+}
+
 /* Mobile Responsive */
 @media (max-width: 768px) {
   .community-tabs {
