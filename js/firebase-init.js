@@ -967,8 +967,8 @@ window.firestoreCreateComment = async (postId, content, replyTo = null) => {
   try {
     // Get user profile for author info
     const profile = await window.firestoreGetProfile(user.uid);
-    const username = profile?.profile?.username || 'anonymous';
-    const avatarUrl = profile?.profile?.avatarUrl || null;
+    const username = profile?.username || 'anonymous';
+    const avatarUrl = profile?.avatarUrl || null;
 
     const now = Timestamp.now();
     const commentData = {

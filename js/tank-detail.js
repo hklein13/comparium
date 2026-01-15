@@ -165,7 +165,7 @@ function renderSpecies(speciesKeys) {
     if (!fish) return;
 
     const card = document.createElement('a');
-    card.href = `species.html?species=${encodeURIComponent(key)}`;
+    card.href = `species.html?fish=${encodeURIComponent(key)}`;
     card.className = 'species-mini-card';
 
     const imgWrapper = document.createElement('div');

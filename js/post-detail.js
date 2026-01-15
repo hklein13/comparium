@@ -106,6 +106,13 @@ function renderPost(post) {
 
   const safeUsername = (post.author?.username || '').replace(/[^a-zA-Z0-9_]/g, '');
 
+  // Check if current user is the post owner
+  const currentUserId = window.firebaseAuth?.currentUser?.uid;
+  const isOwner = currentUserId && currentUserId === post.userId;
+  const deleteButtonHTML = isOwner
+    ? `<button class="post-detail__delete" onclick="deleteCurrentPost('${post.id}')" title="Delete post">Delete</button>`
+    : '';
+
   container.innerHTML = `
     <article class="post-detail">
       <div class="post-detail__header">
@@ -125,6 +132,7 @@ function renderPost(post) {
             <span>${formatDate(post.created)}</span>
           </div>
         </div>
+        ${deleteButtonHTML}
       </div>
 
       <div class="post-detail__content">
@@ -409,6 +417,24 @@ async function togglePostLike(postId, buttonElement) {
     }
 
     countSpan.textContent = count;
+  }
+}
+
+/**
+ * Delete the current post (owner only)
+ */
+async function deleteCurrentPost(postId) {
+  if (!confirm('Are you sure you want to delete this post? This cannot be undone.')) {
+    return;
+  }
+
+  const result = await window.postManager.deletePost(postId);
+
+  if (result.success) {
+    alert('Post deleted successfully');
+    window.location.href = 'community.html';
+  } else {
+    alert(result.error || 'Failed to delete post');
   }
 }
 
