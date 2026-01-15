@@ -693,6 +693,90 @@
         document.getElementById('profile-following-count').textContent = social.followingCount || 0;
       }
 
+      // ============================================
+      // Profile Edit Modal
+      // ============================================
+
+      function openProfileEditModal() {
+        const modal = document.getElementById('profile-edit-modal');
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+
+        // Load current values
+        loadProfileEditData();
+
+        // Set up bio character counter
+        const bioInput = document.getElementById('edit-bio');
+        bioInput.addEventListener('input', updateBioCharCount);
+      }
+
+      function closeProfileEditModal() {
+        const modal = document.getElementById('profile-edit-modal');
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+      }
+
+      async function loadProfileEditData() {
+        const uid = window.getFirebaseUid?.();
+        if (!uid) return;
+
+        const profile = await window.firestoreGetProfile(uid);
+        const profileData = profile?.profile || {};
+
+        document.getElementById('edit-bio').value = profileData.bio || '';
+        document.getElementById('edit-experience').value = profileData.experience || '';
+        document.getElementById('edit-location').value = profileData.location || '';
+
+        updateBioCharCount();
+      }
+
+      function updateBioCharCount() {
+        const bio = document.getElementById('edit-bio').value;
+        document.getElementById('bio-char-count').textContent = bio.length;
+      }
+
+      async function saveProfileChanges() {
+        const uid = window.getFirebaseUid?.();
+        if (!uid) return;
+
+        const bio = document.getElementById('edit-bio').value.trim();
+        const experience = document.getElementById('edit-experience').value;
+        const location = document.getElementById('edit-location').value.trim();
+
+        // Validation
+        if (bio.length > 500) {
+          alert('Bio must be 500 characters or less');
+          return;
+        }
+        if (location.length > 100) {
+          alert('Location must be 100 characters or less');
+          return;
+        }
+
+        try {
+          const result = await window.firestoreUpdateProfile(uid, {
+            profile: { bio, experience, location },
+          });
+
+          if (result.success) {
+            closeProfileEditModal();
+            loadProfileTab(); // Refresh display
+            authManager?.showMessage?.('Profile updated', 'success');
+          } else {
+            alert(result.error || 'Failed to save profile');
+          }
+        } catch (error) {
+          alert('Failed to save profile');
+        }
+      }
+
+      // Close profile edit modal on backdrop click
+      document.getElementById('profile-edit-modal')?.addEventListener('click', function (e) {
+        if (e.target === this) {
+          closeProfileEditModal();
+        }
+      });
+
       async function loadMyPosts() {
         const container = document.getElementById('my-posts-list');
         const uid = window.getFirebaseUid?.();
