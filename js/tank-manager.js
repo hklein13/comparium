@@ -382,10 +382,10 @@ window.tankManager = {
     const buttons = document.querySelectorAll('.privacy-btn');
     const hiddenInput = document.getElementById('tank-public');
 
-    buttons.forEach((btn) => {
+    buttons.forEach(btn => {
       btn.addEventListener('click', () => {
         // Update selection state
-        buttons.forEach((b) => b.classList.remove('selected'));
+        buttons.forEach(b => b.classList.remove('selected'));
         btn.classList.add('selected');
 
         // Update hidden input value
@@ -404,7 +404,7 @@ window.tankManager = {
     const buttons = document.querySelectorAll('.privacy-btn');
     const hiddenInput = document.getElementById('tank-public');
 
-    buttons.forEach((btn) => {
+    buttons.forEach(btn => {
       const btnValue = btn.dataset.value === 'true';
       btn.classList.toggle('selected', btnValue === isPublic);
     });

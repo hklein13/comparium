@@ -130,9 +130,7 @@ function renderTankInfo(tank) {
   document.getElementById('tank-name').textContent = tank.name || 'Unnamed Tank';
 
   const sizeEl = document.getElementById('tank-size');
-  sizeEl.textContent = tank.size
-    ? `${tank.size}${tank.sizeUnit === 'liters' ? 'L' : 'g'}`
-    : '';
+  sizeEl.textContent = tank.size ? `${tank.size}${tank.sizeUnit === 'liters' ? 'L' : 'g'}` : '';
 
   const ownerLink = document.getElementById('tank-owner-link');
   ownerLink.textContent = `@${tank.username || 'Anonymous'}`;

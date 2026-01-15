@@ -14,11 +14,11 @@ const __dirname = dirname(__filename);
 
 // Acceptable licenses (CC licenses that allow reuse)
 const ALLOWED_LICENSES = [
-  'cc0',        // Public domain
-  'cc-by',      // Attribution
-  'cc-by-sa',   // Attribution-ShareAlike
-  'cc-by-nc',   // Attribution-NonCommercial (OK for non-profit site)
-  'cc-by-nc-sa' // Attribution-NonCommercial-ShareAlike
+  'cc0', // Public domain
+  'cc-by', // Attribution
+  'cc-by-sa', // Attribution-ShareAlike
+  'cc-by-nc', // Attribution-NonCommercial (OK for non-profit site)
+  'cc-by-nc-sa', // Attribution-NonCommercial-ShareAlike
 ];
 
 // Load fish database
@@ -52,7 +52,7 @@ async function searchINaturalist(scientificName, commonName) {
       const response = await fetch(url, {
         headers: {
           'User-Agent': 'Comparium/1.0 (https://comparium.net) Node.js',
-          'Accept': 'application/json',
+          Accept: 'application/json',
         },
       });
 
@@ -124,7 +124,6 @@ async function searchINaturalist(scientificName, commonName) {
       if (photos.length > 0) {
         return photos.slice(0, 3); // Return up to 3 photos
       }
-
     } catch (error) {
       console.error(`  Error searching for "${query}":`, error.message);
     }
@@ -359,11 +358,16 @@ function generateHTML(speciesData) {
     </div>
 
     <div class="grid">
-        ${speciesData.map(species => `
+        ${speciesData
+          .map(
+            species => `
             <div class="card ${species.images.length === 0 ? 'no-image' : ''}" data-key="${species.key}" id="card-${species.key}">
-                ${species.images.length > 0
+                ${
+                  species.images.length > 0
                     ? `<div class="card-images">
-                        ${species.images.map((img, i) => `
+                        ${species.images
+                          .map(
+                            (img, i) => `
                             <img src="${img.thumbUrl}"
                                  alt="${species.commonName}"
                                  data-key="${species.key}"
@@ -372,14 +376,17 @@ function generateHTML(speciesData) {
                                  onclick="selectImage(this)"
                                  title="Click to select"
                                  loading="lazy">
-                        `).join('')}
+                        `
+                          )
+                          .join('')}
                        </div>`
                     : `<div class="card-placeholder">No CC-licensed image found</div>`
                 }
                 <div class="card-body">
                     <h3 class="card-title">${species.commonName}</h3>
                     <p class="card-scientific">${species.scientificName}</p>
-                    ${species.images.length > 0
+                    ${
+                      species.images.length > 0
                         ? `<p class="card-meta">
                             License: ${species.images[0].license} |
                             ${species.images.length} option${species.images.length > 1 ? 's' : ''}
@@ -392,7 +399,9 @@ function generateHTML(speciesData) {
                     }
                 </div>
             </div>
-        `).join('')}
+        `
+          )
+          .join('')}
     </div>
 
     <div class="output-area" id="outputArea">
@@ -514,7 +523,9 @@ async function main() {
   const results = [];
   for (let i = 0; i < speciesWithoutImages.length; i++) {
     const species = speciesWithoutImages[i];
-    process.stdout.write(`Searching iNaturalist: ${i + 1}/${speciesWithoutImages.length} - ${species.commonName}...`);
+    process.stdout.write(
+      `Searching iNaturalist: ${i + 1}/${speciesWithoutImages.length} - ${species.commonName}...`
+    );
 
     const images = await searchINaturalist(species.scientificName, species.commonName);
 

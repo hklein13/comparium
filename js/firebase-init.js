@@ -784,12 +784,7 @@ window.firestoreCreatePost = async postData => {
 window.firestoreGetPosts = async (options = {}) => {
   if (!firestore) return { success: false, posts: [] };
 
-  const {
-    category = null,
-    sortBy = 'newest',
-    limit: maxResults = 20,
-    lastDoc = null,
-  } = options;
+  const { category = null, sortBy = 'newest', limit: maxResults = 20, lastDoc = null } = options;
 
   try {
     let constraints = [where('visibility', '==', 'public')];
@@ -964,8 +959,10 @@ window.firestoreCreateComment = async (postId, content, replyTo = null) => {
   if (!user) return { success: false, error: 'Must be logged in to comment' };
 
   if (!postId) return { success: false, error: 'Post ID required' };
-  if (!content || content.trim().length === 0) return { success: false, error: 'Comment cannot be empty' };
-  if (content.length > 1000) return { success: false, error: 'Comment too long (max 1000 characters)' };
+  if (!content || content.trim().length === 0)
+    return { success: false, error: 'Comment cannot be empty' };
+  if (content.length > 1000)
+    return { success: false, error: 'Comment too long (max 1000 characters)' };
 
   try {
     // Get user profile for author info

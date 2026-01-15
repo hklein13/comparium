@@ -803,7 +803,8 @@ var fishDatabase = {
     commonName: 'Otocinclus Catfish',
     scientificName: 'Otocinclus spp.',
     origin: 'southAmerica',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2Fotocinclus.jpg?alt=media",
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2Fotocinclus.jpg?alt=media',
     tempMin: 70,
     tempMax: 79,
     tempUnit: '°F',
@@ -828,7 +829,8 @@ var fishDatabase = {
     commonName: 'Bristlenose Pleco',
     scientificName: 'Ancistrus spp.',
     origin: 'northCentralAmerica',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FbristlenosePleco.jpg?alt=media",
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FbristlenosePleco.jpg?alt=media',
     tempMin: 72,
     tempMax: 80,
     tempUnit: '°F',
@@ -1013,7 +1015,8 @@ var fishDatabase = {
     commonName: 'Nerite Snail',
     scientificName: 'Neritina spp.',
     origin: 'africa',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FneriteSnail.jpg?alt=media",
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FneriteSnail.jpg?alt=media',
     tempMin: 65,
     tempMax: 85,
     tempUnit: '°F',
@@ -3623,7 +3626,8 @@ var fishDatabase = {
     commonName: 'Gold Gourami',
     scientificName: 'Trichopodus trichopterus (Gold)',
     origin: 'asia',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FgoldGourami.jpg?alt=media",
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FgoldGourami.jpg?alt=media',
     tempMin: 73,
     tempMax: 82,
     tempUnit: '°F',
@@ -3907,7 +3911,8 @@ var fishDatabase = {
     commonName: 'Head and Tail Light Tetra',
     scientificName: 'Hemigrammus ocellifer',
     origin: 'southAmerica',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FheadAndTailLightTetra.jpg?alt=media",
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FheadAndTailLightTetra.jpg?alt=media',
     tempMin: 72,
     tempMax: 80,
     tempUnit: '°F',
@@ -4018,7 +4023,8 @@ var fishDatabase = {
     commonName: "Beckford's Pencilfish",
     scientificName: 'Nannostomus beckfordi',
     origin: 'southAmerica',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FbeckfordsPencilfish.jpg?alt=media",
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FbeckfordsPencilfish.jpg?alt=media',
     tempMin: 75,
     tempMax: 82,
     tempUnit: '°F',
@@ -4153,12 +4159,12 @@ var fishDatabase = {
       'Males more intensely colored, smaller; females fuller-bodied, slightly larger; straightforward to distinguish',
   },
 
-
   flagTetra: {
     commonName: 'Flag Tetra',
     scientificName: 'Hyphessobrycon heterorhabdus',
     origin: 'southAmerica',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FflagTetra.jpg?alt=media",
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FflagTetra.jpg?alt=media',
     tempMin: 73,
     tempMax: 82,
     tempUnit: '°F',
@@ -4185,7 +4191,8 @@ var fishDatabase = {
     commonName: 'Costello Tetra',
     scientificName: 'Hemigrammus costelloi',
     origin: 'southAmerica',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FcostelloTetra.jpg?alt=media",
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FcostelloTetra.jpg?alt=media',
     tempMin: 72,
     tempMax: 80,
     tempUnit: '°F',
@@ -4290,7 +4297,8 @@ var fishDatabase = {
     commonName: 'Dawn Tetra',
     scientificName: 'Aphyocharax paraguayensis',
     origin: 'southAmerica',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FdawnTetra.jpg?alt=media",
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FdawnTetra.jpg?alt=media',
     tempMin: 72,
     tempMax: 80,
     tempUnit: '°F',
@@ -4398,7 +4406,8 @@ var fishDatabase = {
     commonName: 'Ruby Tetra',
     scientificName: 'Axelrodia riesei',
     origin: 'southAmerica',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FrubyTetra.jpg?alt=media",
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FrubyTetra.jpg?alt=media',
     tempMin: 68,
     tempMax: 82,
     tempUnit: '°F',
@@ -4563,7 +4572,8 @@ var fishDatabase = {
     commonName: 'T-Barb',
     scientificName: 'Puntigrus partipentazona',
     origin: 'asia',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FtBarb.jpg?alt=media",
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FtBarb.jpg?alt=media',
     tempMin: 72,
     tempMax: 79,
     tempUnit: '°F',
@@ -4614,7 +4624,8 @@ var fishDatabase = {
     commonName: 'Glowlight Danio',
     scientificName: 'Celestichthys choprae',
     origin: 'asia',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FglowlightDanio.jpg?alt=media",
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FglowlightDanio.jpg?alt=media',
     tempMin: 68,
     tempMax: 77,
     tempUnit: '°F',
@@ -5699,7 +5710,8 @@ var fishDatabase = {
     commonName: 'Melanistius Corydoras',
     scientificName: 'Corydoras melanistius',
     origin: 'southAmerica',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FmelanistiusCorydoras.jpg?alt=media",
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FmelanistiusCorydoras.jpg?alt=media',
     tempMin: 72,
     tempMax: 79,
     tempUnit: '°F',
@@ -5726,7 +5738,8 @@ var fishDatabase = {
     commonName: 'Agassizi Corydoras',
     scientificName: 'Corydoras agassizii',
     origin: 'southAmerica',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FagassiziCorydoras.jpg?alt=media",
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FagassiziCorydoras.jpg?alt=media',
     tempMin: 72,
     tempMax: 80,
     tempUnit: '°F',
@@ -5813,7 +5826,8 @@ var fishDatabase = {
     commonName: 'Skunk Botia',
     scientificName: 'Yasuhikotakia morleti',
     origin: 'asia',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FskunkBotia.jpg?alt=media",
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FskunkBotia.jpg?alt=media',
     tempMin: 78,
     tempMax: 86,
     tempUnit: '°F',
@@ -6040,7 +6054,8 @@ var fishDatabase = {
     commonName: 'Whiptail Catfish',
     scientificName: 'Rineloricaria lanceolata',
     origin: 'southAmerica',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FwhiptailCatfish.jpg?alt=media",
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FwhiptailCatfish.jpg?alt=media',
     tempMin: 72,
     tempMax: 79,
     tempUnit: '°F',
@@ -6094,7 +6109,8 @@ var fishDatabase = {
     commonName: 'Talking Catfish',
     scientificName: 'Acanthodoras spinosissimus',
     origin: 'southAmerica',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FtalkingCatfish.jpg?alt=media",
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FtalkingCatfish.jpg?alt=media',
     tempMin: 72,
     tempMax: 82,
     tempUnit: '°F',
@@ -6121,7 +6137,8 @@ var fishDatabase = {
     commonName: 'Banjo Catfish',
     scientificName: 'Bunocephalus coracoideus',
     origin: 'southAmerica',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FbanjoCatfish.jpg?alt=media",
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FbanjoCatfish.jpg?alt=media',
     tempMin: 72,
     tempMax: 79,
     tempUnit: '°F',
@@ -6207,7 +6224,8 @@ var fishDatabase = {
     commonName: 'Banded Gourami',
     scientificName: 'Trichogaster fasciata',
     origin: 'asia',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FbandedGourami.jpg?alt=media",
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FbandedGourami.jpg?alt=media',
     tempMin: 72,
     tempMax: 82,
     tempUnit: '°F',
@@ -6290,7 +6308,8 @@ var fishDatabase = {
     commonName: 'Licorice Gourami',
     scientificName: 'Parosphromenus deissneri',
     origin: 'asia',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FlicoriceGourami.jpg?alt=media",
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FlicoriceGourami.jpg?alt=media',
     tempMin: 72,
     tempMax: 82,
     tempUnit: '°F',
@@ -6376,7 +6395,8 @@ var fishDatabase = {
     commonName: 'Black Shark',
     scientificName: 'Labeo chrysophekadion',
     origin: 'asia',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FblackShark.jpg?alt=media",
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FblackShark.jpg?alt=media',
     tempMin: 72,
     tempMax: 79,
     tempUnit: '°F',
@@ -6596,7 +6616,8 @@ var fishDatabase = {
     commonName: 'Golden Wonder Killifish',
     scientificName: 'Aplocheilus lineatus',
     origin: 'asia',
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FgoldenWonderKillifish.jpg?alt=media",
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FgoldenWonderKillifish.jpg?alt=media',
     tempMin: 72,
     tempMax: 79,
     tempUnit: '°F',

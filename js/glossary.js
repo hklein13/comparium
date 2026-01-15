@@ -1307,7 +1307,9 @@ class GlossaryManager {
     const isSpecies =
       entry.category === 'species' && typeof fishDatabase !== 'undefined' && fishDatabase[fishKey];
     const isPlant =
-      entry.category === 'plants' && typeof plantDatabase !== 'undefined' && plantDatabase[plantKey];
+      entry.category === 'plants' &&
+      typeof plantDatabase !== 'undefined' &&
+      plantDatabase[plantKey];
 
     // For species entries, render as a card that opens modal
     if (isSpecies) {

@@ -117,7 +117,9 @@ test.describe('Complete User Flow', () => {
       await expect(page.locator('.tank-modal-backdrop.active')).toBeVisible();
 
       // Click the quick log water change button inside the modal
-      const waterChangeBtn = page.locator('#tank-modal-quicklog-buttons .quick-log-btn:has-text("Water Change")');
+      const waterChangeBtn = page.locator(
+        '#tank-modal-quicklog-buttons .quick-log-btn:has-text("Water Change")'
+      );
       await waterChangeBtn.click();
 
       // Wait for success message
@@ -126,7 +128,9 @@ test.describe('Complete User Flow', () => {
       });
 
       // Verify event appears in recent events inside the modal
-      await expect(page.locator('#tank-modal-events .event-item:has-text("Water Change")')).toBeVisible({
+      await expect(
+        page.locator('#tank-modal-events .event-item:has-text("Water Change")')
+      ).toBeVisible({
         timeout: 3000,
       });
 
@@ -138,7 +142,9 @@ test.describe('Complete User Flow', () => {
 
     await test.step('Log filter cleaning event via quick log', async () => {
       // Modal should still be open from previous step, click filter cleaning button
-      const filterBtn = page.locator('#tank-modal-quicklog-buttons .quick-log-btn:has-text("Filter")');
+      const filterBtn = page.locator(
+        '#tank-modal-quicklog-buttons .quick-log-btn:has-text("Filter")'
+      );
       await filterBtn.click();
 
       // Wait for success message (the modal only shows most recent event, so we verify via toast)
@@ -371,8 +377,12 @@ test.describe('Complete User Flow', () => {
       const eventCount = await eventItems.count();
 
       if (eventCount >= 2) {
-        await expect(page.locator('#tank-modal-events .event-item:has-text("Water Change")')).toBeVisible();
-        await expect(page.locator('#tank-modal-events .event-item:has-text("Filter")')).toBeVisible();
+        await expect(
+          page.locator('#tank-modal-events .event-item:has-text("Water Change")')
+        ).toBeVisible();
+        await expect(
+          page.locator('#tank-modal-events .event-item:has-text("Filter")')
+        ).toBeVisible();
         console.log('✓ Maintenance events persisted correctly');
       } else if (eventCount > 0) {
         console.log(`⚠ Only ${eventCount} events found (expected 2+)`);

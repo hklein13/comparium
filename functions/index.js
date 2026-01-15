@@ -449,16 +449,22 @@ exports.onCommentCreated = onDocumentCreated(
     console.log(`onCommentCreated: Incrementing commentCount for post ${postId}`);
 
     // Increment comment count on the post
-    await db.collection('posts').doc(postId).update({
-      'stats.commentCount': FieldValue.increment(1),
-    });
+    await db
+      .collection('posts')
+      .doc(postId)
+      .update({
+        'stats.commentCount': FieldValue.increment(1),
+      });
 
     // If this is a reply, also increment replyCount on the parent comment
     if (comment.replyTo) {
       console.log(`onCommentCreated: Incrementing replyCount for comment ${comment.replyTo}`);
-      await db.collection('comments').doc(comment.replyTo).update({
-        replyCount: FieldValue.increment(1),
-      });
+      await db
+        .collection('comments')
+        .doc(comment.replyTo)
+        .update({
+          replyCount: FieldValue.increment(1),
+        });
     }
 
     console.log('onCommentCreated: Complete');
@@ -499,9 +505,12 @@ exports.onCommentDeleted = onDocumentDeleted(
 
     // Decrement comment count on the post
     try {
-      await db.collection('posts').doc(postId).update({
-        'stats.commentCount': FieldValue.increment(-1),
-      });
+      await db
+        .collection('posts')
+        .doc(postId)
+        .update({
+          'stats.commentCount': FieldValue.increment(-1),
+        });
     } catch (error) {
       // Post may have been deleted already
       console.log(`onCommentDeleted: Could not update post ${postId} - may be deleted`);
@@ -511,9 +520,12 @@ exports.onCommentDeleted = onDocumentDeleted(
     if (comment.replyTo) {
       console.log(`onCommentDeleted: Decrementing replyCount for comment ${comment.replyTo}`);
       try {
-        await db.collection('comments').doc(comment.replyTo).update({
-          replyCount: FieldValue.increment(-1),
-        });
+        await db
+          .collection('comments')
+          .doc(comment.replyTo)
+          .update({
+            replyCount: FieldValue.increment(-1),
+          });
       } catch (error) {
         // Parent comment may have been deleted already
         console.log(
@@ -561,9 +573,12 @@ exports.onLikeCreated = onDocumentCreated(
 
     console.log(`onLikeCreated: Incrementing likeCount for ${collectionName}/${targetId}`);
 
-    await db.collection(collectionName).doc(targetId).update({
-      'stats.likeCount': FieldValue.increment(1),
-    });
+    await db
+      .collection(collectionName)
+      .doc(targetId)
+      .update({
+        'stats.likeCount': FieldValue.increment(1),
+      });
 
     console.log('onLikeCreated: Complete');
   }
@@ -605,14 +620,15 @@ exports.onLikeDeleted = onDocumentDeleted(
     console.log(`onLikeDeleted: Decrementing likeCount for ${collectionName}/${targetId}`);
 
     try {
-      await db.collection(collectionName).doc(targetId).update({
-        'stats.likeCount': FieldValue.increment(-1),
-      });
+      await db
+        .collection(collectionName)
+        .doc(targetId)
+        .update({
+          'stats.likeCount': FieldValue.increment(-1),
+        });
     } catch (error) {
       // Target may have been deleted already
-      console.log(
-        `onLikeDeleted: Could not update ${collectionName}/${targetId} - may be deleted`
-      );
+      console.log(`onLikeDeleted: Could not update ${collectionName}/${targetId} - may be deleted`);
     }
 
     console.log('onLikeDeleted: Complete');

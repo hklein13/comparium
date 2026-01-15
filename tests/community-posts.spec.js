@@ -277,10 +277,7 @@ test.describe('Comments', () => {
     const firstPost = page.locator('.post-card').first();
     const commentBtn = firstPost.locator('.post-card__action').nth(1); // Second action button is comment
 
-    await Promise.all([
-      page.waitForURL(/post\.html\?id=/, { timeout: 30000 }),
-      commentBtn.click(),
-    ]);
+    await Promise.all([page.waitForURL(/post\.html\?id=/, { timeout: 30000 }), commentBtn.click()]);
 
     // Wait for Firebase on the new page
     await page.waitForFunction(() => window.firebaseFirestore !== undefined, { timeout: 10000 });
