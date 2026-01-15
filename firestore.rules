@@ -550,17 +550,17 @@ service cloud.firestore {
 
     match /bookmarks/{bookmarkId} {
       // Only owner can read their bookmarks (bookmarks are private)
+      // Uses userId field to support collection queries with where('userId', '==', uid)
       allow read: if request.auth != null
-                  && bookmarkId.matches(request.auth.uid + '_.*');
+                  && resource.data.userId == request.auth.uid;
 
       // User can only create bookmarks for themselves
       allow create: if request.auth != null
-                    && bookmarkId.matches(request.auth.uid + '_.*')
                     && request.resource.data.userId == request.auth.uid;
 
       // User can only delete their own bookmarks
       allow delete: if request.auth != null
-                    && bookmarkId.matches(request.auth.uid + '_.*');
+                    && resource.data.userId == request.auth.uid;
 
       // No updates allowed (bookmarks are create/delete only)
       allow update: if false;
