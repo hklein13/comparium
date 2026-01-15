@@ -63,6 +63,7 @@ If a phase is in progress (see "Current Phase" below), there should be a plan fi
 **Current Stats:** 244 fish species (235 with images), 15 aquarium plants (14 with images)
 
 **Recent Features (January 2026):**
+- Phase 4.4: Enhanced profiles with tabs, bio, settings, notification preferences
 - Phase 4.3: Follows & bookmarks on community
 - Phase 4.2: Comments & likes on community posts
 - Phase 4.1: Core posts - community feed with categories
@@ -70,7 +71,7 @@ If a phase is in progress (see "Current Phase" below), there should be a plan fi
 - Plant selector for tanks (add plants alongside species)
 - Forgot password feature (login page)
 
-**Current Phase:** Phase 4.3 Follows & Bookmarks (complete)
+**Current Phase:** Phase 4.4 Enhanced Profiles (complete)
 
 **Active Branch:** `main`
 
@@ -311,7 +312,8 @@ Development follows a phased approach. See `DATA-MODEL.md` for complete specific
 | **Phase 4 MVP** | ✅ Complete | Tank sharing + Community gallery |
 | **Phase 4.1** | ✅ Complete | Core posts - community feed with categories |
 | **Phase 4.2** | ✅ Complete | Comments & likes on posts |
-| **Phase 4 Full** | ⏳ Planned | Follows, bookmarks, enhanced profiles |
+| **Phase 4.3** | ✅ Complete | Follows & bookmarks |
+| **Phase 4.4** | ✅ Complete | Enhanced profiles (tabs, bio, settings) |
 | **Phase 5** | ⏳ Planned | Diagnostic tool (fish health decision tree) |
 | **Phase 6** | ⏳ Long-term | Native mobile app (iOS + Android) |
 
@@ -356,6 +358,19 @@ Development follows a phased approach. See `DATA-MODEL.md` for complete specific
 - Security rules for follows (public read, owner create/delete) and bookmarks (private)
 
 **Key Files:** `js/social-manager.js`, `js/profile.js`, `js/community.js`
+
+### Phase 4.4 - Enhanced Profiles (January 2026)
+**Branch:** `claude/phase4-4-enhanced-profiles`
+
+**What's Implemented:**
+- Dashboard tabs: My Tanks, My Profile, Settings
+- My Profile sub-tabs: Overview, My Posts, Bookmarks
+- Profile editing: bio (500 chars), experience level, location
+- Notification preferences: maintenance reminders, community activity, system updates
+- Profile stats: post count, follower/following counts
+- Account info display with email
+
+**Key Files:** `dashboard.html`, `js/firebase-init.js` (firestoreUpdateProfile), `css/naturalist.css`
 
 ## Git Workflow
 
