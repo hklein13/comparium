@@ -140,6 +140,10 @@
                     </button>
                   </div>
                   <div class="settings-dropdown-divider"></div>
+                  <button onclick="viewMyProfile()" class="settings-dropdown-btn">
+                    View My Profile
+                  </button>
+                  <div class="settings-dropdown-divider"></div>
                   <button onclick="authManager.logout()" class="settings-dropdown-btn">
                     Log Out
                   </button>
@@ -1316,6 +1320,13 @@
         notifDropdown.classList.remove('open');
         // Toggle settings
         settingsDropdown.classList.toggle('open');
+      }
+
+      function viewMyProfile() {
+        const username = document.getElementById('settings-username')?.textContent;
+        if (username) {
+          window.location.href = `profile.html?user=${encodeURIComponent(username)}`;
+        }
       }
 
       async function markAllRead() {

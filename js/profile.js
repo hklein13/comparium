@@ -40,8 +40,6 @@ async function initProfile() {
  * @returns {Promise<string|null>} - The resolved userId or null
  */
 async function resolveUserId(userParam) {
-  const db = window.firebaseFirestore;
-
   // Firebase UIDs are typically 28 characters and alphanumeric
   // Usernames are typically shorter and may contain different characters
   const looksLikeUid = /^[a-zA-Z0-9]{20,}$/.test(userParam);
@@ -51,12 +49,12 @@ async function resolveUserId(userParam) {
     return userParam;
   }
 
-  // It's likely a username - look it up in the usernames collection
+  // It's a username - use the existing helper function to look it up
+  // This preserves case sensitivity as usernames are stored with original case
   try {
-    const usernameDoc = await db.collection('usernames').doc(userParam.toLowerCase()).get();
-
-    if (usernameDoc.exists) {
-      return usernameDoc.data().uid;
+    const userData = await window.firestoreGetUidByUsername(userParam);
+    if (userData && userData.uid) {
+      return userData.uid;
     }
 
     // Username not found
