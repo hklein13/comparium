@@ -7362,6 +7362,14 @@ body.logged-in .favorite-star {
   font-size: 0.9rem;
 }
 
+/* Profile Bio */
+.profile-bio {
+  font-style: italic;
+  color: var(--ink-secondary);
+  margin: 0.5rem 0 1rem 0;
+  max-width: 500px;
+}
+
 /* Profile Follow Stats & Button */
 .profile-stats {
   display: flex;
