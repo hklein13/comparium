@@ -651,6 +651,187 @@
       }
 
       // ============================================
+      // Profile Tab Data Loading
+      // ============================================
+
+      async function loadProfileTab() {
+        const uid = window.getFirebaseUid?.();
+        if (!uid) return;
+
+        const profile = await window.firestoreGetProfile(uid);
+        if (!profile) return;
+
+        // Update avatar
+        const username = profile.username || 'User';
+        document.getElementById('profile-avatar-letter').textContent = username.charAt(0).toUpperCase();
+        document.getElementById('profile-card-username').textContent = `@${username}`;
+
+        // Update details (experience + location)
+        const profileData = profile.profile || {};
+        const details = [];
+        if (profileData.experience) {
+          details.push(profileData.experience.charAt(0).toUpperCase() + profileData.experience.slice(1));
+        }
+        if (profileData.location) {
+          details.push(profileData.location);
+        }
+        document.getElementById('profile-card-details').textContent = details.join(' · ') || 'No details set';
+
+        // Update bio
+        const bioEl = document.getElementById('profile-card-bio');
+        if (profileData.bio) {
+          bioEl.textContent = `"${profileData.bio}"`;
+          bioEl.style.display = 'block';
+        } else {
+          bioEl.style.display = 'none';
+        }
+
+        // Update stats
+        const social = profile.social || {};
+        document.getElementById('profile-post-count').textContent = social.postCount || 0;
+        document.getElementById('profile-follower-count').textContent = social.followerCount || 0;
+        document.getElementById('profile-following-count').textContent = social.followingCount || 0;
+      }
+
+      async function loadMyPosts() {
+        const container = document.getElementById('my-posts-list');
+        const uid = window.getFirebaseUid?.();
+
+        if (!uid) {
+          container.innerHTML = '<p>Please log in to view your posts.</p>';
+          return;
+        }
+
+        container.innerHTML = '<p>Loading your posts...</p>';
+
+        try {
+          const result = await window.postManager?.getUserPosts(uid);
+
+          if (!result?.success || !result.posts?.length) {
+            container.innerHTML = `
+              <div class="activity-empty">
+                <p>You haven't created any posts yet.</p>
+                <a href="community.html" class="btn btn-primary">Create Your First Post</a>
+              </div>
+            `;
+            return;
+          }
+
+          container.innerHTML = result.posts.map(post => `
+            <div class="my-post-card" onclick="window.location.href='post.html?id=${post.id}'">
+              <div class="my-post-card__content">
+                <span class="my-post-card__category">${escapeHTML(post.category)}</span>
+                <p class="my-post-card__text">${escapeHTML(post.content?.substring(0, 150))}${post.content?.length > 150 ? '...' : ''}</p>
+                <span class="my-post-card__meta">${formatTimeAgo(post.created)} · ${post.stats?.likeCount || 0} likes · ${post.stats?.commentCount || 0} comments</span>
+              </div>
+              <button class="my-post-card__delete" onclick="event.stopPropagation(); deleteMyPost('${post.id}')" title="Delete post">&times;</button>
+            </div>
+          `).join('');
+        } catch (error) {
+          container.innerHTML = '<p>Failed to load posts.</p>';
+        }
+      }
+
+      async function deleteMyPost(postId) {
+        if (!confirm('Delete this post? This cannot be undone.')) return;
+
+        const result = await window.postManager?.deletePost(postId);
+        if (result?.success) {
+          loadMyPosts(); // Refresh list
+        } else {
+          alert(result?.error || 'Failed to delete post');
+        }
+      }
+
+      async function loadMyBookmarks() {
+        const container = document.getElementById('my-bookmarks-list');
+        const uid = window.getFirebaseUid?.();
+
+        if (!uid) {
+          container.innerHTML = '<p>Please log in to view bookmarks.</p>';
+          return;
+        }
+
+        container.innerHTML = '<p>Loading bookmarks...</p>';
+
+        try {
+          const bookmarks = await window.socialManager?.getBookmarkedPosts();
+
+          if (!bookmarks?.length) {
+            container.innerHTML = `
+              <div class="activity-empty">
+                <p>No bookmarked posts yet.</p>
+                <a href="community.html" class="btn btn-ghost">Browse Community</a>
+              </div>
+            `;
+            return;
+          }
+
+          container.innerHTML = bookmarks.map(post => `
+            <div class="my-post-card" onclick="window.location.href='post.html?id=${post.id}'">
+              <div class="my-post-card__content">
+                <span class="my-post-card__author">@${escapeHTML(post.author?.username || 'unknown')}</span>
+                <span class="my-post-card__category">${escapeHTML(post.category)}</span>
+                <p class="my-post-card__text">${escapeHTML(post.content?.substring(0, 150))}${post.content?.length > 150 ? '...' : ''}</p>
+              </div>
+              <button class="my-post-card__bookmark bookmarked" onclick="event.stopPropagation(); toggleBookmarkFromList('${post.id}')" title="Remove bookmark">&#9733;</button>
+            </div>
+          `).join('');
+        } catch (error) {
+          container.innerHTML = '<p>Failed to load bookmarks.</p>';
+        }
+      }
+
+      async function toggleBookmarkFromList(postId) {
+        await window.socialManager?.toggleBookmark(postId);
+        loadMyBookmarks(); // Refresh list
+      }
+
+      async function loadSettingsTab() {
+        const uid = window.getFirebaseUid?.();
+        if (!uid) return;
+
+        // Load notification preferences
+        const profile = await window.firestoreGetProfile(uid);
+        const prefs = profile?.settings?.notificationPrefs || {};
+
+        // Set checkbox states (default to true for most)
+        document.getElementById('pref-onComment').checked = prefs.onComment !== false;
+        document.getElementById('pref-onReply').checked = prefs.onReply !== false;
+        document.getElementById('pref-onLike').checked = prefs.onLike === true;
+        document.getElementById('pref-onFollow').checked = prefs.onFollow !== false;
+        document.getElementById('pref-onFollowingPost').checked = prefs.onFollowingPost === true;
+
+        // Update email display
+        const user = window.getFirebaseAuth?.()?.currentUser;
+        if (user?.email) {
+          document.getElementById('settings-email').textContent = user.email;
+        }
+      }
+
+      async function saveNotificationPreferences() {
+        const uid = window.getFirebaseUid?.();
+        if (!uid) return;
+
+        const prefs = {
+          onComment: document.getElementById('pref-onComment').checked,
+          onReply: document.getElementById('pref-onReply').checked,
+          onLike: document.getElementById('pref-onLike').checked,
+          onFollow: document.getElementById('pref-onFollow').checked,
+          onFollowingPost: document.getElementById('pref-onFollowingPost').checked,
+        };
+
+        try {
+          await window.firestoreUpdateProfile(uid, {
+            'settings.notificationPrefs': prefs,
+          });
+          authManager?.showMessage?.('Preferences saved', 'success');
+        } catch (error) {
+          authManager?.showMessage?.('Failed to save preferences', 'error');
+        }
+      }
+
+      // ============================================
       // Dashboard Initialization
       // ============================================
 
@@ -1425,7 +1606,11 @@
       }
 
       function viewMyProfile() {
-        const username = document.getElementById('settings-username')?.textContent;
+        // Try settings dropdown first, then profile card (remove @ prefix if present)
+        let username = document.getElementById('settings-username')?.textContent;
+        if (!username) {
+          username = document.getElementById('profile-card-username')?.textContent?.replace('@', '');
+        }
         if (username) {
           window.location.href = `profile.html?user=${encodeURIComponent(username)}`;
         }
