@@ -67,7 +67,7 @@ If a phase is in progress (see "Current Phase" below), there should be a plan fi
 - Plant selector for tanks (add plants alongside species)
 - Forgot password feature (login page)
 
-**Current Phase:** Phase 4 MVP merged ✅ (Next: Phase 3E-3F or Phase 4 Full)
+**Current Phase:** Phase 4.1 Core Posts complete (branch ready for merge)
 
 **Active Branch:** `main`
 
@@ -135,8 +135,11 @@ glossary-generator.js (transforms data)
 - `js/plant-data.js` - Plant database (15 entries with position, planting style, difficulty, lighting, water params)
 - `js/plant-descriptions.js` - Curated descriptions for all 15 plants
 - `js/tank-manager.js` - Tank CRUD operations with privacy Yes/No buttons
-- `js/public-tank-manager.js` - Syncs tanks to/from publicTanks collection (Phase 4)
-- `js/community.js` - Community gallery page logic (Phase 4)
+- `js/public-tank-manager.js` - Syncs tanks to/from publicTanks collection, creates posts when sharing (Phase 4)
+- `js/post-manager.js` - Post CRUD operations and feed queries (Phase 4.1)
+- `js/post-composer.js` - New post modal component (Phase 4.1)
+- `js/post-detail.js` - Post detail page with comments placeholder (Phase 4.1)
+- `js/community.js` - Community posts feed with category filtering (Phase 4)
 - `js/maintenance-manager.js` - Event logging and schedule management for tanks
 - `scripts/serviceAccountKey.json` - Firebase Admin credentials (gitignored, never commit)
 
@@ -296,8 +299,9 @@ Development follows a phased approach. See `DATA-MODEL.md` for complete specific
 | **Phase 1** | ✅ Complete | Tank management, maintenance events, schedules |
 | **Phase 2** | ✅ Complete | Notifications system + FCM push notifications |
 | **Phase 3** | 🔄 In Progress | Content expansion (3A-3D, 3G done; 3E-3F pending) |
-| **Phase 4 MVP** | ✅ Code Complete | Tank sharing + Community gallery (branch ready for merge) |
-| **Phase 4 Full** | ⏳ Planned | Follows, posts, comments, likes |
+| **Phase 4 MVP** | ✅ Complete | Tank sharing + Community gallery |
+| **Phase 4.1** | ✅ Complete | Core posts - community feed with categories (branch ready for merge) |
+| **Phase 4 Full** | ⏳ Planned | Follows, comments, likes |
 | **Phase 5** | ⏳ Planned | Diagnostic tool (fish health decision tree) |
 | **Phase 6** | ⏳ Long-term | Native mobile app (iOS + Android) |
 
@@ -313,6 +317,22 @@ Development follows a phased approach. See `DATA-MODEL.md` for complete specific
 - Security rules deployed for public read, owner write
 
 **Key Files:** `js/public-tank-manager.js`, `js/community.js`, `js/tank-detail.js`, `js/profile.js`
+
+### Phase 4.1 - Core Posts (January 2026)
+**Branch:** `claude/phase4-full-social`
+
+**What's Implemented:**
+- Community page shows unified posts feed (tanks + general posts)
+- Post categories: Tanks, Help, Tips, Fish ID, Milestones
+- Sharing a tank automatically creates a "Tanks" category post
+- Post detail page (`post.html?id=postId`)
+- New post composer modal for logged-in users
+- `posts` Firestore collection with category filtering and sorting
+- Tank preview component renders in post cards for shared tanks
+
+**Key Files:** `js/post-manager.js`, `js/post-composer.js`, `js/post-detail.js`
+
+**Tests:** `tests/community-posts.spec.js` (5 tests for page structure, filtering, post cards)
 
 ## Git Workflow
 
@@ -352,14 +372,15 @@ Development follows a phased approach. See `DATA-MODEL.md` for complete specific
 - ✅ ESLint configured and passing (0 errors)
 - ✅ Prettier configured and all files formatted
 - ✅ Claude Code hooks set up in `.claude/settings.json`
-- ✅ Playwright tests passing (7 passed, 11 skipped)
+- ✅ Playwright tests passing (12 passed, 11 skipped)
 - ✅ Data integrity tests passing (244 species validated)
 - ✅ Security rules tests passing (25 checks)
 - ✅ Cloud Function tests available (dry-run simulation)
 - ✅ All 4 Cloud Functions deployed and operational
 - ✅ **Phase 2 complete** - Notifications + FCM push
 - ✅ **Phase 3D complete** - 235/244 species have images (96.3%)
-- ✅ **Phase 4 MVP complete** - Tank sharing + Community gallery (branch ready for merge)
+- ✅ **Phase 4 MVP complete** - Tank sharing + Community gallery
+- ✅ **Phase 4.1 complete** - Core posts with categories (branch ready for merge)
 
 ### Claude Code Plugins (MCP Servers)
 The following plugins enhance development workflow:
@@ -412,6 +433,7 @@ allow write: if isAdmin();        // Admin-only writes
 - `notifications` - Maintenance notifications (owner read, Cloud Functions create)
 - `fcmTokens` - FCM push notification tokens (owner read/write)
 - `publicTanks` - Shared tanks for community gallery (public read, owner write) - **Phase 4**
+- `posts` - Community posts with categories (public read, owner write) - **Phase 4.1**
 
 ## Image System
 
