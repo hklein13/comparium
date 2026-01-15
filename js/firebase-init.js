@@ -1270,6 +1270,101 @@ window.firestoreGetFollowingCount = async function (userId) {
 };
 
 // ============================================================================
+// BOOKMARKS - Firestore Operations (Phase 4.3)
+// ============================================================================
+
+/**
+ * Toggle bookmark on a post
+ * @param {string} postId - Post ID to bookmark/unbookmark
+ * @returns {Promise<{success: boolean, bookmarked?: boolean, error?: string}>}
+ */
+window.firestoreToggleBookmark = async function (postId) {
+  if (!auth.currentUser) {
+    return { success: false, error: 'Must be logged in to bookmark' };
+  }
+
+  const userId = auth.currentUser.uid;
+  const bookmarkId = `${userId}_${postId}`;
+  const bookmarkRef = doc(firestore, 'bookmarks', bookmarkId);
+
+  try {
+    const docSnap = await getDoc(bookmarkRef);
+
+    if (docSnap.exists()) {
+      // Unbookmark
+      await deleteDoc(bookmarkRef);
+      return { success: true, bookmarked: false };
+    } else {
+      // Bookmark
+      await setDoc(bookmarkRef, {
+        userId: userId,
+        postId: postId,
+        created: Timestamp.now(),
+      });
+      return { success: true, bookmarked: true };
+    }
+  } catch (error) {
+    console.error('Error toggling bookmark:', error);
+    return { success: false, error: error.message };
+  }
+};
+
+/**
+ * Check if current user has bookmarked a post
+ * @param {string} postId - Post ID to check
+ * @returns {Promise<{success: boolean, bookmarked?: boolean, error?: string}>}
+ */
+window.firestoreIsBookmarked = async function (postId) {
+  if (!auth.currentUser) {
+    return { success: true, bookmarked: false };
+  }
+
+  const userId = auth.currentUser.uid;
+  const bookmarkId = `${userId}_${postId}`;
+
+  try {
+    const docSnap = await getDoc(doc(firestore, 'bookmarks', bookmarkId));
+    return { success: true, bookmarked: docSnap.exists() };
+  } catch (error) {
+    console.error('Error checking bookmark status:', error);
+    return { success: false, error: error.message };
+  }
+};
+
+/**
+ * Get current user's bookmarked posts
+ * @returns {Promise<{success: boolean, bookmarks?: Array, error?: string}>}
+ */
+window.firestoreGetUserBookmarks = async function () {
+  if (!auth.currentUser) {
+    return { success: false, error: 'Must be logged in to view bookmarks' };
+  }
+
+  const userId = auth.currentUser.uid;
+
+  try {
+    const snapshot = await getDocs(
+      query(
+        collection(firestore, 'bookmarks'),
+        where('userId', '==', userId),
+        orderBy('created', 'desc')
+      )
+    );
+
+    const bookmarks = snapshot.docs.map(d => ({
+      id: d.id,
+      ...d.data(),
+      created: d.data().created?.toDate?.() || new Date(),
+    }));
+
+    return { success: true, bookmarks };
+  } catch (error) {
+    console.error('Error getting user bookmarks:', error);
+    return { success: false, error: error.message };
+  }
+};
+
+// ============================================================================
 // FCM TOKEN MANAGEMENT (Phase 2 - Push Notifications)
 // ============================================================================
 
