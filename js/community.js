@@ -354,10 +354,14 @@ async function fetchFreshTankPhoto(tankId, imageElement) {
   if (!tankId || !window.firebaseFirestore) return;
 
   try {
-    const db = window.firebaseFirestore;
-    const tankDoc = await db.collection('publicTanks').doc(tankId).get();
+    // Use modular Firebase SDK (v9+)
+    const { doc, getDoc } =
+      await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
 
-    if (tankDoc.exists) {
+    const tankRef = doc(window.firebaseFirestore, 'publicTanks', tankId);
+    const tankDoc = await getDoc(tankRef);
+
+    if (tankDoc.exists()) {
       const tankData = tankDoc.data();
       if (tankData.coverPhoto) {
         // Update the image element with fresh photo

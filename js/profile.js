@@ -480,10 +480,14 @@ async function loadBookmarks() {
     }
 
     // Load the actual posts for each bookmark
-    const db = window.firebaseFirestore;
+    // Use modular Firebase SDK (v9+)
+    const { doc, getDoc } =
+      await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+
     for (const bookmark of bookmarks) {
-      const postDoc = await db.collection('posts').doc(bookmark.postId).get();
-      if (postDoc.exists) {
+      const postRef = doc(window.firebaseFirestore, 'posts', bookmark.postId);
+      const postDoc = await getDoc(postRef);
+      if (postDoc.exists()) {
         const post = { id: postDoc.id, ...postDoc.data() };
         const card = createBookmarkCard(post);
         gridEl.appendChild(card);
