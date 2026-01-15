@@ -1312,11 +1312,7 @@ window.firestoreGetFollowingCount = async function (userId) {
 window.firestoreGetFollowingUserIds = async function (userId, maxResults = 30) {
   try {
     const snapshot = await getDocs(
-      query(
-        collection(firestore, 'follows'),
-        where('followerId', '==', userId),
-        limit(maxResults)
-      )
+      query(collection(firestore, 'follows'), where('followerId', '==', userId), limit(maxResults))
     );
     const userIds = snapshot.docs.map(doc => doc.data().followingId);
     return { success: true, userIds };

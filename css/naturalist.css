@@ -4672,7 +4672,7 @@ body.logged-in .favorite-star {
   cursor: pointer;
 }
 
-.settings-checkbox input[type="checkbox"] {
+.settings-checkbox input[type='checkbox'] {
   width: 18px;
   height: 18px;
   accent-color: var(--forest);

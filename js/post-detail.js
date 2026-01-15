@@ -114,9 +114,8 @@ async function renderPost(post) {
     let freshCoverPhoto = tank.coverPhoto;
     if (tank.tankId && window.firebaseFirestore) {
       try {
-        const { doc, getDoc } = await import(
-          'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js'
-        );
+        const { doc, getDoc } =
+          await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
         const tankDoc = await getDoc(doc(window.firebaseFirestore, 'publicTanks', tank.tankId));
         if (tankDoc.exists() && tankDoc.data().coverPhoto) {
           freshCoverPhoto = tankDoc.data().coverPhoto;
@@ -216,7 +215,6 @@ async function renderPost(post) {
 
     <a href="community.html" class="back-link">&larr; Back to feed</a>
   `;
-
 }
 
 /**

@@ -150,17 +150,11 @@ window.socialManager = {
 
     try {
       const { collection, query, where, orderBy, getDocs, doc, getDoc } =
-        await import(
-          'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js'
-        );
+        await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
 
       // Get user's bookmarks
       const bookmarksRef = collection(window.firebaseFirestore, 'bookmarks');
-      const q = query(
-        bookmarksRef,
-        where('userId', '==', uid),
-        orderBy('created', 'desc')
-      );
+      const q = query(bookmarksRef, where('userId', '==', uid), orderBy('created', 'desc'));
 
       const snapshot = await getDocs(q);
       const bookmarks = snapshot.docs.map(d => d.data());

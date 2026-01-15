@@ -101,6 +101,13 @@ async function loadPosts(append = false) {
       posts = result.posts;
       postLastDoc = result.lastDoc;
 
+      // Client-side sort to handle mixed Timestamp/string created fields
+      if (postSortBy === 'newest') {
+        posts.sort((a, b) => new Date(b.created) - new Date(a.created));
+      } else if (postSortBy === 'top') {
+        posts.sort((a, b) => (b.stats?.likeCount || 0) - (a.stats?.likeCount || 0));
+      }
+
       if (posts.length < 20) {
         allPostsLoaded = true;
       }
@@ -117,6 +124,14 @@ async function loadPosts(append = false) {
     } else {
       feed.style.display = '';
       emptyState.style.display = 'none';
+
+      // Debug: Log post dates to verify sort order
+      if (posts.length > 1) {
+        console.log(
+          'Post order (should be newest first):',
+          posts.map(p => ({ id: p.id.slice(0, 8), created: p.created }))
+        );
+      }
 
       posts.forEach(post => {
         const card = createPostCard(post);
@@ -321,6 +336,16 @@ function createPostCard(post) {
   };
   actions.appendChild(likeBtn);
 
+  // Check initial like state (for logged-in users)
+  if (window.firebaseAuth?.currentUser) {
+    window.socialManager.hasLikedPost(post.id).then(hasLiked => {
+      if (hasLiked) {
+        likeBtn.classList.add('liked');
+        likeBtn.querySelector('.like-icon').innerHTML = '&#9829;';
+      }
+    });
+  }
+
   const commentBtn = document.createElement('button');
   commentBtn.className = 'post-card__action';
   commentBtn.innerHTML = `<span>&#128172;</span> ${post.stats?.commentCount || 0}`;
@@ -341,6 +366,8 @@ function createPostCard(post) {
       const result = await window.socialManager.toggleBookmark(post.id);
       if (result.success) {
         bookmarkBtn.classList.toggle('bookmarked', result.bookmarked);
+      } else {
+        console.error('Bookmark toggle failed:', result.error);
       }
     };
 

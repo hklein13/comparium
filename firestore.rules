@@ -235,8 +235,9 @@ service cloud.firestore {
     // ========================================================================
 
     match /posts/{postId} {
-      // READ: Only public posts are visible to everyone
-      allow read: if resource.data.visibility == 'public';
+      // READ: Public posts visible to everyone, owners can query their own posts
+      allow read: if resource.data.visibility == 'public'
+                  || (request.auth != null && resource.data.userId == request.auth.uid);
 
       // CREATE: Must be authenticated and set userId to own UID
       allow create: if request.auth != null &&
@@ -549,17 +550,24 @@ service cloud.firestore {
     // ========================================================================
 
     match /bookmarks/{bookmarkId} {
-      // Only owner can read their bookmarks (bookmarks are private)
-      // Uses userId field to support collection queries with where('userId', '==', uid)
-      allow read: if request.auth != null
-                  && resource.data.userId == request.auth.uid;
+      // Helper: Check if bookmarkId belongs to current user
+      // Format: {userId}_{postId} - so we check if it starts with user's UID
+      function isOwnerBookmark() {
+        return bookmarkId.matches(request.auth.uid + '_.*');
+      }
 
-      // User can only create bookmarks for themselves
+      // Read: Allow single-doc reads (isOwnerBookmark) and collection queries (userId field)
+      allow read: if request.auth != null
+                  && (isOwnerBookmark() || resource.data.userId == request.auth.uid);
+
+      // Create: Verify both document ID and data match the user
       allow create: if request.auth != null
+                    && isOwnerBookmark()
                     && request.resource.data.userId == request.auth.uid;
 
-      // User can only delete their own bookmarks
+      // Delete: User can only delete their own bookmarks
       allow delete: if request.auth != null
+                    && isOwnerBookmark()
                     && resource.data.userId == request.auth.uid;
 
       // No updates allowed (bookmarks are create/delete only)

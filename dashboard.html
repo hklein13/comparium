@@ -203,163 +203,190 @@
           <div class="dashboard-main-row">
             <!-- Tank Gallery Section -->
             <section class="tank-gallery-section dashboard-section-animate" id="my-tanks-section">
-          <div class="tank-gallery-header">
-            <h2>My Tanks</h2>
-          </div>
-
-          <!-- Tank Form (Initially Hidden) -->
-          <div id="tank-form-container" class="tank-form" style="display: none">
-            <h3 id="form-title">Create New Tank</h3>
-            <form id="tank-form" onsubmit="saveTank(event)">
-              <input type="hidden" id="tank-id" />
-
-              <div class="form-group">
-                <label for="tank-name">Tank Name</label>
-                <input type="text" id="tank-name" required placeholder="e.g., Living Room 55g" />
+              <div class="tank-gallery-header">
+                <h2>My Tanks</h2>
               </div>
 
-              <div class="form-group">
-                <label for="tank-size">Tank Size (gallons)</label>
-                <input type="number" id="tank-size" required min="1" placeholder="e.g., 55" />
-              </div>
+              <!-- Tank Form (Initially Hidden) -->
+              <div id="tank-form-container" class="tank-form" style="display: none">
+                <h3 id="form-title">Create New Tank</h3>
+                <form id="tank-form" onsubmit="saveTank(event)">
+                  <input type="hidden" id="tank-id" />
 
-              <div class="form-group">
-                <label for="tank-notes">Notes (Optional)</label>
-                <textarea
-                  id="tank-notes"
-                  rows="3"
-                  placeholder="Equipment, substrate, plans..."
-                ></textarea>
-              </div>
-
-              <div class="form-group">
-                <label for="tank-photo">Tank Photo (Optional)</label>
-                <div class="photo-upload-zone" id="photo-upload-zone">
-                  <input
-                    type="file"
-                    id="tank-photo"
-                    accept="image/jpeg,image/png,image/webp"
-                    onchange="handlePhotoSelect(event)"
-                    style="display: none"
-                  />
-                  <div class="photo-upload-placeholder" id="photo-upload-placeholder">
-                    <span class="photo-upload-icon">+</span>
-                    <span>Click or drag to add a photo</span>
-                    <small>JPEG, PNG, or WebP (max 5MB)</small>
+                  <div class="form-group">
+                    <label for="tank-name">Tank Name</label>
+                    <input
+                      type="text"
+                      id="tank-name"
+                      required
+                      placeholder="e.g., Living Room 55g"
+                    />
                   </div>
-                  <div class="photo-upload-preview" id="photo-upload-preview" style="display: none">
-                    <img id="photo-preview-image" src="" alt="Tank photo preview" />
-                    <button type="button" class="photo-remove-btn" onclick="removePhotoSelection()">
-                      Remove
+
+                  <div class="form-group">
+                    <label for="tank-size">Tank Size (gallons)</label>
+                    <input type="number" id="tank-size" required min="1" placeholder="e.g., 55" />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="tank-notes">Notes (Optional)</label>
+                    <textarea
+                      id="tank-notes"
+                      rows="3"
+                      placeholder="Equipment, substrate, plans..."
+                    ></textarea>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="tank-photo">Tank Photo (Optional)</label>
+                    <div class="photo-upload-zone" id="photo-upload-zone">
+                      <input
+                        type="file"
+                        id="tank-photo"
+                        accept="image/jpeg,image/png,image/webp"
+                        onchange="handlePhotoSelect(event)"
+                        style="display: none"
+                      />
+                      <div class="photo-upload-placeholder" id="photo-upload-placeholder">
+                        <span class="photo-upload-icon">+</span>
+                        <span>Click or drag to add a photo</span>
+                        <small>JPEG, PNG, or WebP (max 5MB)</small>
+                      </div>
+                      <div
+                        class="photo-upload-preview"
+                        id="photo-upload-preview"
+                        style="display: none"
+                      >
+                        <img id="photo-preview-image" src="" alt="Tank photo preview" />
+                        <button
+                          type="button"
+                          class="photo-remove-btn"
+                          onclick="removePhotoSelection()"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Select Fish Species</label>
+                    <input
+                      type="text"
+                      id="species-search"
+                      placeholder="Search species..."
+                      oninput="filterSpeciesSelector()"
+                    />
+                    <select id="species-selector" onchange="addSpeciesToTank()" size="6">
+                      <option value="">-- Choose a species to add --</option>
+                    </select>
+                    <small class="form-hint">Type to filter, click to add</small>
+                  </div>
+
+                  <div id="selected-species-list" class="selected-species">
+                    <strong>Selected Species:</strong>
+                    <ul id="species-list" class="fish-list"></ul>
+                  </div>
+
+                  <!-- Plant Selector -->
+                  <div class="form-group">
+                    <label>Add Plants (Optional)</label>
+                    <input
+                      type="text"
+                      id="plant-search"
+                      placeholder="Search plants..."
+                      oninput="filterPlantSelector()"
+                    />
+                    <select id="plant-selector" onchange="addPlantToTank()" size="5">
+                      <option value="">-- Choose a plant to add --</option>
+                    </select>
+                    <small class="form-hint">Type to filter, click to add</small>
+                  </div>
+
+                  <div id="selected-plants-list" class="selected-plants">
+                    <strong>Selected Plants:</strong>
+                    <ul id="plants-list" class="plant-list"></ul>
+                  </div>
+
+                  <!-- Share Tank Public/Private -->
+                  <div class="form-group share-toggle-group">
+                    <input type="hidden" id="tank-public" value="false" />
+                    <div class="privacy-selector">
+                      <div class="privacy-buttons">
+                        <button type="button" class="privacy-btn" data-value="true">Yes</button>
+                        <button type="button" class="privacy-btn selected" data-value="false">
+                          No
+                        </button>
+                      </div>
+                      <span class="privacy-label">Share this tank publicly</span>
+                    </div>
+                    <small class="form-hint">Public tanks appear in the Community gallery</small>
+                  </div>
+
+                  <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Save Tank</button>
+                    <button type="button" onclick="cancelForm()" class="btn btn-ghost">
+                      Cancel
                     </button>
                   </div>
+                </form>
+              </div>
+
+              <!-- Tank Gallery (populated by JS) -->
+              <div id="tanks-container" class="tank-gallery">
+                <div class="tank-gallery-empty">
+                  <p>Loading tanks...</p>
+                </div>
+              </div>
+            </section>
+
+            <!-- Maintenance Timeline Section -->
+            <section class="maintenance-timeline-section dashboard-section-animate">
+              <div class="maintenance-timeline-header">
+                <h2>Upcoming Care</h2>
+                <span class="maintenance-timeline-summary" id="maintenance-summary"></span>
+              </div>
+
+              <!-- Maintenance Timeline (populated by JS) -->
+              <div id="maintenance-timeline">
+                <div class="maintenance-timeline-empty">
+                  <p>No maintenance scheduled</p>
                 </div>
               </div>
 
-              <div class="form-group">
-                <label>Select Fish Species</label>
-                <input
-                  type="text"
-                  id="species-search"
-                  placeholder="Search species..."
-                  oninput="filterSpeciesSelector()"
-                />
-                <select id="species-selector" onchange="addSpeciesToTank()" size="6">
-                  <option value="">-- Choose a species to add --</option>
-                </select>
-                <small class="form-hint">Type to filter, click to add</small>
+              <!-- Actions Section -->
+              <div class="timeline-actions" id="timeline-actions" style="display: none">
+                <button class="btn btn-primary" id="timeline-log-event-btn">+ Log Event</button>
+                <button class="btn btn-ghost" id="timeline-add-schedule-btn">+ Add Schedule</button>
               </div>
-
-              <div id="selected-species-list" class="selected-species">
-                <strong>Selected Species:</strong>
-                <ul id="species-list" class="fish-list"></ul>
-              </div>
-
-              <!-- Plant Selector -->
-              <div class="form-group">
-                <label>Add Plants (Optional)</label>
-                <input
-                  type="text"
-                  id="plant-search"
-                  placeholder="Search plants..."
-                  oninput="filterPlantSelector()"
-                />
-                <select id="plant-selector" onchange="addPlantToTank()" size="5">
-                  <option value="">-- Choose a plant to add --</option>
-                </select>
-                <small class="form-hint">Type to filter, click to add</small>
-              </div>
-
-              <div id="selected-plants-list" class="selected-plants">
-                <strong>Selected Plants:</strong>
-                <ul id="plants-list" class="plant-list"></ul>
-              </div>
-
-              <!-- Share Tank Public/Private -->
-              <div class="form-group share-toggle-group">
-                <input type="hidden" id="tank-public" value="false" />
-                <div class="privacy-selector">
-                  <div class="privacy-buttons">
-                    <button type="button" class="privacy-btn" data-value="true">Yes</button>
-                    <button type="button" class="privacy-btn selected" data-value="false">
-                      No
-                    </button>
-                  </div>
-                  <span class="privacy-label">Share this tank publicly</span>
-                </div>
-                <small class="form-hint">Public tanks appear in the Community gallery</small>
-              </div>
-
-              <div class="form-actions">
-                <button type="submit" class="btn btn-primary">Save Tank</button>
-                <button type="button" onclick="cancelForm()" class="btn btn-ghost">Cancel</button>
-              </div>
-            </form>
-          </div>
-
-          <!-- Tank Gallery (populated by JS) -->
-          <div id="tanks-container" class="tank-gallery">
-            <div class="tank-gallery-empty">
-              <p>Loading tanks...</p>
-            </div>
-          </div>
-        </section>
-
-        <!-- Maintenance Timeline Section -->
-        <section class="maintenance-timeline-section dashboard-section-animate">
-          <div class="maintenance-timeline-header">
-            <h2>Upcoming Care</h2>
-            <span class="maintenance-timeline-summary" id="maintenance-summary"></span>
-          </div>
-
-          <!-- Maintenance Timeline (populated by JS) -->
-          <div id="maintenance-timeline">
-            <div class="maintenance-timeline-empty">
-              <p>No maintenance scheduled</p>
-            </div>
-          </div>
-
-          <!-- Actions Section -->
-          <div class="timeline-actions" id="timeline-actions" style="display: none">
-            <button class="btn btn-primary" id="timeline-log-event-btn">+ Log Event</button>
-            <button class="btn btn-ghost" id="timeline-add-schedule-btn">+ Add Schedule</button>
-          </div>
             </section>
           </div>
         </div>
         <!-- End My Tanks Tab -->
 
         <!-- My Profile Tab -->
-        <div id="tab-profile" class="dashboard-tab-panel" style="display: none;">
+        <div id="tab-profile" class="dashboard-tab-panel" style="display: none">
           <!-- Profile Sub-tabs -->
           <nav class="dashboard-subtabs">
-            <button class="dashboard-subtab active" data-subtab="overview" onclick="switchProfileSubtab('overview')">
+            <button
+              class="dashboard-subtab active"
+              data-subtab="overview"
+              onclick="switchProfileSubtab('overview')"
+            >
               Overview
             </button>
-            <button class="dashboard-subtab" data-subtab="posts" onclick="switchProfileSubtab('posts')">
+            <button
+              class="dashboard-subtab"
+              data-subtab="posts"
+              onclick="switchProfileSubtab('posts')"
+            >
               My Posts
             </button>
-            <button class="dashboard-subtab" data-subtab="bookmarks" onclick="switchProfileSubtab('bookmarks')">
+            <button
+              class="dashboard-subtab"
+              data-subtab="bookmarks"
+              onclick="switchProfileSubtab('bookmarks')"
+            >
               Bookmarks
             </button>
           </nav>
@@ -384,22 +411,26 @@
                   <span><strong id="profile-following-count">0</strong> following</span>
                 </div>
                 <div class="profile-card__actions">
-                  <button class="btn btn-primary" onclick="openProfileEditModal()">Edit Profile</button>
-                  <button class="btn btn-ghost" onclick="viewMyProfile()">View Public Profile</button>
+                  <button class="btn btn-primary" onclick="openProfileEditModal()">
+                    Edit Profile
+                  </button>
+                  <button class="btn btn-ghost" onclick="viewMyProfile()">
+                    View Public Profile
+                  </button>
                 </div>
               </div>
             </div>
           </div>
 
           <!-- My Posts Sub-tab -->
-          <div id="subtab-posts" class="dashboard-subtab-panel" style="display: none;">
+          <div id="subtab-posts" class="dashboard-subtab-panel" style="display: none">
             <div id="my-posts-list" class="my-posts-list">
               <p>Loading your posts...</p>
             </div>
           </div>
 
           <!-- Bookmarks Sub-tab -->
-          <div id="subtab-bookmarks" class="dashboard-subtab-panel" style="display: none;">
+          <div id="subtab-bookmarks" class="dashboard-subtab-panel" style="display: none">
             <div id="my-bookmarks-list" class="my-bookmarks-list">
               <p>Loading bookmarks...</p>
             </div>
@@ -408,30 +439,30 @@
         <!-- End My Profile Tab -->
 
         <!-- Settings Tab -->
-        <div id="tab-settings" class="dashboard-tab-panel" style="display: none;">
+        <div id="tab-settings" class="dashboard-tab-panel" style="display: none">
           <div class="settings-section">
             <h3>Notification Preferences</h3>
             <p class="settings-description">Control what appears in your notification bell.</p>
 
             <div class="settings-checkboxes">
               <label class="settings-checkbox">
-                <input type="checkbox" id="pref-onComment" checked>
+                <input type="checkbox" id="pref-onComment" checked />
                 <span>Someone comments on my post</span>
               </label>
               <label class="settings-checkbox">
-                <input type="checkbox" id="pref-onReply" checked>
+                <input type="checkbox" id="pref-onReply" checked />
                 <span>Someone replies to my comment</span>
               </label>
               <label class="settings-checkbox">
-                <input type="checkbox" id="pref-onLike">
+                <input type="checkbox" id="pref-onLike" />
                 <span>Someone likes my post or comment</span>
               </label>
               <label class="settings-checkbox">
-                <input type="checkbox" id="pref-onFollow" checked>
+                <input type="checkbox" id="pref-onFollow" checked />
                 <span>Someone follows me</span>
               </label>
               <label class="settings-checkbox">
-                <input type="checkbox" id="pref-onFollowingPost">
+                <input type="checkbox" id="pref-onFollowingPost" />
                 <span>Someone I follow creates a post</span>
               </label>
             </div>
@@ -457,7 +488,6 @@
           </div>
         </div>
         <!-- End Settings Tab -->
-
       </div>
       <!-- End Tab Content Container -->
     </div>
@@ -527,7 +557,7 @@
     <div id="event-modal-container"></div>
 
     <!-- Profile Edit Modal -->
-    <div id="profile-edit-modal" class="modal-backdrop" style="display: none;">
+    <div id="profile-edit-modal" class="modal-backdrop" style="display: none">
       <div class="modal profile-edit-modal">
         <div class="modal-header">
           <h3>Edit Profile</h3>
@@ -536,7 +566,12 @@
         <div class="modal-body">
           <div class="form-group">
             <label for="edit-bio">Bio</label>
-            <textarea id="edit-bio" rows="4" maxlength="500" placeholder="Tell others about yourself..."></textarea>
+            <textarea
+              id="edit-bio"
+              rows="4"
+              maxlength="500"
+              placeholder="Tell others about yourself..."
+            ></textarea>
             <small class="form-hint"><span id="bio-char-count">0</span>/500 characters</small>
           </div>
 
@@ -553,7 +588,12 @@
 
           <div class="form-group">
             <label for="edit-location">Location</label>
-            <input type="text" id="edit-location" maxlength="100" placeholder="e.g., California, USA">
+            <input
+              type="text"
+              id="edit-location"
+              maxlength="100"
+              placeholder="e.g., California, USA"
+            />
           </div>
         </div>
         <div class="modal-footer">
@@ -661,19 +701,24 @@
 
         // Update avatar
         const username = profile.username || 'User';
-        document.getElementById('profile-avatar-letter').textContent = username.charAt(0).toUpperCase();
+        document.getElementById('profile-avatar-letter').textContent = username
+          .charAt(0)
+          .toUpperCase();
         document.getElementById('profile-card-username').textContent = `@${username}`;
 
         // Update details (experience + location)
         const profileData = profile.profile || {};
         const details = [];
         if (profileData.experience) {
-          details.push(profileData.experience.charAt(0).toUpperCase() + profileData.experience.slice(1));
+          details.push(
+            profileData.experience.charAt(0).toUpperCase() + profileData.experience.slice(1)
+          );
         }
         if (profileData.location) {
           details.push(profileData.location);
         }
-        document.getElementById('profile-card-details').textContent = details.join(' · ') || 'No details set';
+        document.getElementById('profile-card-details').textContent =
+          details.join(' · ') || 'No details set';
 
         // Update bio
         const bioEl = document.getElementById('profile-card-bio');
@@ -686,7 +731,13 @@
 
         // Update stats
         const social = profile.social || {};
-        document.getElementById('profile-post-count').textContent = social.postCount || 0;
+
+        // Get actual post count via query (more accurate than stored count)
+        const postsResult = await window.postManager?.getUserPosts(uid);
+        console.log('Post count debug:', { uid, postsResult });
+        const postCount = postsResult?.posts?.length || 0;
+        document.getElementById('profile-post-count').textContent = postCount;
+
         document.getElementById('profile-follower-count').textContent = social.followerCount || 0;
         document.getElementById('profile-following-count').textContent = social.followingCount || 0;
       }
@@ -799,7 +850,9 @@
             return;
           }
 
-          container.innerHTML = result.posts.map(post => `
+          container.innerHTML = result.posts
+            .map(
+              post => `
             <div class="my-post-card" onclick="window.location.href='post.html?id=${post.id}'">
               <div class="my-post-card__content">
                 <span class="my-post-card__category">${escapeHTML(post.category)}</span>
@@ -808,7 +861,9 @@
               </div>
               <button class="my-post-card__delete" onclick="event.stopPropagation(); deleteMyPost('${post.id}')" title="Delete post">&times;</button>
             </div>
-          `).join('');
+          `
+            )
+            .join('');
         } catch (error) {
           container.innerHTML = '<p>Failed to load posts.</p>';
         }
@@ -849,7 +904,9 @@
             return;
           }
 
-          container.innerHTML = bookmarks.map(post => `
+          container.innerHTML = bookmarks
+            .map(
+              post => `
             <div class="my-post-card" onclick="window.location.href='post.html?id=${post.id}'">
               <div class="my-post-card__content">
                 <span class="my-post-card__author">@${escapeHTML(post.author?.username || 'unknown')}</span>
@@ -858,7 +915,9 @@
               </div>
               <button class="my-post-card__bookmark bookmarked" onclick="event.stopPropagation(); toggleBookmarkFromList('${post.id}')" title="Remove bookmark">&#9733;</button>
             </div>
-          `).join('');
+          `
+            )
+            .join('');
         } catch (error) {
           container.innerHTML = '<p>Failed to load bookmarks.</p>';
         }
@@ -885,7 +944,7 @@
         document.getElementById('pref-onFollowingPost').checked = prefs.onFollowingPost === true;
 
         // Update email display
-        const user = window.getFirebaseAuth?.()?.currentUser;
+        const user = window.firebaseAuth?.currentUser;
         if (user?.email) {
           document.getElementById('settings-email').textContent = user.email;
         }
@@ -1689,7 +1748,9 @@
         // Try settings dropdown first, then profile card (remove @ prefix if present)
         let username = document.getElementById('settings-username')?.textContent;
         if (!username) {
-          username = document.getElementById('profile-card-username')?.textContent?.replace('@', '');
+          username = document
+            .getElementById('profile-card-username')
+            ?.textContent?.replace('@', '');
         }
         if (username) {
           window.location.href = `profile.html?user=${encodeURIComponent(username)}`;
