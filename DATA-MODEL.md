@@ -12,10 +12,21 @@
 |-------|--------|-------|
 | **Phase 1** | ✅ Complete | Tank management, events, schedules |
 | **Phase 2** | ✅ Complete | Notifications + FCM push (January 2026) |
-| **Phase 3** | 🔄 In Progress | Content expansion + Dashboard redesign + Tank photos |
-| **Phase 4** | ⏳ Planned | Social features |
+| **Phase 3** | 🔄 In Progress | Content expansion (3A-3D, 3G done; 3E-3F pending) |
+| **Phase 4** | ✅ Complete | Social features (MVP, posts, comments, likes, follows, bookmarks, profiles) |
 | **Phase 5** | ⏳ Planned | Diagnostic tool |
 | **Phase 6** | ⏳ Long-term | Native mobile app (iOS + Android) |
+
+### Phase 4 Future Polish (Deferred)
+These items from the original Phase 4 spec are deferred for future implementation:
+- [ ] Cloud Functions for follow counts (`onFollowCreate`/`onFollowDelete`)
+- [ ] Cloud Function for post counts (`onPostCreate`)
+- [ ] Cloud Function to update author info when profile changes (`updatePostAuthor`)
+- [ ] Moderation features (flagging, reporting posts/comments)
+- [ ] Post visibility options (followers-only, private posts)
+- [ ] Direct messaging (DMs)
+- [ ] Hashtag support for post discovery
+- [ ] `allowComments` preference per user
 
 ### Phase 2 Implementation Details (Complete)
 - ✅ `notifications` collection created with security rules
