@@ -277,7 +277,7 @@ functions/
 
 ### Naturalist Theme (Current)
 - **CSS:** `css/naturalist.css` - Single stylesheet for entire site (includes tank/maintenance/modal styles)
-- **Fonts:** Darker Grotesque (display/body), Libre Baskerville (serif accents), Source Sans 3 (fallback)
+- **Fonts:** Zodiak (serif headings, from Fontshare), Figtree (sans-serif body, from Google Fonts)
 - **No emojis** - Design uses typography and color for visual hierarchy
 - **Color palette:** Forest green (`#234a3a`), ivory/stone backgrounds, ink text hierarchy
 
