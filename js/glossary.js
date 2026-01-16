@@ -1036,9 +1036,9 @@ class GlossaryManager {
         const countLabel = count === 1 ? 'entry' : 'entries';
 
         return `
-                <div class="category-card ${activeClass}" onclick="glossaryManager.selectCategory('${category.id}')">
-                    <span class="category-card-name">${category.title}</span>
-                    <span class="category-card-count">${count} ${countLabel}</span>
+                <div class="category-filter ${activeClass}" onclick="glossaryManager.selectCategory('${category.id}')">
+                    <span class="category-filter-name">${category.title}</span>
+                    <span class="category-filter-count">${count} ${countLabel}</span>
                 </div>
             `;
       })

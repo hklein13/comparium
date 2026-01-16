@@ -42,11 +42,9 @@
   --origin-australia-oceania: #3d6a6a;
   --origin-australia-oceania-bg: rgba(61, 106, 106, 0.12);
 
-  /* Typography */
-  --font-serif: 'Libre Baskerville', Georgia, serif;
-  --font-sans: 'Source Sans 3', system-ui, sans-serif;
-  --font-display: 'Darker Grotesque', sans-serif;
-  --font-body: 'Darker Grotesque', sans-serif;
+  /* Typography - Zodiak (editorial serif) + Figtree (warm humanist sans) */
+  --font-serif: 'Zodiak', Georgia, serif;
+  --font-sans: 'Figtree', system-ui, sans-serif;
 
   /* Spacing */
   --space-xs: 0.25rem;
@@ -261,7 +259,7 @@
 }
 
 .origin-explore-section h2 {
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-size: 2rem;
   color: var(--ink);
   margin-bottom: var(--space-sm);
@@ -328,7 +326,7 @@
 }
 
 .origin-tile h3 {
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-size: 1.1rem;
   font-weight: 600;
   color: var(--ink);
@@ -441,7 +439,7 @@
 }
 
 .category-name {
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-size: 1.1rem;
   font-weight: 600;
   color: var(--ink);
@@ -509,7 +507,7 @@
 }
 
 .origin-card-name {
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-size: 1rem;
   font-weight: 600;
   color: var(--white);
@@ -569,7 +567,7 @@
 }
 
 .related-species-section h3 {
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-size: 1.25rem;
   color: var(--ink);
   margin-bottom: var(--space-xs);
@@ -695,32 +693,8 @@
 }
 
 /* ============================================
-   BUTTON & FORM MICRO-ANIMATIONS
+   FORM INPUT FOCUS STATES
    ============================================ */
-
-/* Button hover/active effects */
-.btn-primary {
-  transition:
-    transform var(--transition-fast),
-    background-color var(--transition-base),
-    box-shadow var(--transition-base);
-}
-
-.btn-primary:hover {
-  transform: scale(1.02);
-}
-
-.btn-primary:active {
-  transform: scale(0.98);
-}
-
-.btn-ghost:hover {
-  transform: scale(1.02);
-}
-
-.btn-ghost:active {
-  transform: scale(0.98);
-}
 
 /* Form input focus states */
 input:focus,
@@ -978,6 +952,11 @@ p {
 .btn-primary:hover {
   background: var(--forest-light);
   color: var(--white);
+  transform: scale(1.02);
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
 }
 
 .btn-secondary {
@@ -999,6 +978,11 @@ p {
 
 .btn-ghost:hover {
   color: var(--forest);
+  transform: scale(1.02);
+}
+
+.btn-ghost:active {
+  transform: scale(0.98);
 }
 
 .btn-small {
@@ -1076,7 +1060,7 @@ p {
 }
 
 .hero-content h1 {
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-size: 3rem;
   font-weight: 700;
   line-height: 1.15;
@@ -1086,7 +1070,7 @@ p {
 }
 
 .hero-content p {
-  font-family: var(--font-body);
+  font-family: var(--font-sans);
   font-size: 1.3rem;
   font-weight: 500;
   color: var(--ink-secondary);
@@ -1095,7 +1079,7 @@ p {
 }
 
 .hero-content .btn {
-  font-family: var(--font-body);
+  font-family: var(--font-sans);
   font-size: 1.1rem;
   font-weight: 600;
   padding: 1rem 2rem;
@@ -1177,7 +1161,7 @@ p {
 }
 
 .demo-section h2 {
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-size: 1.85rem;
   font-weight: 700;
   margin-bottom: 1rem;
@@ -1185,7 +1169,7 @@ p {
 }
 
 .demo-section .lead {
-  font-family: var(--font-body);
+  font-family: var(--font-sans);
   font-size: 1.15rem;
   font-weight: 500;
   color: var(--ink-secondary);
@@ -1201,7 +1185,7 @@ p {
 }
 
 .demo-preview-placeholder {
-  font-family: var(--font-body);
+  font-family: var(--font-sans);
   background: var(--stone);
   border-radius: var(--radius-lg);
   padding: 3rem;
@@ -1222,7 +1206,7 @@ p {
 }
 
 .showcase-section h2 {
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-size: 1.85rem;
   font-weight: 700;
   margin-bottom: 2rem;
@@ -1275,7 +1259,7 @@ p {
 }
 
 .showcase-name {
-  font-family: var(--font-body);
+  font-family: var(--font-sans);
   font-size: 0.95rem;
   font-weight: 600;
   color: var(--ink);
@@ -1286,7 +1270,7 @@ p {
 }
 
 .showcase-cta a {
-  font-family: var(--font-body);
+  font-family: var(--font-sans);
   color: var(--forest);
   font-size: 1rem;
   font-weight: 600;
@@ -1309,7 +1293,7 @@ p {
 }
 
 .origin-note p {
-  font-family: var(--font-body);
+  font-family: var(--font-sans);
   font-size: 1rem;
   font-weight: 500;
   color: var(--ink-tertiary);
@@ -2181,7 +2165,7 @@ p {
   border-radius: var(--radius-md);
   cursor: pointer;
   transition: all 0.2s ease;
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
 }
 
 .compare-button:hover:not(:disabled) {
@@ -3438,7 +3422,7 @@ p {
   position: relative;
   overflow: visible;
   text-align: center;
-  z-index: 100;
+  z-index: 1;
 }
 
 /* Ambient caustic light effect */
@@ -4700,11 +4684,6 @@ body.logged-in .favorite-star {
   flex: 1;
 }
 
-.btn-small {
-  padding: 0.4rem 0.8rem;
-  font-size: 0.85rem;
-}
-
 /* ----------------------------------------
    Dashboard Responsive
    ---------------------------------------- */
@@ -4903,7 +4882,8 @@ body.logged-in .favorite-star {
   }
 }
 
-.category-card {
+/* Glossary Category Filter Buttons (renamed from .category-card to avoid collision) */
+.category-filter {
   background: var(--white);
   border: 2px solid var(--border);
   border-radius: var(--radius-xl);
@@ -4913,18 +4893,18 @@ body.logged-in .favorite-star {
   text-align: center;
 }
 
-.category-card:hover {
+.category-filter:hover {
   border-color: var(--ink-tertiary);
   transform: translateY(-4px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 
-.category-card.active {
+.category-filter.active {
   border-color: var(--forest);
   background: var(--success-bg);
 }
 
-.category-card-name {
+.category-filter-name {
   display: block;
   font-size: 1.25rem;
   font-weight: 600;
@@ -4932,13 +4912,13 @@ body.logged-in .favorite-star {
   margin-bottom: 0.25rem;
 }
 
-.category-card-count {
+.category-filter-count {
   display: block;
   font-size: 0.85rem;
   color: var(--ink-tertiary);
 }
 
-.category-card.active .category-card-name {
+.category-filter.active .category-filter-name {
   color: var(--forest);
 }
 
@@ -6817,7 +6797,7 @@ body.logged-in .favorite-star {
 
 /* Hero Section */
 .community-hero {
-  background: var(--stone);
+  background: var(--white);
   padding: var(--space-2xl) var(--space-lg);
   text-align: center;
   border-bottom: 1px solid var(--border);
@@ -6826,7 +6806,7 @@ body.logged-in .favorite-star {
 .community-hero h1 {
   font-family: var(--font-serif);
   font-size: clamp(2rem, 4vw, 2.75rem);
-  color: var(--forest);
+  color: var(--ink);
   margin-bottom: var(--space-sm);
 }
 

@@ -37,13 +37,12 @@
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
 
-    <!-- Google Fonts -->
+    <!-- Fonts: Zodiak (Fontshare) + Figtree (Google) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
+    <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+    <link href="https://api.fontshare.com/v2/css?f[]=zodiak@400,500,600,700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
     <!-- Stylesheets -->
     <link rel="stylesheet" href="css/naturalist.css" />
@@ -157,8 +156,20 @@
 
     <!-- Footer -->
     <footer class="footer">
-      <p>Comparium &copy; 2026 | Built for aquarium enthusiasts</p>
+      <div class="footer-logo">Comparium</div>
+      <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="faq.html">FAQ</a>
+        <a href="glossary.html">Glossary</a>
+        <a href="mailto:admin@comparium.net">Contact</a>
+      </div>
+      <p class="footer-copy">&copy; <span id="copyright-year"></span> Comparium</p>
     </footer>
+
+    <!-- Auto-update copyright year -->
+    <script>
+      document.getElementById('copyright-year').textContent = new Date().getFullYear();
+    </script>
 
     <!-- Scripts -->
     <script type="module" src="js/firebase-init.js"></script>
