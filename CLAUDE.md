@@ -63,6 +63,7 @@ If a phase is in progress (see "Current Phase" below), there should be a plan fi
 **Current Stats:** 244 fish species (235 with images), 15 aquarium plants (14 with images)
 
 **Recent Features (January 2026):**
+- CSS Standardization: Zodiak + Figtree fonts, UI consistency fixes
 - Phase 4.4: Enhanced profiles with tabs, bio, settings, notification preferences
 - Phase 4.3: Follows & bookmarks on community
 - Phase 4.2: Comments & likes on community posts
@@ -71,9 +72,33 @@ If a phase is in progress (see "Current Phase" below), there should be a plan fi
 - Plant selector for tanks (add plants alongside species)
 - Forgot password feature (login page)
 
-**Current Phase:** Phase 4.4 Enhanced Profiles (complete)
+**Current Phase:** Homepage "Living Wall" Redesign (in progress)
 
-**Active Branch:** `main`
+**Active Branch:** `main` (work in progress on worktree branch)
+
+### In-Progress Work: Homepage Living Wall
+
+**Status:** Design complete, implementation plan ready, execution not started
+
+**Worktree:** `.worktrees/homepage-living-wall`
+**Branch:** `claude/homepage-living-wall`
+
+**Documentation:**
+- Design doc: `docs/plans/2026-01-17-homepage-living-wall-design.md`
+- Implementation plan: `docs/plans/2026-01-17-homepage-living-wall-implementation.md` (13 tasks)
+
+**To Resume:**
+1. `cd .worktrees/homepage-living-wall`
+2. Read implementation plan at `docs/plans/2026-01-17-homepage-living-wall-implementation.md`
+3. Choose execution approach:
+   - Subagent-Driven: Use `superpowers:subagent-driven-development` skill
+   - Manual: Follow tasks 1-13 in order
+4. After completion: Push branch, create PR to merge to main
+
+**What This Changes:**
+- Removes 3 static homepage sections (demo, browse database, explore by origin)
+- Adds dynamic Pinterest-style mosaic grid mixing community tanks/posts with species
+- Mosaic has smart fallbacks - always looks full even with no community content
 
 ## Commands
 
