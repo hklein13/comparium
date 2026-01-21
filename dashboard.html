@@ -698,6 +698,8 @@
           loadMyPosts();
         } else if (subtabName === 'bookmarks') {
           loadMyBookmarks();
+        } else if (subtabName === 'favorites') {
+          loadMyFavorites();
         }
       }
 
@@ -939,6 +941,55 @@
       async function toggleBookmarkFromList(postId) {
         await window.socialManager?.toggleBookmark(postId);
         loadMyBookmarks(); // Refresh list
+      }
+
+      async function loadMyFavorites() {
+        const container = document.getElementById('my-favorites-list');
+        const uid = window.getFirebaseUid?.();
+
+        if (!uid) {
+          container.innerHTML = '<p>Please log in to view favorites.</p>';
+          return;
+        }
+
+        container.innerHTML = '<p>Loading favorites...</p>';
+
+        try {
+          const favorites = await window.firestoreGetFavorites(uid);
+
+          if (!favorites?.length) {
+            container.innerHTML = `
+              <div class="activity-empty">
+                <p>No favorite species yet.</p>
+                <p style="margin-top: 0.5rem; font-size: 0.9rem;">Click the star on any species in the Compare tool to add favorites.</p>
+                <a href="compare.html" class="btn btn-ghost" style="margin-top: 1rem;">Browse Species</a>
+              </div>
+            `;
+            return;
+          }
+
+          container.innerHTML = `
+            <div class="favorites-grid">
+              ${favorites
+                .map(key => {
+                  const fish = typeof fishDatabase !== 'undefined' ? fishDatabase[key] : null;
+                  if (!fish) return '';
+                  return `
+                    <div class="favorite-card" onclick="window.location.href='species.html?species=${key}'">
+                      <div class="favorite-card__image">
+                        ${fish.imageUrl ? `<img src="${fish.imageUrl}" alt="${escapeHTML(fish.commonName)}" />` : '<div class="favorite-card__placeholder">No image</div>'}
+                      </div>
+                      <div class="favorite-card__name">${escapeHTML(fish.commonName)}</div>
+                    </div>
+                  `;
+                })
+                .join('')}
+            </div>
+          `;
+        } catch (error) {
+          console.error('Error loading favorites:', error);
+          container.innerHTML = '<p>Failed to load favorites.</p>';
+        }
       }
 
       async function loadSettingsTab() {
