@@ -229,12 +229,137 @@ test.describe('Complete User Flow', () => {
       await expect(page.locator('.tank-modal-backdrop.active')).not.toBeVisible();
     });
 
-    // NOTE: Schedule management tests (Phase 2C) skipped - UI redesign changed
-    // the schedule management workflow. Tests need to be updated to use the
-    // new modal-based approach. The core functionality still works.
+    // ========================================================================
+    // PHASE 2C: MAINTENANCE CRUD TESTS
+    // ========================================================================
 
-    await test.step('Skip schedule tests - UI redesigned', async () => {
-      console.log('⚠ Schedule management tests skipped - dashboard UI redesigned');
+    await test.step('Create a maintenance schedule', async () => {
+      // Open tank modal if not already open
+      const tankPortrait = page.locator('.tank-portrait:has-text("Test Community Tank")');
+      await tankPortrait.click();
+      await expect(page.locator('.tank-modal-backdrop.active')).toBeVisible();
+
+      // Click "+ Add Schedule" button
+      await page.click('#tank-modal-add-schedule-btn');
+
+      // Wait for schedule modal
+      await expect(page.locator('.event-modal')).toBeVisible();
+
+      // Select schedule type (water change)
+      await page.selectOption('#schedule-type', 'waterChange');
+
+      // Set interval to 7 days
+      await page.fill('#schedule-interval', '7');
+
+      // Save schedule
+      await page.click('button:has-text("Save")');
+
+      // Verify success message
+      await expect(page.locator('.message-alert')).toBeVisible({
+        timeout: 5000,
+      });
+
+      // Wait for message to clear
+      await page.waitForTimeout(2000);
+
+      console.log('✓ Schedule created successfully');
+    });
+
+    await test.step('Edit the maintenance schedule', async () => {
+      // Reopen tank modal to see schedules
+      const tankPortrait = page.locator('.tank-portrait:has-text("Test Community Tank")');
+      await tankPortrait.click();
+      await expect(page.locator('.tank-modal-backdrop.active')).toBeVisible();
+      await page.waitForTimeout(1000);
+
+      // Schedule pills should be visible in the tank modal
+      const schedulePill = page.locator('.schedule-pill').first();
+
+      if (await schedulePill.isVisible({ timeout: 3000 }).catch(() => false)) {
+        // Click to edit
+        await schedulePill.click();
+        await expect(page.locator('.event-modal')).toBeVisible();
+
+        // Change interval to 14 days
+        await page.fill('#schedule-interval', '14');
+
+        // Save changes
+        await page.click('button:has-text("Save")');
+
+        // Verify success
+        await expect(page.locator('.message-alert')).toBeVisible({
+          timeout: 5000,
+        });
+        await page.waitForTimeout(2000);
+
+        console.log('✓ Schedule edited successfully');
+      } else {
+        console.log('⚠ No schedule pill visible to edit');
+      }
+    });
+
+    await test.step('Delete a maintenance event', async () => {
+      // Reopen tank modal
+      const tankPortrait = page.locator('.tank-portrait:has-text("Test Community Tank")');
+      await tankPortrait.click();
+      await expect(page.locator('.tank-modal-backdrop.active')).toBeVisible();
+
+      // Wait for events to load
+      await page.waitForTimeout(1500);
+
+      // Find delete button on an event
+      const deleteBtn = page.locator('.event-delete-btn').first();
+
+      if (await deleteBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
+        // Set up dialog handler for confirmation
+        page.once('dialog', dialog => dialog.accept());
+        await deleteBtn.click();
+
+        // Verify success
+        await expect(page.locator('.message-alert:has-text("deleted")')).toBeVisible({
+          timeout: 5000,
+        });
+        await page.waitForTimeout(2000);
+
+        console.log('✓ Event deleted successfully');
+      } else {
+        console.log('⚠ No events available to delete');
+      }
+    });
+
+    await test.step('Delete the maintenance schedule', async () => {
+      // Reopen tank modal
+      const tankPortrait = page.locator('.tank-portrait:has-text("Test Community Tank")');
+      await tankPortrait.click();
+      await expect(page.locator('.tank-modal-backdrop.active')).toBeVisible();
+      await page.waitForTimeout(1000);
+
+      // Click on schedule pill to open edit modal
+      const schedulePill = page.locator('.schedule-pill').first();
+
+      if (await schedulePill.isVisible({ timeout: 2000 }).catch(() => false)) {
+        await schedulePill.click();
+        await expect(page.locator('.event-modal')).toBeVisible();
+
+        // Click delete button
+        page.once('dialog', dialog => dialog.accept());
+        await page.click('button:has-text("Delete")');
+
+        // Verify success
+        await expect(page.locator('.message-alert:has-text("deleted")')).toBeVisible({
+          timeout: 5000,
+        });
+        console.log('✓ Schedule deleted successfully');
+      } else {
+        console.log('⚠ No schedule available to delete');
+      }
+
+      // Close modal
+      const closeBtn = page.locator('.tank-modal-close');
+      if (await closeBtn.isVisible().catch(() => false)) {
+        await closeBtn.click();
+      }
+      await page.waitForTimeout(500);
     });
 
     // ========================================================================
