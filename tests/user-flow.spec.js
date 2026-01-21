@@ -65,6 +65,73 @@ test.describe('Complete User Flow', () => {
     });
 
     // ========================================================================
+    // PHASE 1.5: NOTIFICATION UI TESTS
+    // ========================================================================
+
+    await test.step('Verify notification bell is visible', async () => {
+      const bellButton = page.locator('#notification-toggle');
+      await expect(bellButton).toBeVisible();
+      console.log('✓ Notification bell icon is visible');
+    });
+
+    await test.step('Verify notification dropdown opens and closes', async () => {
+      // Open dropdown
+      await page.click('#notification-toggle');
+      const dropdown = page.locator('#notification-dropdown');
+      await expect(dropdown).toHaveClass(/open/);
+
+      // Verify header
+      await expect(dropdown.locator('h3')).toHaveText('Notifications');
+
+      // Click outside to close
+      await page.click('body', { position: { x: 10, y: 10 } });
+      await expect(dropdown).not.toHaveClass(/open/);
+      console.log('✓ Notification dropdown opens and closes correctly');
+    });
+
+    await test.step('Verify empty notification state', async () => {
+      await page.click('#notification-toggle');
+      const emptyState = page.locator('.notification-empty');
+      await expect(emptyState).toBeVisible();
+      await expect(emptyState).toContainText('No notifications yet');
+      // Close dropdown
+      await page.click('#notification-toggle');
+      console.log('✓ Empty notification state displays correctly');
+    });
+
+    await test.step('Verify notification badge reflects count', async () => {
+      const badge = page.locator('#notification-badge');
+      await expect(badge).toBeAttached();
+      // Badge should be hidden or show 0 for new user
+      const isHidden = await badge.isHidden();
+      if (!isHidden) {
+        const count = await badge.textContent();
+        expect(parseInt(count || '0')).toBe(0);
+      }
+      console.log('✓ Notification badge shows correct count (0)');
+    });
+
+    await test.step('Verify settings dropdown works independently', async () => {
+      // Open settings
+      await page.click('#settings-toggle');
+      const settingsDropdown = page.locator('#settings-dropdown');
+      await expect(settingsDropdown).toHaveClass(/open/);
+
+      // Notification dropdown should NOT be open
+      const notifDropdown = page.locator('#notification-dropdown');
+      await expect(notifDropdown).not.toHaveClass(/open/);
+
+      // Open notifications - settings should close
+      await page.click('#notification-toggle');
+      await expect(notifDropdown).toHaveClass(/open/);
+      await expect(settingsDropdown).not.toHaveClass(/open/);
+
+      // Close for next tests
+      await page.click('#notification-toggle');
+      console.log('✓ Only one dropdown open at a time');
+    });
+
+    // ========================================================================
     // PHASE 2: CREATE TANK
     // ========================================================================
 
