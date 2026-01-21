@@ -163,6 +163,7 @@ window.firestoreGetProfile = async uid => {
     const snap = await getDoc(ref);
     return snap.exists() ? snap.data() : null;
   } catch (e) {
+    console.error('firestoreGetProfile failed:', e);
     return null;
   }
 };
@@ -290,7 +291,11 @@ window.firestoreGetFavorites = async uid => {
 window.firestoreSaveTank = async (uid, tank) => {
   try {
     const ref = doc(firestore, 'users', uid);
-    const profile = (await window.firestoreGetProfile(uid)) || { profile: { tanks: [] } };
+    let profile = await window.firestoreGetProfile(uid);
+    if (!profile) {
+      console.warn('firestoreSaveTank: No profile found for UID, using fallback. This is unexpected.', uid);
+      profile = { profile: { tanks: [] } };
+    }
     profile.profile.tanks = profile.profile.tanks || [];
     if (tank.id) {
       const index = profile.profile.tanks.findIndex(t => t.id === tank.id);
@@ -311,6 +316,7 @@ window.firestoreSaveTank = async (uid, tank) => {
     await setDoc(ref, profile, { merge: true });
     return { success: true, tankId: tank.id };
   } catch (e) {
+    console.error('firestoreSaveTank failed:', e);
     return { success: false };
   }
 };
@@ -320,6 +326,7 @@ window.firestoreGetTanks = async uid => {
     const profile = await window.firestoreGetProfile(uid);
     return profile?.profile?.tanks || [];
   } catch (e) {
+    console.error('firestoreGetTanks failed:', e);
     return [];
   }
 };
@@ -327,11 +334,16 @@ window.firestoreGetTanks = async uid => {
 window.firestoreDeleteTank = async (uid, tankId) => {
   try {
     const ref = doc(firestore, 'users', uid);
-    const profile = (await window.firestoreGetProfile(uid)) || { profile: { tanks: [] } };
+    let profile = await window.firestoreGetProfile(uid);
+    if (!profile) {
+      console.warn('firestoreDeleteTank: No profile found for UID, using fallback. This is unexpected.', uid);
+      profile = { profile: { tanks: [] } };
+    }
     profile.profile.tanks = (profile.profile.tanks || []).filter(t => t.id !== tankId);
     await setDoc(ref, profile, { merge: true });
     return { success: true };
   } catch (e) {
+    console.error('firestoreDeleteTank failed:', e);
     return { success: false };
   }
 };
@@ -419,6 +431,7 @@ window.firestoreGetTankEvents = async (uid, tankId, maxResults = 50) => {
       created: d.data().created?.toDate?.()?.toISOString() || d.data().created,
     }));
   } catch (e) {
+    console.error('firestoreGetTankEvents failed:', e);
     return [];
   }
 };
@@ -563,6 +576,7 @@ window.firestoreGetTankSchedules = async (uid, tankId) => {
       };
     });
   } catch (e) {
+    console.error('firestoreGetTankSchedules failed:', e);
     return [];
   }
 };
@@ -768,6 +782,7 @@ window.firestoreGetNotifications = async (uid, maxResults = 20) => {
     const snap = await getDocs(q);
     return snap.docs.map(d => ({ id: d.id, ...d.data() }));
   } catch (e) {
+    console.error('firestoreGetNotifications failed:', e);
     return [];
   }
 };
