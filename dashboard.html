@@ -388,6 +388,13 @@
             >
               Bookmarks
             </button>
+            <button
+              class="dashboard-subtab"
+              data-subtab="favorites"
+              onclick="switchProfileSubtab('favorites')"
+            >
+              Favorites
+            </button>
           </nav>
 
           <!-- Overview Sub-tab -->
@@ -432,6 +439,13 @@
           <div id="subtab-bookmarks" class="dashboard-subtab-panel" style="display: none">
             <div id="my-bookmarks-list" class="my-bookmarks-list">
               <p>Loading bookmarks...</p>
+            </div>
+          </div>
+
+          <!-- Favorites Sub-tab -->
+          <div id="subtab-favorites" class="dashboard-subtab-panel" style="display: none">
+            <div id="my-favorites-list" class="my-favorites-list">
+              <p>Loading favorites...</p>
             </div>
           </div>
         </div>
