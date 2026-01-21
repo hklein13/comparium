@@ -41,8 +41,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
-    <link href="https://api.fontshare.com/v2/css?f[]=zodiak@400,500,600,700&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link
+      href="https://api.fontshare.com/v2/css?f[]=zodiak@400,500,600,700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
 
     <!-- Stylesheets -->
     <link rel="stylesheet" href="css/naturalist.css" />
@@ -92,98 +98,20 @@
       </div>
     </section>
 
-    <!-- Demo Preview Section -->
-    <section class="demo-section">
-      <div class="demo-container">
-        <h2>See how it works</h2>
-        <p class="lead">
-          Select species. Get compatibility results.<br />
-          Temperature, pH, tank size, temperament, and predation risk — checked automatically.
-        </p>
-        <a href="compare.html" class="btn btn-primary">Try the Comparison Tool</a>
-      </div>
+    <!-- Featured Tank Section -->
+    <section class="featured-tank-section" id="featured-tank">
+      <!-- Tank will be dynamically inserted by homepage-mosaic.js -->
     </section>
 
-    <!-- Browse Database Categories -->
-    <section class="showcase-section">
-      <h2>Browse the database</h2>
-      <div class="category-showcase">
-        <a href="glossary.html?category=species" class="category-card">
-          <span class="category-name">Species</span>
-          <span class="category-count">246 fish profiles</span>
-        </a>
-        <a href="glossary.html?category=equipment" class="category-card">
-          <span class="category-name">Equipment</span>
-          <span class="category-count">Filters, heaters & more</span>
-        </a>
-        <a href="glossary.html?category=diseases" class="category-card">
-          <span class="category-name">Diseases</span>
-          <span class="category-count">Common ailments</span>
-        </a>
-        <a href="glossary.html?category=terminology" class="category-card">
-          <span class="category-name">Terminology</span>
-          <span class="category-count">Aquarium terms</span>
-        </a>
-      </div>
-    </section>
-
-    <!-- Explore by Origin Section -->
-    <section class="origin-explore-section">
-      <h2>Explore by origin</h2>
-      <p class="origin-explore-subtitle">
-        Discover species from freshwater habitats around the world
-      </p>
-      <div class="origin-cards">
-        <a href="glossary.html?origin=southAmerica" class="origin-card">
-          <img
-            src="https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FcardinalTetra.jpg?alt=media"
-            alt="Cardinal Tetra from South America"
-          />
-          <div class="origin-card-overlay">
-            <span class="origin-card-name">South America</span>
-            <span class="origin-card-count">90 species</span>
-          </div>
-        </a>
-        <a href="glossary.html?origin=asia" class="origin-card">
-          <img
-            src="https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FbettaFish.jpg?alt=media"
-            alt="Betta from Asia"
-          />
-          <div class="origin-card-overlay">
-            <span class="origin-card-name">Asia</span>
-            <span class="origin-card-count">89 species</span>
-          </div>
-        </a>
-        <a href="glossary.html?origin=africa" class="origin-card">
-          <img
-            src="https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FyellowLabCichlid.jpg?alt=media"
-            alt="Yellow Lab Cichlid from Africa"
-          />
-          <div class="origin-card-overlay">
-            <span class="origin-card-name">Africa</span>
-            <span class="origin-card-count">35 species</span>
-          </div>
-        </a>
-        <a href="glossary.html?origin=northCentralAmerica" class="origin-card">
-          <img
-            src="https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2Fplaty.jpg?alt=media"
-            alt="Platy from North America"
-          />
-          <div class="origin-card-overlay">
-            <span class="origin-card-name">N. &amp; C. America</span>
-            <span class="origin-card-count">23 species</span>
-          </div>
-        </a>
-        <a href="glossary.html?origin=australiaOceania" class="origin-card">
-          <img
-            src="https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FboesemansRainbowfish.jpg?alt=media"
-            alt="Boesemani Rainbowfish from Oceania"
-          />
-          <div class="origin-card-overlay">
-            <span class="origin-card-name">Oceania</span>
-            <span class="origin-card-count">9 species</span>
-          </div>
-        </a>
+    <!-- Join Community CTA -->
+    <section class="join-cta-section">
+      <div class="join-cta">
+        <h2 class="join-cta__title">Join the community</h2>
+        <p class="join-cta__subtitle">Share your tanks, get advice, and connect with aquarists worldwide</p>
+        <div class="join-cta__actions">
+          <a href="signup.html" class="btn btn-primary">Sign Up Free</a>
+          <a href="glossary.html" class="btn btn-ghost">Browse Species</a>
+        </div>
       </div>
     </section>
 
@@ -208,7 +136,11 @@
     <script type="module" src="js/firebase-init.js"></script>
     <script src="js/storage-service.js"></script>
     <script src="js/auth-manager.js"></script>
+    <script src="js/fish-data.js"></script>
+    <script src="js/plant-data.js"></script>
+    <script src="js/public-tank-manager.js"></script>
     <script src="js/scroll-animations.js"></script>
+    <script src="js/homepage-mosaic.js"></script>
 
     <!-- Force video autoplay on iOS Safari -->
     <script>
