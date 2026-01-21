@@ -78,27 +78,29 @@ If a phase is in progress (see "Current Phase" below), there should be a plan fi
 
 ### In-Progress Work: Homepage Living Wall
 
-**Status:** Design complete, implementation plan ready, execution not started
+**Status:** Implementation complete, ready for review and merge
 
 **Worktree:** `.worktrees/homepage-living-wall`
 **Branch:** `claude/homepage-living-wall`
 
-**Documentation:**
-- Design doc: `docs/plans/2026-01-17-homepage-living-wall-design.md`
-- Implementation plan: `docs/plans/2026-01-17-homepage-living-wall-implementation.md` (13 tasks)
+**Note:** Original plan was a Pinterest-style mosaic grid, but was simplified during implementation to a cleaner design.
 
-**To Resume:**
+**What Was Implemented:**
+- Removed 3 static homepage sections (demo preview, browse database, explore by origin)
+- Added **Featured Tank** section: photo left, info right (tank name, owner, description, stats, species list, plants list)
+- Added **Join CTA** section: centered call-to-action with Sign Up and Browse Species buttons
+- Premium CSS: fluid typography, touch-aware hovers, responsive design
+
+**Files Changed:**
+- `index.html` - New HTML structure for featured tank + join CTA
+- `js/homepage-mosaic.js` - Simplified to ~120 lines (fetches/renders featured tank only)
+- `css/naturalist.css` - Added featured tank + join CTA styles (~190 lines at end of file)
+
+**To Complete:**
 1. `cd .worktrees/homepage-living-wall`
-2. Read implementation plan at `docs/plans/2026-01-17-homepage-living-wall-implementation.md`
-3. Choose execution approach:
-   - Subagent-Driven: Use `superpowers:subagent-driven-development` skill
-   - Manual: Follow tasks 1-13 in order
-4. After completion: Push branch, create PR to merge to main
-
-**What This Changes:**
-- Removes 3 static homepage sections (demo, browse database, explore by origin)
-- Adds dynamic Pinterest-style mosaic grid mixing community tanks/posts with species
-- Mosaic has smart fallbacks - always looks full even with no community content
+2. Review changes: `git diff main`
+3. Push branch: `git push -u origin claude/homepage-living-wall`
+4. Create PR to merge to main
 
 ## Commands
 
