@@ -63,44 +63,18 @@ If a phase is in progress (see "Current Phase" below), there should be a plan fi
 **Current Stats:** 244 fish species (235 with images), 15 aquarium plants (14 with images)
 
 **Recent Features (January 2026):**
+- Homepage redesign: Featured Tank section + Join CTA (replaced static demo sections)
+- Test consolidation: 9 new tests integrated into main flow (notification UI + maintenance CRUD)
+- Favorites sub-tab: Dashboard Profile tab now has Overview, My Posts, Bookmarks, Favorites
+- Debug logging: Firestore operations now log errors to console for debugging
 - CSS Standardization: Zodiak + Figtree fonts, UI consistency fixes
 - Phase 4.4: Enhanced profiles with tabs, bio, settings, notification preferences
 - Phase 4.3: Follows & bookmarks on community
 - Phase 4.2: Comments & likes on community posts
 - Phase 4.1: Core posts - community feed with categories
 - Phase 4 MVP: Tank sharing with Community gallery
-- Plant selector for tanks (add plants alongside species)
-- Forgot password feature (login page)
 
-**Current Phase:** Homepage "Living Wall" Redesign (in progress)
-
-**Active Branch:** `main` (work in progress on worktree branch)
-
-### In-Progress Work: Homepage Living Wall
-
-**Status:** Implementation complete, ready for review and merge
-
-**Worktree:** `.worktrees/homepage-living-wall`
-**Branch:** `claude/homepage-living-wall`
-
-**Note:** Original plan was a Pinterest-style mosaic grid, but was simplified during implementation to a cleaner design.
-
-**What Was Implemented:**
-- Removed 3 static homepage sections (demo preview, browse database, explore by origin)
-- Added **Featured Tank** section: photo left, info right (tank name, owner, description, stats, species list, plants list)
-- Added **Join CTA** section: centered call-to-action with Sign Up and Browse Species buttons
-- Premium CSS: fluid typography, touch-aware hovers, responsive design
-
-**Files Changed:**
-- `index.html` - New HTML structure for featured tank + join CTA
-- `js/homepage-mosaic.js` - Simplified to ~120 lines (fetches/renders featured tank only)
-- `css/naturalist.css` - Added featured tank + join CTA styles (~190 lines at end of file)
-
-**To Complete:**
-1. `cd .worktrees/homepage-living-wall`
-2. Review changes: `git diff main`
-3. Push branch: `git push -u origin claude/homepage-living-wall`
-4. Create PR to merge to main
+**Current Phase:** No active development phase - ready for new work
 
 ## Commands
 
