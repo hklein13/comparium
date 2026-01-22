@@ -60,9 +60,10 @@ If a phase is in progress (see "Current Phase" below), there should be a plan fi
 - **Repository:** https://github.com/hklein13/comparium
 - **Firebase Project:** `comparium-21b69`
 
-**Current Stats:** 244 fish species (235 with images), 15 aquarium plants (14 with images)
+**Current Stats:** 238 fish species (229 with images), 15 aquarium plants (14 with images)
 
 **Recent Features (January 2026):**
+- Glossary audit: Removed 6 duplicate species, added `alternateNames` field, fixed pleco diet classifications
 - Homepage redesign: Featured Tank section + Join CTA (replaced static demo sections)
 - Test consolidation: 9 new tests integrated into main flow (notification UI + maintenance CRUD)
 - Favorites sub-tab: Dashboard Profile tab now has Overview, My Posts, Bookmarks, Favorites
@@ -135,8 +136,8 @@ glossary-generator.js (transforms data)
 ```
 
 ### Key Files
-- `js/fish-data.js` - Single source of truth for all fish species (244 entries)
-- `js/fish-descriptions.js` - Curated descriptions for all 244 fish species
+- `js/fish-data.js` - Single source of truth for all fish species (238 entries, supports `alternateNames` array)
+- `js/fish-descriptions.js` - Curated descriptions for all 238 fish species
 - `js/plant-data.js` - Plant database (15 entries with position, planting style, difficulty, lighting, water params)
 - `js/plant-descriptions.js` - Curated descriptions for all 15 plants
 - `js/tank-manager.js` - Tank CRUD operations with privacy Yes/No buttons
@@ -151,14 +152,16 @@ glossary-generator.js (transforms data)
 - `scripts/serviceAccountKey.json` - Firebase Admin credentials (gitignored, never commit)
 
 ### ⚠️ Critical: Glossary Entry Structure Sync
-The migration script (`scripts/migrate-glossary-to-firestore.js`) has a **duplicated copy** of `generateGlossaryEntry()` (lines 180-196) that must stay in sync with `js/glossary-generator.js`.
+The migration script (`scripts/migrate-glossary-to-firestore.js`) has a **duplicated copy** of `generateGlossaryEntry()` (lines 223-251) that must stay in sync with `js/glossary-generator.js`.
 
 **Why duplication exists:** The migration runs in Node.js and can't easily import browser-side JS.
 
 **When modifying glossary entry structure:**
 1. Update `js/glossary-generator.js` (browser-side)
-2. Update `scripts/migrate-glossary-to-firestore.js` (Node-side, lines 180-196)
+2. Update `scripts/migrate-glossary-to-firestore.js` (Node-side, lines 223-251)
 3. Run `npm run migrate:glossary` to update Firestore
+
+**Migration cleanup:** The script automatically removes stale Firestore entries that no longer exist in source files.
 
 **Key fields that must match:**
 - `id` - kebab-case for Firestore document ID

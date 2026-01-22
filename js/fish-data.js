@@ -120,7 +120,7 @@ var fishDatabase = {
     tankSizeUnit: 'gallons',
     maxSize: 3,
     sizeUnit: 'inches',
-    aggression: 'Aggressive (males)',
+    aggression: 'Aggressive',
     diet: 'Carnivore',
     schooling: 'Solitary',
     waterHardness: '5-15 dGH',
@@ -842,7 +842,7 @@ var fishDatabase = {
     maxSize: 5.0,
     sizeUnit: 'inches',
     aggression: 'Peaceful',
-    diet: 'Omnivore',
+    diet: 'Herbivore',
     schooling: 'Solitary',
     waterHardness: '2-20 dGH',
     lifespan: '8 years',
@@ -1250,6 +1250,7 @@ var fishDatabase = {
       'Egg scatterer; spawns in dense vegetation; eggs hatch in 24-36 hours; tolerates varied conditions',
     genderDifferentiation:
       'Females rounder with deeper body; males slimmer with pointed swim bladder visible',
+    alternateNames: ['Pristella Tetra'],
   },
   penguinTetra: {
     commonName: 'Penguin Tetra',
@@ -1466,6 +1467,7 @@ var fishDatabase = {
       'Egg scatterer; spawns among fine plants; eggs hatch in 24-36 hours; challenging',
     genderDifferentiation:
       'Males develop extended dorsal/anal fins and brilliant iridescence; females shorter fins',
+    alternateNames: ['Pentazona Barb'],
   },
 
   // Rainbowfish (new category)
@@ -1547,6 +1549,7 @@ var fishDatabase = {
       'Egg scatterer; spawns in groups among plants; eggs hatch in 2-3 days; challenging',
     genderDifferentiation:
       'Males develop red-edged anal fin; females lack red edge and are fuller-bodied',
+    alternateNames: ['Lake Kutubu Rainbowfish'],
   },
   redRainbowfish: {
     commonName: 'Red Rainbowfish',
@@ -1628,6 +1631,7 @@ var fishDatabase = {
     breedingNeeds:
       'Egg scatterer; rarely bred in aquarium; requires very soft, acidic water; difficult',
     genderDifferentiation: 'Males slimmer with more intense colors; females fuller-bodied',
+    alternateNames: ['Least Rasbora'],
   },
   microrasbora: {
     commonName: 'Green Kubotai Rasbora',
@@ -1654,6 +1658,7 @@ var fishDatabase = {
     breedingNeeds:
       'Egg scatterer; spawns among fine-leaved plants; eggs hatch in 24-36 hours; challenging',
     genderDifferentiation: 'Males slimmer with brighter green coloration; females fuller-bodied',
+    alternateNames: ['Kubotai Rasbora'],
   },
 
   // Additional Livebearers
@@ -2221,6 +2226,7 @@ var fishDatabase = {
       'Has been bred in aquarium; requires high oxygen, strong flow, and cool temperatures; moderately difficult',
     genderDifferentiation:
       'Males have square/rough snout edge (fences); females have rounded snout edge',
+    alternateNames: ['Reticulated Hillstream Loach'],
   },
 
   // Additional Corydoras
@@ -2480,7 +2486,7 @@ var fishDatabase = {
     maxSize: 24.0,
     sizeUnit: 'inches',
     aggression: 'Semi-aggressive',
-    diet: 'Omnivore',
+    diet: 'Herbivore',
     schooling: 'Solitary',
     waterHardness: '2-12 dGH',
     lifespan: '10-15 years',
@@ -2693,34 +2699,6 @@ var fishDatabase = {
       'Males have elongated anal fin with black edge; females fuller-bodied with rounded fins',
   },
 
-  pristellaTetra: {
-    commonName: 'Pristella Tetra',
-    scientificName: 'Pristella maxillaris',
-    origin: 'southAmerica',
-    imageUrl:
-      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FpristellaTetra.jpg?alt=media',
-    tempMin: 75,
-    tempMax: 82,
-    tempUnit: '°F',
-    phMin: 6.0,
-    phMax: 8.0,
-    tankSizeMin: 15,
-    tankSizeRecommended: 25,
-    tankSizeUnit: 'gallons',
-    maxSize: 2,
-    sizeUnit: 'inches',
-    aggression: 'Peaceful',
-    diet: 'Omnivore',
-    schooling: 'School of 6+',
-    waterHardness: '2-20 dGH',
-    lifespan: '3-5 years',
-    careLevel: 'Very Easy',
-    breedingNeeds:
-      'Egg scatterer; spawns among plants; eggs hatch in 24-36 hours; easy to breed; tolerates brackish water',
-    genderDifferentiation:
-      'Males slimmer with more intense fin coloration; females fuller-bodied especially when gravid',
-  },
-
   blackPhantomTetra: {
     commonName: 'Black Phantom Tetra',
     scientificName: 'Hyphessobrycon megalopterus',
@@ -2860,34 +2838,6 @@ var fishDatabase = {
       'Egg scatterer; spawns among plants; eggs hatch in 24-36 hours; easy to breed in soft acidic water',
     genderDifferentiation:
       'Males slimmer with red-orange fin edges; females fuller-bodied with less intense fin coloration',
-  },
-
-  pentazonaBarb: {
-    commonName: 'Pentazona Barb',
-    scientificName: 'Desmopuntius pentazona',
-    origin: 'asia',
-    imageUrl:
-      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FpentazonaBarb.jpg?alt=media',
-    tempMin: 72,
-    tempMax: 79,
-    tempUnit: '°F',
-    phMin: 5.0,
-    phMax: 6.5,
-    tankSizeMin: 20,
-    tankSizeRecommended: 30,
-    tankSizeUnit: 'gallons',
-    maxSize: 2,
-    sizeUnit: 'inches',
-    aggression: 'Peaceful',
-    diet: 'Omnivore',
-    schooling: 'School of 6+',
-    waterHardness: '1-5 dGH',
-    lifespan: '3-5 years',
-    careLevel: 'Moderate',
-    breedingNeeds:
-      'Egg scatterer; spawns among plants; eggs hatch in 24-36 hours; requires very soft acidic water',
-    genderDifferentiation:
-      'Males slimmer with brighter coloration; females fuller-bodied, especially when gravid',
   },
 
   // Additional Rasboras & Small Cyprinids
@@ -4756,33 +4706,6 @@ var fishDatabase = {
     genderDifferentiation: 'Females fuller when gravid; males slimmer',
   },
 
-  kubotaiRasbora: {
-    commonName: 'Kubotai Rasbora',
-    scientificName: 'Microdevario kubotai',
-    origin: 'asia',
-    imageUrl:
-      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FkubotaiRasbora.jpg?alt=media',
-    tempMin: 72,
-    tempMax: 79,
-    tempUnit: '°F',
-    phMin: 5.0,
-    phMax: 7.0,
-    tankSizeMin: 10,
-    tankSizeRecommended: 10,
-    tankSizeUnit: 'gallons',
-    maxSize: 0.75,
-    sizeUnit: 'inches',
-    aggression: 'Peaceful',
-    diet: 'Omnivore',
-    schooling: 'School of 8-10+',
-    waterHardness: '1-8 dGH',
-    lifespan: '3-5 years',
-    careLevel: 'Moderate',
-    breedingNeeds:
-      'Egg scatterer; soft acidic water, fine-leaved plants, dim lighting; eggs hatch in 24-36 hours',
-    genderDifferentiation: 'Females slightly fuller; males more intensely colored',
-  },
-
   dwarfSpottedRasbora: {
     commonName: 'Dwarf Spotted Rasbora',
     scientificName: 'Boraras maculatus',
@@ -4836,32 +4759,6 @@ var fishDatabase = {
     genderDifferentiation: 'Females fuller-bodied; males slimmer',
   },
 
-  leastRasbora: {
-    commonName: 'Least Rasbora',
-    scientificName: 'Boraras urophthalmoides',
-    origin: 'asia',
-    imageUrl:
-      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FleastRasbora.jpg?alt=media',
-    tempMin: 72,
-    tempMax: 82,
-    tempUnit: '°F',
-    phMin: 5.0,
-    phMax: 7.0,
-    tankSizeMin: 5,
-    tankSizeRecommended: 10,
-    tankSizeUnit: 'gallons',
-    maxSize: 0.75,
-    sizeUnit: 'inches',
-    aggression: 'Peaceful',
-    diet: 'Omnivore',
-    schooling: 'School of 8-10+',
-    waterHardness: '1-8 dGH',
-    lifespan: '3-5 years',
-    careLevel: 'Moderate',
-    breedingNeeds: 'Egg scatterer; soft acidic water, fine-leaved plants; very small eggs and fry',
-    genderDifferentiation: 'Females fuller; males slimmer, more colorful',
-  },
-
   bandedRainbowfish: {
     commonName: 'Banded Rainbowfish',
     scientificName: 'Melanotaenia trifasciata',
@@ -4888,34 +4785,6 @@ var fishDatabase = {
       'Continuous spawner; separate breeding tank, spawning mops, hard alkaline water; eggs hatch in 7-12 days',
     genderDifferentiation:
       'Males larger, more intensely colored with brighter vertical bands; females smaller, paler',
-  },
-
-  lakeKutubuRainbowfish: {
-    commonName: 'Lake Kutubu Rainbowfish',
-    scientificName: 'Melanotaenia lacustris',
-    origin: 'australiaOceania',
-    imageUrl:
-      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FlakeKutubuRainbowfish.jpg?alt=media',
-    tempMin: 75,
-    tempMax: 86,
-    tempUnit: '°F',
-    phMin: 7.0,
-    phMax: 8.5,
-    tankSizeMin: 40,
-    tankSizeRecommended: 55,
-    tankSizeUnit: 'gallons',
-    maxSize: 5,
-    sizeUnit: 'inches',
-    aggression: 'Peaceful',
-    diet: 'Omnivore',
-    schooling: 'School of 6+',
-    waterHardness: '8-20 dGH',
-    lifespan: '5-8 years',
-    careLevel: 'Moderate',
-    breedingNeeds:
-      'Continuous spawner; spawning mops, hard alkaline water; eggs hatch in 7-10 days',
-    genderDifferentiation:
-      'Males more colorful with intense blue-green, deeper body; females paler, smaller',
   },
 
   kamakaRainbowfish: {
@@ -5931,34 +5800,6 @@ var fishDatabase = {
     genderDifferentiation: 'Not easily distinguished externally',
   },
 
-  reticulatedHillstreamLoach: {
-    commonName: 'Reticulated Hillstream Loach',
-    scientificName: 'Sewellia lineolata',
-    origin: 'asia',
-    imageUrl:
-      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FreticulatedHillstreamLoach.jpg?alt=media',
-    tempMin: 64,
-    tempMax: 75,
-    tempUnit: '°F',
-    phMin: 6.5,
-    phMax: 7.5,
-    tankSizeMin: 20,
-    tankSizeRecommended: 30,
-    tankSizeUnit: 'gallons',
-    maxSize: 2.5,
-    sizeUnit: 'inches',
-    aggression: 'Peaceful',
-    diet: 'Herbivore',
-    schooling: 'Group of 3+',
-    waterHardness: '6-10 dGH',
-    lifespan: '6-8 years',
-    careLevel: 'Difficult',
-    breedingNeeds:
-      'Rarely bred in captivity; requires specialized conditions mimicking seasonal floods; eggs laid among rocks',
-    genderDifferentiation:
-      'Males develop broader pectoral fins during breeding season; females fuller when gravid',
-  },
-
   orangeFinnedLoach: {
     commonName: 'Orange-Finned Loach',
     scientificName: 'Yasuhikotakia modesta',
@@ -6035,7 +5876,7 @@ var fishDatabase = {
     maxSize: 8,
     sizeUnit: 'inches',
     aggression: 'Semi-aggressive',
-    diet: 'Omnivore',
+    diet: 'Herbivore',
     schooling: 'Keep 1 male with multiple females, or singly',
     waterHardness: '6-10 dGH',
     lifespan: '10-15 years',

@@ -48,9 +48,6 @@ const fishDescriptions = {
   flameTetra:
     'A small, fiery tetra reaching 1.5 inches with brilliant orange-red body and black-edged fins. Native to Brazilian coastal rivers near Rio de Janeiro, they inhabit slow-moving, well-vegetated waters. Peaceful, hardy, and displaying intense flame coloration, these active schoolers thrive in groups of 6+ in planted tanks and maintain vibrant colors with quality diet and proper water conditions.',
 
-  pristellaTetra:
-    'A small, transparent tetra reaching 2 inches with silver translucent body revealing internal skeleton and distinctive black-and-yellow marked dorsal and anal fins. Native to South American coastal waters including Amazon and Orinoco basins, they tolerate both fresh and brackish conditions. Peaceful, hardy, and extremely adaptable, these active schoolers thrive in groups of 6+ and display unique transparency when viewed from the side.',
-
   xRayTetra:
     'A small, transparent tetra reaching 2 inches with silver translucent body revealing internal skeleton and distinctive black-and-yellow marked dorsal and anal fins. Native to South American coastal waters including Amazon and Orinoco basins, they tolerate both fresh and brackish conditions. Peaceful, hardy, and extremely adaptable, these active schoolers thrive in groups of 6+ and display unique transparency when viewed from the side.',
 
@@ -162,9 +159,6 @@ const fishDescriptions = {
   fiveBandedBarb:
     'A peaceful barb reaching 3 inches with five bold vertical black bands on golden body. Native to Southeast Asian streams in Malaysia, Singapore, and Indonesia, they prefer well-vegetated areas. Peaceful, shy, and suitable for community tanks unlike many barbs, these attractive schoolers thrive in groups of 6+ in planted tanks with minimal aggression and fin-nipping behavior.',
 
-  pentazonaBarb:
-    'A small, peaceful barb reaching 2 inches with striking pattern of five bold black vertical bands on golden-orange body. Native to Southeast Asian peat swamp forests in Borneo and Malaysia, they prefer soft, acidic blackwater conditions. Peaceful, shy, and suitable for community tanks unlike most barbs, these attractive schoolers thrive in groups of 6+ in well-planted tanks with subdued lighting and minimal fin-nipping behavior.',
-
   blackRubyBarb:
     'A stunning barb reaching 2.5 inches with males developing intense ruby-red and black coloration during breeding. Native to Sri Lankan hill streams with cool, well-oxygenated water, they prefer flowing conditions. Peaceful for barbs and suitable for community tanks, these color-changing schoolers thrive in groups of 6+ in cooler water than most tropical species, with males displaying spectacular breeding colors.',
 
@@ -246,12 +240,6 @@ const fishDescriptions = {
   exclamationPointRasbora:
     'A tiny nano fish reaching only 0.75 inches with single bold black spot at tail base resembling an exclamation point. Native to Indonesian peat swamps in southern Borneo, they inhabit soft, acidic blackwater conditions. Peaceful, delicate, and requiring species-specific nano setups, these miniature schoolers thrive in groups of 10+ with pristine water quality and dense vegetation.',
 
-  kubotaiRasbora:
-    'A beautiful nano rasbora reaching 0.75 inches with neon green-blue horizontal stripe and orange-red fins. Native to slow-moving streams and marshes of Thailand, they prefer heavily planted blackwater conditions with tannins. Peaceful, active, tiny schooling fish perfect for nano aquariums, thriving in groups of 8-10+ in densely planted tanks with dark substrate, floating plants, and subdued lighting where their iridescent colors shine brilliantly.',
-
-  leastRasbora:
-    'A tiny nano rasbora reaching 0.75 inches with slender translucent body and subtle red-orange tones. Native to slow-moving blackwater habitats of Southeast Asia with dense vegetation and leaf litter, they prefer soft acidic tannin-rich water. Peaceful, delicate, miniature schooling fish perfect for nano aquariums, thriving in groups of 8-10+ in heavily planted tanks with dark substrate and gentle filtration where their diminutive size and subtle beauty shine in proper conditions.',
-
   dwarfSpottedRasbora:
     'A tiny nano rasbora reaching 0.75 inches with red-orange body and distinctive dark spots along sides. Native to slow-moving peat swamps, streams, and rivers of Southeast Asia with heavy leaf litter and tannins, they inhabit soft acidic blackwater. Peaceful, delicate, striking schooling fish ideal for nano aquariums, thriving in groups of 8+ in heavily planted tanks with dark substrate and subdued lighting where their vibrant red coloration displays beautifully.',
 
@@ -287,9 +275,6 @@ const fishDescriptions = {
 
   bandedRainbowfish:
     'A colorful medium rainbowfish reaching 5 inches with distinctive vertical bands and iridescent blue-green body. Native to streams and rivers of Papua New Guinea, they prefer well-oxygenated flowing water with vegetation. Active, peaceful schooling fish that display stunning colors when mature males compete, thriving in groups of 6+ with 2:1 female to male ratio in spacious tanks with good water movement and plenty of swimming room.',
-
-  lakeKutubuRainbowfish:
-    'A spectacular rainbowfish reaching 5 inches with vibrant blue-green iridescent body and yellow-orange fins. Endemic to Lake Kutubu in Papua New Guinea, they are restricted to this single lake system. Active, peaceful, colorful schooling fish that develop intense coloration with maturity, thriving in groups of 6+ in well-filtered tanks with moderate current and plenty of swimming space where males display brilliant colors when competing.',
 
   kamakaRainbowfish:
     'A stunning rainbowfish reaching 3.5 inches with electric blue body and yellow-orange fins. Native to fast-flowing streams of Papua New Guinea, they prefer well-oxygenated water with current. Active, peaceful, brilliantly colored schooling fish that intensify in color with age, thriving in groups of 6+ in well-maintained tanks with good water movement and quality where mature males display spectacular electric blue coloration.',
@@ -620,9 +605,6 @@ const fishDescriptions = {
 
   horsefaceLoach:
     "An elongated bottom-dwelling loach reaching 8-10 inches with extended snout resembling a horse's face and tan-brown body with darker mottling. Native to Southeast Asian river systems including Thailand and neighboring countries, they inhabit sandy-bottomed streams and rivers where they burrow extensively. Peaceful, nocturnal burrowers requiring deep soft sand substrate for their unique digging behavior, these specialized loaches are more active at night and prefer groups of 3-5 with ample swimming space, making them interesting additions for experienced aquarists with suitable large sand-bottomed setups.",
-
-  reticulatedHillstreamLoach:
-    'A specialized small loach reaching 2-3 inches with flattened body, intricate reticulated pattern, and ventral sucker adapted for fast-flowing waters. Native to fast-moving hillstreams and torrential zones in Southeast Asia, they inhabit highly oxygenated rocky streams with strong current. Peaceful algae-eaters requiring very specific conditions with high flow, excellent oxygenation, and cooler temperatures, these unique bottom-dwellers graze biofilm from smooth rocks and need groups of 3+ in specialized setups, making them suitable only for experienced aquarists who can replicate their demanding hillstream habitat requirements.',
 
   orangeFinnedLoach:
     'A large, boisterous loach reaching 8-10 inches with blue-gray body and distinctive bright orange-red fins. Native to rivers of Thailand and nearby Southeast Asian countries, they inhabit moderate to fast-flowing waters with rocky substrates. Semi-aggressive, territorial, and very active with excellent snail-eating abilities, these robust loaches require very large tanks with groups of 5+ and sturdy tankmates, making them suitable only for experienced aquarists with spacious setups who can manage their aggressive tendencies and provide the swimming space they demand for their highly active nature.',

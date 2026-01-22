@@ -93,6 +93,12 @@ function loadSpeciesDetail() {
     ? `<a href="glossary.html?origin=${fish.origin}" class="origin-badge species-origin-badge" data-origin="${fish.origin}">${getOriginDisplayName(fish.origin)}</a>`
     : '';
 
+  // Generate alternate names display if alternateNames exist
+  const alternateNamesDisplay =
+    fish.alternateNames && fish.alternateNames.length > 0
+      ? `<p class="alternate-names">Also known as: ${fish.alternateNames.join(', ')}</p>`
+      : '';
+
   // Get related species from same origin
   const relatedSpecies = getRelatedSpeciesByOrigin(fishKey, fish.origin, 4);
 
@@ -109,6 +115,7 @@ function loadSpeciesDetail() {
                 <div class="species-title">
                     <h1>${fish.commonName}</h1>
                     <p class="scientific-name"><em>${fish.scientificName}</em></p>
+                    ${alternateNamesDisplay}
                     ${originBadge}
                     ${generateFavoriteStar(fishKey)}
                 </div>

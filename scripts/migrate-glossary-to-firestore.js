@@ -240,6 +240,7 @@ function generateGlossaryEntry(key, fish, descriptions = {}) {
     originDisplayName: fish.origin ? getOriginDisplayName(fish.origin) : null,
     careLevel: normalizedCareLevel, // For sorting: beginner, intermediate, advanced
     tags: generateFishTags(fish),
+    alternateNames: fish.alternateNames || [], // Alternate common names for this species
     category: 'species',
     author: 'System',
     firestoreId: null,
@@ -396,13 +397,52 @@ function loadOtherGlossaryData() {
   // Extract diseases array
   const diseasesMatch = content.match(/diseases:\s*\[([\s\S]*?)\],?\s*equipment:/);
   const equipmentMatch = content.match(/equipment:\s*\[([\s\S]*?)\],?\s*terminology:/);
-  const terminologyMatch = content.match(/terminology:\s*\[([\s\S]*?)\]\s*};?\s*}/);
+  const terminologyMatch = content.match(/terminology:\s*\[([\s\S]*?)\],?\s*};?\s*}/);
 
   const diseases = diseasesMatch ? eval(`[${diseasesMatch[1]}]`) : [];
   const equipment = equipmentMatch ? eval(`[${equipmentMatch[1]}]`) : [];
   const terminology = terminologyMatch ? eval(`[${terminologyMatch[1]}]`) : [];
 
   return { diseases, equipment, terminology };
+}
+
+// Cleanup function to remove orphaned Firestore documents
+async function cleanupOrphanedDocuments(glossaryCollection, validIds) {
+  console.log('🧹 Checking for stale Firestore entries...\n');
+
+  // Get all existing document IDs from Firestore
+  const existingDocs = await glossaryCollection.listDocuments();
+  const existingIds = existingDocs.map(doc => doc.id);
+
+  // Find orphaned IDs (exist in Firestore but not in source data)
+  const orphanedIds = existingIds.filter(id => !validIds.has(id));
+
+  if (orphanedIds.length === 0) {
+    console.log('✅ No stale entries found\n');
+    return 0;
+  }
+
+  console.log(`⚠️  Found ${orphanedIds.length} stale entries to remove:`);
+  orphanedIds.forEach(id => console.log(`   - ${id}`));
+  console.log('');
+
+  // Delete orphaned documents in batches
+  const batchSize = 500;
+  for (let i = 0; i < orphanedIds.length; i += batchSize) {
+    const batch = db.batch();
+    const batchIds = orphanedIds.slice(i, i + batchSize);
+
+    for (const id of batchIds) {
+      const docRef = glossaryCollection.doc(id);
+      batch.delete(docRef);
+    }
+
+    await batch.commit();
+    console.log(`🗑️  Deleted batch ${Math.floor(i / batchSize) + 1}`);
+  }
+
+  console.log(`\n✅ Removed ${orphanedIds.length} stale entries\n`);
+  return orphanedIds.length;
 }
 
 // Main migration function
@@ -501,11 +541,16 @@ async function migrateGlossaryData() {
       }
     }
 
+    // Cleanup orphaned documents
+    const validIds = new Set(allEntries.map(entry => entry.id));
+    const deletedCount = await cleanupOrphanedDocuments(glossaryCollection, validIds);
+
     // Summary
     console.log('\n╔════════════════════════════════════════════════╗');
     console.log('║            Migration Complete!                 ║');
     console.log('╚════════════════════════════════════════════════╝\n');
     console.log(`✅ Successfully migrated: ${successCount} entries`);
+    console.log(`🗑️  Stale entries removed: ${deletedCount} entries`);
     console.log(`❌ Errors:               ${errorCount} entries`);
 
     if (errorCount > 0) {
