@@ -80,6 +80,9 @@ async function loadTankDetail(tankId) {
     renderMeta(tank);
   } catch (error) {
     console.error('Error loading tank:', error);
+    if (typeof Sentry !== 'undefined') {
+      Sentry.captureException(error);
+    }
     showError();
   }
 }

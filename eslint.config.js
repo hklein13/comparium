@@ -36,6 +36,8 @@ export default [
         TextEncoder: 'readonly',
         // Firebase globals (loaded via CDN/modules)
         firebase: 'readonly',
+        // Error tracking (loaded via CDN)
+        Sentry: 'readonly',
 
         // Project globals (shared across script tags)
         fishDatabase: 'writable',

@@ -61,6 +61,9 @@ async function resolveUserId(userParam) {
     return null;
   } catch (error) {
     console.error('Error resolving username:', error);
+    if (typeof Sentry !== 'undefined') {
+      Sentry.captureException(error);
+    }
     return null;
   }
 }
@@ -142,6 +145,9 @@ async function loadProfile(userId) {
     await renderFollowButton(userId);
   } catch (error) {
     console.error('Error loading profile:', error);
+    if (typeof Sentry !== 'undefined') {
+      Sentry.captureException(error);
+    }
     showError();
   }
 }

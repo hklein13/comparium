@@ -64,7 +64,7 @@ If a phase is in progress (see "Current Phase" below), there should be a plan fi
 - **Repository:** https://github.com/hklein13/comparium
 - **Firebase Project:** `comparium-21b69`
 
-**Current Stats:** 238 fish species (229 with images), 15 aquarium plants (14 with images)
+**Current Stats:** 238 fish species (all with images), 15 aquarium plants (all with images)
 
 **Recent Features (January 2026):**
 - Bookmarks redesign: Denormalized storage eliminates N+1 queries, `onPostDeleted` cleans up orphans
@@ -320,7 +320,7 @@ Development follows a phased approach. See `DATA-MODEL.md` for complete specific
 |-------|--------|-------------|
 | **Phase 1** | ✅ Complete | Tank management, maintenance events, schedules |
 | **Phase 2** | ✅ Complete | Notifications system + FCM push notifications |
-| **Phase 3** | 🔄 In Progress | Content expansion (3A-3D, 3G ✅; 3E-3F pending; 9 species need images) |
+| **Phase 3** | ✅ Complete | Content expansion - all 238 species + 15 plants have images |
 | **Phase 4 MVP** | ✅ Complete | Tank sharing + Community gallery |
 | **Phase 4.1** | ✅ Complete | Core posts - community feed with categories |
 | **Phase 4.2** | ✅ Complete | Comments & likes on posts |
@@ -433,7 +433,7 @@ Development follows a phased approach. See `DATA-MODEL.md` for complete specific
 - ✅ Sentry error tracking live (test: `Sentry.captureMessage("test")` in browser console)
 - ✅ Git line endings configured (`core.autocrlf=true`)
 - ✅ **Phase 2 complete** - Notifications + FCM push
-- ✅ **Phase 3D complete** - 229/238 species have images (96%)
+- ✅ **Phase 3 complete** - All 238 species + 15 plants have images (100%)
 - ✅ **Phase 4 MVP complete** - Tank sharing + Community gallery
 - ✅ **Phase 4.1 complete** - Core posts with categories (branch ready for merge)
 

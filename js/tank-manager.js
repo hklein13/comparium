@@ -1028,6 +1028,9 @@ window.tankManager = {
       tanks.forEach(tank => this.renderTankPortrait(container, tank));
     } catch (error) {
       console.error('Error loading tanks:', error);
+      if (typeof Sentry !== 'undefined') {
+        Sentry.captureException(error);
+      }
       container.innerHTML = '';
       container.appendChild(
         this.createGalleryEmptyState('Error loading tanks. Please refresh the page.', true)
@@ -1138,6 +1141,9 @@ window.tankManager = {
       }
     } catch (error) {
       console.error('Error loading tank:', error);
+      if (typeof Sentry !== 'undefined') {
+        Sentry.captureException(error);
+      }
       authManager.showMessage('Failed to load tank', 'error');
     }
   },
@@ -1200,6 +1206,9 @@ window.tankManager = {
       }
     } catch (error) {
       console.error('Error updating dashboard stats:', error);
+      if (typeof Sentry !== 'undefined') {
+        Sentry.captureException(error);
+      }
     }
   },
 };
