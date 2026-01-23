@@ -447,6 +447,22 @@ The following plugins enhance development workflow:
 | **code-simplifier** | Refactor code for clarity | After completing features, before major UI changes |
 | **feature-dev** | Guided feature development | Planning new features with architecture focus |
 
+### Custom Skills (Personal)
+Skills stored in `~/.claude/skills/` for use across all projects:
+
+| Skill | Purpose | When to Use |
+|-------|---------|-------------|
+| **hindsight-refactor** | Fresh-eyes evaluation of completed features | After completing a feature (merged or not), to evaluate if a cleaner rebuild is warranted |
+
+**Hindsight Refactor workflow:**
+1. Describe the feature and provide branch name (if unmerged) or key files (if merged)
+2. Agent captures behavior (tests + documented flows)
+3. Agent produces fair critique with strengths, issues, and verdict
+4. You decide: original wins / rebuild / hybrid
+5. If rebuilding: agent creates competing branch, you compare side-by-side
+
+Example: `Let's do a hindsight refactor on the bookmarks feature. Key files are js/social-manager.js and firestoreToggleBookmark in firebase-init.js.`
+
 **Sentry MCP Setup:** Connected to org `harrison-klein`. If disconnected, run: `claude mcp add --transport http sentry https://mcp.sentry.dev/mcp --header "Authorization: Bearer <token>"` (get token from https://sentry.io/settings/auth-tokens/)
 
 **Note:** The `.claude/` folder is gitignored (contains local settings and hooks). Hooks are already configured and working.
