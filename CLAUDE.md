@@ -77,7 +77,7 @@ If a phase is in progress (see "Current Phase" below), there should be a plan fi
 - Phase 4.1: Core posts - community feed with categories
 - Phase 4 MVP: Tank sharing with Community gallery
 
-**Current Phase:** Branch `claude/near-term-improvements` ready for PR/merge
+**Current Phase:** No active development phase - ready for new work
 
 ## Commands
 
