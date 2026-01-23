@@ -10,7 +10,7 @@
 /**
  * Initialize the app - build UI with fish data from fish-data.js
  */
-function initializeApp() {
+async function initializeApp() {
   try {
     // Verify we have data (loaded from fish-data.js)
     if (!fishDatabase || Object.keys(fishDatabase).length === 0) {
