@@ -313,7 +313,7 @@ Development follows a phased approach. See `DATA-MODEL.md` for complete specific
 |-------|--------|-------------|
 | **Phase 1** | ✅ Complete | Tank management, maintenance events, schedules |
 | **Phase 2** | ✅ Complete | Notifications system + FCM push notifications |
-| **Phase 3** | 🔄 In Progress | Content expansion (3A-3D, 3G done; 3E-3F pending) |
+| **Phase 3** | 🔄 In Progress | Content expansion (3A-3D, 3G ✅; 3E-3F pending; 9 species need images) |
 | **Phase 4 MVP** | ✅ Complete | Tank sharing + Community gallery |
 | **Phase 4.1** | ✅ Complete | Core posts - community feed with categories |
 | **Phase 4.2** | ✅ Complete | Comments & likes on posts |
@@ -416,14 +416,14 @@ Development follows a phased approach. See `DATA-MODEL.md` for complete specific
 - ✅ Prettier configured and all files formatted
 - ✅ Claude Code hooks set up in `.claude/settings.json`
 - ✅ Playwright tests passing (12 passed, 11 skipped)
-- ✅ Data integrity tests passing (244 species validated)
+- ✅ Data integrity tests passing (238 species validated)
 - ✅ Security rules tests passing (25 checks)
 - ✅ Cloud Function tests available (dry-run simulation)
-- ✅ All 4 Cloud Functions deployed and operational
+- ✅ All 8 Cloud Functions deployed and operational
 - ✅ Sentry error tracking live (test: `Sentry.captureMessage("test")` in browser console)
 - ✅ Git line endings configured (`core.autocrlf=true`)
 - ✅ **Phase 2 complete** - Notifications + FCM push
-- ✅ **Phase 3D complete** - 235/244 species have images (96.3%)
+- ✅ **Phase 3D complete** - 229/238 species have images (96%)
 - ✅ **Phase 4 MVP complete** - Tank sharing + Community gallery
 - ✅ **Phase 4.1 complete** - Core posts with categories (branch ready for merge)
 

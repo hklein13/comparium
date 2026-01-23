@@ -1,7 +1,7 @@
 # Project Changes Tracking
 
 _This document tracks pending changes and improvements for the Comparium project._
-_Last Updated: January 6, 2026_
+_Last Updated: January 22, 2026_
 
 ---
 
@@ -126,14 +126,14 @@ These issues were identified in code review but are low-risk. Address when time 
 ## ACTIVE (Near-term Improvements)
 
 ### HOME PAGE
-- [ ] Change photos - no clown loach, no cherry barb (awaiting user species selection)
+- ~~[ ] Change photos - no clown loach, no cherry barb~~ (Old design - homepage redesigned with Featured Tank section)
 
 ### DASHBOARD PAGE
 - [ ] Make Dashboard nav link visually distinct (button style like Sign Up)
 
 ### GLOSSARY PAGE
-- [ ] Add remaining photos
-- [ ] Add hyperlinks to individual fish → species detail page
+- [ ] Add remaining photos (9 species need images)
+- [x] Add hyperlinks to individual fish → species detail page
 
 ### SPECIES PAGES
 - [ ] Add remaining photos
@@ -145,17 +145,17 @@ These issues were identified in code review but are low-risk. Address when time 
 
 ## WAITING ON USER INPUT
 
-- [ ] Home page photo swap (user picking replacement species)
-- [ ] Breeding information (user providing data)
-- [ ] Gender differentiation info (user providing data)
+- ~~[ ] Home page photo swap~~ (Old design - homepage redesigned)
+- [x] Breeding information (completed in Phase 3A)
+- [x] Gender differentiation info (completed in Phase 3A)
 
 ---
 
 ## DEFERRED TO PHASE 3 (Expanded Glossary)
 
-- [ ] Add new terms for equipment, diseases, general
-- [ ] Add plants section
-- [ ] Add example photos for diseases
+- [ ] Add new terms for equipment (expand from 6 to 16 entries) - Sub-phase 3F
+- [x] Add plants section (15 plants visible in glossary) - Sub-phase 3G complete
+- [ ] Add example photos for diseases (23 entries) - Sub-phase 3E
 
 ---
 
@@ -204,15 +204,19 @@ These issues were identified in code review but are low-risk. Address when time 
 **Staging Branch:** None active (create `claude/phase3-glossary` for next work)
 **Live Site:** https://comparium.net (auto-deploys from main)
 
-**Cloud Functions (all deployed):**
+**Cloud Functions (8 deployed):**
 - `helloComparium` - Test/health check (HTTP)
 - `checkDueSchedules` - Daily 8 AM UTC (scheduler)
 - `sendPushNotification` - On notification create (Firestore trigger)
 - `cleanupExpiredNotifications` - Weekly Sunday 2 AM UTC (scheduler)
+- `onCommentCreated` - Increment post/comment counts (Firestore trigger)
+- `onCommentDeleted` - Decrement post/comment counts (Firestore trigger)
+- `onLikeCreated` - Increment like counts (Firestore trigger)
+- `onLikeDeleted` - Decrement like counts (Firestore trigger)
 
 **Test Status:**
-- Playwright: 7 passed, 11 skipped
-- Data integrity: 143 species validated
+- Playwright: 12 passed, 11 skipped
+- Data integrity: 238 species validated
 - Security rules: 25 checks passed
 
 **Local uncommitted files (intentionally kept local):**
