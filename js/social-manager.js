@@ -165,10 +165,18 @@ window.socialManager = {
       // Fetch full post data for each bookmark
       const posts = [];
       for (const bookmark of bookmarks) {
-        const postRef = doc(window.firebaseFirestore, 'posts', bookmark.postId);
-        const postDoc = await getDoc(postRef);
-        if (postDoc.exists()) {
-          posts.push({ id: postDoc.id, ...postDoc.data() });
+        try {
+          console.log('[DEBUG] Fetching post:', bookmark.postId);
+          const postRef = doc(window.firebaseFirestore, 'posts', bookmark.postId);
+          const postDoc = await getDoc(postRef);
+          if (postDoc.exists()) {
+            posts.push({ id: postDoc.id, ...postDoc.data() });
+          } else {
+            console.log('[DEBUG] Post not found (deleted?):', bookmark.postId);
+          }
+        } catch (postError) {
+          // Post may be deleted or made private - skip it
+          console.log('[DEBUG] Cannot access post (deleted/private?):', bookmark.postId, postError.message);
         }
       }
 
