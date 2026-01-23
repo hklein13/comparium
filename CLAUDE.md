@@ -63,6 +63,7 @@ If a phase is in progress (see "Current Phase" below), there should be a plan fi
 **Current Stats:** 238 fish species (229 with images), 15 aquarium plants (14 with images)
 
 **Recent Features (January 2026):**
+- Near-term improvements: Tank form validation (name/size required), dashboard nav hidden when logged out, compare tool expanded to 5 species
 - Sentry error tracking: Live on all pages, captures JS errors from all users (org: `harrison-klein`, project: `comparium`)
 - Glossary audit: Removed 6 duplicate species, added `alternateNames` field, fixed pleco diet classifications
 - Homepage redesign: Featured Tank section + Join CTA (replaced static demo sections)
@@ -76,7 +77,7 @@ If a phase is in progress (see "Current Phase" below), there should be a plan fi
 - Phase 4.1: Core posts - community feed with categories
 - Phase 4 MVP: Tank sharing with Community gallery
 
-**Current Phase:** No active development phase - ready for new work
+**Current Phase:** Branch `claude/near-term-improvements` ready for PR/merge
 
 ## Commands
 
@@ -197,7 +198,7 @@ if (!missing.length && !orphaned.length) console.log('SUCCESS: All keys match!')
 
 ### Page Structure
 - **index.html** - Landing page (video hero, demo CTA, species showcase)
-- **compare.html** - Fish comparison tool (main app functionality)
+- **compare.html** - Fish comparison tool (supports up to 5 species)
 - **dashboard.html** - User hub with tanks, maintenance, favorites
 - **glossary.html** - Encyclopedia (Species, Plants, Diseases, Equipment, Terminology)
 - **species.html** - Fish detail page (`?species=fishKey`)
