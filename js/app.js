@@ -260,11 +260,16 @@ const selectedSpecies = {
   panel1: null,
   panel2: null,
   panel3: null,
+  panel4: null,
+  panel5: null,
 };
+
+// Track visible panel count (starts at 3)
+let visiblePanelCount = 3;
 
 // Build collapsible category panels
 function buildPanels() {
-  const panels = ['panel1', 'panel2', 'panel3'];
+  const panels = ['panel1', 'panel2', 'panel3', 'panel4', 'panel5'];
   panels.forEach(panelId => {
     const panel = document.getElementById(panelId);
     panel.innerHTML = '';
@@ -410,6 +415,45 @@ function updateSelectionStatus() {
     statusEl.textContent = `${count} species selected - ready to compare`;
     statusEl.classList.add('ready');
     compareBtn.disabled = false;
+  }
+}
+
+// Add a new species slot (reveal panel 4 or 5)
+function addSpeciesSlot() {
+  if (visiblePanelCount >= 5) return;
+
+  visiblePanelCount++;
+  const selectorCard = document.getElementById('selector' + visiblePanelCount);
+
+  if (selectorCard) {
+    selectorCard.style.display = 'flex';
+    selectorCard.classList.remove('selector-card-hidden');
+    // Animate in
+    selectorCard.style.opacity = '0';
+    selectorCard.style.transform = 'translateY(10px)';
+    window.requestAnimationFrame(() => {
+      selectorCard.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+      selectorCard.style.opacity = '1';
+      selectorCard.style.transform = 'translateY(0)';
+    });
+  }
+
+  updateAddSpeciesButton();
+}
+
+// Update the Add Species button visibility and count
+function updateAddSpeciesButton() {
+  const addBtn = document.getElementById('addSpeciesBtn');
+  const countEl = document.getElementById('speciesSlotCount');
+  const wrapper = document.getElementById('addSpeciesWrapper');
+
+  if (countEl) {
+    countEl.textContent = `${visiblePanelCount} of 5 slots`;
+  }
+
+  if (visiblePanelCount >= 5 && addBtn && wrapper) {
+    addBtn.style.display = 'none';
+    countEl.textContent = '5 of 5 slots (max)';
   }
 }
 

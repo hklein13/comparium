@@ -80,9 +80,9 @@
         <a href="glossary.html">Glossary</a>
         <a href="community.html">Community</a>
         <a href="faq.html">FAQ</a>
-        <a href="dashboard.html">Dashboard</a>
+        <a href="dashboard.html" class="nav-dashboard">Dashboard</a>
         <div id="auth-links">
-          <a href="login.html">Login</a>
+          <a href="login.html" class="nav-ghost">Login</a>
           <a href="signup.html" class="nav-cta">Sign Up</a>
         </div>
       </nav>
@@ -192,6 +192,62 @@
             />
             <div class="species-panel" id="panel3"></div>
           </div>
+
+          <!-- Selector Card 4 (Hidden by default) -->
+          <div class="selector-card selector-card-hidden" id="selector4" style="display: none">
+            <div class="selector-card-header">
+              <span class="selector-label">Species 4</span>
+              <span class="selector-optional">(optional)</span>
+              <button class="selector-clear" onclick="clearSelection(4)" style="display: none">
+                Clear
+              </button>
+            </div>
+            <div class="selector-preview" id="preview4">
+              <div class="selector-preview-placeholder">
+                <span>Search below to select</span>
+              </div>
+            </div>
+            <input
+              type="text"
+              class="search-input"
+              id="search4"
+              placeholder="Search 246 species..."
+              oninput="filterSpecies('panel4', 'search4')"
+            />
+            <div class="species-panel" id="panel4"></div>
+          </div>
+
+          <!-- Selector Card 5 (Hidden by default) -->
+          <div class="selector-card selector-card-hidden" id="selector5" style="display: none">
+            <div class="selector-card-header">
+              <span class="selector-label">Species 5</span>
+              <span class="selector-optional">(optional)</span>
+              <button class="selector-clear" onclick="clearSelection(5)" style="display: none">
+                Clear
+              </button>
+            </div>
+            <div class="selector-preview" id="preview5">
+              <div class="selector-preview-placeholder">
+                <span>Search below to select</span>
+              </div>
+            </div>
+            <input
+              type="text"
+              class="search-input"
+              id="search5"
+              placeholder="Search 246 species..."
+              oninput="filterSpecies('panel5', 'search5')"
+            />
+            <div class="species-panel" id="panel5"></div>
+          </div>
+        </div>
+
+        <!-- Add Species Button -->
+        <div class="add-species-wrapper" id="addSpeciesWrapper">
+          <button class="add-species-btn" id="addSpeciesBtn" onclick="addSpeciesSlot()">
+            + Add Species
+          </button>
+          <span class="species-slot-count" id="speciesSlotCount">3 of 5 slots</span>
         </div>
 
         <div class="compare-button-wrapper">

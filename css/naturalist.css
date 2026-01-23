@@ -917,11 +917,61 @@ p {
 }
 
 .nav-cta {
-  color: var(--forest) !important;
+  background: var(--forest);
+  color: var(--white) !important;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-md);
   font-weight: 600;
 }
 
+.nav-cta:hover {
+  background: var(--forest-dark, #1a3a2e);
+  color: var(--white) !important;
+}
+
 .nav-cta.active::after {
+  display: none;
+}
+
+/* Ghost button style for Login */
+.nav-ghost {
+  border: 1px solid var(--forest);
+  color: var(--forest) !important;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  background: transparent;
+}
+
+.nav-ghost:hover {
+  background: var(--forest);
+  color: var(--white) !important;
+}
+
+.nav-ghost.active::after {
+  display: none;
+}
+
+/* Dashboard link - hidden by default, shown when logged in */
+.nav-dashboard {
+  display: none;
+}
+
+body.logged-in .nav-dashboard {
+  display: inline-flex;
+  background: var(--forest);
+  color: var(--white) !important;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+}
+
+body.logged-in .nav-dashboard:hover {
+  background: var(--forest-dark, #1a3a2e);
+  color: var(--white) !important;
+}
+
+body.logged-in .nav-dashboard.active::after {
   display: none;
 }
 
@@ -1598,6 +1648,31 @@ p {
   color: var(--ink-tertiary);
 }
 
+/* Form validation error states */
+.form-group input.input-error,
+.form-group select.input-error,
+.form-group textarea.input-error {
+  border-color: #dc3545;
+}
+
+.form-group input.input-error:focus,
+.form-group select.input-error:focus,
+.form-group textarea.input-error:focus {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.15);
+}
+
+.form-error-message {
+  display: none;
+  color: #dc3545;
+  font-size: 0.85rem;
+  margin-top: var(--space-xs);
+}
+
+.form-error-message.visible {
+  display: block;
+}
+
 /* Search input */
 .search-input {
   width: 100%;
@@ -1934,6 +2009,41 @@ p {
 .selector-preview-scientific {
   font-size: 0.8rem;
   font-style: italic;
+  color: var(--ink-tertiary);
+}
+
+/* Add Species Button */
+.add-species-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  margin-top: var(--space-lg);
+}
+
+.add-species-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 0.6rem 1.2rem;
+  background: transparent;
+  border: 1px dashed var(--forest);
+  color: var(--forest);
+  border-radius: var(--radius-md);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.add-species-btn:hover {
+  background: var(--forest);
+  color: var(--white);
+  border-style: solid;
+}
+
+.species-slot-count {
+  font-size: 0.85rem;
   color: var(--ink-tertiary);
 }
 
