@@ -628,6 +628,12 @@ function displayComparison(fishData) {
 
   grid.innerHTML = html;
   grid.classList.add('active');
+
+  // Set dynamic grid columns based on species count
+  const columnStyle = `200px repeat(${fishData.length}, 1fr)`;
+  grid.querySelectorAll('.comparison-header, .comparison-row').forEach(row => {
+    row.style.gridTemplateColumns = columnStyle;
+  });
 }
 
 function analyzeCompatibility(fishData) {
