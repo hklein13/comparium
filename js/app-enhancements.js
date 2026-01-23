@@ -26,12 +26,14 @@ function makeSpeciesNamesClickable() {
   if (typeof selectedSpecies === 'undefined') {
     return;
   }
-  // Get all the fish data from selected panels
-  const fish1Key = selectedSpecies.panel1;
-  const fish2Key = selectedSpecies.panel2;
-  const fish3Key = selectedSpecies.panel3;
-
-  const selectedFish = [fish1Key, fish2Key, fish3Key].filter(Boolean);
+  // Get all the fish data from selected panels (supports up to 5 species)
+  const selectedFish = [
+    selectedSpecies.panel1,
+    selectedSpecies.panel2,
+    selectedSpecies.panel3,
+    selectedSpecies.panel4,
+    selectedSpecies.panel5,
+  ].filter(Boolean);
   // Replace each fish name with clickable link
   selectedFish.forEach(fishKey => {
     const fish = fishDatabase[fishKey];

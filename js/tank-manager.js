@@ -370,6 +370,7 @@ window.tankManager = {
     this.populatePlantSelector();
     this.setupPhotoDragDrop();
     this.setupPrivacyButtons();
+    this.setupValidationListeners();
     await this.loadTanks();
     this.checkPendingSpecies();
     this.isInitialized = true;
@@ -570,6 +571,7 @@ window.tankManager = {
     this.currentPhotoUrl = null;
     this.existingPhotoUrl = null;
     this.wasPublicBefore = false;
+    this.clearAllErrors();
   },
 
   /**
@@ -780,11 +782,95 @@ window.tankManager = {
     this.updatePlantsList();
   },
 
+  // ============================================
+  // FORM VALIDATION
+  // ============================================
+
+  /**
+   * Show validation error on a field
+   */
+  showFieldError(inputId, errorId) {
+    const input = document.getElementById(inputId);
+    const error = document.getElementById(errorId);
+    if (input) input.classList.add('input-error');
+    if (error) error.classList.add('visible');
+  },
+
+  /**
+   * Clear validation error on a field
+   */
+  clearFieldError(inputId, errorId) {
+    const input = document.getElementById(inputId);
+    const error = document.getElementById(errorId);
+    if (input) input.classList.remove('input-error');
+    if (error) error.classList.remove('visible');
+  },
+
+  /**
+   * Clear all validation errors
+   */
+  clearAllErrors() {
+    this.clearFieldError('tank-name', 'tank-name-error');
+    this.clearFieldError('tank-size', 'tank-size-error');
+  },
+
+  /**
+   * Validate the tank form
+   * @returns {boolean} true if valid, false if errors
+   */
+  validateTankForm() {
+    let isValid = true;
+    this.clearAllErrors();
+
+    // Validate tank name
+    const nameInput = document.getElementById('tank-name');
+    const nameValue = nameInput?.value?.trim() || '';
+    if (!nameValue) {
+      this.showFieldError('tank-name', 'tank-name-error');
+      isValid = false;
+    }
+
+    // Validate tank size
+    const sizeInput = document.getElementById('tank-size');
+    const sizeValue = parseInt(sizeInput?.value, 10) || 0;
+    if (sizeValue <= 0) {
+      this.showFieldError('tank-size', 'tank-size-error');
+      isValid = false;
+    }
+
+    return isValid;
+  },
+
+  /**
+   * Setup validation event listeners to clear errors on input
+   */
+  setupValidationListeners() {
+    const nameInput = document.getElementById('tank-name');
+    const sizeInput = document.getElementById('tank-size');
+
+    if (nameInput) {
+      nameInput.addEventListener('input', () => {
+        this.clearFieldError('tank-name', 'tank-name-error');
+      });
+    }
+
+    if (sizeInput) {
+      sizeInput.addEventListener('input', () => {
+        this.clearFieldError('tank-size', 'tank-size-error');
+      });
+    }
+  },
+
   /**
    * Save tank (create or update)
    */
   async saveTank(event) {
     if (event) event.preventDefault();
+
+    // Validate form first
+    if (!this.validateTankForm()) {
+      return;
+    }
 
     const uid = authManager.getCurrentUid();
     if (!uid) {
