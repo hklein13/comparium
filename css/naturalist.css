@@ -8509,7 +8509,9 @@ body.logged-in .favorite-star {
   border-radius: 8px;
   overflow: hidden;
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .favorite-card:hover {

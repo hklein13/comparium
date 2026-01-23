@@ -529,14 +529,18 @@ test.describe('Complete User Flow', () => {
       // NOTE: Favorites verification skipped - the Favorites subtab exists and works
       // (verified manually) but Playwright has timing issues finding it after tab switches.
       // The favorite functionality is tested indirectly through the "add favorite" step earlier.
-      console.log('⚠ Favorites persistence verification skipped (feature works, test has timing issues)');
+      console.log(
+        '⚠ Favorites persistence verification skipped (feature works, test has timing issues)'
+      );
     });
 
     await test.step('Verify comparison history persisted after re-login', async () => {
       // NOTE: Comparison history verification skipped - dashboard was redesigned and
       // #comparison-count / #recent-comparisons selectors no longer exist.
       // Comparison functionality works (tested via "Create and save a comparison" step).
-      console.log('⚠ Comparison history verification skipped (dashboard redesigned, selectors outdated)');
+      console.log(
+        '⚠ Comparison history verification skipped (dashboard redesigned, selectors outdated)'
+      );
     });
 
     // ========================================================================

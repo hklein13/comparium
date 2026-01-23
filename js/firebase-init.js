@@ -293,7 +293,10 @@ window.firestoreSaveTank = async (uid, tank) => {
     const ref = doc(firestore, 'users', uid);
     let profile = await window.firestoreGetProfile(uid);
     if (!profile) {
-      console.warn('firestoreSaveTank: No profile found for UID, using fallback. This is unexpected.', uid);
+      console.warn(
+        'firestoreSaveTank: No profile found for UID, using fallback. This is unexpected.',
+        uid
+      );
       profile = { profile: { tanks: [] } };
     }
     profile.profile.tanks = profile.profile.tanks || [];
@@ -336,7 +339,10 @@ window.firestoreDeleteTank = async (uid, tankId) => {
     const ref = doc(firestore, 'users', uid);
     let profile = await window.firestoreGetProfile(uid);
     if (!profile) {
-      console.warn('firestoreDeleteTank: No profile found for UID, using fallback. This is unexpected.', uid);
+      console.warn(
+        'firestoreDeleteTank: No profile found for UID, using fallback. This is unexpected.',
+        uid
+      );
       profile = { profile: { tanks: [] } };
     }
     profile.profile.tanks = (profile.profile.tanks || []).filter(t => t.id !== tankId);
