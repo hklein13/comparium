@@ -63,6 +63,7 @@ If a phase is in progress (see "Current Phase" below), there should be a plan fi
 **Current Stats:** 238 fish species (229 with images), 15 aquarium plants (14 with images)
 
 **Recent Features (January 2026):**
+- Sentry error tracking: Live on all pages, captures JS errors from all users (org: `harrison-klein`, project: `comparium`)
 - Glossary audit: Removed 6 duplicate species, added `alternateNames` field, fixed pleco diet classifications
 - Homepage redesign: Featured Tank section + Join CTA (replaced static demo sections)
 - Test consolidation: 9 new tests integrated into main flow (notification UI + maintenance CRUD)
@@ -419,6 +420,8 @@ Development follows a phased approach. See `DATA-MODEL.md` for complete specific
 - ✅ Security rules tests passing (25 checks)
 - ✅ Cloud Function tests available (dry-run simulation)
 - ✅ All 4 Cloud Functions deployed and operational
+- ✅ Sentry error tracking live (test: `Sentry.captureMessage("test")` in browser console)
+- ✅ Git line endings configured (`core.autocrlf=true`)
 - ✅ **Phase 2 complete** - Notifications + FCM push
 - ✅ **Phase 3D complete** - 235/244 species have images (96.3%)
 - ✅ **Phase 4 MVP complete** - Tank sharing + Community gallery
@@ -430,9 +433,11 @@ The following plugins enhance development workflow:
 | Plugin | Purpose | When to Use |
 |--------|---------|-------------|
 | **sequential-thinking** | Step-by-step problem solving | Complex debugging, multi-step reasoning |
-| **sentry** | Error tracking integration | Monitor live site errors (requires Sentry account) |
+| **sentry** | Error tracking integration | `/getIssues` to view live errors, `/getIssues comparium` for project-specific |
 | **code-simplifier** | Refactor code for clarity | After completing features, before major UI changes |
 | **feature-dev** | Guided feature development | Planning new features with architecture focus |
+
+**Sentry MCP Setup:** Connected to org `harrison-klein`. If disconnected, run: `claude mcp add --transport http sentry https://mcp.sentry.dev/mcp --header "Authorization: Bearer <token>"` (get token from https://sentry.io/settings/auth-tokens/)
 
 **Note:** The `.claude/` folder is gitignored (contains local settings and hooks). Hooks are already configured and working.
 
@@ -538,6 +543,7 @@ Tank cover photos stored at `images/tanks/{tankId}.jpg`. Key functions: `storage
 ### Git Issues
 - "Uncommitted changes" → `git stash`, then `git pull`, then `git stash pop`
 - "Not a git repository" → User is in wrong folder or used ZIP download
+- Line ending noise (many files show modified) → Already configured: `git config core.autocrlf true`
 
 ### Migration Issues
 - Service account key must be at `scripts/serviceAccountKey.json`
