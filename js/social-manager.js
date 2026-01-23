@@ -146,6 +146,7 @@ window.socialManager = {
    */
   async getBookmarkedPosts() {
     const uid = window.getFirebaseUid?.();
+    console.log('[DEBUG] getBookmarkedPosts uid:', uid);
     if (!uid) return [];
 
     try {
@@ -156,7 +157,9 @@ window.socialManager = {
       const bookmarksRef = collection(window.firebaseFirestore, 'bookmarks');
       const q = query(bookmarksRef, where('userId', '==', uid), orderBy('created', 'desc'));
 
+      console.log('[DEBUG] About to query bookmarks...');
       const snapshot = await getDocs(q);
+      console.log('[DEBUG] Bookmarks query succeeded, count:', snapshot.docs.length);
       const bookmarks = snapshot.docs.map(d => d.data());
 
       // Fetch full post data for each bookmark
@@ -172,6 +175,9 @@ window.socialManager = {
       return posts;
     } catch (error) {
       console.error('Error getting bookmarked posts:', error);
+      if (typeof Sentry !== 'undefined') {
+        Sentry.captureException(error);
+      }
       return [];
     }
   },
