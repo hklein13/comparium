@@ -44,12 +44,27 @@ function loadComparisonFromUrl() {
 
   if (speciesKeys.length === 0) return;
 
-  // Pre-select each species in order (panels 1, 2, 3)
-  speciesKeys.slice(0, 3).forEach((key, index) => {
+  // Pre-select each species in order (up to 5 panels)
+  speciesKeys.slice(0, 5).forEach((key, index) => {
     const panelId = 'panel' + (index + 1);
     selectedSpecies[panelId] = key;
     updateSelectorPreview(panelId, key);
+
+    // Auto-reveal panels 4 and 5 if needed
+    if (index >= 3) {
+      visiblePanelCount = index + 1;
+      const selectorCard = document.getElementById('selector' + (index + 1));
+      if (selectorCard) {
+        selectorCard.style.display = 'flex';
+        selectorCard.classList.remove('selector-card-hidden');
+      }
+    }
   });
+
+  // Update the Add Species button state after revealing panels
+  if (speciesKeys.length > 3) {
+    updateAddSpeciesButton();
+  }
 
   updateSelectionStatus();
 
@@ -497,17 +512,20 @@ function getAggressionBadge(aggression) {
 }
 
 function compareSpecies() {
-  const fish1Key = selectedSpecies.panel1;
-  const fish2Key = selectedSpecies.panel2;
-  const fish3Key = selectedSpecies.panel3;
+  // Collect all selected species from all panels (up to 5)
+  const selectedFish = [];
+  for (let i = 1; i <= 5; i++) {
+    const panelKey = `panel${i}`;
+    if (selectedSpecies[panelKey]) {
+      selectedFish.push(selectedSpecies[panelKey]);
+    }
+  }
 
-  if (!fish1Key || !fish2Key) {
+  // Validate we have at least 2 species
+  if (selectedFish.length < 2) {
     alert('Please select at least two fish species to compare');
     return;
   }
-
-  const selectedFish = [fish1Key, fish2Key];
-  if (fish3Key) selectedFish.push(fish3Key);
 
   // Get fish data and attach the database key to each object
   const fishData = selectedFish.map(key => ({
@@ -907,14 +925,16 @@ compareSpecies = function () {
 
   // After comparison, save if logged in
   if (authManager.isLoggedIn()) {
-    const fish1Key = selectedSpecies.panel1;
-    const fish2Key = selectedSpecies.panel2;
-    const fish3Key = selectedSpecies.panel3;
+    // Collect all selected species from all panels (up to 5)
+    const selectedFish = [];
+    for (let i = 1; i <= 5; i++) {
+      const panelKey = `panel${i}`;
+      if (selectedSpecies[panelKey]) {
+        selectedFish.push(selectedSpecies[panelKey]);
+      }
+    }
 
-    if (fish1Key && fish2Key) {
-      const selectedFish = [fish1Key, fish2Key];
-      if (fish3Key) selectedFish.push(fish3Key);
-
+    if (selectedFish.length >= 2) {
       // Include _databaseKey for proper URL linking in comparison history
       const fishData = selectedFish.map(key => ({
         ...fishDatabase[key],
