@@ -925,6 +925,7 @@ window.firestoreDeletePost = async (uid, postId) => {
       return { success: false, error: 'Not authorized' };
     }
     await deleteDoc(ref);
+    // Note: Bookmarks are cleaned up by onPostDeleted Cloud Function
     return { success: true };
   } catch (e) {
     return { success: false, error: e.message };
@@ -1264,6 +1265,9 @@ window.firestoreToggleFollow = async function (targetUserId) {
     }
   } catch (error) {
     console.error('Error toggling follow:', error);
+    if (typeof Sentry !== 'undefined') {
+      Sentry.captureException(error);
+    }
     return { success: false, error: error.message };
   }
 };
@@ -1286,6 +1290,9 @@ window.firestoreIsFollowing = async function (targetUserId) {
     return { success: true, following: docSnap.exists() };
   } catch (error) {
     console.error('Error checking follow status:', error);
+    if (typeof Sentry !== 'undefined') {
+      Sentry.captureException(error);
+    }
     return { success: false, error: error.message };
   }
 };
@@ -1303,6 +1310,9 @@ window.firestoreGetFollowerCount = async function (userId) {
     return { success: true, count: snapshot.size };
   } catch (error) {
     console.error('Error getting follower count:', error);
+    if (typeof Sentry !== 'undefined') {
+      Sentry.captureException(error);
+    }
     return { success: false, error: error.message };
   }
 };
@@ -1320,6 +1330,9 @@ window.firestoreGetFollowingCount = async function (userId) {
     return { success: true, count: snapshot.size };
   } catch (error) {
     console.error('Error getting following count:', error);
+    if (typeof Sentry !== 'undefined') {
+      Sentry.captureException(error);
+    }
     return { success: false, error: error.message };
   }
 };
@@ -1339,6 +1352,9 @@ window.firestoreGetFollowingUserIds = async function (userId, maxResults = 30) {
     return { success: true, userIds };
   } catch (error) {
     console.error('Error getting following user IDs:', error);
+    if (typeof Sentry !== 'undefined') {
+      Sentry.captureException(error);
+    }
     return { success: false, error: error.message };
   }
 };
@@ -1371,6 +1387,9 @@ window.firestoreGetPostsByUserIds = async function (userIds, maxResults = 10) {
     return { success: true, posts };
   } catch (error) {
     console.error('Error getting posts by user IDs:', error);
+    if (typeof Sentry !== 'undefined') {
+      Sentry.captureException(error);
+    }
     return { success: false, error: error.message };
   }
 };
@@ -1401,16 +1420,32 @@ window.firestoreToggleBookmark = async function (postId) {
       await deleteDoc(bookmarkRef);
       return { success: true, bookmarked: false };
     } else {
-      // Bookmark
+      // Fetch post to get display data
+      const postRef = doc(firestore, 'posts', postId);
+      const postSnap = await getDoc(postRef);
+
+      if (!postSnap.exists()) {
+        return { success: false, error: 'Post not found' };
+      }
+
+      const post = postSnap.data();
+
+      // Store bookmark with flat post data (denormalized)
       await setDoc(bookmarkRef, {
         userId: userId,
         postId: postId,
         created: Timestamp.now(),
+        content: (post.content || '').substring(0, 150),
+        category: post.category || 'General',
+        authorUsername: post.author?.username || 'unknown',
       });
       return { success: true, bookmarked: true };
     }
   } catch (error) {
     console.error('Error toggling bookmark:', error);
+    if (typeof Sentry !== 'undefined') {
+      Sentry.captureException(error);
+    }
     return { success: false, error: error.message };
   }
 };
@@ -1433,6 +1468,9 @@ window.firestoreIsBookmarked = async function (postId) {
     return { success: true, bookmarked: docSnap.exists() };
   } catch (error) {
     console.error('Error checking bookmark status:', error);
+    if (typeof Sentry !== 'undefined') {
+      Sentry.captureException(error);
+    }
     return { success: false, error: error.message };
   }
 };
@@ -1466,6 +1504,9 @@ window.firestoreGetUserBookmarks = async function () {
     return { success: true, bookmarks };
   } catch (error) {
     console.error('Error getting user bookmarks:', error);
+    if (typeof Sentry !== 'undefined') {
+      Sentry.captureException(error);
+    }
     return { success: false, error: error.message };
   }
 };

@@ -226,18 +226,18 @@
 
                   <div class="form-group">
                     <label for="tank-name">Tank Name</label>
-                    <input
-                      type="text"
-                      id="tank-name"
-                      placeholder="e.g., Living Room 55g"
-                    />
-                    <span id="tank-name-error" class="form-error-message">Tank name is required</span>
+                    <input type="text" id="tank-name" placeholder="e.g., Living Room 55g" />
+                    <span id="tank-name-error" class="form-error-message"
+                      >Tank name is required</span
+                    >
                   </div>
 
                   <div class="form-group">
                     <label for="tank-size">Tank Size (gallons)</label>
                     <input type="number" id="tank-size" min="1" placeholder="e.g., 55" />
-                    <span id="tank-size-error" class="form-error-message">Tank size must be greater than 0</span>
+                    <span id="tank-size-error" class="form-error-message"
+                      >Tank size must be greater than 0</span
+                    >
                   </div>
 
                   <div class="form-group">
@@ -939,7 +939,7 @@
               <div class="my-post-card__content">
                 <span class="my-post-card__author">@${escapeHTML(post.author?.username || 'unknown')}</span>
                 <span class="my-post-card__category">${escapeHTML(post.category)}</span>
-                <p class="my-post-card__text">${escapeHTML(post.content?.substring(0, 150))}${post.content?.length > 150 ? '...' : ''}</p>
+                <p class="my-post-card__text">${escapeHTML(post.content)}${post.content?.length >= 150 ? '...' : ''}</p>
               </div>
               <button class="my-post-card__bookmark bookmarked" onclick="event.stopPropagation(); toggleBookmarkFromList('${post.id}')" title="Remove bookmark">&#9733;</button>
             </div>

@@ -662,13 +662,13 @@ exports.onLikeDeleted = onDocumentDeleted(
 /**
  * onPostDeleted
  *
- * Purpose: Cascade delete all comments and likes when a post is deleted
+ * Purpose: Cascade delete comments, likes, and bookmarks when a post is deleted
  * Trigger: Firestore onDelete on posts collection
  *
  * How it works:
  * 1. Delete all comments associated with this post
- * 2. Delete all likes on this post
- * 3. Note: Likes on comments will be orphaned but cleaned up separately
+ * 2. Delete all likes on this post and its comments
+ * 3. Delete all bookmarks pointing to this post
  */
 exports.onPostDeleted = onDocumentDeleted(
   {
@@ -695,6 +695,9 @@ exports.onPostDeleted = onDocumentDeleted(
       .where('targetType', '==', 'post')
       .get();
 
+    // Get all bookmarks for this post
+    const bookmarksSnap = await db.collection('bookmarks').where('postId', '==', postId).get();
+
     // Collect all comment IDs to also delete their likes
     const commentIds = commentsSnap.docs.map(doc => doc.id);
 
@@ -714,7 +717,12 @@ exports.onPostDeleted = onDocumentDeleted(
     }
 
     // Delete everything in batches (Firestore batch limit is 500)
-    const allDocs = [...commentsSnap.docs, ...postLikesSnap.docs, ...commentLikesDocs];
+    const allDocs = [
+      ...commentsSnap.docs,
+      ...postLikesSnap.docs,
+      ...commentLikesDocs,
+      ...bookmarksSnap.docs,
+    ];
 
     if (allDocs.length === 0) {
       console.log('onPostDeleted: No associated data to delete');
@@ -722,7 +730,7 @@ exports.onPostDeleted = onDocumentDeleted(
     }
 
     console.log(
-      `onPostDeleted: Deleting ${commentsSnap.docs.length} comments, ${postLikesSnap.docs.length} post likes, ${commentLikesDocs.length} comment likes`
+      `onPostDeleted: Deleting ${commentsSnap.docs.length} comments, ${postLikesSnap.docs.length} post likes, ${commentLikesDocs.length} comment likes, ${bookmarksSnap.docs.length} bookmarks`
     );
 
     // Process in batches of 500

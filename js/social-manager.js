@@ -132,61 +132,19 @@ window.socialManager = {
   },
 
   /**
-   * Get current user's bookmarked posts
-   * @returns {Promise<Array>}
-   */
-  async getBookmarks() {
-    const result = await window.firestoreGetUserBookmarks();
-    return result.success ? result.bookmarks : [];
-  },
-
-  /**
-   * Get all bookmarked posts for current user (with full post data)
-   * @returns {Promise<array>} - Array of post objects
+   * Get current user's bookmarked posts (from denormalized bookmark data)
+   * @returns {Promise<Array>} - Array of post-like objects for display
    */
   async getBookmarkedPosts() {
-    const uid = window.getFirebaseUid?.();
-    console.log('[DEBUG] getBookmarkedPosts uid:', uid);
-    if (!uid) return [];
+    const result = await window.firestoreGetUserBookmarks();
+    if (!result.success) return [];
 
-    try {
-      const { collection, query, where, orderBy, getDocs, doc, getDoc } =
-        await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
-
-      // Get user's bookmarks
-      const bookmarksRef = collection(window.firebaseFirestore, 'bookmarks');
-      const q = query(bookmarksRef, where('userId', '==', uid), orderBy('created', 'desc'));
-
-      console.log('[DEBUG] About to query bookmarks...');
-      const snapshot = await getDocs(q);
-      console.log('[DEBUG] Bookmarks query succeeded, count:', snapshot.docs.length);
-      const bookmarks = snapshot.docs.map(d => d.data());
-
-      // Fetch full post data for each bookmark
-      const posts = [];
-      for (const bookmark of bookmarks) {
-        try {
-          console.log('[DEBUG] Fetching post:', bookmark.postId);
-          const postRef = doc(window.firebaseFirestore, 'posts', bookmark.postId);
-          const postDoc = await getDoc(postRef);
-          if (postDoc.exists()) {
-            posts.push({ id: postDoc.id, ...postDoc.data() });
-          } else {
-            console.log('[DEBUG] Post not found (deleted?):', bookmark.postId);
-          }
-        } catch (postError) {
-          // Post may be deleted or made private - skip it
-          console.log('[DEBUG] Cannot access post (deleted/private?):', bookmark.postId, postError.message);
-        }
-      }
-
-      return posts;
-    } catch (error) {
-      console.error('Error getting bookmarked posts:', error);
-      if (typeof Sentry !== 'undefined') {
-        Sentry.captureException(error);
-      }
-      return [];
-    }
+    // Transform bookmark data to post-like objects for display
+    return result.bookmarks.map(bookmark => ({
+      id: bookmark.postId,
+      content: bookmark.content || '',
+      category: bookmark.category || 'General',
+      author: { username: bookmark.authorUsername || 'unknown' },
+    }));
   },
 };

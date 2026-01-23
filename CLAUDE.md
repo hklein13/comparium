@@ -2,6 +2,10 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## CRITICAL: Model Selection
+
+**USE OPUS 4.5 ONLY.** Do not use Sonnet or Haiku unless the user explicitly requests it. This project requires the most capable model for accurate code changes and architectural decisions.
+
 ## User Context
 
 **CRITICAL:** The user is a complete beginner to coding/programming with no prior knowledge.
@@ -63,6 +67,7 @@ If a phase is in progress (see "Current Phase" below), there should be a plan fi
 **Current Stats:** 238 fish species (229 with images), 15 aquarium plants (14 with images)
 
 **Recent Features (January 2026):**
+- Bookmarks redesign: Denormalized storage eliminates N+1 queries, `onPostDeleted` cleans up orphans
 - Near-term improvements: Tank form validation (name/size required), dashboard nav hidden when logged out, compare tool expanded to 5 species
 - Sentry error tracking: Live on all pages, captures JS errors from all users (org: `harrison-klein`, project: `comparium`)
 - Glossary audit: Removed 6 duplicate species, added `alternateNames` field, fixed pleco diet classifications
@@ -261,7 +266,7 @@ Separate Node.js project using CommonJS (not ES6 modules).
 ```
 functions/
 ├── package.json     # Dependencies: firebase-admin, firebase-functions, firebase-messaging
-├── index.js         # All function definitions (8 functions)
+├── index.js         # All function definitions (9 functions)
 └── .gitignore       # Ignores node_modules, secrets
 ```
 
@@ -276,6 +281,7 @@ functions/
 | `onCommentDeleted` | Firestore onDelete (comments) | Decrement post/comment counts |
 | `onLikeCreated` | Firestore onCreate (likes) | Increment like counts |
 | `onLikeDeleted` | Firestore onDelete (likes) | Decrement like counts |
+| `onPostDeleted` | Firestore onDelete (posts) | Cascade delete comments, likes, bookmarks |
 
 **Deployment:** `firebase deploy --only functions` (takes ~2 min)
 
@@ -358,12 +364,15 @@ Development follows a phased approach. See `DATA-MODEL.md` for complete specific
 **What's Implemented:**
 - Follow/unfollow users from their profile page
 - Follower and following counts displayed on profiles
-- Bookmark posts for later viewing
+- Bookmark posts for later viewing (denormalized - stores post snapshot)
 - Bookmarks tab on own profile (private to owner)
 - `follows` and `bookmarks` Firestore collections with compound IDs
 - Security rules for follows (public read, owner create/delete) and bookmarks (private)
+- `onPostDeleted` Cloud Function cleans up orphaned bookmarks
 
-**Key Files:** `js/social-manager.js`, `js/profile.js`, `js/community.js`
+**Bookmarks Architecture:** Bookmarks store denormalized post data (`content`, `category`, `authorUsername`) at bookmark time. This avoids N+1 queries but means bookmarks show content as it was when bookmarked (stale data accepted as tradeoff).
+
+**Key Files:** `js/social-manager.js`, `js/profile.js`, `js/community.js`, `js/firebase-init.js` (firestoreToggleBookmark)
 
 ### Phase 4.4 - Enhanced Profiles (January 2026)
 **Branch:** `claude/phase4-4-enhanced-profiles`
@@ -420,7 +429,7 @@ Development follows a phased approach. See `DATA-MODEL.md` for complete specific
 - ✅ Data integrity tests passing (238 species validated)
 - ✅ Security rules tests passing (25 checks)
 - ✅ Cloud Function tests available (dry-run simulation)
-- ✅ All 8 Cloud Functions deployed and operational
+- ✅ All 9 Cloud Functions deployed and operational
 - ✅ Sentry error tracking live (test: `Sentry.captureMessage("test")` in browser console)
 - ✅ Git line endings configured (`core.autocrlf=true`)
 - ✅ **Phase 2 complete** - Notifications + FCM push
@@ -485,7 +494,7 @@ allow write: if isAdmin();        // Admin-only writes
 - `comments` - Comments on posts with threading (public read, owner write) - **Phase 4.2**
 - `likes` - User likes on posts/comments (public read, owner create/delete) - **Phase 4.2**
 - `follows` - User follow relationships (public read, owner create/delete) - **Phase 4.3**
-- `bookmarks` - User bookmarked posts (private to owner) - **Phase 4.3**
+- `bookmarks` - User bookmarked posts with denormalized post data (private to owner) - **Phase 4.3**
 
 ## Image System
 

@@ -556,7 +556,9 @@ service cloud.firestore {
         return bookmarkId.matches(request.auth.uid + '_.*');
       }
 
-      // Read: Allow single-doc reads (isOwnerBookmark) and collection queries (userId field)
+      // Read: Owner can read their bookmarks
+      // Use document ID pattern for single-doc reads (handles non-existent docs)
+      // Use data.userId for collection queries
       allow read: if request.auth != null
                   && (isOwnerBookmark() || resource.data.userId == request.auth.uid);
 
