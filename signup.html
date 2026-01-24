@@ -179,7 +179,7 @@
 
           if (user) {
             // Already logged in - redirect to dashboard
-            window.location.href = 'dashboard.html';
+            window.location.href = '/dashboard';
           }
         } catch (error) {
           console.error('Firebase initialization error:', error);
@@ -219,7 +219,7 @@
 
             // Redirect after short delay
             setTimeout(() => {
-              window.location.href = 'dashboard.html';
+              window.location.href = '/dashboard';
             }, 1000);
           } else {
             messageDisplay.innerHTML = `<div class="error-message">${result.message}</div>`;

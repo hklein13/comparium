@@ -41,7 +41,7 @@ messaging.onBackgroundMessage(payload => {
     badge: '/favicon.ico',
     tag: payload.data?.notificationId || 'comparium-notification',
     data: {
-      url: payload.data?.url || '/dashboard.html',
+      url: payload.data?.url || '/dashboard',
       notificationId: payload.data?.notificationId,
     },
   };
@@ -61,7 +61,7 @@ self.addEventListener('notificationclick', event => {
   event.notification.close();
 
   // Get the URL to open (from notification data or default to dashboard)
-  const relativeUrl = event.notification.data?.url || '/dashboard.html';
+  const relativeUrl = event.notification.data?.url || '/dashboard';
   // Convert to absolute URL for cross-origin safety
   const urlToOpen = new URL(relativeUrl, self.location.origin).href;
 

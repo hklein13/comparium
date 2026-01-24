@@ -167,7 +167,7 @@ exports.checkDueSchedules = onSchedule(
             expiresAt: expiresAt,
             action: {
               type: 'navigate',
-              url: '/dashboard.html#my-tanks-section',
+              url: '/dashboard#my-tanks-section',
               data: { tankId: schedule.tankId },
             },
             source: {
@@ -249,12 +249,12 @@ exports.sendPushNotification = onDocumentCreated(
       },
       data: {
         notificationId: notificationId,
-        url: notification.action?.url || '/dashboard.html',
+        url: notification.action?.url || '/dashboard',
         type: notification.type || 'general',
       },
       webpush: {
         fcmOptions: {
-          link: notification.action?.url || '/dashboard.html',
+          link: notification.action?.url || '/dashboard',
         },
         notification: {
           icon: '/favicon.ico',

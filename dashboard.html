@@ -883,7 +883,7 @@
           container.innerHTML = result.posts
             .map(
               post => `
-            <div class="my-post-card" onclick="window.location.href='post.html?id=${post.id}'">
+            <div class="my-post-card" onclick="window.location.href='/post?id=${post.id}'">
               <div class="my-post-card__content">
                 <span class="my-post-card__category">${escapeHTML(post.category)}</span>
                 <p class="my-post-card__text">${escapeHTML(post.content?.substring(0, 150))}${post.content?.length > 150 ? '...' : ''}</p>
@@ -937,7 +937,7 @@
           container.innerHTML = bookmarks
             .map(
               post => `
-            <div class="my-post-card" onclick="window.location.href='post.html?id=${post.id}'">
+            <div class="my-post-card" onclick="window.location.href='/post?id=${post.id}'">
               <div class="my-post-card__content">
                 <span class="my-post-card__author">@${escapeHTML(post.author?.username || 'unknown')}</span>
                 <span class="my-post-card__category">${escapeHTML(post.category)}</span>
@@ -990,7 +990,7 @@
                   const fish = typeof fishDatabase !== 'undefined' ? fishDatabase[key] : null;
                   if (!fish) return '';
                   return `
-                    <div class="favorite-card" onclick="window.location.href='species.html?species=${key}'">
+                    <div class="favorite-card" onclick="window.location.href='/species?species=${key}'">
                       <div class="favorite-card__image">
                         ${fish.imageUrl ? `<img src="${fish.imageUrl}" alt="${escapeHTML(fish.commonName)}" />` : '<div class="favorite-card__placeholder">No image</div>'}
                       </div>
@@ -1079,7 +1079,7 @@
           if (!user) {
             // Not authenticated - redirect to login
             console.log('Not authenticated, redirecting to login');
-            window.location.href = 'login.html';
+            window.location.href = '/login';
             return;
           }
 
@@ -1133,7 +1133,7 @@
 
           if (!profile) {
             console.error('Profile not found');
-            window.location.href = 'login.html';
+            window.location.href = '/login';
             return;
           }
 
@@ -1832,7 +1832,7 @@
             ?.textContent?.replace('@', '');
         }
         if (username) {
-          window.location.href = `profile.html?user=${encodeURIComponent(username)}`;
+          window.location.href = `/profile?user=${encodeURIComponent(username)}`;
         }
       }
 
