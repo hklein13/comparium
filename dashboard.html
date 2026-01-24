@@ -51,14 +51,14 @@
   <body>
     <!-- Header -->
     <header class="header">
-      <a href="index.html" class="logo"><img src="images/logo.jpg" alt="Comparium" height="56"></a>
+      <a href="/" class="logo"><img src="images/logo.jpg" alt="Comparium" height="56"></a>
       <nav class="nav">
-        <a href="index.html">Home</a>
-        <a href="compare.html">Compare</a>
-        <a href="glossary.html">Glossary</a>
-        <a href="community.html">Community</a>
-        <a href="faq.html">FAQ</a>
-        <a href="dashboard.html" class="nav-dashboard active">Dashboard</a>
+        <a href="/">Home</a>
+        <a href="/compare">Compare</a>
+        <a href="/glossary">Glossary</a>
+        <a href="/community">Community</a>
+        <a href="/faq">FAQ</a>
+        <a href="/dashboard" class="nav-dashboard active">Dashboard</a>
         <div id="auth-links"></div>
       </nav>
     </header>
@@ -510,7 +510,7 @@
               <div class="settings-row">
                 <span class="settings-label">Password</span>
                 <span class="settings-value">••••••••</span>
-                <a href="forgot-password.html" class="btn btn-ghost btn-small">Change Password</a>
+                <a href="/forgot-password" class="btn btn-ghost btn-small">Change Password</a>
               </div>
             </div>
           </div>
@@ -635,9 +635,9 @@
     <footer class="footer">
       <div class="footer-logo"><img src="images/logo.jpg" alt="Comparium" height="40"></div>
       <div class="footer-links">
-        <a href="about.html">About</a>
-        <a href="faq.html">FAQ</a>
-        <a href="glossary.html">Glossary</a>
+        <a href="/about">About</a>
+        <a href="/faq">FAQ</a>
+        <a href="/glossary">Glossary</a>
         <a href="mailto:admin@comparium.net">Contact</a>
       </div>
       <p class="footer-copy">&copy; <span id="copyright-year"></span> Comparium</p>
@@ -874,7 +874,7 @@
             container.innerHTML = `
               <div class="activity-empty">
                 <p>You haven't created any posts yet.</p>
-                <a href="community.html" class="btn btn-primary">Create Your First Post</a>
+                <a href="/community" class="btn btn-primary">Create Your First Post</a>
               </div>
             `;
             return;
@@ -883,7 +883,7 @@
           container.innerHTML = result.posts
             .map(
               post => `
-            <div class="my-post-card" onclick="window.location.href='post.html?id=${post.id}'">
+            <div class="my-post-card" onclick="window.location.href='/post?id=${post.id}'">
               <div class="my-post-card__content">
                 <span class="my-post-card__category">${escapeHTML(post.category)}</span>
                 <p class="my-post-card__text">${escapeHTML(post.content?.substring(0, 150))}${post.content?.length > 150 ? '...' : ''}</p>
@@ -928,7 +928,7 @@
             container.innerHTML = `
               <div class="activity-empty">
                 <p>No bookmarked posts yet.</p>
-                <a href="community.html" class="btn btn-ghost">Browse Community</a>
+                <a href="/community" class="btn btn-ghost">Browse Community</a>
               </div>
             `;
             return;
@@ -937,7 +937,7 @@
           container.innerHTML = bookmarks
             .map(
               post => `
-            <div class="my-post-card" onclick="window.location.href='post.html?id=${post.id}'">
+            <div class="my-post-card" onclick="window.location.href='/post?id=${post.id}'">
               <div class="my-post-card__content">
                 <span class="my-post-card__author">@${escapeHTML(post.author?.username || 'unknown')}</span>
                 <span class="my-post-card__category">${escapeHTML(post.category)}</span>
@@ -977,7 +977,7 @@
               <div class="activity-empty">
                 <p>No favorite species yet.</p>
                 <p style="margin-top: 0.5rem; font-size: 0.9rem;">Click the star on any species in the Compare tool to add favorites.</p>
-                <a href="compare.html" class="btn btn-ghost" style="margin-top: 1rem;">Browse Species</a>
+                <a href="/compare" class="btn btn-ghost" style="margin-top: 1rem;">Browse Species</a>
               </div>
             `;
             return;
@@ -990,7 +990,7 @@
                   const fish = typeof fishDatabase !== 'undefined' ? fishDatabase[key] : null;
                   if (!fish) return '';
                   return `
-                    <div class="favorite-card" onclick="window.location.href='species.html?species=${key}'">
+                    <div class="favorite-card" onclick="window.location.href='/species?species=${key}'">
                       <div class="favorite-card__image">
                         ${fish.imageUrl ? `<img src="${fish.imageUrl}" alt="${escapeHTML(fish.commonName)}" />` : '<div class="favorite-card__placeholder">No image</div>'}
                       </div>
@@ -1079,7 +1079,7 @@
           if (!user) {
             // Not authenticated - redirect to login
             console.log('Not authenticated, redirecting to login');
-            window.location.href = 'login.html';
+            window.location.href = '/login';
             return;
           }
 
@@ -1101,7 +1101,7 @@
               <h2 style="color: #dc3545;">Error Loading Dashboard</h2>
               <p style="margin: 1rem 0;">${message}</p>
               <p style="margin-top: 2rem;">
-                <a href="login.html" class="btn btn-primary">Return to Login</a>
+                <a href="/login" class="btn btn-primary">Return to Login</a>
               </p>
             </div>
           `;
@@ -1133,7 +1133,7 @@
 
           if (!profile) {
             console.error('Profile not found');
-            window.location.href = 'login.html';
+            window.location.href = '/login';
             return;
           }
 
@@ -1832,7 +1832,7 @@
             ?.textContent?.replace('@', '');
         }
         if (username) {
-          window.location.href = `profile.html?user=${encodeURIComponent(username)}`;
+          window.location.href = `/profile?user=${encodeURIComponent(username)}`;
         }
       }
 

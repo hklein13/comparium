@@ -144,7 +144,7 @@ function generateGlossaryEntry(key, fish, descriptions = {}) {
 
   return {
     id: toKebabCase(key),
-    fishKey: key, // Original camelCase key for fishDatabase lookups and species.html links
+    fishKey: key, // Original camelCase key for fishDatabase lookups and /species links
     title: fish.commonName,
     scientificName: fish.scientificName,
     description: generateFishDescription(key, fish, descriptions),

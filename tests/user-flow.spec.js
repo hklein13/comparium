@@ -36,7 +36,7 @@ test.describe('Complete User Flow', () => {
     // ========================================================================
 
     await test.step('Navigate to signup page', async () => {
-      await page.goto('/signup.html');
+      await page.goto('/signup');
       await expect(page).toHaveTitle(/Sign Up.*Comparium/i);
 
       // Wait for Firebase to load (check if window.firebaseAuth exists)
@@ -54,7 +54,7 @@ test.describe('Complete User Flow', () => {
       await page.click('button[type="submit"]');
 
       // Wait for registration to complete and redirect to dashboard
-      await page.waitForURL('**/dashboard.html', { timeout: 10000 });
+      await page.waitForURL('**/dashboard*', { timeout: 10000 });
 
       // Verify we're on dashboard
       await expect(page.locator('#username-display')).toHaveText(testUser.username, {
@@ -137,7 +137,7 @@ test.describe('Complete User Flow', () => {
 
     await test.step('Navigate to tanks section on dashboard', async () => {
       // Tank management is now embedded in dashboard
-      await page.goto('/dashboard.html#my-tanks-section');
+      await page.goto('/dashboard#my-tanks-section');
       await expect(page).toHaveTitle(/Dashboard.*Comparium/i);
     });
 
@@ -376,7 +376,7 @@ test.describe('Complete User Flow', () => {
     // ========================================================================
 
     await test.step('Navigate to compare page and add favorite', async () => {
-      await page.goto('/compare.html');
+      await page.goto('/compare');
 
       // Wait for species items to render
       await page.waitForTimeout(2000);
@@ -453,7 +453,7 @@ test.describe('Complete User Flow', () => {
 
     await test.step('Logout from account', async () => {
       // Navigate to dashboard where logout is in Settings dropdown
-      await page.goto('/dashboard.html');
+      await page.goto('/dashboard');
 
       // Wait for settings toggle to appear (dashboard loaded)
       await page.waitForSelector('#settings-toggle', { timeout: 15000 });
@@ -466,7 +466,7 @@ test.describe('Complete User Flow', () => {
       await page.click('.settings-dropdown-btn:has-text("Log Out")');
 
       // Wait for redirect to home page
-      await page.waitForURL(/index\.html|\/$/);
+      await page.waitForURL(/\/index|\/$/);
 
       // Verify login/signup links are visible (logged out state)
       // Use .first() since homepage may have multiple signup links
@@ -481,7 +481,7 @@ test.describe('Complete User Flow', () => {
     // ========================================================================
 
     await test.step('Navigate to login page', async () => {
-      await page.goto('/login.html');
+      await page.goto('/login');
       await expect(page).toHaveTitle(/Login.*Comparium/i);
 
       // Wait for Firebase to load
@@ -497,7 +497,7 @@ test.describe('Complete User Flow', () => {
       await page.click('button[type="submit"]');
 
       // Wait for redirect to dashboard
-      await page.waitForURL('**/dashboard.html', { timeout: 10000 });
+      await page.waitForURL('**/dashboard*', { timeout: 10000 });
 
       // Verify we're logged in
       await expect(page.locator('#username-display')).toHaveText(testUser.username, {
@@ -517,7 +517,7 @@ test.describe('Complete User Flow', () => {
       expect(parseInt(tankCount)).toBeGreaterThanOrEqual(1);
 
       // Tank management is now embedded in dashboard - scroll to section
-      await page.goto('/dashboard.html#my-tanks-section');
+      await page.goto('/dashboard#my-tanks-section');
 
       // Verify our tank still exists in the embedded tanks section
       await expect(page.locator('.tank-portrait:has-text("Test Community Tank")')).toBeVisible();
@@ -549,7 +549,7 @@ test.describe('Complete User Flow', () => {
 
     await test.step('Verify maintenance events persisted after re-login', async () => {
       // Navigate to tanks section
-      await page.goto('/dashboard.html#my-tanks-section');
+      await page.goto('/dashboard#my-tanks-section');
 
       // Wait for tank portrait to load
       const tankPortrait = page.locator('.tank-portrait:has-text("Test Community Tank")');
@@ -619,7 +619,7 @@ test.describe('Complete User Flow', () => {
 test.describe('Authentication Edge Cases', () => {
   test('should prevent duplicate username registration', async ({ page }) => {
     await test.step('Attempt to register with existing username', async () => {
-      await page.goto('/signup.html');
+      await page.goto('/signup');
 
       // Wait for Firebase to load
       await page.waitForFunction(() => window.firebaseAuth !== undefined, { timeout: 10000 });
@@ -652,7 +652,7 @@ test.describe('Authentication Edge Cases', () => {
 
   test('should handle invalid login credentials', async ({ page }) => {
     await test.step('Attempt login with wrong password', async () => {
-      await page.goto('/login.html');
+      await page.goto('/login');
 
       // Wait for Firebase to load
       await page.waitForFunction(() => window.firebaseAuth !== undefined, { timeout: 10000 });
@@ -669,7 +669,7 @@ test.describe('Authentication Edge Cases', () => {
 
       // Verify we're still on login page (didn't successfully login)
       const url = page.url();
-      const stillOnLogin = url.includes('login.html');
+      const stillOnLogin = url.includes('/login');
       const errorShown = await page
         .locator('.message-alert')
         .isVisible()
@@ -690,19 +690,19 @@ test.describe('Protected Routes', () => {
     await page.context().clearCookies();
 
     await test.step('Access dashboard without login', async () => {
-      await page.goto('/dashboard.html');
+      await page.goto('/dashboard');
 
       // Should redirect to login page
-      await page.waitForURL('**/login.html', { timeout: 5000 });
+      await page.waitForURL('**/login*', { timeout: 5000 });
 
       console.log('✓ Protected route correctly redirected to login');
     });
 
     await test.step('Access my-tanks without login (redirects to dashboard then login)', async () => {
-      await page.goto('/my-tanks.html');
+      await page.goto('/my-tanks');
 
-      // my-tanks.html now redirects to dashboard, which then redirects to login
-      await page.waitForURL('**/login.html', { timeout: 5000 });
+      // my-tanks now redirects to dashboard, which then redirects to login
+      await page.waitForURL('**/login*', { timeout: 5000 });
 
       console.log('✓ Protected route correctly redirected to login');
     });
@@ -716,13 +716,13 @@ test.describe('Protected Routes', () => {
 test.describe('Page Load Tests', () => {
   test('all main pages should load without errors', async ({ page }) => {
     const pages = [
-      { url: '/index.html', title: /Comparium/i },
-      { url: '/compare.html', title: /Compare/i },
-      { url: '/glossary.html', title: /Glossary/i },
-      { url: '/faq.html', title: /FAQ/i },
-      { url: '/login.html', title: /Login/i },
-      { url: '/signup.html', title: /Sign Up/i },
-      { url: '/about.html', title: /Comparium|How to Use/i },
+      { url: '/', title: /Comparium/i },
+      { url: '/compare', title: /Compare/i },
+      { url: '/glossary', title: /Glossary/i },
+      { url: '/faq', title: /FAQ/i },
+      { url: '/login', title: /Login/i },
+      { url: '/signup', title: /Sign Up/i },
+      { url: '/about', title: /Comparium|How to Use/i },
     ];
 
     for (const p of pages) {
@@ -751,7 +751,7 @@ test.describe('Page Load Tests', () => {
   });
 
   test('glossary should display species', async ({ page }) => {
-    await page.goto('/glossary.html');
+    await page.goto('/glossary');
 
     // Wait for the glossary container to be ready
     await page.waitForSelector('.glossary-container, #glossary-container, .glossary-items', {
@@ -780,7 +780,7 @@ test.describe('Page Load Tests', () => {
   });
 
   test('FAQ should have working accordion', async ({ page }) => {
-    await page.goto('/faq.html');
+    await page.goto('/faq');
 
     // Wait for FAQ items
     await page.waitForSelector('.faq-card', { timeout: 5000 });

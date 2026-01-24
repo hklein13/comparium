@@ -390,7 +390,7 @@ function createTankCard(tank) {
   const card = document.createElement('article');
   card.className = 'community-card';
   card.onclick = () => {
-    window.location.href = `tank.html?id=${encodeURIComponent(tank.id)}`;
+    window.location.href = `/tank?id=${encodeURIComponent(tank.id)}`;
   };
 
   // Image section

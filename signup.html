@@ -50,17 +50,17 @@
   <body>
     <!-- Header -->
     <header class="header">
-      <a href="index.html" class="logo"><img src="images/logo.jpg" alt="Comparium" height="56"></a>
+      <a href="/" class="logo"><img src="images/logo.jpg" alt="Comparium" height="56"></a>
       <nav class="nav">
-        <a href="index.html">Home</a>
-        <a href="compare.html">Compare</a>
-        <a href="glossary.html">Glossary</a>
-        <a href="community.html">Community</a>
-        <a href="faq.html">FAQ</a>
-        <a href="dashboard.html" class="nav-dashboard">Dashboard</a>
+        <a href="/">Home</a>
+        <a href="/compare">Compare</a>
+        <a href="/glossary">Glossary</a>
+        <a href="/community">Community</a>
+        <a href="/faq">FAQ</a>
+        <a href="/dashboard" class="nav-dashboard">Dashboard</a>
         <div id="auth-links">
-          <a href="login.html" class="nav-ghost">Login</a>
-          <a href="signup.html" class="nav-cta active">Sign Up</a>
+          <a href="/login" class="nav-ghost">Login</a>
+          <a href="/signup" class="nav-cta active">Sign Up</a>
         </div>
       </nav>
     </header>
@@ -127,8 +127,8 @@
         </form>
 
         <div class="auth-links">
-          <p>Already have an account? <a href="login.html">Login here</a></p>
-          <p><a href="index.html">Continue without signing up</a></p>
+          <p>Already have an account? <a href="/login">Login here</a></p>
+          <p><a href="/">Continue without signing up</a></p>
         </div>
       </div>
     </div>
@@ -137,9 +137,9 @@
     <footer class="footer">
       <div class="footer-logo"><img src="images/logo.jpg" alt="Comparium" height="40"></div>
       <div class="footer-links">
-        <a href="about.html">About</a>
-        <a href="faq.html">FAQ</a>
-        <a href="glossary.html">Glossary</a>
+        <a href="/about">About</a>
+        <a href="/faq">FAQ</a>
+        <a href="/glossary">Glossary</a>
         <a href="mailto:admin@comparium.net">Contact</a>
       </div>
       <p class="footer-copy">&copy; <span id="copyright-year"></span> Comparium</p>
@@ -179,7 +179,7 @@
 
           if (user) {
             // Already logged in - redirect to dashboard
-            window.location.href = 'dashboard.html';
+            window.location.href = '/dashboard';
           }
         } catch (error) {
           console.error('Firebase initialization error:', error);
@@ -219,7 +219,7 @@
 
             // Redirect after short delay
             setTimeout(() => {
-              window.location.href = 'dashboard.html';
+              window.location.href = '/dashboard';
             }, 1000);
           } else {
             messageDisplay.innerHTML = `<div class="error-message">${result.message}</div>`;

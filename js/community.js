@@ -215,7 +215,7 @@ function createPostCard(post) {
     tankPreview.className = 'post-card__tank-preview';
     tankPreview.onclick = e => {
       e.stopPropagation();
-      window.location.href = `tank.html?id=${encodeURIComponent(post.linkedTank.tankId)}`;
+      window.location.href = `/tank?id=${encodeURIComponent(post.linkedTank.tankId)}`;
     };
 
     // Tank photo or placeholder
@@ -311,7 +311,7 @@ function createPostCard(post) {
     e.stopPropagation();
 
     if (!window.firebaseAuth?.currentUser) {
-      window.location.href = 'login.html';
+      window.location.href = '/login';
       return;
     }
 
@@ -451,7 +451,7 @@ function formatTimeAgo(dateStr) {
 }
 
 function viewPostDetail(postId) {
-  window.location.href = `post.html?id=${encodeURIComponent(postId)}`;
+  window.location.href = `/post?id=${encodeURIComponent(postId)}`;
 }
 
 function filterByCategory(category) {

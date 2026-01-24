@@ -134,7 +134,7 @@ async function renderPost(post) {
     if (tank.plantCount > 0) tankStats.push(`${tank.plantCount} plants`);
 
     linkedTankHTML = `
-      <div class="post-detail__tank-preview" onclick="window.location.href='tank.html?id=${encodeURIComponent(tank.tankId)}'">
+      <div class="post-detail__tank-preview" onclick="window.location.href='/tank?id=${encodeURIComponent(tank.tankId)}'">
         <div class="post-detail__tank-image">
           ${
             freshCoverPhoto
@@ -179,7 +179,7 @@ async function renderPost(post) {
           }
         </div>
         <div class="post-detail__meta">
-          <a href="profile.html?user=${encodeURIComponent(post.author?.username || '')}" class="post-detail__author">
+          <a href="/profile?user=${encodeURIComponent(post.author?.username || '')}" class="post-detail__author">
             @${safeUsername || 'anonymous'}
           </a>
           <div class="post-detail__info">
@@ -213,7 +213,7 @@ async function renderPost(post) {
       </section>
     </article>
 
-    <a href="community.html" class="back-link">&larr; Back to feed</a>
+    <a href="/community" class="back-link">&larr; Back to feed</a>
   `;
 }
 
@@ -247,7 +247,7 @@ function showError(message) {
     <div class="community-error">
       <h3>Error</h3>
       <p>${message}</p>
-      <a href="community.html" class="btn btn-primary">Back to feed</a>
+      <a href="/community" class="btn btn-primary">Back to feed</a>
     </div>
   `;
 }
@@ -346,7 +346,7 @@ async function renderComment(comment, postId, isReply = false, currentUserId = n
           }
         </div>
         <div class="comment__meta">
-          <a href="profile.html?user=${encodedUsername}" class="comment__author">@${safeUsername}</a>
+          <a href="/profile?user=${encodedUsername}" class="comment__author">@${safeUsername}</a>
           <span class="comment__time">${timeAgo}</span>
         </div>
       </div>
@@ -522,7 +522,7 @@ async function deleteCurrentPost(postId) {
 
   if (result.success) {
     alert('Post deleted successfully');
-    window.location.href = 'community.html';
+    window.location.href = '/community';
   } else {
     alert(result.error || 'Failed to delete post');
   }

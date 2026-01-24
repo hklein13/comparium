@@ -172,7 +172,7 @@ The migration script (`scripts/migrate-glossary-to-firestore.js`) has a **duplic
 
 **Key fields that must match:**
 - `id` - kebab-case for Firestore document ID
-- `fishKey` - original camelCase key for `fishDatabase` lookups and species.html links
+- `fishKey` - original camelCase key for `fishDatabase` lookups and `/species` links
 - All other entry properties (title, tags, category, etc.)
 
 ### ⚠️ Critical: fish-data.js ↔ fish-descriptions.js Key Sync
@@ -202,16 +202,18 @@ if (!missing.length && !orphaned.length) console.log('SUCCESS: All keys match!')
 - Wrong suffixes: `schwartzsCory` vs `schwartziCorydoras`
 
 ### Page Structure
-- **index.html** - Landing page (video hero, demo CTA, species showcase)
-- **compare.html** - Fish comparison tool (supports up to 5 species)
-- **dashboard.html** - User hub with tanks, maintenance, favorites
-- **glossary.html** - Encyclopedia (Species, Plants, Diseases, Equipment, Terminology)
-- **species.html** - Fish detail page (`?species=fishKey`)
-- **plant.html** - Plant detail page (`?plant=plantKey`)
-- **community.html** - Public tank gallery (Phase 4)
-- **tank.html** - Public tank detail view (`?id=tankId`) (Phase 4)
-- **profile.html** - User profile page (`?user=username`) (Phase 4)
-- **faq.html** - FAQ with accordion and search
+Clean URLs enabled - access pages without `.html` extension (e.g., `/community` instead of `/community.html`).
+
+- **index.html** - Landing page (`/`) - video hero, demo CTA, species showcase
+- **compare.html** - Fish comparison tool (`/compare`) - supports up to 5 species
+- **dashboard.html** - User hub (`/dashboard`) - tanks, maintenance, favorites
+- **glossary.html** - Encyclopedia (`/glossary`) - Species, Plants, Diseases, Equipment, Terminology
+- **species.html** - Fish detail page (`/species?species=fishKey`)
+- **plant.html** - Plant detail page (`/plant?plant=plantKey`)
+- **community.html** - Public tank gallery (`/community`) - Phase 4
+- **tank.html** - Public tank detail view (`/tank?id=tankId`) - Phase 4
+- **profile.html** - User profile page (`/profile?user=username`) - Phase 4
+- **faq.html** - FAQ with accordion and search (`/faq`)
 
 ### Module Systems
 - **Browser:** ES6 modules (import/export)
@@ -334,9 +336,9 @@ Development follows a phased approach. See `DATA-MODEL.md` for complete specific
 
 **What's Implemented:**
 - Users can share tanks publicly via Yes/No buttons in tank modal
-- Community gallery page (`community.html`) shows all public tanks
-- Public tank detail view (`tank.html?id=tankId`)
-- Minimal user profile page (`profile.html?user=username`)
+- Community gallery page (`/community`) shows all public tanks
+- Public tank detail view (`/tank?id=tankId`)
+- Minimal user profile page (`/profile?user=username`)
 - `publicTanks` Firestore collection with denormalized tank data
 - Security rules deployed for public read, owner write
 
@@ -349,7 +351,7 @@ Development follows a phased approach. See `DATA-MODEL.md` for complete specific
 - Community page shows unified posts feed (tanks + general posts)
 - Post categories: Tanks, Help, Tips, Fish ID, Milestones
 - Sharing a tank automatically creates a "Tanks" category post
-- Post detail page (`post.html?id=postId`)
+- Post detail page (`/post?id=postId`)
 - New post composer modal for logged-in users
 - `posts` Firestore collection with category filtering and sorting
 - Tank preview component renders in post cards for shared tanks

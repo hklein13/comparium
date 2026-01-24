@@ -1582,7 +1582,7 @@ class GlossaryManager {
     // Set actions
     if (modalActions) {
       modalActions.innerHTML = `
-        <a href="species.html?fish=${encodeURIComponent(fishKey)}" class="btn btn-primary">View Full Profile</a>
+        <a href="/species?fish=${encodeURIComponent(fishKey)}" class="btn btn-primary">View Full Profile</a>
         <button class="btn btn-ghost" onclick="addToCompare('${fishKey}')">Add to Compare</button>
       `;
     }
@@ -1746,7 +1746,7 @@ class GlossaryManager {
     // Set actions - link to plant detail page
     if (modalActions) {
       modalActions.innerHTML = `
-        <a href="plant.html?plant=${encodeURIComponent(plantKey)}" class="btn btn-primary">View Full Profile</a>
+        <a href="/plant?plant=${encodeURIComponent(plantKey)}" class="btn btn-primary">View Full Profile</a>
       `;
     }
 
@@ -1843,7 +1843,7 @@ function addToCompare(fishKey) {
   if (typeof fishDatabase === 'undefined' || !fishDatabase[fishKey]) return;
 
   // Navigate to compare.html with the species pre-selected via URL parameter
-  window.location.href = `compare.html?species=${encodeURIComponent(fishKey)}`;
+  window.location.href = `/compare?species=${encodeURIComponent(fishKey)}`;
 }
 
 // Handle ESC key to close modal

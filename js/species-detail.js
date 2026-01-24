@@ -51,7 +51,7 @@ function showSpeciesDetail(speciesKey) {
   }
 
   // Create or navigate to species page
-  window.location.href = `species.html?fish=${speciesKey}`;
+  window.location.href = `/species?fish=${speciesKey}`;
 }
 
 /**
@@ -67,7 +67,7 @@ function loadSpeciesDetail() {
     document.getElementById('species-content').innerHTML = `
             <div class="empty-state">
                 <h2>No fish selected</h2>
-                <p><a href="index.html">Return to comparison tool</a></p>
+                <p><a href="/">Return to comparison tool</a></p>
             </div>
         `;
     return;
@@ -79,7 +79,7 @@ function loadSpeciesDetail() {
     document.getElementById('species-content').innerHTML = `
             <div class="empty-state">
                 <h2>Fish not found</h2>
-                <p><a href="index.html">Return to comparison tool</a></p>
+                <p><a href="/">Return to comparison tool</a></p>
             </div>
         `;
     return;
@@ -90,7 +90,7 @@ function loadSpeciesDetail() {
 
   // Generate origin badge if origin exists
   const originBadge = fish.origin
-    ? `<a href="glossary.html?origin=${fish.origin}" class="origin-badge species-origin-badge" data-origin="${fish.origin}">${getOriginDisplayName(fish.origin)}</a>`
+    ? `<a href="/glossary?origin=${fish.origin}" class="origin-badge species-origin-badge" data-origin="${fish.origin}">${getOriginDisplayName(fish.origin)}</a>`
     : '';
 
   // Generate alternate names display if alternateNames exist
@@ -251,7 +251,7 @@ function loadSpeciesDetail() {
             </div>
 
             <div class="species-actions">
-                <button onclick="window.location.href='index.html'" class="btn-small">
+                <button onclick="window.location.href='/'" class="btn-small">
                     Compare with Other Fish
                 </button>
                 ${
@@ -275,7 +275,7 @@ function loadSpeciesDetail() {
                     ${relatedSpecies
                       .map(
                         ({ key, fish: relatedFish }) => `
-                        <a href="species.html?fish=${key}" class="related-species-card">
+                        <a href="/species?fish=${key}" class="related-species-card">
                             <div class="related-species-image">
                                 <img src="${relatedFish.imageUrl}" alt="${relatedFish.commonName}" loading="lazy">
                             </div>
@@ -285,7 +285,7 @@ function loadSpeciesDetail() {
                       )
                       .join('')}
                 </div>
-                <a href="glossary.html?origin=${fish.origin}" class="related-species-link">
+                <a href="/glossary?origin=${fish.origin}" class="related-species-link">
                     View all ${getOriginDisplayName(fish.origin)} species &rarr;
                 </a>
             </div>
@@ -377,11 +377,11 @@ function addToTankPlan(speciesKey) {
 
   // Store in session for tank builder (read by tankManager on dashboard)
   sessionStorage.setItem('addToTank', speciesKey);
-  window.location.href = 'dashboard.html#my-tanks-section';
+  window.location.href = '/dashboard#my-tanks-section';
 }
 
-// Initialize species detail page if we're on species.html
-if (window.location.pathname.includes('species.html')) {
+// Initialize species detail page if we're on species page
+if (window.location.pathname.includes('/species')) {
   // Set up delegated click handler for favorite stars (XSS-safe alternative to inline onclick)
   function setupFavoriteStarHandler() {
     const content = document.getElementById('species-content');

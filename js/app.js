@@ -31,8 +31,8 @@ async function initializeApp() {
 
 /**
  * Load comparison from URL parameters
- * URL format: compare.html?species=neonTetra,cardinalTetra,cherryBarb
- * Also supports single species: compare.html?species=neonTetra (pre-selects in slot 1)
+ * URL format: /compare?species=neonTetra,cardinalTetra,cherryBarb
+ * Also supports single species: /compare?species=neonTetra (pre-selects in slot 1)
  */
 function loadComparisonFromUrl() {
   const urlParams = new URLSearchParams(window.location.search);

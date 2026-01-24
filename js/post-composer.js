@@ -14,7 +14,7 @@ function openPostComposer() {
   const uid = window.getFirebaseUid();
   if (!uid) {
     alert('Please log in to create a post');
-    window.location.href = 'login.html';
+    window.location.href = '/login';
     return;
   }
 
