@@ -6637,212 +6637,117 @@ body.logged-in .favorite-star {
 }
 
 /* ============================================
-   ABOUT PAGE
+   ABOUT PAGE - Letter Format
    ============================================ */
 
-/* About Hero - Dark forest theme */
-.about-hero {
-  position: relative;
-  background: linear-gradient(135deg, var(--forest) 0%, #1a3a2e 100%);
-  padding: 5rem 2rem 6rem;
-  text-align: center;
-  overflow: hidden;
-}
-
-.about-hero__content {
-  position: relative;
-  z-index: 1;
-  max-width: 700px;
+.about-letter {
+  max-width: 680px;
   margin: 0 auto;
+  padding: 3rem 2rem 4rem;
 }
 
-.about-hero__eyebrow {
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.7);
-  margin-bottom: 1rem;
-}
-
-.about-hero h1 {
+.about-letter h1 {
   font-family: var(--font-serif);
-  font-size: 2.75rem;
-  font-weight: 700;
-  line-height: 1.2;
-  color: var(--white);
-  margin-bottom: 1.25rem;
+  font-size: 2.5rem;
+  font-weight: 400;
+  color: var(--ink);
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
 }
 
-.about-hero__subtitle {
-  font-size: 1.15rem;
-  line-height: 1.6;
-  color: rgba(255, 255, 255, 0.85);
-  max-width: 500px;
-  margin: 0 auto;
-}
-
-.about-hero__decoration {
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  right: 0;
-  height: 60px;
-  background: var(--ivory);
-  clip-path: ellipse(55% 100% at 50% 100%);
-}
-
-/* Feature Cards */
-.about-features {
-  padding: 4rem 2rem 5rem;
-  max-width: 1000px;
-  margin: 0 auto;
-  background: var(--ivory);
-}
-
-.feature-cards {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-}
-
-.feature-card {
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 2rem;
-  transition: all 0.25s ease;
-  box-shadow:
-    inset 1px 1px 0 rgba(255, 255, 255, 0.5),
-    0 2px 8px rgba(0, 0, 0, 0.04);
-}
-
-.feature-card:hover {
-  border-color: var(--forest);
-  transform: translateY(-6px);
-  box-shadow:
-    inset 1px 1px 0 rgba(255, 255, 255, 0.5),
-    0 12px 32px rgba(35, 74, 58, 0.12);
-}
-
-.feature-card__icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 56px;
-  height: 56px;
-  background: var(--ivory);
-  border-radius: 12px;
-  color: var(--forest);
-  margin-bottom: 1.25rem;
-}
-
-.feature-card h3 {
-  font-family: var(--font-serif);
-  font-size: 1.25rem;
-  margin-bottom: 0.75rem;
+.about-letter__content {
+  font-size: 1.05rem;
+  line-height: 1.8;
   color: var(--ink);
 }
 
-.feature-card p {
-  color: var(--ink-secondary);
-  line-height: 1.65;
-  margin-bottom: 1.25rem;
-  font-size: 0.95rem;
-}
-
-.feature-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  color: var(--forest);
-  font-weight: 600;
-  font-size: 0.9rem;
-  text-decoration: none;
-  transition: gap 0.2s ease;
-}
-
-.feature-link::after {
-  content: '\2192';
-  transition: transform 0.2s ease;
-}
-
-.feature-link:hover {
-  text-decoration: none;
-}
-
-.feature-link:hover::after {
-  transform: translateX(4px);
-}
-
-/* Contact Section */
-.about-contact {
-  background: var(--forest);
-  padding: 4rem 2rem;
-  text-align: center;
-}
-
-.about-contact__content {
-  max-width: 500px;
-  margin: 0 auto;
-}
-
-.about-contact h2 {
-  font-family: var(--font-serif);
-  font-size: 1.5rem;
-  color: var(--white);
-  margin-bottom: 1rem;
-}
-
-.about-contact p {
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 1rem;
-  line-height: 1.6;
+.about-letter__content p {
   margin-bottom: 1.5rem;
 }
 
-.about-contact__email {
+.about-letter__content h2 {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: var(--ink);
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.about-letter__content ul {
+  margin: 0 0 1.5rem 1.25rem;
+  padding: 0;
+}
+
+.about-letter__content li {
+  margin-bottom: 0.75rem;
+  line-height: 1.7;
+}
+
+.about-letter__signature {
+  margin-top: 2rem;
+  font-style: italic;
+  color: var(--ink-secondary);
+}
+
+.about-letter__signature strong {
+  font-style: normal;
+  color: var(--ink);
+}
+
+/* Contact Section */
+.about-letter__contact {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+
+.about-letter__contact h2 {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: var(--ink);
+  margin-bottom: 0.75rem;
+}
+
+.about-letter__contact p {
+  color: var(--ink-secondary);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 1.25rem;
+}
+
+.about-letter__email {
   display: inline-block;
-  font-size: 1.15rem;
+  font-size: 1rem;
   font-weight: 600;
-  color: var(--white);
-  padding: 0.75rem 1.5rem;
-  border: 2px solid rgba(255, 255, 255, 0.4);
+  color: var(--forest);
+  padding: 0.6rem 1.25rem;
+  border: 1px solid var(--forest);
   border-radius: var(--radius-md);
   text-decoration: none;
   transition: all 0.2s ease;
 }
 
-.about-contact__email:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.7);
+.about-letter__email:hover {
+  background: var(--forest);
+  color: var(--white);
 }
 
 /* About Page Responsive */
 @media (max-width: 768px) {
-  .about-hero {
-    padding: 4rem 1.5rem 5rem;
+  .about-letter {
+    padding: 2rem 1.5rem 3rem;
   }
 
-  .about-hero h1 {
+  .about-letter h1 {
     font-size: 2rem;
   }
 
-  .about-hero__decoration {
-    height: 40px;
-  }
-
-  .about-features {
-    padding: 3rem 1.5rem 4rem;
-  }
-
-  .feature-cards {
-    grid-template-columns: 1fr;
-    gap: 1.25rem;
-  }
-
-  .about-contact {
-    padding: 3rem 1.5rem;
+  .about-letter__content {
+    font-size: 1rem;
   }
 }
 
