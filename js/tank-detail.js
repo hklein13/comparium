@@ -137,7 +137,7 @@ function renderTankInfo(tank) {
 
   const ownerLink = document.getElementById('tank-owner-link');
   ownerLink.textContent = `@${tank.username || 'Anonymous'}`;
-  ownerLink.href = `profile.html?user=${encodeURIComponent(tank.userId)}`;
+  ownerLink.href = `/profile?user=${encodeURIComponent(tank.userId)}`;
 
   const descEl = document.getElementById('tank-description');
   if (tank.description) {
@@ -168,7 +168,7 @@ function renderSpecies(speciesKeys) {
     if (!fish) return;
 
     const card = document.createElement('a');
-    card.href = `species.html?fish=${encodeURIComponent(key)}`;
+    card.href = `/species?fish=${encodeURIComponent(key)}`;
     card.className = 'species-mini-card';
 
     const imgWrapper = document.createElement('div');
@@ -213,7 +213,7 @@ function renderPlants(plantKeys) {
     if (!plant) return;
 
     const item = document.createElement('a');
-    item.href = `plant.html?plant=${encodeURIComponent(key)}`;
+    item.href = `/plant?plant=${encodeURIComponent(key)}`;
     item.className = 'plant-list-item';
 
     const name = document.createElement('span');

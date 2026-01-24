@@ -156,8 +156,8 @@ class AuthManager {
     this.updateUIForLoggedOutUser();
 
     // Redirect to home page
-    if (window.location.pathname !== '/index.html' && !window.location.pathname.endsWith('/')) {
-      window.location.href = 'index.html';
+    if (window.location.pathname !== '/' && window.location.pathname !== '/index' && !window.location.pathname.endsWith('/')) {
+      window.location.href = '/';
     }
   }
 
@@ -227,8 +227,8 @@ class AuthManager {
     const authLinks = document.getElementById('auth-links');
     if (authLinks) {
       authLinks.innerHTML = `
-                <a href="login.html">Login</a>
-                <a href="signup.html">Sign Up</a>
+                <a href="/login">Login</a>
+                <a href="/signup">Sign Up</a>
             `;
     }
 
@@ -274,7 +274,7 @@ class AuthManager {
 
     // Not logged in - redirect to login
     sessionStorage.setItem('redirectAfterLogin', window.location.pathname);
-    window.location.href = 'login.html';
+    window.location.href = '/login';
     return false;
   }
 
@@ -285,10 +285,10 @@ class AuthManager {
     const redirect = sessionStorage.getItem('redirectAfterLogin');
     sessionStorage.removeItem('redirectAfterLogin');
 
-    if (redirect && redirect !== '/login.html') {
+    if (redirect && redirect !== '/login') {
       window.location.href = redirect;
     } else {
-      window.location.href = 'dashboard.html';
+      window.location.href = '/dashboard';
     }
   }
 

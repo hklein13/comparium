@@ -80,16 +80,16 @@ async function buildFeaturedTank() {
     container.innerHTML = `
       <div class="featured-tank animate-on-scroll">
         <div class="featured-tank__image">
-          <a href="tank.html?id=${escapeHTML(tank.id)}">
+          <a href="/tank?id=${escapeHTML(tank.id)}">
             <img src="${escapeHTML(tank.coverPhoto)}" alt="${escapeHTML(tank.name || 'Featured Tank')}" />
           </a>
         </div>
         <div class="featured-tank__info">
           <div class="featured-tank__label">Featured Tank</div>
           <h3 class="featured-tank__name">
-            <a href="tank.html?id=${escapeHTML(tank.id)}">${escapeHTML(tank.name || 'Unnamed Tank')}</a>
+            <a href="/tank?id=${escapeHTML(tank.id)}">${escapeHTML(tank.name || 'Unnamed Tank')}</a>
           </h3>
-          <p class="featured-tank__author">by <a href="profile.html?user=${escapeHTML(tank.owner?.username || '')}">${escapeHTML(tank.owner?.username || 'Anonymous')}</a></p>
+          <p class="featured-tank__author">by <a href="/profile?user=${escapeHTML(tank.owner?.username || '')}">${escapeHTML(tank.owner?.username || 'Anonymous')}</a></p>
           ${tank.description ? `<p class="featured-tank__description">${escapeHTML(tank.description)}</p>` : ''}
           <div class="featured-tank__stats">
             <span>${tank.size || '?'} ${tank.sizeUnit || 'gallons'}</span>
@@ -98,7 +98,7 @@ async function buildFeaturedTank() {
           </div>
           ${speciesList ? `<p class="featured-tank__species"><strong>Species:</strong> ${escapeHTML(speciesList)}${speciesMore}</p>` : ''}
           ${plantsList ? `<p class="featured-tank__plants"><strong>Plants:</strong> ${escapeHTML(plantsList)}${plantsMore}</p>` : ''}
-          <a href="tank.html?id=${escapeHTML(tank.id)}" class="btn btn-ghost">View Tank</a>
+          <a href="/tank?id=${escapeHTML(tank.id)}" class="btn btn-ghost">View Tank</a>
         </div>
       </div>
     `;

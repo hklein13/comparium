@@ -100,7 +100,7 @@ function showPlantDetail(plantKey) {
     return;
   }
 
-  window.location.href = `plant.html?plant=${plantKey}`;
+  window.location.href = `/plant?plant=${plantKey}`;
 }
 
 /**
@@ -119,7 +119,7 @@ function loadPlantDetail() {
     document.getElementById('plant-content').innerHTML = `
             <div class="empty-state">
                 <h2>No plant selected</h2>
-                <p><a href="glossary.html">Return to glossary</a></p>
+                <p><a href="/glossary">Return to glossary</a></p>
             </div>
         `;
     return;
@@ -131,7 +131,7 @@ function loadPlantDetail() {
     document.getElementById('plant-content').innerHTML = `
             <div class="empty-state">
                 <h2>Plant not found</h2>
-                <p><a href="glossary.html">Return to glossary</a></p>
+                <p><a href="/glossary">Return to glossary</a></p>
             </div>
         `;
     return;
@@ -241,7 +241,7 @@ function loadPlantDetail() {
             </div>
 
             <div class="species-actions">
-                <button onclick="window.location.href='glossary.html'" class="btn-small">
+                <button onclick="window.location.href='/glossary'" class="btn-small">
                     Back to Glossary
                 </button>
             </div>
@@ -256,7 +256,7 @@ function loadPlantDetail() {
                     ${relatedPlants
                       .map(
                         ({ key, plant: relatedPlant }) => `
-                        <a href="plant.html?plant=${key}" class="related-species-card">
+                        <a href="/plant?plant=${key}" class="related-species-card">
                             <div class="related-species-image">
                                 ${
                                   relatedPlant.imageUrl
@@ -284,8 +284,8 @@ function loadPlantDetail() {
   document.getElementById('plant-content').innerHTML = content;
 }
 
-// Initialize plant detail page if we're on plant.html
-if (window.location.pathname.includes('plant.html')) {
+// Initialize plant detail page if we're on plant page
+if (window.location.pathname.includes('/plant')) {
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', loadPlantDetail);
   } else {

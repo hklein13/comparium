@@ -18,7 +18,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Community Page Structure', () => {
   test('community page should load and display posts feed', async ({ page }) => {
     await test.step('Navigate to community page', async () => {
-      await page.goto('/community.html');
+      await page.goto('/community');
       await expect(page).toHaveTitle(/Community.*Comparium/i);
     });
 
@@ -84,7 +84,7 @@ test.describe('Community Page Structure', () => {
 
 test.describe('Community Page Filtering', () => {
   test('category filter should update active state', async ({ page }) => {
-    await page.goto('/community.html');
+    await page.goto('/community');
     await page.waitForFunction(() => window.firebaseFirestore !== undefined, { timeout: 10000 });
 
     // Wait for initial load
@@ -130,7 +130,7 @@ test.describe('Community Page Filtering', () => {
   });
 
   test('sort dropdown should change sort order', async ({ page }) => {
-    await page.goto('/community.html');
+    await page.goto('/community');
     await page.waitForFunction(() => window.firebaseFirestore !== undefined, { timeout: 10000 });
     await page.waitForSelector('.post-card, .community-empty', { timeout: 15000 });
 
@@ -159,7 +159,7 @@ test.describe('Community Page Filtering', () => {
 
 test.describe('Post Card Structure', () => {
   test('post cards should have expected elements when posts exist', async ({ page }) => {
-    await page.goto('/community.html');
+    await page.goto('/community');
     await page.waitForFunction(() => window.firebaseFirestore !== undefined, { timeout: 10000 });
     await page.waitForSelector('.post-card, .community-empty', { timeout: 15000 });
 
@@ -225,7 +225,7 @@ test.describe('Post Card Structure', () => {
   });
 
   test('tank posts should have tank preview component', async ({ page }) => {
-    await page.goto('/community.html');
+    await page.goto('/community');
     await page.waitForFunction(() => window.firebaseFirestore !== undefined, { timeout: 10000 });
     await page.waitForSelector('.post-card, .community-empty', { timeout: 15000 });
 
@@ -262,7 +262,7 @@ test.describe('Post Card Structure', () => {
 test.describe('Comments', () => {
   test('comment section should display on post detail', async ({ page }) => {
     // Navigate to community page
-    await page.goto('/community.html');
+    await page.goto('/community');
     await page.waitForFunction(() => window.firebaseFirestore !== undefined, { timeout: 10000 });
     await page.waitForSelector('.post-card, .community-empty', { timeout: 15000 });
 
@@ -272,12 +272,12 @@ test.describe('Comments', () => {
       return;
     }
 
-    // Click the comment button on the first post (this always goes to post.html)
-    // Using comment button avoids the issue where tank preview click goes to tank.html
+    // Click the comment button on the first post (this always goes to /post)
+    // Using comment button avoids the issue where tank preview click goes to /tank
     const firstPost = page.locator('.post-card').first();
     const commentBtn = firstPost.locator('.post-card__action').nth(1); // Second action button is comment
 
-    await Promise.all([page.waitForURL(/post\.html\?id=/, { timeout: 30000 }), commentBtn.click()]);
+    await Promise.all([page.waitForURL(/\/post\?id=/, { timeout: 30000 }), commentBtn.click()]);
 
     // Wait for Firebase on the new page
     await page.waitForFunction(() => window.firebaseFirestore !== undefined, { timeout: 10000 });
@@ -316,7 +316,7 @@ test.describe('Comments', () => {
 
 test.describe('Like Buttons', () => {
   test('like button should be present on post cards', async ({ page }) => {
-    await page.goto('/community.html');
+    await page.goto('/community');
     await page.waitForFunction(() => window.firebaseFirestore !== undefined, { timeout: 10000 });
     await page.waitForSelector('.post-card, .community-empty', { timeout: 15000 });
 

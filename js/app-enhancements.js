@@ -49,7 +49,7 @@ function makeSpeciesNamesClickable() {
 
     resultsDiv.innerHTML = resultsDiv.innerHTML.replace(
       fishNameRegex,
-      `<a href="species.html?fish=${fishKey}" class="fish-name-link">${fish.commonName}</a>`
+      `<a href="/species?fish=${fishKey}" class="fish-name-link">${fish.commonName}</a>`
     );
   });
 
@@ -72,7 +72,7 @@ function addFavoriteStarsToResults(selectedFish) {
 
     // Find fish name links and add star after them
     const links = resultsDiv.querySelectorAll(
-      `a.fish-name-link[href="species.html?fish=${fishKey}"]`
+      `a.fish-name-link[href="/species?fish=${fishKey}"]`
     );
     links.forEach(link => {
       if (
@@ -238,7 +238,7 @@ function addViewDetailsButtons() {
     button.onclick = function () {
       const selectedValue = select.value;
       if (selectedValue) {
-        window.location.href = `species.html?fish=${selectedValue}`;
+        window.location.href = `/species?fish=${selectedValue}`;
       }
     };
 
