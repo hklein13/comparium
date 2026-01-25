@@ -1,0 +1,13 @@
+# Dependencies
+node_modules/
+
+# Output files
+output/
+*.mp4
+
+# Build cache
+.remotion/
+
+# Synced data (regenerated from main codebase)
+# Keep this line commented if you want to commit the synced data
+# src/fish-data.js

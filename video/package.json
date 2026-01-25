@@ -1,0 +1,29 @@
+{
+  "name": "comparium-video",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Remotion video templates for Comparium social media content",
+  "scripts": {
+    "start": "remotion studio",
+    "build": "remotion bundle",
+    "render": "remotion render SpeciesSpotlight",
+    "render:all": "node scripts/render-all.js",
+    "sync-data": "node scripts/sync-data.js"
+  },
+  "keywords": [
+    "remotion",
+    "video",
+    "aquarium"
+  ],
+  "author": "Comparium",
+  "license": "ISC",
+  "dependencies": {
+    "@remotion/bundler": "^4.0.409",
+    "@remotion/cli": "^4.0.409",
+    "@remotion/google-fonts": "^4.0.409",
+    "@remotion/renderer": "^4.0.409",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "remotion": "^4.0.409"
+  }
+}

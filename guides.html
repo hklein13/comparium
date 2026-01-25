@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- SEO Meta Tags -->
+    <title>Aquarium Guides | Comparium - Learn Fishkeeping</title>
+    <meta
+      name="description"
+      content="Comprehensive aquarium guides for beginners and experienced fishkeepers. Learn about tank cycling, fish compatibility, maintenance, and more."
+    />
+    <meta
+      name="keywords"
+      content="aquarium guide, fishkeeping guide, beginner aquarium, tank cycling, fish compatibility, aquarium maintenance"
+    />
+    <meta name="author" content="Comparium" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://comparium.net/guides" />
+    <meta property="og:title" content="Aquarium Guides | Comparium" />
+    <meta
+      property="og:description"
+      content="Comprehensive aquarium guides for beginners and experienced fishkeepers."
+    />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://comparium.net/guides" />
+    <meta property="twitter:title" content="Aquarium Guides | Comparium" />
+    <meta
+      property="twitter:description"
+      content="Comprehensive aquarium guides for beginners and experienced fishkeepers."
+    />
+
+    <!-- Favicon -->
+    <link rel="icon" href="images/logo-icon.jpg" type="image/jpeg" />
+    <link rel="icon" href="favicon.ico" sizes="32x32" />
+    <link rel="apple-touch-icon" href="images/logo-icon.jpg" />
+
+    <!-- Sentry Error Tracking -->
+    <script
+      src="https://js.sentry-cdn.com/50e923b4a70189dbdd673937e8161a92.min.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- Fonts: Zodiak (Fontshare) + Figtree (Google) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+    <link
+      href="https://api.fontshare.com/v2/css?f[]=zodiak@400,500,600,700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/naturalist.css" />
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VNY458QF3"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', 'G-8VNY458QF3');
+    </script>
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="header">
+      <a href="/" class="logo"><img src="images/logo.jpg" alt="Comparium" height="56" /></a>
+      <nav class="nav">
+        <a href="/">Home</a>
+        <a href="/compare">Compare</a>
+        <a href="/glossary">Glossary</a>
+        <a href="/guides" class="active">Guides</a>
+        <a href="/community">Community</a>
+        <a href="/faq">FAQ</a>
+        <a href="/dashboard" class="nav-dashboard">Dashboard</a>
+        <div id="auth-links">
+          <a href="/login" class="nav-ghost">Login</a>
+          <a href="/signup" class="nav-cta">Sign Up</a>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="guides-hero">
+      <div class="guides-hero__content">
+        <h1>Aquarium Guides</h1>
+        <p class="guides-hero__subtitle">
+          Learn everything you need to know about fishkeeping, from your first tank to advanced
+          techniques.
+        </p>
+      </div>
+    </section>
+
+    <!-- Category Filters -->
+    <nav class="guides-nav">
+      <div class="guides-nav__tabs">
+        <button class="guides-nav__tab active" data-category="all" onclick="filterGuides('all')">
+          All
+        </button>
+        <button class="guides-nav__tab" data-category="beginner" onclick="filterGuides('beginner')">
+          Beginner
+        </button>
+        <button
+          class="guides-nav__tab"
+          data-category="compatibility"
+          onclick="filterGuides('compatibility')"
+        >
+          Compatibility
+        </button>
+        <button class="guides-nav__tab" data-category="care" onclick="filterGuides('care')">
+          Care
+        </button>
+        <button class="guides-nav__tab" data-category="plants" onclick="filterGuides('plants')">
+          Plants
+        </button>
+        <button class="guides-nav__tab" data-category="health" onclick="filterGuides('health')">
+          Health
+        </button>
+      </div>
+    </nav>
+
+    <!-- Featured Guide -->
+    <section class="guides-featured" id="featuredSection">
+      <div class="guides-featured__content">
+        <span class="guides-featured__label">Featured Guide</span>
+        <h2 class="guides-featured__title" id="featuredTitle">Loading...</h2>
+        <p class="guides-featured__description" id="featuredDescription"></p>
+        <div class="guides-featured__meta">
+          <span class="guides-featured__time" id="featuredTime"></span>
+          <span class="guides-featured__category" id="featuredCategory"></span>
+        </div>
+        <a href="#" class="btn btn-primary guides-featured__btn" id="featuredLink">Read Guide</a>
+      </div>
+    </section>
+
+    <!-- Guides Grid -->
+    <section class="guides-container">
+      <div class="guides-grid" id="guidesGrid">
+        <!-- Populated by JavaScript -->
+      </div>
+      <div class="guides-empty" id="guidesEmpty" style="display: none">
+        <h3>No guides found</h3>
+        <p>Check back soon for more guides in this category.</p>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-logo"><img src="images/logo.jpg" alt="Comparium" height="40" /></div>
+      <div class="footer-links">
+        <a href="/about">About</a>
+        <a href="/faq">FAQ</a>
+        <a href="/glossary">Glossary</a>
+        <a href="mailto:admin@comparium.net">Contact</a>
+      </div>
+      <p class="footer-copy">&copy; <span id="copyright-year"></span> Comparium</p>
+    </footer>
+
+    <!-- Auto-update copyright year -->
+    <script>
+      document.getElementById('copyright-year').textContent = new Date().getFullYear();
+    </script>
+
+    <!-- Scripts -->
+    <script type="module" src="js/firebase-init.js"></script>
+    <script src="js/storage-service.js"></script>
+    <script src="js/auth-manager.js"></script>
+    <script src="js/guides-data.js"></script>
+    <script src="js/guides.js"></script>
+  </body>
+</html>

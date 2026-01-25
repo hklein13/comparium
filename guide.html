@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- SEO Meta Tags (dynamic via JS) -->
+    <title>Guide | Comparium</title>
+    <meta name="description" content="Comprehensive aquarium guide from Comparium." />
+    <meta name="author" content="Comparium" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://comparium.net/guide" />
+    <meta property="og:title" content="Aquarium Guide | Comparium" />
+    <meta property="og:description" content="Comprehensive aquarium guide from Comparium." />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://comparium.net/guide" />
+    <meta property="twitter:title" content="Aquarium Guide | Comparium" />
+    <meta property="twitter:description" content="Comprehensive aquarium guide from Comparium." />
+
+    <!-- Favicon -->
+    <link rel="icon" href="images/logo-icon.jpg" type="image/jpeg" />
+    <link rel="icon" href="favicon.ico" sizes="32x32" />
+    <link rel="apple-touch-icon" href="images/logo-icon.jpg" />
+
+    <!-- Sentry Error Tracking -->
+    <script
+      src="https://js.sentry-cdn.com/50e923b4a70189dbdd673937e8161a92.min.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- Fonts: Zodiak (Fontshare) + Figtree (Google) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+    <link
+      href="https://api.fontshare.com/v2/css?f[]=zodiak@400,500,600,700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/naturalist.css" />
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VNY458QF3"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', 'G-8VNY458QF3');
+    </script>
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="header">
+      <a href="/" class="logo"><img src="images/logo.jpg" alt="Comparium" height="56" /></a>
+      <nav class="nav">
+        <a href="/">Home</a>
+        <a href="/compare">Compare</a>
+        <a href="/glossary">Glossary</a>
+        <a href="/guides" class="active">Guides</a>
+        <a href="/community">Community</a>
+        <a href="/faq">FAQ</a>
+        <a href="/dashboard" class="nav-dashboard">Dashboard</a>
+        <div id="auth-links">
+          <a href="/login" class="nav-ghost">Login</a>
+          <a href="/signup" class="nav-cta">Sign Up</a>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Article Container -->
+    <article class="guide-article">
+      <!-- Article Header -->
+      <header class="guide-article__header">
+        <a href="/guides" class="guide-article__back">Back to Guides</a>
+        <span class="guide-article__category" id="guideCategory">Loading...</span>
+        <h1 class="guide-article__title" id="guideTitle">Loading...</h1>
+        <div class="guide-article__meta">
+          <span class="guide-article__time" id="guideTime"></span>
+          <span class="guide-article__date" id="guideDate"></span>
+        </div>
+      </header>
+
+      <!-- Table of Contents -->
+      <nav class="guide-article__toc" id="guideToc">
+        <h3>Contents</h3>
+        <ol id="tocList">
+          <!-- Populated by JS -->
+        </ol>
+      </nav>
+
+      <!-- Article Content -->
+      <div class="guide-article__content" id="guideContent">
+        <!-- Populated by JS -->
+      </div>
+
+      <!-- Article Footer -->
+      <footer class="guide-article__footer">
+        <div class="guide-article__share">
+          <span>Found this helpful?</span>
+          <a href="/guides" class="btn btn-ghost">Read More Guides</a>
+        </div>
+      </footer>
+    </article>
+
+    <!-- Related Guides -->
+    <section class="guide-related">
+      <h2>Related Guides</h2>
+      <div class="guides-grid guides-grid--small" id="relatedGuides">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-logo"><img src="images/logo.jpg" alt="Comparium" height="40" /></div>
+      <div class="footer-links">
+        <a href="/about">About</a>
+        <a href="/faq">FAQ</a>
+        <a href="/glossary">Glossary</a>
+        <a href="mailto:admin@comparium.net">Contact</a>
+      </div>
+      <p class="footer-copy">&copy; <span id="copyright-year"></span> Comparium</p>
+    </footer>
+
+    <!-- Auto-update copyright year -->
+    <script>
+      document.getElementById('copyright-year').textContent = new Date().getFullYear();
+    </script>
+
+    <!-- Scripts -->
+    <script type="module" src="js/firebase-init.js"></script>
+    <script src="js/storage-service.js"></script>
+    <script src="js/auth-manager.js"></script>
+    <script src="js/guides-data.js"></script>
+    <script src="js/guide-detail.js"></script>
+  </body>
+</html>

@@ -39,3 +39,33 @@ npm-debug.log*
 
 # Git worktrees
 .worktrees/
+
+# Firebase hosting cache
+.firebase/
+
+# Playwright MCP
+.playwright-mcp/
+
+# Temporary script files
+scripts/temp-*.json
+scripts/temp-images/
+scripts/*-selection.json
+scripts/failed-uploads.json
+scripts/duckweed-retry.json
+
+# Temporary/working files
+nul
+*.xlsx
+font-preview.html
+
+# Working documents (not code)
+*.txt
+aquarium_fish_species_summaries.md
+scripts/review-summary.md
+
+# Working logo files (not production)
+Comparium logo*.jpg
+comparium logo*.jpg
+
+# Diff/patch files
+*-diff.txt

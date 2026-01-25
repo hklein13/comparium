@@ -1,0 +1,19 @@
+<svg width="600" height="200" viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@600&amp;display=swap');
+      .fish { fill: #234a3a; }
+      .eye { fill: #ffffff; }
+      .text { font-family: 'Nunito', sans-serif; font-weight: 600; font-size: 54px; fill: #234a3a; letter-spacing: 0.05em; }
+    </style>
+  </defs>
+
+  <g transform="translate(50, 40) scale(1.2)">
+    <path class="fish" d="M72,12 C60,12 45,20 35,35 C28,45 25,58 25,72 C25,86 28,99 35,109 C45,124 60,132 72,132 L85,132 L68,115 L85,98 L75,98 C65,98 55,90 55,72 C55,54 65,46 75,46 L95,46 L105,32 L88,12 Z" />
+    <path class="fish" d="M25,72 L5,85 L5,59 Z" />
+    <path class="fish" d="M45,15 L60,30 L40,30 Z" />
+    <circle class="eye" cx="82" cy="35" r="4.5" />
+  </g>
+
+  <text x="200" y="115" class="text">OMPARIUM</text>
+</svg>
