@@ -71,9 +71,7 @@ function addFavoriteStarsToResults(selectedFish) {
     if (!fish) return;
 
     // Find fish name links and add star after them
-    const links = resultsDiv.querySelectorAll(
-      `a.fish-name-link[href="/species?fish=${fishKey}"]`
-    );
+    const links = resultsDiv.querySelectorAll(`a.fish-name-link[href="/species?fish=${fishKey}"]`);
     links.forEach(link => {
       if (
         link.nextSibling &&

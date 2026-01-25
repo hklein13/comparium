@@ -23,6 +23,8 @@
     "images:preview": "node scripts/generate-image-preview.js",
     "images:inaturalist": "node scripts/generate-inaturalist-preview.js",
     "images:upload": "node scripts/upload-selected-images.js",
+    "social:export": "node scripts/export-social-content.js",
+    "social:export:json": "node scripts/export-social-content.js --json",
     "lint": "eslint js/",
     "lint:fix": "eslint js/ --fix",
     "format": "prettier --write \"**/*.{js,html,css,json}\"",

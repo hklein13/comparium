@@ -206,7 +206,8 @@ var plantDatabase = {
     commonName: 'Duckweed',
     scientificName: 'Lemna minor',
     origin: 'northCentralAmerica',
-    imageUrl: 'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fplants%2Fduckweed.jpg?alt=media',
+    imageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fplants%2Fduckweed.jpg?alt=media',
     position: 'surface',
     plantingStyle: 'floating',
     difficulty: 'Easy',

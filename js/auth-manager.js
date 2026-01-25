@@ -156,7 +156,11 @@ class AuthManager {
     this.updateUIForLoggedOutUser();
 
     // Redirect to home page
-    if (window.location.pathname !== '/' && window.location.pathname !== '/index' && !window.location.pathname.endsWith('/')) {
+    if (
+      window.location.pathname !== '/' &&
+      window.location.pathname !== '/index' &&
+      !window.location.pathname.endsWith('/')
+    ) {
       window.location.href = '/';
     }
   }
