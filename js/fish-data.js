@@ -2397,7 +2397,7 @@ var fishDatabase = {
     scientificName: 'Platydoras armatulus',
     origin: 'southAmerica',
     imageUrl:
-      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FstripedRaphaelCatfish.jpg?alt=media',
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FstripedRaphaelCatfish.jpg?alt=media&v=2',
     tempMin: 75,
     tempMax: 82,
     tempUnit: '°F',
@@ -4118,7 +4118,7 @@ var fishDatabase = {
     scientificName: 'Hyphessobrycon heterorhabdus',
     origin: 'southAmerica',
     imageUrl:
-      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FflagTetra.jpg?alt=media',
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FflagTetra.jpg?alt=media&v=2',
     tempMin: 73,
     tempMax: 82,
     tempUnit: '°F',
@@ -4474,7 +4474,7 @@ var fishDatabase = {
     scientificName: 'Dawkinsia arulius',
     origin: 'asia',
     imageUrl:
-      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FaruliusBarb.jpg?alt=media',
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FaruliusBarb.jpg?alt=media&v=2',
     tempMin: 68,
     tempMax: 77,
     tempUnit: '°F',
@@ -4798,7 +4798,7 @@ var fishDatabase = {
     scientificName: 'Melanotaenia kamaka',
     origin: 'australiaOceania',
     imageUrl:
-      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FkamakaRainbowfish.jpg?alt=media',
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FkamakaRainbowfish.jpg?alt=media&v=2',
     tempMin: 72,
     tempMax: 79,
     tempUnit: '°F',
@@ -5079,7 +5079,7 @@ var fishDatabase = {
     scientificName: 'Dimidiochromis compressiceps',
     origin: 'africa',
     imageUrl:
-      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FeyeBiterCichlid.jpg?alt=media',
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FeyeBiterCichlid.jpg?alt=media&v=2',
     tempMin: 76,
     tempMax: 82,
     tempUnit: '°F',
@@ -6047,7 +6047,7 @@ var fishDatabase = {
     scientificName: 'Trichopodus pectoralis',
     origin: 'asia',
     imageUrl:
-      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FsnakeskinGourami.jpg?alt=media',
+      'https://firebasestorage.googleapis.com/v0/b/comparium-21b69.firebasestorage.app/o/images%2Fspecies%2FsnakeskinGourami.jpg?alt=media&v=2',
     tempMin: 75,
     tempMax: 86,
     tempUnit: '°F',
