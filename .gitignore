@@ -52,6 +52,7 @@ scripts/temp-images/
 scripts/*-selection.json
 scripts/failed-uploads.json
 scripts/duckweed-retry.json
+scripts/seed-content.json
 
 # Temporary/working files
 nul
