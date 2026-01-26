@@ -67,6 +67,7 @@ If a phase is in progress (see "Current Phase" below), there should be a plan fi
 **Current Stats:** 238 fish species (all with images), 15 aquarium plants (all with images)
 
 **Recent Features (January 2026):**
+- Community seeding: 5 seed users, 12 posts, 13 comments, 21 likes via `scripts/seed-community.js`
 - Video generation system: Remotion-based "Guess the Fish" 3-clue format for TikTok/Shorts (20 species rendered)
 - Guides section: Educational articles infrastructure (guides.html, guide.html, js/guides-data.js)
 - Bookmarks redesign: Denormalized storage eliminates N+1 queries, `onPostDeleted` cleans up orphans

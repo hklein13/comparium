@@ -26,7 +26,7 @@ Complete these items **before** starting marketing to ensure new visitors get a 
 
 | Item | Status | Details |
 |------|--------|---------|
-| **Seed community with 10-15 posts** | [ ] | Empty community (1 post) makes site look abandoned |
+| **Seed community with 10-15 posts** | [x] | Done: 5 users, 12 posts, 13 comments, 21 likes |
 | **Remove/replace @harrison featured tank** | [ ] | Shows owner's name - obvious it's not organic activity |
 | **Add diverse featured tanks** | [ ] | Rotate through seeded user tanks for social proof |
 
@@ -36,7 +36,7 @@ Complete these items **before** starting marketing to ensure new visitors get a 
 |------|--------|---------|
 | **Add "Why Sign Up?" messaging** | [ ] | Users can browse everything without account - unclear value of registration |
 | **Create sign-up incentive** | [ ] | "Save your comparisons", "Track your tanks", "Get maintenance reminders" |
-| **Build Guides section** | [ ] | Educational content for beginners (already in Phase 2) |
+| **Build Guides section** | [x] | Infrastructure complete (guides.html, guide.html, js/guides-data.js) - content pending |
 
 ### Nice to Have (Consider)
 
@@ -56,7 +56,7 @@ Complete these items **before** starting marketing to ensure new visitors get a 
 - Mobile: Fully responsive across all tested pages
 
 **What Needs Attention:**
-- Community page shows only 1 post (looks dead)
+- ~~Community page shows only 1 post (looks dead)~~ FIXED: Now has 12 seeded posts
 - Featured tank shows "@harrison" (obviously the owner)
 - No clear reason to create an account vs. just browsing
 
@@ -123,25 +123,19 @@ Create 4-5 accounts with distinct personalities:
 - Common beginner mistakes
 
 ### 2.3 Seed Community Posts
+**Status:** ✅ COMPLETE
 
-| Category | Count | Content Examples |
-|----------|-------|------------------|
-| Tanks | 4-5 | "My 29g community tank build", "First planted tank" |
-| Help | 3-4 | "Is my tank cycled?", "Fish acting weird" with helpful replies |
-| Tips | 2-3 | "Always drip acclimate", "Test water weekly" |
-| Milestones | 2 | "First successful fry!", "6 months no fish loss" |
-| Fish ID | 1-2 | "What species is this?" with answer in comments |
-
-**Guidelines for authentic seeding:**
-- Stagger post dates across several days
-- Add comments and likes between accounts
-- Use casual tone, minor typos okay
-- Reference site tools naturally
+Seeded via `scripts/seed-community.js`:
+- 5 seed accounts: sammyg, wtk1234, dallastanks, tanktutor, tetralife
+- 12 posts (4 Tanks, 3 Help, 3 Tips, 2 Milestones)
+- 13 comments forming realistic threads
+- 21 likes distributed across posts
+- Timestamps backdated 1-12 days for organic feel
 
 ### 2.4 Launch Video Posting
-- Generate 14+ videos (one week buffer)
-- Begin posting: 2/day TikTok, 1/day YouTube Shorts
-- Cross-post same content to both platforms
+- [x] Generate 14+ videos (one week buffer) - 20 videos rendered in `video/output/`
+- [ ] Begin posting: 2/day TikTok, 1/day YouTube Shorts
+- [ ] Cross-post same content to both platforms
 
 ### 2.5 Reddit Karma Building
 - Join r/Aquariums, r/PlantedTank, r/bettafish
