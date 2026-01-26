@@ -67,6 +67,7 @@ If a phase is in progress (see "Current Phase" below), there should be a plan fi
 **Current Stats:** 238 fish species (all with images), 15 aquarium plants (all with images)
 
 **Recent Features (January 2026):**
+- Generative art videos: "Satisfying Aquarium" ambient scenes with 6 palettes, bubbles, light rays (no filming needed)
 - Community seeding: 5 seed users, 12 posts, 13 comments, 21 likes via `scripts/seed-community.js`
 - Video generation system: Remotion-based "Guess the Fish" 3-clue format for TikTok/Shorts (20 species rendered)
 - Guides section: Educational articles infrastructure (guides.html, guide.html, js/guides-data.js)
@@ -137,6 +138,12 @@ cd video && npm run start        # Launch Remotion Studio preview at localhost:3
 cd video && npm run render       # Render single video (default species)
 cd video && npm run render:all   # Render all species with curated facts
 cd video && npm run render:all -- --limit 5  # Render first 5 only
+
+# Generative Art Videos (Satisfying Aquarium)
+cd video && npm run render:satisfying           # Render single (deepOcean palette)
+cd video && npm run render:satisfying:batch     # Render all 6 palette variations
+cd video && npm run render:satisfying:batch -- --square    # Render square format
+cd video && npm run render:satisfying:batch -- tropical    # Render specific palette
 ```
 
 ## Architecture
@@ -176,17 +183,39 @@ Remotion-based video generation for TikTok/YouTube Shorts content.
 ```
 video/
 ├── src/
-│   ├── SpeciesSpotlight.jsx   # Main video template (3-clue "Guess the Fish" format)
-│   ├── Root.jsx               # Composition config (1080x1920 vertical, 20s @ 30fps)
-│   ├── video-facts.js         # Curated clues and reveal facts per species
-│   └── index.js               # Remotion entry point
+│   ├── SpeciesSpotlight.jsx     # "Guess the Fish" 3-clue format
+│   ├── SatisfyingAquarium.jsx   # Generative art composition (layers gradient + rays + bubbles)
+│   ├── Root.jsx                 # Composition registry (1080x1920 vertical, 20s @ 30fps)
+│   ├── video-facts.js           # Curated clues and reveal facts per species
+│   ├── index.js                 # Remotion entry point
+│   ├── generative/              # Generative art components
+│   │   ├── CanvasBackground.jsx # Base canvas component synced with Remotion frames
+│   │   ├── WaterGradient.jsx    # Animated depth gradient with noise texture
+│   │   ├── Bubbles.jsx          # Rising bubble particle system
+│   │   └── LightRays.jsx        # Volumetric light beams
+│   └── utils/                   # Utility functions
+│       ├── noise.js             # Perlin noise, FBM, turbulence
+│       ├── colors.js            # 6 palettes + color manipulation
+│       ├── canvas.js            # Drawing helpers (gradients, bubbles, rays)
+│       └── easing.js            # 20+ animation easing functions
 ├── scripts/
-│   └── render-all.js          # Batch render all species with video facts
-├── output/                    # Rendered MP4s (gitignored)
-└── README.md                  # Usage documentation
+│   ├── render-all.js            # Batch render species videos
+│   └── render-satisfying.js     # Batch render generative art videos
+├── output/                      # Rendered MP4s (gitignored)
+└── README.md                    # Usage documentation
 ```
 
-**Key workflow:** Edit `video-facts.js` to add clues for new species, then run `npm run render:all` to generate videos.
+**Available Compositions:**
+| Composition | Format | Description |
+|-------------|--------|-------------|
+| `SpeciesSpotlight` | 1080x1920 | "Guess the Fish" 3-clue game |
+| `SpeciesSpotlightSquare` | 1080x1080 | Square version for Instagram |
+| `SatisfyingAquarium` | 1080x1920 | Generative underwater ambient scene |
+| `SatisfyingAquariumSquare` | 1080x1080 | Square version for Instagram |
+
+**Species Spotlight workflow:** Edit `video-facts.js` to add clues for new species, then run `npm run render:all`.
+
+**Satisfying Aquarium workflow:** Run `npm run render:satisfying:batch` to generate all 6 palette variations (deepOcean, tropical, plantedTank, golden, midnight, coral). Add trending audio in CapCut before posting.
 
 ### ⚠️ Critical: Glossary Entry Structure Sync
 The migration script (`scripts/migrate-glossary-to-firestore.js`) has a **duplicated copy** of `generateGlossaryEntry()` (lines 223-251) that must stay in sync with `js/glossary-generator.js`.

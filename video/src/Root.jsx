@@ -3,6 +3,7 @@
  */
 import { Composition } from "remotion";
 import { SpeciesSpotlight } from "./SpeciesSpotlight.jsx";
+import { SatisfyingAquarium } from "./SatisfyingAquarium.jsx";
 
 // Default species data for preview
 const defaultSpecies = {
@@ -51,6 +52,40 @@ export const RemotionRoot = () => {
         height={1080}
         defaultProps={{
           species: defaultSpecies,
+        }}
+      />
+
+      {/* Satisfying Aquarium - Vertical (TikTok/Reels/Shorts) */}
+      <Composition
+        id="SatisfyingAquarium"
+        component={SatisfyingAquarium}
+        durationInFrames={600} // 20 seconds at 30fps
+        fps={30}
+        width={1080}
+        height={1920}
+        defaultProps={{
+          palette: "deepOcean",
+          bubbleCount: 35,
+          bubbleSpeed: 1,
+          lightRayCount: 5,
+          lightIntensity: 0.8,
+        }}
+      />
+
+      {/* Satisfying Aquarium - Square (Instagram Feed) */}
+      <Composition
+        id="SatisfyingAquariumSquare"
+        component={SatisfyingAquarium}
+        durationInFrames={600}
+        fps={30}
+        width={1080}
+        height={1080}
+        defaultProps={{
+          palette: "deepOcean",
+          bubbleCount: 25,
+          bubbleSpeed: 1,
+          lightRayCount: 4,
+          lightIntensity: 0.8,
         }}
       />
     </>

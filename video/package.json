@@ -8,6 +8,8 @@
     "build": "remotion bundle",
     "render": "remotion render SpeciesSpotlight",
     "render:all": "node scripts/render-all.js",
+    "render:satisfying": "remotion render SatisfyingAquarium --output output/satisfying-deepOcean.mp4",
+    "render:satisfying:batch": "node scripts/render-satisfying.js",
     "sync-data": "node scripts/sync-data.js"
   },
   "keywords": [
