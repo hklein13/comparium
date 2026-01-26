@@ -67,6 +67,8 @@ If a phase is in progress (see "Current Phase" below), there should be a plan fi
 **Current Stats:** 238 fish species (all with images), 15 aquarium plants (all with images)
 
 **Recent Features (January 2026):**
+- Video generation system: Remotion-based "Guess the Fish" 3-clue format for TikTok/Shorts (20 species rendered)
+- Guides section: Educational articles infrastructure (guides.html, guide.html, js/guides-data.js)
 - Bookmarks redesign: Denormalized storage eliminates N+1 queries, `onPostDeleted` cleans up orphans
 - Near-term improvements: Tank form validation (name/size required), dashboard nav hidden when logged out, compare tool expanded to 5 species
 - Sentry error tracking: Live on all pages, captures JS errors from all users (org: `harrison-klein`, project: `comparium`)
@@ -127,6 +129,13 @@ npm run format:check             # Check formatting without changing files
 cd functions && npm install      # Install function dependencies (first time only)
 firebase deploy --only functions # Deploy Cloud Functions to Firebase
 firebase functions:log           # View function logs
+
+# Video Generation (TikTok/YouTube Shorts)
+cd video && npm install          # Install Remotion dependencies (first time only)
+cd video && npm run start        # Launch Remotion Studio preview at localhost:3000
+cd video && npm run render       # Render single video (default species)
+cd video && npm run render:all   # Render all species with curated facts
+cd video && npm run render:all -- --limit 5  # Render first 5 only
 ```
 
 ## Architecture
@@ -147,6 +156,8 @@ glossary-generator.js (transforms data)
 - `js/fish-descriptions.js` - Curated descriptions for all 238 fish species
 - `js/plant-data.js` - Plant database (15 entries with position, planting style, difficulty, lighting, water params)
 - `js/plant-descriptions.js` - Curated descriptions for all 15 plants
+- `js/guides-data.js` - Guide content storage (beginner guides, care articles)
+- `js/guides.js` - Guides page frontend logic
 - `js/tank-manager.js` - Tank CRUD operations with privacy Yes/No buttons
 - `js/public-tank-manager.js` - Syncs tanks to/from publicTanks collection, creates posts when sharing (Phase 4)
 - `js/post-manager.js` - Post CRUD operations and feed queries (Phase 4.1)
@@ -157,6 +168,24 @@ glossary-generator.js (transforms data)
 - `js/community.js` - Community posts feed with category filtering (Phase 4)
 - `js/maintenance-manager.js` - Event logging and schedule management for tanks
 - `scripts/serviceAccountKey.json` - Firebase Admin credentials (gitignored, never commit)
+
+### Video Generation System (`video/` folder)
+Remotion-based video generation for TikTok/YouTube Shorts content.
+
+```
+video/
+├── src/
+│   ├── SpeciesSpotlight.jsx   # Main video template (3-clue "Guess the Fish" format)
+│   ├── Root.jsx               # Composition config (1080x1920 vertical, 20s @ 30fps)
+│   ├── video-facts.js         # Curated clues and reveal facts per species
+│   └── index.js               # Remotion entry point
+├── scripts/
+│   └── render-all.js          # Batch render all species with video facts
+├── output/                    # Rendered MP4s (gitignored)
+└── README.md                  # Usage documentation
+```
+
+**Key workflow:** Edit `video-facts.js` to add clues for new species, then run `npm run render:all` to generate videos.
 
 ### ⚠️ Critical: Glossary Entry Structure Sync
 The migration script (`scripts/migrate-glossary-to-firestore.js`) has a **duplicated copy** of `generateGlossaryEntry()` (lines 223-251) that must stay in sync with `js/glossary-generator.js`.
@@ -213,6 +242,8 @@ Clean URLs enabled - access pages without `.html` extension (e.g., `/community` 
 - **community.html** - Public tank gallery (`/community`) - Phase 4
 - **tank.html** - Public tank detail view (`/tank?id=tankId`) - Phase 4
 - **profile.html** - User profile page (`/profile?user=username`) - Phase 4
+- **guides.html** - Article listing page (`/guides`) - beginner guides, care articles
+- **guide.html** - Individual guide view (`/guide?guide=slug`)
 - **faq.html** - FAQ with accordion and search (`/faq`)
 
 ### Module Systems

@@ -1,8 +1,8 @@
 # Comparium Growth & Distribution Plan
 
 > **Created:** January 2026
-> **Status:** Ready for implementation
-> **To execute:** Pull this plan into a Claude Code session and approve it
+> **Status:** In Progress (Phase 1 partially complete)
+> **Last Updated:** January 2026 - Video system built, TikTok account created, guides infrastructure ready
 >
 > **Note (Jan 2026):** Site changes may have been made in parallel sessions. Before implementing, run `git status` and review recent commits to check for updates that could affect this plan (especially community/post features, homepage featured tank logic, or auth flows).
 
@@ -65,22 +65,23 @@ Complete these items **before** starting marketing to ensure new visitors get a 
 ## Phase 1: Foundation (Week 1)
 
 ### 1.1 Create Social Media Accounts
-- [ ] TikTok: @comparium or @comparium.fish
-- [ ] YouTube: Comparium channel
+- [x] TikTok: @comparium.fish (created)
+- [ ] YouTube: Comparium channel (waiting for Google account age requirement)
 - [ ] Reddit: New account (needs karma building before promotion)
 
 ### 1.2 Build Content Export Script
-**File:** `scripts/export-social-content.js`
+**Status:** ✅ REPLACED with Remotion video system
 
-Create a Node.js script that:
-- Reads from `js/fish-data.js`
-- Outputs CSV/JSON with: species name, 3 key facts, image URL, suggested hashtags
-- Format ready for content calendar
+Instead of InVideo AI, built custom Remotion-based video generation:
+- `video/src/video-facts.js` - Curated clues and reveal facts
+- `video/src/SpeciesSpotlight.jsx` - "Guess the Fish" 3-clue format
+- `video/scripts/render-all.js` - Batch rendering
+- **20 species videos rendered** and ready for posting
 
 ### 1.3 Set Up Content Pipeline
 - [ ] Create Google Sheet content calendar
 - [ ] Set up Gemini integration for caption generation (via Google Workspace)
-- [ ] Sign up for InVideo AI (~$25/month)
+- [x] ~~Sign up for InVideo AI~~ (Not needed - using custom Remotion system)
 - [ ] Set up Buffer or Later free tier for scheduling
 
 ### 1.4 Create Seed Accounts on Comparium
@@ -95,21 +96,23 @@ Create 4-5 accounts with distinct personalities:
 | `aqua_helper` | Community welcomer | Responds to posts, welcomes newcomers |
 
 ### 1.5 Test Video Creation
-- [ ] Create 5 test videos in InVideo AI
-- [ ] Establish template/style for species spotlights
-- [ ] Test export and upload workflow
+- [x] ~~Create 5 test videos in InVideo AI~~ Built custom Remotion system instead
+- [x] Establish template/style for species spotlights (3-clue "Guess the Fish" format)
+- [x] Test export and upload workflow (20 videos rendered to video/output/)
 
 ---
 
 ## Phase 2: Content & Seeding (Week 2)
 
 ### 2.1 Build Guides Section
-**New files needed:**
-- `guides.html` - Article listing page
-- `guide.html` - Individual article template (query param: `?guide=cycling`)
-- `js/guides-data.js` - Guide content storage
-- Update `naturalist.css` with article styles
-- Add "Guides" link to site navigation
+**Status:** ✅ INFRASTRUCTURE COMPLETE (content not yet written)
+
+- [x] `guides.html` - Article listing page
+- [x] `guide.html` - Individual article template (query param: `?guide=cycling`)
+- [x] `js/guides-data.js` - Guide content storage
+- [x] `js/guides.js` - Frontend logic
+- [x] Update `naturalist.css` with article styles
+- [x] Add "Guides" link to site navigation
 
 ### 2.2 Write Priority Guide #1
 **"Complete Beginner's Guide to Your First Aquarium"**
@@ -225,21 +228,24 @@ Document:
 
 ## Technical Implementation Details
 
-### Content Export Script
+### Video Generation System (IMPLEMENTED)
 ```
-Location: scripts/export-social-content.js
+Location: video/
 
-Inputs: js/fish-data.js
-Outputs: scripts/social-content.csv
+Structure:
+video/
+├── src/
+│   ├── SpeciesSpotlight.jsx   # 3-clue "Guess the Fish" template
+│   ├── Root.jsx               # 1080x1920 vertical, 20s @ 30fps
+│   ├── video-facts.js         # Curated clues per species (20 species)
+│   └── index.js               # Remotion entry point
+├── scripts/
+│   └── render-all.js          # Batch render all species
+└── output/                    # Rendered MP4s (gitignored)
 
-Fields per species:
-- commonName
-- scientificName
-- fact1 (temperature + pH range)
-- fact2 (tank size + schooling)
-- fact3 (unique trait from description)
-- imageUrl
-- hashtags (#fishtok #[speciesname] #aquarium)
+Commands:
+cd video && npm run start      # Preview in browser
+cd video && npm run render:all # Render all videos
 ```
 
 ### Guides Page Structure
@@ -354,11 +360,14 @@ Create Google Sheet with columns:
 
 | Tool | Purpose | Cost |
 |------|---------|------|
-| InVideo AI | Video generation | ~$25/month |
+| ~~InVideo AI~~ | ~~Video generation~~ | ~~$25/month~~ |
+| **Remotion** | Custom video generation (built) | **Free** |
 | Buffer/Later | Scheduling | Free tier |
 | Google Workspace | Scripts, Sheets, Gemini | Already have |
 | Canva | Thumbnails, images | Free tier |
-| **Total** | | **~$25/month** |
+| **Total** | | **~$0/month** |
+
+**Note:** Original plan estimated ~$25/month for InVideo AI. Custom Remotion system eliminates this cost.
 
 ---
 
@@ -380,9 +389,9 @@ Create Google Sheet with columns:
 - Consider what's blocking conversion
 
 **If video creation is too time-consuming:**
-- Batch more aggressively (2 weeks at once)
-- Simplify templates
-- Consider hiring Fiverr editor ($5-10/video)
+- Batch render with `npm run render:all` (generates all at once)
+- Add more species to `video-facts.js` for variety
+- Current system: ~20 videos rendered in minutes
 
 ---
 
